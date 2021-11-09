@@ -512,7 +512,13 @@ EOF</pre>
 <div class="literalblock">
 <div class="content">
 <pre>kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-operator/main/deploy/crd/zookeepercluster.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-operator/main/deploy/crd/stop.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-operator/main/deploy/crd/start.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-operator/main/deploy/crd/restart.crd.yaml
 kubectl apply -f https://raw.githubusercontent.com/stackabletech/kafka-operator/main/deploy/crd/kafkacluster.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/stackabletech/kafka-operator/main/deploy/crd/stop.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/stackabletech/kafka-operator/main/deploy/crd/start.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/stackabletech/kafka-operator/main/deploy/crd/restart.crd.yaml
 kubectl apply -f https://raw.githubusercontent.com/stackabletech/agent/main/deploy/crd/repository.crd.yaml
 kubectl apply -f https://raw.githubusercontent.com/stackabletech/nifi-operator/main/deploy/crd/nificluster.crd.yaml</pre>
 </div>

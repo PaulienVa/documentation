@@ -273,7 +273,7 @@
 <h2 id="_about_this_guide"><a class="anchor" href="#_about_this_guide"></a>About this guide</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Firstly, let’s cover whether this Getting started guide is right for you. This is intended as a learning tool to discover more about Stackable, its deployment and architecture.</p>
+<p>Firstly, let’s cover whether this <strong>Getting Started</strong> guide is right for you. This is intended as a learning tool to discover more about Stackable, its deployment and architecture.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -356,10 +356,16 @@
 <h2 id="_installing_kubernetes"><a class="anchor" href="#_installing_kubernetes"></a>Installing Kubernetes</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Stackable’s control plane is built around Kubernetes. We’ll be deploying services not as containers but as regular services controlled by systemd. Stackable Agent is a custom kubelet and bridges the worlds between Kubernetes and native deployment. For this walkthrough we’ll be using K3s, which offers a very quick and easy way to bootstrap your Kubernetes infrastructure. On your controller node run the following command as root to install K3s:</p>
+<p>Stackable’s control plane is built around Kubernetes. We’ll be deploying services not as containers but as regular services controlled by systemd. Stackable Agent is a custom kubelet and bridges the worlds between Kubernetes and native deployment. For this walkthrough we’ll be using K3s, which offers a very quick and easy way to bootstrap your Kubernetes infrastructure.</p>
 </div>
 <div class="paragraph">
-<p><code>curl -sfL <a href="https://get.k3s.io" class="bare">https://get.k3s.io</a> | sh -</code></p>
+<p>On your <strong>controller</strong> node run the following commands as root to install K3s:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>apt-get install curl
+curl -sfL https://get.k3s.io | sh -</pre>
+</div>
 </div>
 <div class="paragraph">
 <p>So long as your VM has an Internet connection it will download and automatically configure a simple Kubernetes environment.</p>
@@ -397,7 +403,10 @@ Metrics-server is running at https://127.0.0.1:6443/api/v1/namespaces/kube-syste
 </div>
 </div>
 <div class="paragraph">
-<p>Now that we have Kubernetes running on the controller node we need to distribute the configuration to the worker nodes. You’ll find a configuration file on your controller node in <code>/etc/rancher/k3s/k3s.yaml</code>. Edit this file and set the property named clusters&#8594;server to the address of your controller node (by default this is set to 127.0.0.1). Once you’ve done this you can distribute the file out to the cluster. Copy this file to <code>/root/.kube/config</code> on each of the nodes (controller and workers). One of the default locations for the Kubernetes configuration file is in the user&#8217;s home directory and the Stackable Agent will check here by default when running as root as required.</p>
+<p>Now that we have Kubernetes running on the controller node we need to distribute the configuration to the <strong>worker</strong> nodes. You’ll find a configuration file on your controller node in <code>/etc/rancher/k3s/k3s.yaml</code>.</p>
+</div>
+<div class="paragraph">
+<p>Edit this file and set the property named clusters&#8594;server to the address of your controller node (by default this is set to 127.0.0.1). Once you’ve done this you can distribute the file out to the cluster. Copy this file to <code>/root/.kube/config</code> on each of the nodes (<strong>controller</strong> and <strong>workers</strong>). One of the default locations for the Kubernetes configuration file is in the user&#8217;s home directory and the Stackable Agent will check here by default when running as root as required.</p>
 </div>
 </div>
 </div>
@@ -448,7 +457,7 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>You can choose whatever way is most convenient for you to apply this CRD to your cluster. You can use <code>kubectl apply -f</code> to read the CRD from a file or from stdin as in this example:</p>
+<p>You can choose whatever way is most convenient for you to apply this CRD to your cluster controller. You can use <code>kubectl apply -f</code> to read the CRD from a file or from stdin as in this example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -507,18 +516,18 @@ EOF</pre>
 <div class="sect2">
 <h3 id="_installing_stackable_crds"><a class="anchor" href="#_installing_stackable_crds"></a>Installing Stackable CRDs</h3>
 <div class="paragraph">
-<p>Kubernetes uses custom resource descriptors or CRDs to define the resources that will be under its control. We firstly need to load the CRDs for the Stackable services before it will be able to deploy them to the cluster. We can do this using kubectl again, just as we did to install the CRD for the Stackable repository. Kubectl can read from stdin, so we’ll use cURL to download the CRDs we need and pipe them to kubectl.</p>
+<p>Kubernetes uses custom resource descriptors or CRDs to define the resources that will be under its control. We firstly need to load the CRDs for the Stackable services before it will be able to deploy them to the cluster. We can do this using kubectl again, just as we did to install the CRD for the Stackable repository. Kubectl can read from stdin, so on the <strong>controller</strong>, use cURL to download the CRDs we need and pipe them to kubectl.</p>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-operator/main/deploy/crd/zookeepercluster.crd.yaml
-kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-operator/main/deploy/crd/stop.crd.yaml
-kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-operator/main/deploy/crd/start.crd.yaml
 kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-operator/main/deploy/crd/restart.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-operator/main/deploy/crd/start.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-operator/main/deploy/crd/stop.crd.yaml
 kubectl apply -f https://raw.githubusercontent.com/stackabletech/kafka-operator/main/deploy/crd/kafkacluster.crd.yaml
-kubectl apply -f https://raw.githubusercontent.com/stackabletech/kafka-operator/main/deploy/crd/stop.crd.yaml
-kubectl apply -f https://raw.githubusercontent.com/stackabletech/kafka-operator/main/deploy/crd/start.crd.yaml
 kubectl apply -f https://raw.githubusercontent.com/stackabletech/kafka-operator/main/deploy/crd/restart.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/stackabletech/kafka-operator/main/deploy/crd/start.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/stackabletech/kafka-operator/main/deploy/crd/stop.crd.yaml
 kubectl apply -f https://raw.githubusercontent.com/stackabletech/agent/main/deploy/crd/repository.crd.yaml
 kubectl apply -f https://raw.githubusercontent.com/stackabletech/nifi-operator/main/deploy/crd/nificluster.crd.yaml</pre>
 </div>
@@ -536,7 +545,7 @@ customresourcedefinition.apiextensions.k8s.io/zookeeperclusters.zookeeper.stacka
 <div class="sect2">
 <h3 id="_configuring_the_stackable_os_package_repository"><a class="anchor" href="#_configuring_the_stackable_os_package_repository"></a>Configuring the Stackable OS package repository</h3>
 <div class="paragraph">
-<p>You will need to configure the Stackable OS package repository on the worker nodes. We’ll also take the opportunity to install OpenJDK Java 11 as well as this will be required by the Stackable services we will be running.</p>
+<p>You will need to configure the Stackable OS package repository on all nodes. We’ll also take the opportunity to install OpenJDK Java 11 as well as this will be required by the Stackable services we will be running.</p>
 </div>
 <div class="paragraph">
 <p>Stackable supports running agents on Debian 10 "Buster", CentOS 7, and CentOS 8.</p>
@@ -547,7 +556,7 @@ customresourcedefinition.apiextensions.k8s.io/zookeeperclusters.zookeeper.stacka
 <div class="content">
 <pre>apt-get install gnupg openjdk-11-jdk curl
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 16dd12f5c7a6d76a
-echo "deb https://repo.stackable.tech/repository/deb-dev buster main" &gt; /etc/apt/sources.list.d/stackable.list
+echo "deb [arch=amd64] https://repo.stackable.tech/repository/deb-dev buster main" &gt; /etc/apt/sources.list.d/stackable.list
 apt-get update</pre>
 </div>
 </div>
@@ -572,7 +581,7 @@ gpgcheck=0" &gt; /etc/yum.repos.d/stackable.repo
 <div class="sect2">
 <h3 id="_installing_stackable_operators"><a class="anchor" href="#_installing_stackable_operators"></a>Installing Stackable Operators</h3>
 <div class="paragraph">
-<p>The Stackable operators are components that translate the service definitions deployed via Kubernetes into deploy services on the worker nodes. These can be installed on any node that has access to the Kubernetes control plane. In this example we will install them on the controller node. Remember to install the Stackable OS package repo before installing the operators as described above.</p>
+<p>The Stackable operators are components that translate the service definitions deployed via Kubernetes into deploy services on the worker nodes. These can be installed on any node that has access to the Kubernetes control plane. In this example we will install them on the <strong>controller</strong> node. Remember to install the Stackable OS package repo before installing the operators as described above.</p>
 </div>
 <div class="sect3">
 <h4 id="_debian_and_ubuntu_2"><a class="anchor" href="#_debian_and_ubuntu_2"></a>Debian and Ubuntu</h4>
@@ -643,7 +652,7 @@ systemctl enable stackable-nifi-operator</pre>
 <div class="sect2">
 <h3 id="_installing_stackable_agent"><a class="anchor" href="#_installing_stackable_agent"></a>Installing Stackable Agent</h3>
 <div class="paragraph">
-<p>On each of the worker nodes you’ll need to install Stackable Agent, which runs a custom kubelet that can be used to launch non-containerised applications using systemd. If this doesn’t make a lot of sense to you, don’t worry. What this means is that you can run regular Linux services using the Kubernetes control plane. This makes sense for example if you wish to run a hybrid deployment with a mix of bare metal and containerised services and manage them all with one framework.</p>
+<p>On each of the <strong>worker</strong> nodes you’ll need to install Stackable Agent, which runs a custom kubelet that can be used to launch non-containerised applications using systemd. If this doesn’t make a lot of sense to you, don’t worry. What this means is that you can run regular Linux services using the Kubernetes control plane. This makes sense for example if you wish to run a hybrid deployment with a mix of bare metal and containerised services and manage them all with one framework.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -652,7 +661,7 @@ systemctl enable stackable-nifi-operator</pre>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Don’t install the agent onto the controller node as it is already has the K3s kubelet running and this would cause a clash. Stackable Agent should only be deployed on the worker nodes.
+Don’t install the agent onto the <strong>controller</strong> node as it is already has the K3s kubelet running and this would cause a clash. Stackable Agent should only be deployed on the <strong>worker</strong> nodes.
 </td>
 </tr>
 </table>
@@ -713,7 +722,15 @@ Environment="KUBECONFIG=/path/to/kubeconfig"</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You will need to manually approve that certificate requests created by the agents before the agent can start. You can do this by running <code>kubectl certificate approve &lt;agent-fqdn&gt;-tls</code> on the controller node after starting the agent.</p>
+<p>These certificate signing requests can be viewed on the <strong>controller</strong> with</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>kubectl get csr</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will need to manually approve that certificate requests created by the agents before the agent can start. You can do this by running <code>kubectl certificate approve &lt;agent-fqdn&gt;-tls</code> on the <strong>controller</strong> node after starting the agent.</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -733,6 +750,30 @@ node2.stackable    	Ready	&lt;none&gt;             	7s  	0.7.0
 node3.stackable    	Ready	&lt;none&gt;             	5s  	0.7.0
 node1.stackable    	Ready	&lt;none&gt;             	3m43s	0.7.0</pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If there is a failure to start the agent on any of the worker nodes, then <code>journalctl -fu stackable-agent</code> for further information.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If the failure is due to the presence of an existing CSR on the <strong>controller</strong> node, delete the offending CSR with <code>kubectl delete csr &lt;CSR Name&gt;</code>. The names of the CSRs can be discovered with <code>kubectl get csr</code>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -782,7 +823,7 @@ EOF</pre>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Debian will automatically bind the computer&#8217;s hostname to 127.0.1.1, which causes ZooKeeper to only listen on the localhost interface. To prevent this, comment out the corresponding entry from /etc/hosts on each worker node.
+Debian will automatically bind the computer&#8217;s hostname to 127.0.1.1, which causes ZooKeeper to only listen on the localhost interface. To prevent this, comment out the corresponding entry from /etc/hosts on each <strong>worker</strong> node.
 </td>
 </tr>
 </table>
@@ -816,7 +857,8 @@ spec:
         replicas: 3
         config:
           logDirs: "/tmp/kafka-logs"
-          metricsPort: 96</pre>
+          metricsPort: 96
+EOF</pre>
 </div>
 </div>
 </div>
@@ -887,7 +929,7 @@ zookeeper-simple-default-server-node1   1/1     Running      0          6m32s</p
 <div class="sect2">
 <h3 id="_apache_zookeeper_3"><a class="anchor" href="#_apache_zookeeper_3"></a>Apache ZooKeeper</h3>
 <div class="paragraph">
-<p>Log onto one of your worker nodes and run the ZooKeeper CLI shell. Stackable stores the service software in /opt/stackable/packages, so you may wish to add this to your PATH environment variable.</p>
+<p>Log onto one of your <strong>worker</strong> nodes and run the ZooKeeper CLI shell. Stackable stores the service software in /opt/stackable/packages, so you may wish to add this to your PATH environment variable.</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -916,7 +958,7 @@ zkCli.sh</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>With <code>kafkacat</code> installed we can log into one of the worker nodes query the metadata on the broker running on localhost.</p>
+<p>With <code>kafkacat</code> installed we can log into one of the <strong>worker</strong> nodes query the metadata on the broker running on localhost.</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -936,7 +978,7 @@ zkCli.sh</pre>
 <div class="sect2">
 <h3 id="_apache_nifi_3"><a class="anchor" href="#_apache_nifi_3"></a>Apache NiFi</h3>
 <div class="paragraph">
-<p>Apache NiFi provides a web interface and the easiest way to test it is to view this in a web browser. Browse to the address of one of your worker nodes on port 8080 e.f. <a href="http://node1.stackable:8080/nifi" class="bare">http://node1.stackable:8080/nifi</a> and you should see the NiFi Canvas.</p>
+<p>Apache NiFi provides a web interface and the easiest way to test it is to view this in a web browser. Browse to the address of one of your <strong>worker</strong> nodes on port 8080 e.f. <a href="http://node1.stackable:8080/nifi" class="bare">http://node1.stackable:8080/nifi</a> and you should see the NiFi Canvas.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="_images/nifi_menu.png" alt="The Apache NiFi web interface"></span></p>

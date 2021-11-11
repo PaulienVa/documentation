@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Usage :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/trino/usage.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../_/css/site.css">
+    <script>var uiRootPath = '../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://docs.stackable.tech">Stackable Documentation</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="trino" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Stackable Operator for Trino</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="building.html">Building the Operator</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="configuration.html">Configuration</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="usage.html">Usage</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Stackable Operator for Trino</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component">
+      <a class="title" href="../home/index.html">Stackable Documentation</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../home/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../hbase/index.html">Stackable Operator for Apache HBase</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../hbase/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../hdfs/index.html">Stackable Operator for Apache HDFS</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../hdfs/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../hive/index.html">Stackable Operator for Apache Hive</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../hive/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../kafka/index.html">Stackable Operator for Apache Kafka</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../kafka/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../nifi/index.html">Stackable Operator for Apache NiFi</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../nifi/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../spark/index.html">Stackable Operator for Apache Spark</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../spark/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../zookeeper/index.html">Stackable Operator for Apache ZooKeeper</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../zookeeper/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../monitoring/index.html">Stackable Operator for Monitoring and Metrics</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../monitoring/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../opa/index.html">Stackable Operator for OpenPolicyAgent</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../opa/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../regorule/index.html">Stackable Operator for OpenPolicyAgent Rego rules</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../regorule/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component is-current">
+      <a class="title" href="index.html">Stackable Operator for Trino</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../home/index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Stackable Operator for Trino</a></li>
+    <li><a href="usage.html">Usage</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/trino-operator/edit/main/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Usage</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Trino works together with the Apache Hive metastore and S3 bucket.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Deployed Stackable Apache Hive metastore</p>
+</li>
+<li>
+<p>Accessible S3 Bucket</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Endpoint, access-key and secret-key</p>
+</li>
+<li>
+<p>Data in the Bucket (we use the <a href="https://archive.ics.uci.edu/ml/datasets/iris">Iris</a> dataset here)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Optional for authorization: Deployed Stackable OPA cluster + RegoRule server</p>
+</li>
+<li>
+<p>Optional to test queries with <a href="https://repo.stackable.tech/#browse/browse:packages:trino-cli%2Ftrino-cli-363-executable.jar">Trino CLI</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installation"><a class="anchor" href="#_installation"></a>Installation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the following we explain or link the required installation steps.</p>
+</div>
+<div class="sect2">
+<h3 id="_s3_bucket"><a class="anchor" href="#_s3_bucket"></a>S3 bucket</h3>
+<div class="paragraph">
+<p>Please refer to the S3 provider.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hive_operator"><a class="anchor" href="#_hive_operator"></a>Hive operator</h3>
+<div class="paragraph">
+<p>Please refer to the <a href="https://github.com/stackabletech/hive-operator">Hive</a> operator and <a href="https://docs.stackable.tech/home/index.html">docs</a>.</p>
+</div>
+<div class="paragraph">
+<p>Both Hive and Trino need the same S3 authentication.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_opa_operator"><a class="anchor" href="#_opa_operator"></a>OPA operator</h3>
+<div class="paragraph">
+<p>Please refer to the <a href="https://github.com/stackabletech/opa-operator">OPA</a> operator and <a href="https://docs.stackable.tech/home/index.html">docs</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_regorule_server"><a class="anchor" href="#_regorule_server"></a>Regorule Server</h3>
+<div class="paragraph">
+<p>The OPA cluster requires downloading rules from a RegoRule server. You can use your own solution or fall back on the Stackable Regorule Server</p>
+</div>
+<div class="paragraph">
+<p>Please refer to the <a href="https://github.com/stackabletech/regorule-operator">RegoRule</a> operator and <a href="https://docs.stackable.tech/home/index.html">docs</a>.</p>
+</div>
+<div class="paragraph">
+<p>This is an example custom resource for the Stackable RegoRule server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>apiVersion: opa.stackable.tech/v1alpha1
+kind: RegoRule
+metadata:
+  name: simple
+spec:
+  rego: |
+    package trino
+
+    can_execute_query = true
+
+    can_access_catalog = true
+
+    can_create_schema = true
+
+    can_drop_schema = true
+
+    can_access_schema = true
+
+    can_create_table = true
+
+    can_drop_table = true
+
+    can_access_table = true
+
+    can_access_column = true
+
+    can_show_schemas = true
+
+    can_show_tables = true
+
+    default can_select_from_columns = false
+
+    can_select_from_columns {
+      input.request.table.catalog == "system"
+      input.request.table.schema == "information_schema"
+      input.request.table.table == {"tables", "schemata"}[_]
+    }
+
+    can_select_from_columns {
+      input.request.table.catalog == "hive"
+      input.request.table.schema == "iris"
+      input.request.table.table == {"iris_parquet"}[_]
+    }
+
+    can_view_query_owned_by = true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can let the Trino operator specify Rego rules by configuring the <code>authorization</code> field in the custom resource. This is a rudimentary implementation for user access.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_trino"><a class="anchor" href="#_trino"></a>Trino</h3>
+<div class="paragraph">
+<p>With the prerequisites fulfilled, the CRD for this operator must be created:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>kubectl apply -f /etc/stackable/trino-operator/crd/trinocluster.crd.yaml</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To create a single node Trino (v362) cluster with Prometheus metrics exposed on port 10200 (coordinator) and 10201 (worker). Metrics will be <code>disabled</code> if you remove the metricsPort porperty. Please adapt the <code>s3Connection</code> with your credentials and the <code>serverCertificate</code> with your key and certificate:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: trino.stackable.tech/v1alpha1
+kind: TrinoCluster
+metadata:
+  name: simple
+spec:
+  version: "0.0.362"
+  nodeEnvironment: production
+  hiveReference:
+    namespace: default
+    name: simple-derby
+  opa:
+    namespace: default
+    name: simple
+  authorization:
+    packageName: trino
+    userPermissions:
+      admin:
+        schemas:
+          read: true
+          write: true
+        tables:
+          iris_parquet:
+            read: true
+            write: true
+          iris_csv:
+            read: true
+            write: true
+      bob:
+        schemas:
+          read: false
+          write: false
+        tables:
+          iris_parquet:
+            read: true
+  s3Connection:
+    endPoint: changeme
+    accessKey: changeme
+    secretKey: changeme
+    sslEnabled: false
+    pathStyleAccess: true
+  coordinators:
+    roleGroups:
+      default:
+        selector:
+          matchExpressions:
+            - operator: In
+              key: kubernetes.io/hostname
+              values:
+                - main-1.stackable.demo
+        config:
+          coordinator: true
+          nodeDataDir: /tmp/trino/data
+          metricsPort: 10200
+          httpServerHttpPort: 8080
+          httpServerHttpsPort: 8443
+          javaHome: /usr/lib/jvm/java-11-openjdk-amd64/
+          passwordFileContent: |
+            alice:$2y$10$HcCa4k9v2DRrD/g7e5vEz.Bk.1xg00YTEHOZjPX7oK3KqMSt2xT8W
+            bob:$2y$10$xVRXtYZnYuQu66SmruijPO8WHFM/UK5QPHTr.Nzf4JMcZSqt3W.2.
+            admin:$2y$10$89xReovvDLacVzRGpjOyAOONnayOgDAyIS2nW9bs5DJT98q17Dy5i
+          serverCertificate: |
+            -----BEGIN PRIVATE KEY-----
+            some_key
+            -----END PRIVATE KEY-----
+            -----BEGIN CERTIFICATE-----
+            some_certificate
+            -----END CERTIFICATE-----
+  workers:
+    roleGroups:
+      default:
+        selector:
+          matchExpressions:
+            - operator: In
+              key: kubernetes.io/hostname
+              values:
+                - worker-1.stackable.demo
+                - worker-2.stackable.demo
+                - worker-3.stackable.demo
+        replicas: 1
+        config:
+          nodeDataDir: /tmp/trino/data2
+          metricsPort: 10201
+          httpServerHttpPort: 8081
+          javaHome: /usr/lib/jvm/java-11-openjdk-amd64/
+EOF</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Assuming you&#8217;ve downloaded and installed the Trino client, connect to the Trino coordinator:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>./trino --server &lt;node_name&gt;:&lt;https-port&gt; --user admin --password</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you use self signed certificates, you also need to add <code>--insecure</code> to the command above.</p>
+</div>
+<div class="paragraph">
+<p>Create a schema and a  table for the Iris data located in S3:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>CREATE SCHEMA IF NOT EXISTS hive.iris
+WITH (location = 's3a://iris/');</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>CREATE TABLE IF NOT EXISTS hive.iris.iris_parquet (
+  sepal_length DOUBLE,
+  sepal_width  DOUBLE,
+  petal_length DOUBLE,
+  petal_width  DOUBLE,
+  class        VARCHAR
+)
+WITH (
+  external_location = 's3a://iris/parq',
+  format = 'PARQUET'
+);</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Query the data:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>SELECT
+    sepal_length,
+    class
+FROM hive.iris.iris_parquet
+LIMIT 10;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you work with opa, try changing some RegoRule entries to false and see if you are not allowed to e.g. list tables or schemas.</p>
+</div>
+<div class="paragraph">
+<p>When changing the automatically generated rego rule package name, a restart of the coordinator pod is required.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+</footer>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

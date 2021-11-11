@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <sitemap>
-<loc>https://docs.stackable.tech/sitemap-agent.xml</loc>
+<loc>https://docs.stackable.tech/sitemap-hbase.xml</loc>
+</sitemap>
+<sitemap>
+<loc>https://docs.stackable.tech/sitemap-hdfs.xml</loc>
+</sitemap>
+<sitemap>
+<loc>https://docs.stackable.tech/sitemap-hive.xml</loc>
 </sitemap>
 <sitemap>
 <loc>https://docs.stackable.tech/sitemap-home.xml</loc>
@@ -23,6 +29,9 @@
 </sitemap>
 <sitemap>
 <loc>https://docs.stackable.tech/sitemap-spark.xml</loc>
+</sitemap>
+<sitemap>
+<loc>https://docs.stackable.tech/sitemap-trino.xml</loc>
 </sitemap>
 <sitemap>
 <loc>https://docs.stackable.tech/sitemap-zookeeper.xml</loc>

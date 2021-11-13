@@ -204,14 +204,14 @@ metadata:
 spec:
   version: "3.0.1"
   config:
-    logDir: "file:///tmp"
+    logDir: /stackable/data/log
     enableMonitoring: true
   masters:
     roleGroups:
       default:
         selector:
           matchLabels:
-            kubernetes.io/arch: stackable-linux
+            kubernetes.io/os: linux
         replicas: 1
         config:
           masterPort: 7078
@@ -221,7 +221,7 @@ spec:
       2core2g:
         selector:
           matchLabels:
-            kubernetes.io/arch: stackable-linux
+            kubernetes.io/os: linux
         config:
           cores: 2
           memory: "2g"
@@ -232,7 +232,7 @@ spec:
       default:
         selector:
           matchLabels:
-            kubernetes.io/arch: stackable-linux
+            kubernetes.io/os: linux
         replicas: 1
         config:
           historyWebUiPort: 18081
@@ -292,7 +292,7 @@ EOF</pre>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">logDir</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The log folder for spark applications (must created by user)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The log folder for spark applications</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">spark.history.fs.logDirectory=logDir, spark.eventLog.enabled=true, spark.eventLog.dir=logDir;</p></td>
 </tr>
 <tr>

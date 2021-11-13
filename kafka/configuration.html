@@ -223,7 +223,7 @@ spec:
   opa:
     reference:
       namespace: default
-      name: simple-opacluster
+      name: simple
     authorizerClassName: com.bisnode.kafka.authorization.OpaAuthorizer
     authorizerCacheInitialCapacity: 0
     authorizerCacheMaximumSize: 0
@@ -233,7 +233,7 @@ spec:
       default:
         selector:
           matchLabels:
-            kubernetes.io/arch: stackable-linux
+            kubernetes.io/os: linux
         replicas: 1
         config:
           logDirs: "/tmp/kafka-logs"

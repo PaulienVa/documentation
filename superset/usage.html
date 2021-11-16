@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Untitled :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/hive/commandline_args.html">
+    <title>Usage :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/superset/usage.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -25,12 +25,12 @@
   </nav>
 </header>
 <div class="body">
-<div class="nav-container" data-component="hive" data-version="master">
+<div class="nav-container" data-component="superset" data-version="master">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">Stackable Operator for Apache Hive</a></h3>
+    <h3 class="title"><a href="index.html">Stackable Operator for Apache Superset</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
@@ -40,10 +40,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="configuration.html">Configuration</a>
-  </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
   </li>
 </ul>
@@ -53,7 +50,7 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Stackable Operator for Apache Hive</span>
+    <span class="title">Stackable Operator for Apache Superset</span>
     <span class="version">master</span>
   </div>
   <ul class="components">
@@ -81,11 +78,11 @@
         </li>
       </ul>
     </li>
-    <li class="component is-current">
-      <a class="title" href="index.html">Stackable Operator for Apache Hive</a>
+    <li class="component">
+      <a class="title" href="../hive/index.html">Stackable Operator for Apache Hive</a>
       <ul class="versions">
-        <li class="version is-current is-latest">
-          <a href="index.html">master</a>
+        <li class="version is-latest">
+          <a href="../hive/index.html">master</a>
         </li>
       </ul>
     </li>
@@ -113,11 +110,11 @@
         </li>
       </ul>
     </li>
-    <li class="component">
-      <a class="title" href="../superset/index.html">Stackable Operator for Apache Superset</a>
+    <li class="component is-current">
+      <a class="title" href="index.html">Stackable Operator for Apache Superset</a>
       <ul class="versions">
-        <li class="version is-latest">
-          <a href="../superset/index.html">master</a>
+        <li class="version is-current is-latest">
+          <a href="index.html">master</a>
         </li>
       </ul>
     </li>
@@ -171,27 +168,120 @@
 <button class="nav-toggle"></button>
   <a href="../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Stackable Operator for Apache Superset</a></li>
+    <li><a href="usage.html">Usage</a></li>
+  </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/hive-operator/edit/main/docs/modules/ROOT/pages/commandline_args.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/superset-operator/edit/main/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<div class="sect2">
-<h3 id="_product_config"><a class="anchor" href="#_product_config"></a>product-config</h3>
+<h1 class="page">Usage</h1>
+<div class="sect1">
+<h2 id="_creation_of_a_superset_node"><a class="anchor" href="#_creation_of_a_superset_node"></a>Creation of a Superset node</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p><strong>Default value</strong>: <code>/etc/stackable/stackable-hive/config-spec/properties.yaml</code></p>
+<p>A Superset node must be created as a custom resource:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: superset.stackable.tech/v1alpha1
+kind: SupersetCluster
+metadata:
+  name: simple
+spec:
+  version: 1.3.2-1.0
+  nodes:
+    roleGroups:
+      default:
+        config:
+          credentialsSecret: simple-superset-credentials</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p><strong>Required</strong>: false</p>
+<p><code>metadata.name</code> contains the name of the Superset cluster.</p>
 </div>
 <div class="paragraph">
-<p><strong>Multiple values:</strong> false</p>
+<p>The label of the Docker image provided by Stackable must be set in <code>spec.version</code>.</p>
 </div>
 <div class="paragraph">
-<p>This file contains property definitions for the Apache Hive configuration.</p>
+<p>The previously created secret must be referenced in <code>credentialsSecret</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_initializing_the_superset_database"><a class="anchor" href="#_initializing_the_superset_database"></a>Initializing the Superset database</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If the database is not initialized yet for Superset, the <code>init</code> command must be executed. The
+command initializes the dababase by creating the necessary database tables, creating the admin user
+account, and loading examples if desired.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: command.superset.stackable.tech/v1alpha1
+kind: Init
+metadata:
+  name: superset-cluster-command-init
+spec:
+  name: simple
+  credentialsSecret: simple-superset-credentials
+  loadExamples: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>spec.name</code> refers to the name of the Superset cluster.</p>
+</div>
+<div class="paragraph">
+<p>The previously created secret must be referenced in <code>spec.credentialsSecret</code>.</p>
+</div>
+<div class="paragraph">
+<p>Set <code>spec.loadExamples</code> to <code>true</code> if you want the dababase populated with example data and
+dashboards.</p>
+</div>
+<div class="paragraph">
+<p>A Kubernetes job is created which starts a pod to initialize the database. This can take a while.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_superset"><a class="anchor" href="#_using_superset"></a>Using Superset</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When the Superset node is created and the database is initialized, Superset can be opened in the
+browser.</p>
+</div>
+<div class="paragraph">
+<p>The Superset port which defaults to <code>8088</code> can be forwarded to the local host:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl port-forward &lt;name-or-ip-of-the-superset-pod&gt; 8088</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then it can be opened in the browser with <code><a href="http://localhost:8088" class="bare">http://localhost:8088</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>Enter the admin credentials from the Kubernetes secret:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/superset-login.png" alt="Login screen of Superset">
+</div>
+</div>
+<div class="paragraph">
+<p>If the examples were loaded then some dashboards are already available:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/superset-dashboard.png" alt="Superset dashboard showing birth names">
+</div>
+</div>
 </div>
 </div>
 </article>

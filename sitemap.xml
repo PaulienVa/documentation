@@ -31,6 +31,9 @@
 <loc>https://docs.stackable.tech/sitemap-spark.xml</loc>
 </sitemap>
 <sitemap>
+<loc>https://docs.stackable.tech/sitemap-superset.xml</loc>
+</sitemap>
+<sitemap>
 <loc>https://docs.stackable.tech/sitemap-trino.xml</loc>
 </sitemap>
 <sitemap>

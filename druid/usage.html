@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Usage :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/kafka/usage.html">
+    <link rel="canonical" href="https://docs.stackable.tech/druid/usage.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -25,20 +25,17 @@
   </nav>
 </header>
 <div class="body">
-<div class="nav-container" data-component="kafka" data-version="master">
+<div class="nav-container" data-component="druid" data-version="master">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">Stackable Operator for Apache Kafka</a></h3>
+    <h3 class="title"><a href="index.html">Stackable Operator for Apache Druid</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="dependencies.html">Dependencies</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
@@ -56,7 +53,7 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Stackable Operator for Apache Kafka</span>
+    <span class="title">Stackable Operator for Apache Druid</span>
     <span class="version">master</span>
   </div>
   <ul class="components">
@@ -68,11 +65,11 @@
         </li>
       </ul>
     </li>
-    <li class="component">
-      <a class="title" href="../druid/index.html">Stackable Operator for Apache Druid</a>
+    <li class="component is-current">
+      <a class="title" href="index.html">Stackable Operator for Apache Druid</a>
       <ul class="versions">
-        <li class="version is-latest">
-          <a href="../druid/index.html">master</a>
+        <li class="version is-current is-latest">
+          <a href="index.html">master</a>
         </li>
       </ul>
     </li>
@@ -100,11 +97,11 @@
         </li>
       </ul>
     </li>
-    <li class="component is-current">
-      <a class="title" href="index.html">Stackable Operator for Apache Kafka</a>
+    <li class="component">
+      <a class="title" href="../kafka/index.html">Stackable Operator for Apache Kafka</a>
       <ul class="versions">
-        <li class="version is-current is-latest">
-          <a href="index.html">master</a>
+        <li class="version is-latest">
+          <a href="../kafka/index.html">master</a>
         </li>
       </ul>
     </li>
@@ -183,11 +180,11 @@
   <a href="../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Stackable Operator for Apache Kafka</a></li>
+    <li><a href="index.html">Stackable Operator for Apache Druid</a></li>
     <li><a href="usage.html">Usage</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/kafka-operator/edit/main/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/druid-operator/edit/main/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
@@ -195,78 +192,136 @@
 </aside>
 <article class="doc">
 <h1 class="page">Usage</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>After installation, the CRD for this operator must be created:</p>
+<p>Druid requires a Zookeeper to run, as well as a database.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_setup_prerequisites"><a class="anchor" href="#_setup_prerequisites"></a>Setup Prerequisites</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_zookeeper_operator"><a class="anchor" href="#_zookeeper_operator"></a>Zookeeper operator</h3>
+<div class="paragraph">
+<p>Please refer to the <a href="https://github.com/stackabletech/zookeeper-operator">Zookeeper</a> operator and <a href="https://docs.stackable.tech/zookeeper/index.html">docs</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sql_database"><a class="anchor" href="#_sql_database"></a>SQL Database</h3>
+<div class="paragraph">
+<p>Druid requires a MySQL or Postgres database.</p>
+</div>
+<div class="paragraph">
+<p>For testing purposes, you can spin up a PostgreSQL database with the bitnami PostgreSQL helm chart.  Add the bitname repository:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>kubectl apply -f /etc/stackable/kafka-operator/crd/kafkacluster.crd.yaml</pre>
+<pre>helm repo add bitnami https://charts.bitnami.com/bitnami</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To create an Apache Kafka (v2.8.0) cluster named "simple" with Prometheus metrics exposed on port 9606:</p>
+<p>And setup the Postgres database:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: kafka.stackable.tech/v1alpha1
-kind: KafkaCluster
+<pre>helm install druid bitnami/postgresql \
+--set postgresqlUsername=druid \
+--set postgresqlPassword=druid \
+--set postgresqlDatabase=druid</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_creating_a_druid_cluster"><a class="anchor" href="#_creating_a_druid_cluster"></a>Creating a Druid Cluster</h3>
+<div class="paragraph">
+<p>With the prerequisites fulfilled, the CRD for this operator must be created:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>kubectl apply -f /etc/stackable/druid-operator/crd</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then a cluster can be deployed using the example below. Replace <code>&lt;cluster-ip-of-postgres-svc&gt;</code> with the actual ip address and make sure you have <strong>exactly one node</strong> labeled with <code>nodeType=druid-data</code> as used in the deep storage selector. Having more than one data node is not supported when using local storage.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: druid.stackable.tech/v1alpha1
+kind: DruidCluster
 metadata:
   name: simple
 spec:
-  version:
-    kafka_version: 2.8.0
+  version: 0.22.0
   zookeeperReference:
     namespace: default
     name: simple
+  metadataStorageDatabase:
+    dbType: postgresql
+    connString: jdbc:postgresql://&lt;cluster-ip-of-postgres-svc&gt;/druid
+    host: &lt;cluster-ip-of-postgres-svc&gt;
+    port: 5432
+    user: druid
+    password: druid
+  deepStorage:
+    storageType: local
+    dataNodeSelector:
+      nodeType: druid-data
+    storageDirectory: /path/to/druidDeepStorage
   brokers:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        replicas: 1
         config:
-          logDirs: "/tmp/kafka-logs"
-          metricsPort: 9606
-EOF</pre>
+          plaintextPort: 8082
+          metricsPort: 9090
+        replicas: 1
+  coordinators:
+    roleGroups:
+      default:
+        config:
+          plaintextPort: 8081
+          metricsPort: 9090
+        replicas: 1
+  historicals:
+    roleGroups:
+      default:
+        config:
+          plaintextPort: 8083
+          metricsPort: 9090
+        replicas: 1
+  middleManagers:
+    roleGroups:
+      default:
+        config:
+          plaintextPort: 8091
+          metricsPort: 9095
+        replicas: 1
+  routers:
+    roleGroups:
+      default:
+        config:
+          plaintextPort: 8888
+          metricsPort: 9195
+        replicas: 1</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you wish to include integration with <a href="https://docs.stackable.tech/opa/index.html">Open Policy Agent</a> and already have an opa cluster, then you can include an <code>opa</code> stanza:</p>
+<p>The Router is hosting the web UI, to be able to access the web interface you need to forward port 8888 first:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: kafka.stackable.tech/v1alpha1
-kind: KafkaCluster
-metadata:
-  name: simple
-spec:
-  version:
-    kafka_version: 2.8.0
-  zookeeperReference:
-    namespace: default
-    name: simple
-  opa:
-    reference:
-      namespace: default
-      name: simple-opacluster
-    authorizerClassName: com.bisnode.kafka.authorization.OpaAuthorizer
-    authorizerCacheInitialCapacity: 0
-    authorizerCacheMaximumSize: 0
-    authorizerCacheExpireAfterSeconds: 0
-  brokers:
-    roleGroups:
-      default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        replicas: 1
-        config:
-          logDirs: "/tmp/kafka-logs"
-          metricsPort: 9606
-EOF</pre>
+<pre>kubectl port-forward --namespace default po/&lt;router-pod-name&gt; 8888:8888</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now open <code><a href="http://localhost:8888" class="bare">http://localhost:8888</a></code> in your browser and follow the <a href="https://druid.apache.org/docs/latest/tutorials/index.html#step-4-load-data">druid documentation</a> on how to load and query sample data.</p>
+</div>
+<div class="paragraph">
+<p>For monitoring purposes, Prometheus metrics are exposed on <code>metricsPort</code>. Similarly to the web UI above, you need to expose the corresponding port for the group you want to monitor.</p>
+</div>
+</div>
 </div>
 </div>
 </article>

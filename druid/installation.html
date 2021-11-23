@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Usage :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/kafka/usage.html">
+    <title>Installation :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/druid/installation.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -25,28 +25,25 @@
   </nav>
 </header>
 <div class="body">
-<div class="nav-container" data-component="kafka" data-version="master">
+<div class="nav-container" data-component="druid" data-version="master">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">Stackable Operator for Apache Kafka</a></h3>
+    <h3 class="title"><a href="index.html">Stackable Operator for Apache Druid</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="building.html">Building the Operator</a>
   </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="dependencies.html">Dependencies</a>
-  </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
   </li>
 </ul>
@@ -56,7 +53,7 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Stackable Operator for Apache Kafka</span>
+    <span class="title">Stackable Operator for Apache Druid</span>
     <span class="version">master</span>
   </div>
   <ul class="components">
@@ -68,11 +65,11 @@
         </li>
       </ul>
     </li>
-    <li class="component">
-      <a class="title" href="../druid/index.html">Stackable Operator for Apache Druid</a>
+    <li class="component is-current">
+      <a class="title" href="index.html">Stackable Operator for Apache Druid</a>
       <ul class="versions">
-        <li class="version is-latest">
-          <a href="../druid/index.html">master</a>
+        <li class="version is-current is-latest">
+          <a href="index.html">master</a>
         </li>
       </ul>
     </li>
@@ -100,11 +97,11 @@
         </li>
       </ul>
     </li>
-    <li class="component is-current">
-      <a class="title" href="index.html">Stackable Operator for Apache Kafka</a>
+    <li class="component">
+      <a class="title" href="../kafka/index.html">Stackable Operator for Apache Kafka</a>
       <ul class="versions">
-        <li class="version is-current is-latest">
-          <a href="index.html">master</a>
+        <li class="version is-latest">
+          <a href="../kafka/index.html">master</a>
         </li>
       </ul>
     </li>
@@ -183,90 +180,54 @@
   <a href="../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Stackable Operator for Apache Kafka</a></li>
-    <li><a href="usage.html">Usage</a></li>
+    <li><a href="index.html">Stackable Operator for Apache Druid</a></li>
+    <li><a href="installation.html">Installation</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/kafka-operator/edit/main/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/druid-operator/edit/main/docs/modules/ROOT/pages/installation.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Usage</h1>
+<h1 class="page">Installation</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>After installation, the CRD for this operator must be created:</p>
+<p>There are three ways to run the Apache Druid Operator:</p>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>kubectl apply -f /etc/stackable/kafka-operator/crd/kafkacluster.crd.yaml</pre>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Build from source. This is documented in <a href="building.html" class="page">Building the Operator</a>.</p>
+</li>
+<li>
+<p>As a Docker container</p>
+</li>
+</ol>
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_docker"><a class="anchor" href="#_docker"></a>Docker</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>To create an Apache Kafka (v2.8.0) cluster named "simple" with Prometheus metrics exposed on port 9606:</p>
+<p>This Operator is published as a Docker image:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: kafka.stackable.tech/v1alpha1
-kind: KafkaCluster
-metadata:
-  name: simple
-spec:
-  version:
-    kafka_version: 2.8.0
-  zookeeperReference:
-    namespace: default
-    name: simple
-  brokers:
-    roleGroups:
-      default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        replicas: 1
-        config:
-          logDirs: "/tmp/kafka-logs"
-          metricsPort: 9606
-EOF</pre>
+<pre class="highlightjs highlight"><code>docker.stackable.tech/stackable/druid-operator</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you wish to include integration with <a href="https://docs.stackable.tech/opa/index.html">Open Policy Agent</a> and already have an opa cluster, then you can include an <code>opa</code> stanza:</p>
+<p>To run it straight from Docker you can use this command:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: kafka.stackable.tech/v1alpha1
-kind: KafkaCluster
-metadata:
-  name: simple
-spec:
-  version:
-    kafka_version: 2.8.0
-  zookeeperReference:
-    namespace: default
-    name: simple
-  opa:
-    reference:
-      namespace: default
-      name: simple-opacluster
-    authorizerClassName: com.bisnode.kafka.authorization.OpaAuthorizer
-    authorizerCacheInitialCapacity: 0
-    authorizerCacheMaximumSize: 0
-    authorizerCacheExpireAfterSeconds: 0
-  brokers:
-    roleGroups:
-      default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        replicas: 1
-        config:
-          logDirs: "/tmp/kafka-logs"
-          metricsPort: 9606
-EOF</pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -e DRUID_OPERATOR_LOG=trace -e KUBECONFIG=/root/.kube/k3s.yaml --mount type=bind,source="$HOME/.kube/k3s.yaml",target="/root/.kube/k3s.yaml" -it docker.stackable.tech/stackable/druid-operator:latest</code></pre>
+</div>
+</div>
 </div>
 </div>
 </article>

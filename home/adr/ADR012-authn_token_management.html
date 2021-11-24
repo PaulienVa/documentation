@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ADR012: Authentication token management :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/adr/ADR012-authn_token_management.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <script>var uiRootPath = '../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://docs.stackable.tech">Stackable Documentation</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="home" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Stackable Documentation</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../getting_started.html">Getting Started</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Stackable Documentation</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">Stackable Documentation</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../druid/index.html">Stackable Operator for Apache Druid</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../druid/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../hbase/index.html">Stackable Operator for Apache HBase</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../hbase/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../hdfs/index.html">Stackable Operator for Apache HDFS</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../hdfs/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../hive/index.html">Stackable Operator for Apache Hive</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../hive/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../kafka/index.html">Stackable Operator for Apache Kafka</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../kafka/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../nifi/index.html">Stackable Operator for Apache NiFi</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../nifi/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../spark/index.html">Stackable Operator for Apache Spark</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../spark/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../superset/index.html">Stackable Operator for Apache Superset</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../superset/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../zookeeper/index.html">Stackable Operator for Apache ZooKeeper</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../zookeeper/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../monitoring/index.html">Stackable Operator for Monitoring and Metrics</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../monitoring/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../opa/index.html">Stackable Operator for OpenPolicyAgent</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../opa/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../regorule/index.html">Stackable Operator for OpenPolicyAgent Rego rules</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../regorule/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../trino/index.html">Stackable Operator for Trino</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../trino/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Stackable Documentation</a></li>
+    <li><a href="ADR012-authn_token_management.html">ADR012: Authentication token management</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/adr/pages/ADR012-authn_token_management.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">ADR012: Authentication token management</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Status: accepted</p>
+</li>
+<li>
+<p>Deciders:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Teo Klestrup Röijezon</p>
+</li>
+<li>
+<p>Lars Francke</p>
+</li>
+<li>
+<p>Sönke Liebau</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Date: 2021-11-23</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Technical Story: <a href="https://github.com/stackabletech/issues/issues/4" class="bare">https://github.com/stackabletech/issues/issues/4</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Services need a way to authenticate each other when communicating. This is typically done by issuing each service some form of secret token that the counterparty can validate. Depending on the service in question, this may be a token unique to the counterparty (such as a password or API key) or a token accepted by a whole trust domain (such as a Kerberos keytab or a TLS certificate). This ADR primarily concerns itself with the latter case.</p>
+</div>
+<div class="paragraph">
+<p>Depending on the specifics of the service being communicated with, this token may need to identify the replica (Pod in Kubernetes terms), the set of replicas (RoleGroup, StatefulSet, or Pod), or the server that the replica is running on (Node).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_decision_drivers"><a class="anchor" href="#_decision_drivers"></a>Decision Drivers</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Depending on the specific service being communicated with, the token may need to identify the the replica (Pod in Kubernetes terms), the set of replicas (RoleGroup, StatefulSet, or Pod), or the server that the replica is running on (Node)</p>
+</li>
+<li>
+<p>Some customers have an existing trust domain where they provision us static tokens that we must use</p>
+</li>
+<li>
+<p>Many customers do not have an existing trust domain, nor do they want to take on the operational burden of managing it manually</p>
+</li>
+<li>
+<p>Ideally, automatically provisioned tokens should be as short-lived as is practical</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_considered_options"><a class="anchor" href="#_considered_options"></a>Considered Options</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Kubernetes secrets (+ Cert Manager etc)</p>
+</li>
+<li>
+<p>Hashicorp Vault</p>
+</li>
+<li>
+<p>Custom secret service</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Option 3: Custom Secret Service</strong></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_kubernetes_secrets"><a class="anchor" href="#_kubernetes_secrets"></a>Kubernetes secrets</h3>
+<div class="paragraph">
+<p>Secrets are managed in Kubernetes Secret objects, which are mounted into the Pods.</p>
+</div>
+<div class="paragraph">
+<p>Depending on the customer&#8217;s configuration, these secrets may be provisioned by operators such as Cert-Manager, or managed manually by an administrator.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because it exists already</p>
+</li>
+<li>
+<p>Good, because people are already used to them</p>
+</li>
+<li>
+<p>Bad, because secret mounting is static for the whole StatefulSet or Deployment (and so cannot depend on the replica or node identity)</p>
+</li>
+<li>
+<p>Bad, because secrets must be provisioned in advance and stored in K8s</p>
+</li>
+<li>
+<p>Bad, because Kubernetes Secrets are typically not encrypted at rest</p>
+</li>
+<li>
+<p>Bad, because cluster and app administrators often have overly broad access to Secrets</p>
+</li>
+<li>
+<p>Bad, because Cert-Manager does not perform any policy check on certificates being issued</p>
+</li>
+<li>
+<p>Bad, because there is no Krb-Keytab-Manager (yet)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hashicorp_vault"><a class="anchor" href="#_hashicorp_vault"></a>Hashicorp Vault</h3>
+<div class="paragraph">
+<p>Secrets are stored or provisioned on demand by Hashicorp Vault, and injected into the pods using Vault-CSI.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because it exists already</p>
+</li>
+<li>
+<p>Good, because it can issue TLS certificates on demand</p>
+</li>
+<li>
+<p>Good, because secrets are encrypted at rest</p>
+</li>
+<li>
+<p>Bad, because it cannot issue Kerberos keytabs</p>
+</li>
+<li>
+<p>Bad, because the APIs for issuing dynamic secrets and retrieving existing secrets are incompatible</p>
+</li>
+<li>
+<p>Bad, because policy controls are limited enough to be nearly useless for managing identities</p>
+</li>
+<li>
+<p>Bad, because it is a heavy operational burden for customers that do not already use it</p>
+</li>
+<li>
+<p>Bad, because Vault Enterprise pricing is unclear (but has a reputation for being very expensive)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_custom_secret_service"><a class="anchor" href="#_custom_secret_service"></a>Custom secret service</h3>
+<div class="paragraph">
+<p>Secrets are stored or provisioned by a custom service (which may delegate to Vault, Kubernetes, etc as needed). Secrets
+are injected into pods using a custom CSI provider or init container.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because it can enforce policy for generated identities (for example: tying TLS certificate to Pod or Node identity)</p>
+</li>
+<li>
+<p>Good, because it can pick pregenerated tokens based on Pod/Node identity</p>
+</li>
+<li>
+<p>Good, because it can have a cluster-global policy for picking between backends</p>
+</li>
+<li>
+<p>Good, because it can accomodate to whatever authn methods we end up supporting</p>
+</li>
+<li>
+<p>Bad, because it&#8217;s another bespoke thing to maintain and develop</p>
+</li>
+<li>
+<p>Bad, because none of us are experienced with writing CSI providers</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+</footer>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

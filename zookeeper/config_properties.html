@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Building the Operator :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/zookeeper/building.html">
+    <title>Untitled :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/zookeeper/config_properties.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -34,9 +34,6 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
@@ -179,26 +176,86 @@
 <button class="nav-toggle"></button>
   <a href="../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="index.html">Stackable Operator for Apache ZooKeeper</a></li>
-    <li><a href="building.html">Building the Operator</a></li>
-  </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/zookeeper-operator/edit/main/docs/modules/ROOT/pages/building.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/zookeeper-operator/edit/main/docs/modules/ROOT/pages/config_properties.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Building the Operator</h1>
-<div class="paragraph">
-<p>This operator is written in Rust.
-It is developed against the latest stable Rust release (1.56 at the time of writing).</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cargo build</pre>
+<div class="sect1">
+<h2 id="_configuration_properties"><a class="anchor" href="#_configuration_properties"></a>Configuration Properties</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 22.2222%;">
+<col style="width: 22.2222%;">
+<col style="width: 22.2222%;">
+<col style="width: 22.2222%;">
+<col style="width: 11.1112%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">config-spec Property</th>
+<th class="tableblock halign-left valign-top">Actual Property</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+<th class="tableblock halign-left valign-top">Recommended Value</th>
+<th class="tableblock halign-left valign-top">Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">adminPort</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin.serverPort</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8080</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">file:zoo.cfg</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">clientPort</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">clientPort</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2181</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2181</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">file:zoo.cfg</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dataDir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dataDir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/tmp/zookeeper</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/stackable/data</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">file:zoo.cfg</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">initLimit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">initLimit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">file:zoo.cfg</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">metricsPort</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">metricsPort</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9505</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9505</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">syncLimit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">syncLimit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">file:zoo.cfg</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tickTime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tickTime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">file:zoo.cfg</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </article>

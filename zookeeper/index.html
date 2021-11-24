@@ -35,9 +35,6 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
-  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -191,6 +188,8 @@
 </aside>
 <article class="doc">
 <h1 class="page">Stackable Operator for Apache ZooKeeper</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
 <p>This is an operator for Kubernetes that can manage <a href="https://zookeeper.apache.org/">Apache ZooKeeper</a> ensembles.</p>
 </div>
@@ -201,14 +200,22 @@
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-This operator only works with images from the <a href="https://repo.stackable.tech/#browse/browse:docker:v2%2Fstackable%2Fzookeeper">Stackable</a> repository
+This operator is part of Stackable Data Platform
+and only works with images from the <a href="https://repo.stackable.tech/#browse/browse:docker:v2%2Fstackable%2Fzookeeper">Stackable</a> repository
 </td>
 </tr>
 </table>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getting_the_docker_image"><a class="anchor" href="#_getting_the_docker_image"></a>Getting the Docker image</h2>
+<div class="sectionbody">
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code>docker pull docker.stackable.tech/stackable/zookeeper:&lt;version&gt;</code></pre>
+</div>
+</div>
 </div>
 </div>
 </article>

@@ -213,6 +213,45 @@
 </div>
 </div>
 <div class="sect1">
+<h2 id="_kubernetes_custom_resource_options"><a class="anchor" href="#_kubernetes_custom_resource_options"></a>Kubernetes custom resource options</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The cluster can be configured via a YAML file. This custom resource specifies the amount of replicas for each role group or role specific configuration like port definitions etc.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperCluster
+metadata:
+  name: simple
+spec:
+  version: 3.5.8
+  servers:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        # Here you can set the Stackable supported configuration parameters
+        # See the documentation for a full list of the exposed configuration parameters
+        config:
+          adminPort: 12000
+          metricsPort: 9505
+          dataDir: /stackable/data
+          tickTime: 3000
+          clientPort: 2181
+        # You can also override properties in a configuration file here
+        configOverrides:
+          zoo.cfg:
+            4lw.commands.whitelist: 'srvr,ruok,isro'
+        # Set environment variables here
+        envOverrides:
+          MY_ENV_VAR: "foobar"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_configuration_properties"><a class="anchor" href="#_configuration_properties"></a>Configuration Properties</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
@@ -264,9 +303,9 @@
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">metricsPort</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">metricsPort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">9505</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">9505</p></td>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9505</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JMX Exporter/ CLI</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">syncLimit</p></td>

@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Usage :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/nifi/usage.html">
+    <title>Untitled :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/nifi/config_properties.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -46,7 +46,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -185,40 +185,29 @@
 <button class="nav-toggle"></button>
   <a href="../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="index.html">Stackable Operator for Apache NiFi</a></li>
-    <li><a href="usage.html">Usage</a></li>
-  </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/nifi-operator/edit/main/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/nifi-operator/edit/main/docs/modules/ROOT/pages/config_properties.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Usage</h1>
+<div class="sect1">
+<h2 id="_kubernetes_custom_resource_options"><a class="anchor" href="#_kubernetes_custom_resource_options"></a>Kubernetes custom resource options</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>After installation, the CRD for this operator must be created:</p>
+<p>The cluster can be configured via a YAML file. This custom resource specifies the amount of replicas for each role group or role specific configuration like port definitions etc.</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>kubectl apply -f /etc/stackable/nifi-operator/crd/nificluster.crd.yaml</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To create a single node Apache NiFi (v1.15.0) cluster with Prometheus metrics exposed on port 8428 and the WebUi on port 10000. As of now only one instance per node is supported:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: nifi.stackable.tech/v1alpha1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: nifi.stackable.tech/v1alpha1
 kind: NifiCluster
 metadata:
-  name: simple-nificluster
+  name: simple
 spec:
   metricsPort: 8428
-  version: "1.15.0"
+  version: "1.13.2"
   zookeeperReference:
     name: simple
     namespace: default
@@ -229,25 +218,60 @@ spec:
         selector:
           matchLabels:
             kubernetes.io/os: linux
-        replicas: 1
         config:
           httpPort: 10000
           protocolPort: 10443
-          loadBalancePort: 6342
-          sensitivePropertyKeySecret: nifi-sensitive-property-key
-EOF</pre>
+          loadBalancePort: 6342</code></pre>
 </div>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: v1alpha1
-kind: Secret
-metadata:
-  name: nifi-sensitive-property-key
-stringData:
-  nifiSensitivePropsKey: mYsUp3rS3cr3tk3y
-EOF</pre>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">config-spec Property</th>
+<th class="tableblock halign-left valign-top">Actual Property</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+<th class="tableblock halign-left valign-top">Recommended Value</th>
+<th class="tableblock halign-left valign-top">Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">httpPort</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nifi.web.http.port</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8080</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">file:nifi.properties</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">protocolPort</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nifi.cluster.node.protocol.port</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9088</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">file:nifi.properties</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">loadBalancePort</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nifi.cluster.load.balance.port</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6342</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">file:nifi.properties</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">metricsPort</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">metricsPort</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JMX Exporter/CLI</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </article>

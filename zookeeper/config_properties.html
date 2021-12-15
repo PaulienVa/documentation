@@ -207,11 +207,7 @@ spec:
         # Here you can set the Stackable supported configuration parameters
         # See the documentation for a full list of the exposed configuration parameters
         config:
-          adminPort: 12000
-          metricsPort: 9505
-          dataDir: /stackable/data
           tickTime: 3000
-          clientPort: 2181
         # You can also override properties in a configuration file here
         configOverrides:
           zoo.cfg:
@@ -245,39 +241,11 @@ spec:
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">adminPort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">admin.serverPort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">8080</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">12000</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">file:zoo.cfg</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">clientPort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">clientPort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2181</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2181</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">file:zoo.cfg</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">dataDir</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">dataDir</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/tmp/zookeeper</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/stackable/data</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">file:zoo.cfg</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">initLimit</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">initLimit</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">file:zoo.cfg</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">metricsPort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">metricsPort</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">9505</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JMX Exporter/ CLI</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">syncLimit</p></td>

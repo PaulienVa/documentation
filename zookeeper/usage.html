@@ -198,7 +198,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>To create a single node Apache ZooKeeper (v3.5.8) cluster with Prometheus metrics exposed on port 9505:</p>
+<p>To create a three-node Apache ZooKeeper (v3.5.8) cluster:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -207,19 +207,42 @@
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperCluster
 metadata:
-  name: simple
+  name: simple-zk
 spec:
   version: 3.5.8
   servers:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        config:
-          metricsPort: 9505
-          dataDir: /stackable/data
+        replicas: 3
+        config: {}
 $ sudo kubectl apply -f zookeeper.yaml</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Afterwards, a ZookeeperZnode root can be created:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ cat znode.yaml
+---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperZnode
+metadata:
+  name: simple-znode
+spec:
+  clusterRef:
+    name: simple-zk
+    namespace: default
+$ sudo kubectl apply -f znode.yaml</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, a ConfigMap is created, containing a path that a ZooKeeper client can connect to:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl get configmap simple-znode-nodeport -o yaml
+$ $ZOOKEEPER_HOME/bin/zkCli.sh -server $(kubectl get configmap simple-znode-nodeport -o jsonpath='{.data.ZOOKEEPER}')</pre>
 </div>
 </div>
 </article>

@@ -34,9 +34,6 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
@@ -189,84 +186,102 @@
 </aside>
 <article class="doc">
 <h1 class="page">Installation</h1>
-<div class="sect1">
-<h2 id="_database_for_the_superset_metadata"><a class="anchor" href="#_database_for_the_superset_metadata"></a>Database for the Superset metadata</h2>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The metadata of Superset (slices, connections, tables, dashboards, &#8230;&#8203;) is stored in an SQL
-database.</p>
+<p>There are three ways to run the Superset Operator:</p>
 </div>
-<div class="paragraph">
-<p>For testing purposes, you can spin up a PostgreSQL database with the following command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm repo add bitnami https://charts.bitnami.com/bitnami
-
-helm install superset bitnami/postgresql \
-    --set postgresqlUsername=superset \
-    --set postgresqlPassword=superset \
-    --set postgresqlDatabase=superset</code></pre>
-</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Helm managed Docker container deployment on Kubernetes</p>
+</li>
+<li>
+<p>As a Docker container</p>
+</li>
+<li>
+<p>Build from source.</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_starting_the_operator"><a class="anchor" href="#_starting_the_operator"></a>Starting the operator</h2>
+<h2 id="_helm"><a class="anchor" href="#_helm"></a>Helm</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Before the operator can be started, the CRDs for this operator and the cluster role binding must be
-created:</p>
+<p>Helm allows you to download and deploy Stackable operators on Kubernetes and is by far the easiest
+installation method. First ensure that you have installed the Stackable Operators Helm repository:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f deploy/crd
-kubectl apply -f deploy/role</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ helm repo add stackable https://repo.stackable.tech/repository/helm-stable/</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The operator can be deployed as a pod:</p>
+<p>Then install the Stackable Operator for Apache Superset</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f deploy/operator</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ helm install superset-operator stackable/superset-operator</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Helm will deploy the operator in a Kubernetes container and apply the CRDs for the Apache Superset
+service. You are now ready to deploy Apache Superset in Kubernetes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_docker"><a class="anchor" href="#_docker"></a>Docker</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This Operator is published as a Docker image:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>docker.stackable.tech/stackable/superset-operator</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When installing manually with Docker you will need to install the Stackable CRDs for Apache Superset
+in your Kubernetes environment. These are available on the
+<a href="https://github.com/stackabletech/superset-operator/tree/main/deploy/crd">Stackable GitHub repository</a>
+for this operator.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>$ kubectl apply -f supersetcluster.crd.yaml
+$ kubectl apply -f init.crd.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To run it straight from Docker you can use this command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run \
+    --name superset-operator \
+    --network host \
+    --env KUBECONFIG=/home/stackable/.kube/config \
+    --mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
+    docker.stackable.tech/stackable/superset-operator:latest</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_secret_with_superset_credentials"><a class="anchor" href="#_secret_with_superset_credentials"></a>Secret with Superset credentials</h2>
+<h2 id="_building_the_operator_from_source"><a class="anchor" href="#_building_the_operator_from_source"></a>Building the operator from source</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A secret with the necessary credentials must be created:</p>
+<p>This operator is written in Rust and is developed against the latest stable Rust release (1.57 at
+the time of writing).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
-kind: Secret
-metadata:
-  name: simple-superset-credentials
-type: superset.stackable.tech/superset-credentials
-stringData:
-  adminUser.username: admin
-  adminUser.firstname: Superset
-  adminUser.lastname: Admin
-  adminUser.email: admin@superset.com
-  adminUser.password: admin
-  connections.secretKey: thisISaSECRET_1234
-  connections.sqlalchemyDatabaseUri: postgresql://superset:superset@superset-postgresql.default.svc.cluster.local/superset</code></pre>
+<pre class="highlightjs highlight"><code>cargo run -- crd | kubectl apply -f -
+cargo run -- run</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>The <code>connections.secretKey</code> will be used for securely signing the session cookies and can be used
-for any other security related needs by extensions. It should be a long random string of bytes.</p>
-</div>
-<div class="paragraph">
-<p><code>connections.sqlalchemyDatabaseUri</code> must contain the connection string to the SQL database storing
-the Superset metadata.</p>
-</div>
-<div class="paragraph">
-<p>The <code>adminUser</code> fields are used by the <code>init</code> command to create an admin user.</p>
 </div>
 </div>
 </div>

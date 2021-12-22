@@ -35,13 +35,7 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
-  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
@@ -193,7 +187,7 @@
 <article class="doc">
 <h1 class="page">Usage</h1>
 <div class="paragraph">
-<p>After installation, the CRD for this operator must be created:</p>
+<p>After installation, ensure CRD for this operator must exists or create yourself:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -201,7 +195,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>To create a single node Apache Hive Metastore (v2.3.9) cluster with Prometheus metrics exposed on port 11111:</p>
+<p>To create a single node Apache Hive Metastore (v2.3.9) cluster with derby:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -220,12 +214,73 @@ spec:
             kubernetes.io/os: linux
         replicas: 1
         config:
-          metricsPort: 11111
           database:
             connString: jdbc:derby:;databaseName=/tmp/metastore_db;create=true
             user: APP
             password: mine
             dbType: derby
+EOF</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To create a single node Apache Hive Metastore (v2.3.9) cluster with derby and S3 access:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: hive.stackable.tech/v1alpha1
+kind: HiveCluster
+metadata:
+  name: simple-derby
+spec:
+  version: 2.3.9
+  metastore:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: 1
+        config:
+          database:
+            connString: jdbc:derby:;databaseName=/stackable/metastore_db;create=true
+            user: APP
+            password: mine
+            dbType: derby
+          s3Connection:
+            endPoint: changeme
+            accessKey: changeme
+            secretKey: changeme
+            sslEnabled: false
+            pathStyleAccess: true
+EOF</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To create a single node Apache Hive Metastore (v2.3.9) cluster with PostgreSQL:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>apiVersion: hive.stackable.tech/v1alpha1
+kind: HiveCluster
+metadata:
+  name: simple-postgres
+spec:
+  version: 2.3.9
+  metastore:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: 1
+        config:
+          warehouseDir: /stackable/metastore
+          database:
+            connString: jdbc:postgresql://localhost:5432/metastoredb
+            user: hiveuser
+            password: mypass
+            dbType: postgres
 EOF</pre>
 </div>
 </div>

@@ -35,13 +35,7 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
-  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
@@ -192,23 +186,15 @@
 </aside>
 <article class="doc">
 <h1 class="page">Usage</h1>
-<div id="preamble">
+<div class="sect1">
+<h2 id="_create_an_apache_spark_cluster"><a class="anchor" href="#_create_an_apache_spark_cluster"></a>Create an Apache Spark cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>After installation, the CRD for this operator must be created:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>kubectl apply -f /etc/stackable/spark-operator/crd/sparkcluster.crd.yaml</pre>
-</div>
+<p>If you followed the installation instructions, you should now have a Stackable Operator for Apache Spark up and running and you are ready to create your first Apache Spark cluster.</p>
 </div>
 <div class="paragraph">
 <p>The example below creates an Apache Spark 3.0.1 cluster with one master (because of <code>replicas: 1</code>), one history server and as many workers as nodes available.
-Multiple instances in the same selector may lead to port duplicates which results in the affected node
-to increase the port one by one (if max_port_retries is not set to 0). Keep that in mind when, for example running multiple masters without specified ports on the same node.</p>
-</div>
-<div class="paragraph">
-<p>Because of <code>enableMonitoring: true</code>, all pods will be annotated for metric scraping. Metrics are retrieved from Spark&#8217;s built in Prometheus Servlet. Only cluster-wide metrics are scraped currently (no application metrics).</p>
+Because of <code>enableMonitoring: true</code>, all pods will be annotated for metric scraping. Metrics are retrieved from Spark&#8217;s built in Prometheus Servlet.</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -257,8 +243,50 @@ EOF</pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_structure"><a class="anchor" href="#_structure"></a>Structure</h3>
+<div class="sect1">
+<h2 id="_using_the_apache_spark_cluster"><a class="anchor" href="#_using_the_apache_spark_cluster"></a>Using the Apache Spark cluster</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The example above sets up a <a href="https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport">NodePort</a> service named <code>simple</code> that clients can use to run Spark jobs.</p>
+</div>
+<div class="paragraph">
+<p>This is how the list of services might look like:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>kubectl get svc
+NAME                            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                         AGE
+kubernetes                      ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP                         20m
+simple                          NodePort    10.96.220.230   &lt;none&gt;        7078:31585/TCP,8081:30497/TCP   31s
+simple-history-server-default   ClusterIP   None            &lt;none&gt;        18081/TCP                       31s
+simple-master-default           ClusterIP   None            &lt;none&gt;        7078/TCP,8081/TCP               31s
+simple-slave-2core2g            ClusterIP   None            &lt;none&gt;        3031/TCP,8083/TCP               31s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To start a Spark shell from inside the cluster you would run:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/stackable/spark/bin/spark-shell --master spark://simple-master-default:7078</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and from outside:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>spark-shell --master spark://172.18.0.2:31585</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where <code>172.18.0.2</code> is the IP address of one of your nodes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration_properties"><a class="anchor" href="#_configuration_properties"></a>Configuration properties</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>There are three levels of configuration:</p>
 </div>
@@ -282,7 +310,6 @@ EOF</pre>
 </tr>
 </tbody>
 </table>
-</div>
 <div class="sect2">
 <h3 id="_common_properties"><a class="anchor" href="#_common_properties"></a>Common properties</h3>
 <table class="tableblock frame-all grid-all stretch">
@@ -438,6 +465,8 @@ EOF</pre>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
 </div>
 </div>
 </article>

@@ -214,7 +214,7 @@
 <p>Druid requires a MySQL or Postgres database.</p>
 </div>
 <div class="paragraph">
-<p>For testing purposes, you can spin up a PostgreSQL database with the bitnami PostgreSQL helm chart.  Add the bitname repository:</p>
+<p>For testing purposes, you can spin up a PostgreSQL database with the bitnami PostgreSQL helm chart.  Add the bitnami repository:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -222,7 +222,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>And setup the Postgres database:</p>
+<p>And set up the Postgres database:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -247,7 +247,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>Then a cluster can be deployed using the example below. Replace <code>&lt;cluster-ip-of-postgres-svc&gt;</code> with the actual ip address and make sure you have <strong>exactly one node</strong> labeled with <code>nodeType=druid-data</code> as used in the deep storage selector. Having more than one data node is not supported when using local storage.</p>
+<p>Then a cluster can be deployed using the example below. Make sure you have <strong>exactly one node</strong> labeled with <code>nodeType=druid-data</code> as used in the deep storage selector. Having more than one data node is not supported when using local storage.</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -258,13 +258,11 @@ metadata:
   name: simple
 spec:
   version: 0.22.0
-  zookeeperReference:
-    namespace: default
-    name: simple
+  zookeeperReference: simple-zk
   metadataStorageDatabase:
     dbType: postgresql
-    connString: jdbc:postgresql://&lt;cluster-ip-of-postgres-svc&gt;/druid
-    host: &lt;cluster-ip-of-postgres-svc&gt;
+    connString: jdbc:postgresql://druid-postgresql/druid
+    host: druid-postgresql    # this is the name of the Postgres service
     port: 5432
     user: druid
     password: druid
@@ -311,15 +309,7 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>The Router is hosting the web UI, to be able to access the web interface you need to forward port 8888 first:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>kubectl port-forward --namespace default po/&lt;router-pod-name&gt; 8888:8888</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now open <code><a href="http://localhost:8888" class="bare">http://localhost:8888</a></code> in your browser and follow the <a href="https://druid.apache.org/docs/latest/tutorials/index.html#step-4-load-data">druid documentation</a> on how to load and query sample data.</p>
+<p>The Router is hosting the web UI, a <code>NodePort</code> service is created by the operator to access the web UI. Connect to the <code>simple-router</code> <code>NodePort</code> service and follow the <a href="https://druid.apache.org/docs/latest/tutorials/index.html#step-4-load-data">druid documentation</a> on how to load and query sample data.</p>
 </div>
 <div class="paragraph">
 <p>For monitoring purposes, Prometheus metrics are exposed on <code>metricsPort</code>. Similarly to the web UI above, you need to expose the corresponding port for the group you want to monitor.</p>

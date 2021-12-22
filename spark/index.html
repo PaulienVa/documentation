@@ -35,13 +35,7 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
-  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
@@ -191,6 +185,8 @@
 </aside>
 <article class="doc">
 <h1 class="page">Stackable Operator for Apache Spark</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
 <p>This is an operator for Kubernetes that can manage <a href="https://spark.apache.org/">Apache Spark</a> standalone clusters.</p>
 </div>
@@ -206,9 +202,16 @@ This operator only works with images from the <a href="https://repo.stackable.te
 </tr>
 </table>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getting_the_docker_image"><a class="anchor" href="#_getting_the_docker_image"></a>Getting the Docker image</h2>
+<div class="sectionbody">
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code>docker pull docker.stackable.tech/stackable/spark:&lt;version&gt;</code></pre>
+</div>
+</div>
 </div>
 </div>
 </article>

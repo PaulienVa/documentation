@@ -251,9 +251,7 @@
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code>$ sudo kubectl apply -f zookeepercluster.crd.yaml
-$ sudo kubectl apply -f start.crd.yaml
-$ sudo kubectl apply -f stop.crd.yaml
-$ sudo kubectl apply -f restart.crd.yaml</code></pre>
+$ sudo kubectl apply -f zookeeperznode.crd.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -261,7 +259,12 @@ $ sudo kubectl apply -f restart.crd.yaml</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -e ZOOKEEPER_OPERATOR_LOG=trace -e KUBECONFIG=/root/.kube/k3s.yaml --mount type=bind,source="$HOME/.kube/k3s.yaml",target="/root/.kube/k3s.yaml" -it docker.stackable.tech/stackable/zookeeper-operator:latest</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run \
+    --name zookeeper-operator \
+    --network host \
+    --env KUBECONFIG=/home/stackable/.kube/config \
+    --mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
+    docker.stackable.tech/stackable/zookeeper-operator:latest</code></pre>
 </div>
 </div>
 </div>

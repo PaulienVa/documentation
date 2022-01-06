@@ -190,7 +190,7 @@
 <article class="doc">
 <h1 class="page">Usage</h1>
 <div class="paragraph">
-<p>The cluster is configured via a YAML file.</p>
+<p>The cluster is configured via a YAML file. The Regorule Operator port is fixed to <code>3030</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -273,7 +273,6 @@ spec:
         name: client
         protocol: TCP
   serviceAccountName: regorule-operator
-  hostNetwork: true
 
 ---
 apiVersion: v1
@@ -282,8 +281,8 @@ metadata:
   name: regorule-service
 spec:
   selector:
-    app.kubernetes.io/name: regorule
-    app.kubernetes.io/instance: simple
+    app.kubernetes.io/instance: regorule-operator
+    app.kubernetes.io/name: regorule-operator
   ports:
     - protocol: TCP
       port: 3030

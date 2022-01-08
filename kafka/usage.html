@@ -204,31 +204,31 @@
 </div>
 </div>
 <div class="paragraph">
-<p>To create an Apache Kafka (v2.8.0) cluster named "simple" with Prometheus metrics exposed on port 9606:</p>
+<p>To create an Apache Kafka (v2.8.1) cluster named <code>simple-kafka</code> assuming that you already have a Zookeeper cluster named <code>simple-zk</code>:</p>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperZnode
+metadata:
+  name: simple-kafka-znode
+spec:
+  clusterRef:
+    name: simple-zk
+    namespace: default
+---
 apiVersion: kafka.stackable.tech/v1alpha1
 kind: KafkaCluster
 metadata:
-  name: simple
+  name: simple-kafka
 spec:
-  version:
-    kafka_version: 2.8.0
-  zookeeperReference:
-    namespace: default
-    name: simple
+  version: 2.8.1
+  zookeeperConfigMapName: simple-kafka-znode
   brokers:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
         replicas: 1
-        config:
-          logDirs: "/tmp/kafka-logs"
-          metricsPort: 9606
 EOF</pre>
 </div>
 </div>
@@ -241,17 +241,12 @@ EOF</pre>
 apiVersion: kafka.stackable.tech/v1alpha1
 kind: KafkaCluster
 metadata:
-  name: simple
+  name: simple-kafka
 spec:
-  version:
-    kafka_version: 2.8.0
-  zookeeperReference:
-    namespace: default
-    name: simple
+  version: 2.8.1
+  zookeeperConfigMapName: simple-kafka-znode
   opa:
-    reference:
-      namespace: default
-      name: simple-opacluster
+    configMapName: simple-opacluster
     authorizerClassName: com.bisnode.kafka.authorization.OpaAuthorizer
     authorizerCacheInitialCapacity: 0
     authorizerCacheMaximumSize: 0
@@ -259,14 +254,16 @@ spec:
   brokers:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
         replicas: 1
-        config:
-          logDirs: "/tmp/kafka-logs"
-          metricsPort: 9606
 EOF</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In either case, the Kafka pods must be bound to a role that has permission to <code>get</code> <code>Service</code> objects. This can be set up using kubectl:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>kubectl create rolebinding kafka --clusterrole=view --serviceaccount=default:default</pre>
 </div>
 </div>
 </article>

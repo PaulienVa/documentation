@@ -229,17 +229,12 @@
 <pre>apiVersion: kafka.stackable.tech/v1alpha1
 kind: KafkaCluster
 metadata:
-  name: simple
+  name: simple-kafka
 spec:
-  version:
-    kafka_version: 2.8.0
-  zookeeperReference:
-    namespace: default
-    name: simple
+  version: 2.8.1
+  zookeeperConfigMapName: simple-kafka-znode
   opa:
-    reference:
-      namespace: default
-      name: simple
+    configMapName: simple-opa
     authorizerClassName: com.bisnode.kafka.authorization.OpaAuthorizer
     authorizerCacheInitialCapacity: 0
     authorizerCacheMaximumSize: 0
@@ -247,13 +242,7 @@ spec:
   brokers:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        replicas: 1
-        config:
-          logDirs: "/tmp/kafka-logs"
-          metricsPort: 9606</pre>
+        replicas: 1</pre>
 </div>
 </div>
 <div class="sect2">
@@ -305,9 +294,9 @@ spec:
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">zookeeperReference</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">struct</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A reference to a ZooKeeper cluster (namespace, name, chroot)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">zookeeperConfigMapName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A reference to a ConfigMap containing a connection string for connecting to a ZooKeeper cluster</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -325,7 +314,7 @@ spec:
 <p>We pool Role and RoleGroup options, since they are the same for Role and RoleGroup.</p>
 </div>
 <div class="sect3">
-<h4 id="_server"><a class="anchor" href="#_server"></a>Server</h4>
+<h4 id="_broker"><a class="anchor" href="#_broker"></a>Broker</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -341,20 +330,6 @@ spec:
 <td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Related Kafka properties</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Location</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">metricsPort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The port where Kafka metrics are exposed as a Prometheus endpoint.</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JMX Exporter / CLI</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">logDirs</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A comma separated list of directories under which to store log files</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">log.Dirs</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">server.properties</p></td>
 </tr>
 </tbody>
 </table>

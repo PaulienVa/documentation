@@ -255,7 +255,7 @@
 apiVersion: druid.stackable.tech/v1alpha1
 kind: DruidCluster
 metadata:
-  name: simple
+  name: simple-druid
 spec:
   version: 0.22.0
   zookeeperReference: simple-zk
@@ -299,7 +299,7 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>The Router is hosting the web UI, a <code>NodePort</code> service is created by the operator to access the web UI. Connect to the <code>simple-router</code> <code>NodePort</code> service and follow the <a href="https://druid.apache.org/docs/latest/tutorials/index.html#step-4-load-data">druid documentation</a> on how to load and query sample data.</p>
+<p>The Router is hosting the web UI, a <code>NodePort</code> service is created by the operator to access the web UI. Connect to the <code>simple-druid-router</code> <code>NodePort</code> service and follow the <a href="https://druid.apache.org/docs/latest/tutorials/index.html#step-4-load-data">druid documentation</a> on how to load and query sample data.</p>
 </div>
 </div>
 </div>
@@ -343,6 +343,27 @@ stringData:
   bucket: druid-deepstorage
   baseKey: storage           # the base key is the prefix to be used; optional</pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_connecting_to_druid_from_other_services"><a class="anchor" href="#_connecting_to_druid_from_other_services"></a>Connecting to Druid from other Services</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The operator creates a <code>ConfigMap</code> with the name of the cluster which contains connection information. Following our example above (the name of the cluster is <code>simple-druid</code>) a <code>ConfigMap</code> with the name <code>simple-druid</code> will be created containing 3 keys:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>DRUID_ROUTER</code> with the format <code>&lt;host&gt;:&lt;port&gt;</code>, which points to the router processes HTTP endpoint. Here you can connect to the web UI, or use REST endpoints such as <code>/druid/v2/sql/</code> to query data. <a href="https://druid.apache.org/docs/latest/querying/sql.html#http-post">More information in the Druid Docs</a>.</p>
+</li>
+<li>
+<p><code>DRUID_AVATICA_JDBC</code> contains a JDBC connect string which can be used together with the <a href="https://calcite.apache.org/avatica/downloads/">Avatica JDBC Driver</a> to connect to Druid and query data. <a href="https://druid.apache.org/docs/latest/querying/sql.html#jdbc">More information in the Druid Docs</a>.</p>
+</li>
+<li>
+<p><code>DRUID_SQALCHEMY</code> contains a connection string used to connect to Druid with SQAlchemy, in - for example - Apache Superset.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>

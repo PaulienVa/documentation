@@ -258,14 +258,6 @@ spec:
 EOF</pre>
 </div>
 </div>
-<div class="paragraph">
-<p>In either case, the Kafka pods must be bound to a role that has permission to <code>get</code> <code>Service</code> objects. This can be set up using kubectl:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>kubectl create rolebinding kafka --clusterrole=view --serviceaccount=default:default</pre>
-</div>
-</div>
 </article>
   </div>
 </main>

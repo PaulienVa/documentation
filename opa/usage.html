@@ -201,7 +201,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>To create a single node OPA (v0.27.1) cluster with Prometheus metrics exposed on port 8181:</p>
+<p>To create a single node OPA (v0.27.1) cluster with Prometheus metrics exposed on port 8081:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -220,7 +220,6 @@ spec:
             kubernetes.io/os: linux
         replicas: 1
         config:
-          port: 8181
           regoRuleReference: "http://localhost:3030/opa/v1"
 EOF</pre>
 </div>

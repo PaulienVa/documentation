@@ -202,11 +202,10 @@ Because of <code>enableMonitoring: true</code>, all pods will be annotated for m
 apiVersion: spark.stackable.tech/v1alpha1
 kind: SparkCluster
 metadata:
-  name: simple
+  name: simple-spark
 spec:
   version: "3.0.1"
   config:
-    logDir: /stackable/data/log
     enableMonitoring: true
   masters:
     roleGroups:
@@ -215,9 +214,7 @@ spec:
           matchLabels:
             kubernetes.io/os: linux
         replicas: 1
-        config:
-          masterPort: 7078
-          masterWebUiPort: 8081
+        config: {}
   workers:
     roleGroups:
       2core2g:
@@ -227,8 +224,6 @@ spec:
         config:
           cores: 2
           memory: "2g"
-          workerPort: 3031
-          workerWebUiPort: 8083
   historyServers:
     roleGroups:
       default:
@@ -236,8 +231,7 @@ spec:
           matchLabels:
             kubernetes.io/os: linux
         replicas: 1
-        config:
-          historyWebUiPort: 18081
+        config: {}
 EOF</pre>
 </div>
 </div>
@@ -247,7 +241,7 @@ EOF</pre>
 <h2 id="_using_the_apache_spark_cluster"><a class="anchor" href="#_using_the_apache_spark_cluster"></a>Using the Apache Spark cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The example above sets up a <a href="https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport">NodePort</a> service named <code>simple</code> that clients can use to run Spark jobs.</p>
+<p>The example above sets up a <a href="https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport">NodePort</a> service named <code>simple-spark-master</code> that clients can use to run Spark jobs.</p>
 </div>
 <div class="paragraph">
 <p>This is how the list of services might look like:</p>
@@ -255,12 +249,12 @@ EOF</pre>
 <div class="literalblock">
 <div class="content">
 <pre>kubectl get svc
-NAME                            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                         AGE
-kubernetes                      ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP                         20m
-simple                          NodePort    10.96.220.230   &lt;none&gt;        7078:31585/TCP,8081:30497/TCP   31s
-simple-history-server-default   ClusterIP   None            &lt;none&gt;        18081/TCP                       31s
-simple-master-default           ClusterIP   None            &lt;none&gt;        7078/TCP,8081/TCP               31s
-simple-slave-2core2g            ClusterIP   None            &lt;none&gt;        3031/TCP,8083/TCP               31s</pre>
+NAME                                  TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                         AGE
+kubernetes                            ClusterIP   10.96.0.1      &lt;none&gt;        443/TCP                         5h38m
+simple-spark-history-server-default   ClusterIP   None           &lt;none&gt;        18080/TCP                       2m54s
+simple-spark-master                   NodePort    10.96.63.134   &lt;none&gt;        8080:31296/TCP,7077:32274/TCP   2m54s
+simple-spark-master-default           ClusterIP   None           &lt;none&gt;        8080/TCP,7077/TCP               2m54s
+simple-spark-slave-2core2g            ClusterIP   None           &lt;none&gt;        8081/TCP                        2m54s</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -268,7 +262,7 @@ simple-slave-2core2g            ClusterIP   None            &lt;none&gt;        
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>/stackable/spark/bin/spark-shell --master spark://simple-master-default:7078</pre>
+<pre>/stackable/spark/bin/spark-shell --master spark://simple-spark-master-default:7077</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -276,11 +270,11 @@ simple-slave-2core2g            ClusterIP   None            &lt;none&gt;        
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>spark-shell --master spark://172.18.0.2:31585</pre>
+<pre>spark-shell --master spark://&lt;node-ip&gt;&gt;:32274</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>where <code>172.18.0.2</code> is the IP address of one of your nodes.</p>
+<p>where <code>&lt;node-ip&gt;</code> is the IP address of the node running your master.</p>
 </div>
 </div>
 </div>
@@ -333,12 +327,6 @@ simple-slave-2core2g            ClusterIP   None            &lt;none&gt;        
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">logDir</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The log folder for spark applications</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">spark.history.fs.logDirectory=logDir, spark.eventLog.enabled=true, spark.eventLog.dir=logDir;</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">secret</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A secret shared between nodes and required to submit applications via spark-submit</p></td>
@@ -377,18 +365,6 @@ simple-slave-2core2g            ClusterIP   None            &lt;none&gt;        
 <td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Related Spark properties</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">masterPort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Start the master on a different port (default: 7077).</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SPARK_MASTER_PORT</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">masterWebUiPort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Port for the master web UI (default: 8080).</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SPARK_MASTER_WEBUI_PORT</p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -407,18 +383,6 @@ simple-slave-2core2g            ClusterIP   None            &lt;none&gt;        
 <td class="tableblock halign-left valign-top"><p class="tableblock">Type</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Related Spark properties</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">workerPort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Start the Spark worker on a specific port (default: random).</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SPARK_WORKER_PORT</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">workerWebUiPort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Port for the worker web UI (default: 8081).</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SPARK_WORKER_WEBUI_PORT</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">cores</p></td>
@@ -456,12 +420,6 @@ simple-slave-2core2g            ClusterIP   None            &lt;none&gt;        
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A local directory where to cache application data. If set, the history server will store application data on disk instead of keeping it in memory. The data written to disk will be re-used in the event of a history server restart.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">spark.history.store.path</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">historyUiPort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The port to which the web interface of the history server binds (default: 18080).</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">spark.history.ui.port</p></td>
 </tr>
 </tbody>
 </table>

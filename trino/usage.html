@@ -208,6 +208,9 @@
 <p>Deployed Stackable Apache Hive metastore</p>
 </li>
 <li>
+<p>Deployed Stackable <a href="https://github.com/stackabletech/secret-operator">secret-operator</a></p>
+</li>
+<li>
 <p>Accessible S3 Bucket</p>
 <div class="ulist">
 <ul>
@@ -245,7 +248,7 @@
 <div class="sect2">
 <h3 id="_hive_operator"><a class="anchor" href="#_hive_operator"></a>Hive operator</h3>
 <div class="paragraph">
-<p>Please refer to the <a href="https://github.com/stackabletech/hive-operator">Hive</a> operator and <a href="https://docs.stackable.tech/home/index.html">docs</a>.</p>
+<p>Please refer to the <a href="https://github.com/stackabletech/hive-operator">Hive</a> operator and <a href="https://docs.stackable.tech/hive/index.html">docs</a>.</p>
 </div>
 <div class="paragraph">
 <p>Both Hive and Trino need the same S3 authentication.</p>
@@ -254,11 +257,59 @@
 <div class="sect2">
 <h3 id="_opa_operator"><a class="anchor" href="#_opa_operator"></a>OPA operator</h3>
 <div class="paragraph">
-<p>Please refer to the <a href="https://github.com/stackabletech/opa-operator">OPA</a> operator and <a href="https://docs.stackable.tech/home/index.html">docs</a>.</p>
+<p>Please refer to the <a href="https://github.com/stackabletech/opa-operator">OPA</a> operator and <a href="https://docs.stackable.tech/opa/index.html">docs</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_regorule_server"><a class="anchor" href="#_regorule_server"></a>Regorule Server</h3>
+<h3 id="_authentication"><a class="anchor" href="#_authentication"></a>Authentication</h3>
+<div class="paragraph">
+<p>We provide user authentication via secret that can be referred in the custom resource:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>authentication:
+  method:
+    multiUser:
+      userCredentialsSecret:
+        namespace: default
+        name: simple-trino-users-secret</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These secrets need to be created manually before startup (check <code>examples/simple-trino-users-secret.yaml</code>):</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>kubectl apply -f examples/simple-trino-users-secret.yaml</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The secret looks the following:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>apiVersion: v1
+kind: Secret
+metadata:
+  name: simple-trino-users-secret
+type: kubernetes.io/opaque
+stringData:
+  admin: $2y$10$89xReovvDLacVzRGpjOyAOONnayOgDAyIS2nW9bs5DJT98q17Dy5i
+  alice: $2y$10$HcCa4k9v2DRrD/g7e5vEz.Bk.1xg00YTEHOZjPX7oK3KqMSt2xT8W
+  bob: $2y$10$xVRXtYZnYuQu66SmruijPO8WHFM/UK5QPHTr.Nzf4JMcZSqt3W.2.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The &lt;user&gt;:&lt;password&gt; combinations are provided in the <code>stringData</code> field. The hashes are created using bcrypt with 10 rounds or more.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>htpasswd -nbBC 10 admin admin</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_regorule_server_authorization"><a class="anchor" href="#_regorule_server_authorization"></a>Regorule Server (Authorization)</h3>
 <div class="paragraph">
 <p>The OPA cluster requires downloading rules from a RegoRule server. You can use your own solution or fall back on the Stackable Regorule Server</p>
 </div>
@@ -318,7 +369,7 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>You can let the Trino operator specify Rego rules by configuring the <code>authorization</code> field in the custom resource. This is a rudimentary implementation for user access.</p>
+<p>You can let the Trino operator write its own Rego rules by configuring the <code>authorization</code> field in the custom resource. This is a rudimentary implementation for user access.</p>
 </div>
 </div>
 <div class="sect2">
@@ -332,7 +383,7 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>To create a single node Trino (v362) cluster with Prometheus metrics exposed on port 10200 (coordinator) and 10201 (worker). Metrics will be <code>disabled</code> if you remove the metricsPort porperty. Please adapt the <code>s3Connection</code> with your credentials and the <code>serverCertificate</code> with your key and certificate:</p>
+<p>To create a single node Trino (v362) cluster. Please adapt the <code>s3</code> with your credentials.</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -340,19 +391,25 @@ spec:
 apiVersion: trino.stackable.tech/v1alpha1
 kind: TrinoCluster
 metadata:
-  name: simple
+  name: simple-trino
 spec:
   version: "0.0.362"
   nodeEnvironment: production
-  hiveReference:
+  hive:
     namespace: default
     name: simple-derby
   opa:
     namespace: default
-    name: simple
+    name: simple-opa
+  authentication:
+    method:
+      multiUser:
+        userCredentialsSecret:
+          namespace: default
+          name: simple-trino-users-secret
   authorization:
-    packageName: trino
-    userPermissions:
+    package: trino
+    permissions:
       admin:
         schemas:
           read: true
@@ -371,7 +428,7 @@ spec:
         tables:
           iris_parquet:
             read: true
-  s3Connection:
+  s3:
     endPoint: changeme
     accessKey: changeme
     secretKey: changeme
@@ -383,23 +440,8 @@ spec:
         selector:
           matchLabels:
             kubernetes.io/os: linux
-        config:
-          coordinator: true
-          nodeDataDir: /stackable/trino/data
-          metricsPort: 10200
-          httpServerHttpPort: 8080
-          httpServerHttpsPort: 8443
-          passwordFileContent: |
-            alice:$2y$10$HcCa4k9v2DRrD/g7e5vEz.Bk.1xg00YTEHOZjPX7oK3KqMSt2xT8W
-            bob:$2y$10$xVRXtYZnYuQu66SmruijPO8WHFM/UK5QPHTr.Nzf4JMcZSqt3W.2.
-            admin:$2y$10$89xReovvDLacVzRGpjOyAOONnayOgDAyIS2nW9bs5DJT98q17Dy5i
-          serverCertificate: |
-            -----BEGIN PRIVATE KEY-----
-            some_key
-            -----END PRIVATE KEY-----
-            -----BEGIN CERTIFICATE-----
-            some_certificate
-            -----END CERTIFICATE-----
+        replicas: 1
+        config: {}
   workers:
     roleGroups:
       default:
@@ -407,10 +449,7 @@ spec:
           matchLabels:
             kubernetes.io/os: linux
         replicas: 1
-        config:
-          nodeDataDir: /stackable/trino/data
-          metricsPort: 10201
-          httpServerHttpPort: 8081
+        config: {}
 EOF</pre>
 </div>
 </div>
@@ -419,7 +458,7 @@ EOF</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>./trino --server &lt;node_name&gt;:&lt;https-port&gt; --user admin --password</pre>
+<pre>./trino.jar --debug --server https://&lt;node_name&gt;:&lt;https-port&gt; --user=admin --password</pre>
 </div>
 </div>
 <div class="paragraph">

@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Building the Operator :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/hdfs/building.html">
+    <title>Implementation :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/hdfs/implementation.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -34,17 +34,14 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="configuration.html">Configuration</a>
-  </li>
-  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="implementation.html">Implementation</a>
   </li>
 </ul>
   </li>
@@ -189,24 +186,80 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Stackable Operator for Apache HDFS</a></li>
-    <li><a href="building.html">Building the Operator</a></li>
+    <li><a href="implementation.html">Implementation</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/hdfs-operator/edit/main/docs/modules/ROOT/pages/building.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/hdfs-operator/edit/main/docs/modules/ROOT/pages/implementation.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Building the Operator</h1>
+<h1 class="page">Implementation</h1>
+<div class="sect1">
+<h2 id="_kubernetes_objects"><a class="anchor" href="#_kubernetes_objects"></a>Kubernetes objects</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>This operator is written in Rust.
-It is developed against the latest stable Rust release (1.56 at the time of writing).</p>
+<p>This operator can be used to set up a highly available HDFS cluster. It implements three roles of the HDFS cluster:</p>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>cargo build</pre>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Node - responsible for holding the actual data. <strong>IMPORTANT</strong> Currently the data is kept in <code>hostPath</code> volumes of 1GB and no configuration options are exposed to the user. Each data node has its own volume.</p>
+</li>
+<li>
+<p>Journal Node - responsible for keeping track of HDFS blocks and used to perform failovers in case the active name node fails. For details see: <a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithQJM.html" class="bare">https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithQJM.html</a></p>
+</li>
+<li>
+<p>Name Node - responsible for keeping track of HDFS blocks and providing access to the data.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The operator creates the following K8S objects per role group defined in the custom resource.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ClusterIP - used for intra-cluster communication.</p>
+</li>
+<li>
+<p>ConfigMap - HDFS configuration files like <code>core-site.xml</code> and <code>hdfs-site.xml</code> are defined here and mounted in the pods.</p>
+</li>
+<li>
+<p>StatefulSet - where the replica count of each role group is defined. By default, a cluster will have 2 name nodes, 3 journal nodes and 3 data nodes.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In addition, a <code>NodePort</code> service is created for each pod that exposes all container ports to the outside world (from the perspective of K8S).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_hdfs"><a class="anchor" href="#_hdfs"></a>HDFS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the custom resource you can specify the number of replicas per role group (name node, data node or journal node) but the operator will make sure that:
+* at least two name nodes are started
+* at least one journal node is started
+* no datanodes are started unless the number of replicas is greater than zero.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_monitoring"><a class="anchor" href="#_monitoring"></a>Monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The cluster can be monitored with Prometheus from inside or outside the K8S cluster.</p>
+</div>
+<div class="paragraph">
+<p>All services (with the exception of the Zookeeper daemon on the node names) run with the JMX exporter agent enabled and expose metrics on the <code>metrics</code> port. This port is available form the container level up to the NodePort services.</p>
+</div>
+<div class="paragraph">
+<p>The metrics endpoints are also used as liveliness probes by K8S.</p>
+</div>
 </div>
 </div>
 </article>

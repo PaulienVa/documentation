@@ -34,17 +34,14 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="configuration.html">Configuration</a>
+    <a class="nav-link" href="usage.html">Usage</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="usage.html">Usage</a>
+    <a class="nav-link" href="implementation.html">Implementation</a>
   </li>
 </ul>
   </li>
@@ -203,148 +200,83 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are three ways to run the HDFS Operator:</p>
+<p>There are two ways to run the HDFS Operator:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Build from source. This is documented in <a href="building.html" class="page">Building the Operator</a>.</p>
+<p>Using Helm.</p>
 </li>
 <li>
-<p>Operating System packages (dep &amp; RPM)</p>
-</li>
-<li>
-<p>As a Docker container</p>
+<p>Build from source.</p>
 </li>
 </ol>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_operating_system_packages"><a class="anchor" href="#_operating_system_packages"></a>Operating System Packages</h2>
+<h2 id="_using_helm"><a class="anchor" href="#_using_helm"></a>Using Helm</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_debian"><a class="anchor" href="#_debian"></a>Debian</h3>
 <div class="paragraph">
-<p>We do provide <code>deb</code> packages for Debian 10:</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Version</th>
-<th class="tableblock halign-left valign-top">Repository</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Development</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><a href="https://repo.stackable.tech/repository/deb-dev/" class="bare">https://repo.stackable.tech/repository/deb-dev/</a> buster main</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Stable</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><a href="https://repo.stackable.tech/repository/deb-release/" class="bare">https://repo.stackable.tech/repository/deb-release/</a> buster main</code></p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>To add these repositories run a command like this:</p>
+<p>Helm allows you to download and deploy Stackable operators on Kubernetes and is by far the easiest installation method. First ensure that you have installed the Stackable Operators Helm repository:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo "deb https://repo.stackable.tech/repository/deb-release/ buster main" | sudo tee -a /etc/apt/sources.list.d/stackable.list</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm repo add stackable https://repo.stackable.tech/repository/helm-dev/
+helm repo update stackable</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>After you added the repository run:</p>
+<p>Then install the Stackable Operator for Apache Hadoop</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo apt-get update
-sudo apt-get install stackable-hdfs-operator</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_rhelcentos"><a class="anchor" href="#_rhelcentos"></a>RHEL/CentOS</h3>
-<div class="paragraph">
-<p>We do provide <code>RPM</code> packages for RHEL 7 &amp; 8.</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Version</th>
-<th class="tableblock halign-left valign-top">Repository</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Development RHEL 7</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><a href="https://repo.stackable.tech/repository/rpm-dev/el7" class="bare">https://repo.stackable.tech/repository/rpm-dev/el7</a></code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Stable RHEL 7</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><a href="https://repo.stackable.tech/repository/rpm-release/el7" class="bare">https://repo.stackable.tech/repository/rpm-release/el7</a></code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Development RHEL 8</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><a href="https://repo.stackable.tech/repository/rpm-dev/el8" class="bare">https://repo.stackable.tech/repository/rpm-dev/el8</a></code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Stable RHEL 8</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><a href="https://repo.stackable.tech/repository/rpm-release/el8" class="bare">https://repo.stackable.tech/repository/rpm-release/el8</a></code></p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>Add this to <code>/etc/yum.repos.d/stackable.repo</code> and make sure to pick the corrrect repository:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code>[stackable]
-name=Stackable
-baseurl=https://repo.stackable.tech/repository/rpm-release/el8
-repo_gpgcheck=0
-enabled=1
-gpgcheck=0</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install hdfs-operator stackable/hdfs-operator</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Install the Operator:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo yum install stackable-hdfs-operator</code></pre>
-</div>
-</div>
+<p>Helm will deploy the operator in a Kubernetes container and apply the CRDs for the Apache Hdfs service. You&#8217;re now ready to deploy Apache Hdfs in Kubernetes as described in  <a href="usage.html" class="page">Usage</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_docker"><a class="anchor" href="#_docker"></a>Docker</h2>
+<h2 id="_build_from_source"><a class="anchor" href="#_build_from_source"></a>Build from source</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This Operator is published as a Docker image:</p>
+<p>For development, testing and debugging purposes it is useful to be able to deploy a locally modified operator without the need to publish a container image and/or a helm chart.</p>
+</div>
+<div class="paragraph">
+<p>Requirements:
+* A recent Rust toolchain to compile the sources. Version 1.58 is the latest at the time of this writing.
+* Docker to build the image.
+* Optionally a local Kubernetes cluster like <code>kind</code> to run the operator and the Hdfs cluster.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>docker.stackable.tech/stackable/hdfs-operator</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cargo build
+cp target/debug/stackable-hdfs-operator .
+docker build -t docker.stackable.tech/stackable/hdfs-operator:0.3.0-nightly -f docker/Dockerfile.devel .
+rm stackable-hdfs-operator</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To run it straight from Docker you can use this command:</p>
+<p>The image can then be loaded in local <code>kind</code> cluster like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -e HDFS_OPERATOR_LOG=trace -e KUBECONFIG=/root/.kube/k3s.yaml --mount type=bind,source="$HOME/.kube/k3s.yaml",target="/root/.kube/k3s.yaml" -it docker.stackable.tech/stackable/hdfs-operator:latest</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kind load docker-image docker.stackable.tech/stackable/hdfs-operator:0.3.0-nightly --name hdfs</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>and the operator can be deployed by using the local Helm chart:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install hdfs-operator deploy/helm/hdfs-operator/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you can proceed to install a custom Apache Hdfs cluster as described in <a href="usage.html" class="page">Usage</a>.</p>
 </div>
 </div>
 </div>

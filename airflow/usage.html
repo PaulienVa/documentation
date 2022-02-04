@@ -228,10 +228,10 @@ dependencies are</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install airflow bitnami/postgresql \
-    --set postgresqlUsername=airflow \
-    --set postgresqlPassword=airflow \
-    --set postgresqlDatabase=airflow</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install airflow-postgresql bitnami/postgresql --version 11.0.0 \
+    --set auth.username=airflow \
+    --set auth.password=airflow \
+    --set auth.database=airflow</code></pre>
 </div>
 </div>
 <div class="paragraph">

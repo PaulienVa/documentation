@@ -197,6 +197,8 @@
 </aside>
 <article class="doc">
 <h1 class="page">Usage</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
 <p>If you are not installing the operator using Helm then after installation the CRD for this operator must be created:</p>
 </div>
@@ -251,6 +253,17 @@ $ sudo kubectl apply -f znode.yaml</pre>
 <div class="content">
 <pre>$ kubectl get configmap simple-znode-nodeport -o yaml
 $ $ZOOKEEPER_HOME/bin/zkCli.sh -server $(kubectl get configmap simple-znode-nodeport -o jsonpath='{.data.ZOOKEEPER}')</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_monitoring"><a class="anchor" href="#_monitoring"></a>Monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The managed ZooKeeper instances are automatically configured to export Prometheus metrics. See
+<a href="#home::monitoring.adoc" class="page unresolved">home::monitoring.adoc</a> for more details.</p>
+</div>
 </div>
 </div>
 </article>

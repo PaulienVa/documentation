@@ -203,6 +203,8 @@
 </aside>
 <article class="doc">
 <h1 class="page">Usage</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
 <p>After installation, the CRD for this operator must be created:</p>
 </div>
@@ -264,6 +266,17 @@ spec:
       default:
         replicas: 1
 EOF</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_monitoring"><a class="anchor" href="#_monitoring"></a>Monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The managed ZooKeeper instances are automatically configured to export Prometheus metrics. See
+<a href="#home::monitoring.adoc" class="page unresolved">home::monitoring.adoc</a> for more details.</p>
+</div>
 </div>
 </div>
 </article>

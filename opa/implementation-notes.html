@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Building the Operator :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/opa/building.html">
+    <title>Implementation Notes :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/opa/implementation-notes.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -34,7 +34,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="building.html">Building the Operator</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -46,7 +46,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="implementation-notes.html">Implementation Notes</a>
   </li>
 </ul>
@@ -192,26 +192,32 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Stackable Operator for OpenPolicyAgent</a></li>
-    <li><a href="building.html">Building the Operator</a></li>
+    <li><a href="implementation-notes.html">Implementation Notes</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/opa-operator/edit/main/docs/modules/ROOT/pages/building.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/opa-operator/edit/main/docs/modules/ROOT/pages/implementation-notes.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Building the Operator</h1>
+<h1 class="page">Implementation Notes</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>This operator is written in Rust.</p>
+<p>These notes may be of use when trying to understand why things are implemented the way that they are,
+but should not be required reading for regular use.</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_opa_replica_per_node"><a class="anchor" href="#_opa_replica_per_node"></a>OPA replica per Node</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>It is developed against the latest stable Rust release, and we currently don&#8217;t support any older versions.</p>
+<p>We run an OPA on each node, because we want to avoid requiring network roundtrips for services making
+policy queries (which are often chained in serial, and block other tasks in the products).</p>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>cargo build</pre>
 </div>
 </div>
 </article>

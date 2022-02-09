@@ -203,6 +203,8 @@
 </aside>
 <article class="doc">
 <h1 class="page">Usage</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
 <p>After installation, the CRD for this operator must be created:</p>
 </div>
@@ -220,7 +222,7 @@
 apiVersion: opa.stackable.tech/v1alpha1
 kind: OpenPolicyAgent
 metadata:
-  name: simple
+  name: simple-opa
 spec:
   version: "0.27.1"
   servers:
@@ -231,8 +233,19 @@ spec:
             kubernetes.io/os: linux
         replicas: 1
         config:
-          regoRuleReference: "http://localhost:3030/opa/v1"
+          regoRuleReference: "http://regorule-operator:3030/opa/v1"
 EOF</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_monitoring"><a class="anchor" href="#_monitoring"></a>Monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The managed OPA instances are automatically configured to export Prometheus metrics. See
+<a href="../home/monitoring.html" class="page">Monitoring</a> for more details.</p>
+</div>
 </div>
 </div>
 </article>

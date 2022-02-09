@@ -235,9 +235,10 @@
 <div class="literalblock">
 <div class="content">
 <pre>helm install druid bitnami/postgresql \
---set postgresqlUsername=druid \
---set postgresqlPassword=druid \
---set postgresqlDatabase=druid</pre>
+--version=11 \
+--set auth.username=druid \
+--set auth.password=druid \
+--set auth.database=druid</pre>
 </div>
 </div>
 </div>
@@ -265,7 +266,7 @@ kind: DruidCluster
 metadata:
   name: simple-druid
 spec:
-  version: 0.22.0
+  version: 0.22.1
   zookeeperConfigMapName: simple-zk
   metadataStorageDatabase:
     dbType: postgresql

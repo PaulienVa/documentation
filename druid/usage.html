@@ -224,21 +224,21 @@
 <div class="paragraph">
 <p>For testing purposes, you can spin up a PostgreSQL database with the bitnami PostgreSQL helm chart.  Add the bitnami repository:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>helm repo add bitnami https://charts.bitnami.com/bitnami</pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm repo add bitnami https://charts.bitnami.com/bitnami</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>And set up the Postgres database:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>helm install druid bitnami/postgresql \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install druid bitnami/postgresql \
 --version=11 \
 --set auth.username=druid \
 --set auth.password=druid \
---set auth.database=druid</pre>
+--set auth.database=druid</code></pre>
 </div>
 </div>
 </div>
@@ -250,18 +250,17 @@
 <div class="paragraph">
 <p>With the prerequisites fulfilled, the CRD for this operator must be created:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>kubectl apply -f /etc/stackable/druid-operator/crd</pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f /etc/stackable/druid-operator/crd</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Then a cluster can be deployed using the example below. Make sure you have <strong>exactly one node</strong> labeled with <code>nodeType=druid-data</code> as used in the deep storage selector. Having more than one data node is not supported when using local storage.</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>    cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: druid.stackable.tech/v1alpha1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: druid.stackable.tech/v1alpha1
 kind: DruidCluster
 metadata:
   name: simple-druid
@@ -304,7 +303,7 @@ spec:
     roleGroups:
       default:
         config: {}
-        replicas: 1</pre>
+        replicas: 1</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -321,36 +320,36 @@ spec:
 <div class="paragraph">
 <p>To use S3, add a section like this to you cluster <code>spec</code>:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>s3:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">s3:
   endpoint: s3-de-central.profitbricks.com
-  credentialsSecret: s3-credentials</pre>
+  credentialsSecret: s3-credentials</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>the secret <code>s3-credentials</code> should contain your access key ID and the secret access key:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>apiVersion: v1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
 kind: Secret
 metadata:
   name: s3-credentials
 stringData:
   accessKeyId: YOURACCESSKEYIDHERE
-  secretAccessKey: YOURSECRETACCESSKEYHERE</pre>
+  secretAccessKey: YOURSECRETACCESSKEYHERE</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>This allows to ingest data from accessible buckets already. To configure a bucket and prefix to be used as a deep storage, change the deep storage configuration like so:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>deepStorage:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">deepStorage:
   storageType: s3
   bucket: druid-deepstorage
-  baseKey: storage           # the base key is the prefix to be used; optional</pre>
+  baseKey: storage           # the base key is the prefix to be used; optional</code></pre>
 </div>
 </div>
 </div>
@@ -373,6 +372,96 @@ stringData:
 <p><code>DRUID_SQALCHEMY</code> contains a connection string used to connect to Druid with SQAlchemy, in - for example - Apache Superset.</p>
 </li>
 </ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration_environment_overrides"><a class="anchor" href="#_configuration_environment_overrides"></a>Configuration &amp; Environment Overrides</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The cluster definition also supports overriding configuration properties and environment variables, either per role or per role group, where the more specific override (role group) has precedence over the less specific one (role).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Overriding certain properties which are set by operator (such as the HTTP port) can interfere with the operator and can lead to problems.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_configuration_properties"><a class="anchor" href="#_configuration_properties"></a>Configuration Properties</h3>
+<div class="paragraph">
+<p>For a role or role group, at the same level of <code>config</code>, you can specify: <code>configOverrides</code> for the <code>runtime.properties</code>. For example, if you want to set the <code>druid.server.http.numThreads</code> for the router to 100 adapt the <code>routers</code> section of the cluster resource like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">routers:
+  roleGroups:
+    default:
+      config: {}
+      configOverrides:
+        runtime.properties:
+          druid.server.http.numThreads: "100"
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Just as for the <code>config</code>, it is possible to specify this at role level as well:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">routers:
+  configOverrides:
+    runtime.properties:
+      druid.server.http.numThreads: "100"
+  roleGroups:
+    default:
+      config: {}
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All override property values must be strings.</p>
+</div>
+<div class="paragraph">
+<p>For a full list of configuration options we refer to the Druid <a href="https://druid.apache.org/docs/latest/configuration/index.html">Configuration Reference</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment Variables</h3>
+<div class="paragraph">
+<p>In a similar fashion, environment variables can be (over)written. For example per role group:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">routers:
+  roleGroups:
+    default:
+      config: {}
+      envOverrides:
+        MY_ENV_VAR: "MY_VALUE"
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or per role:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">routers:
+  envOverrides:
+    MY_ENV_VAR: "MY_VALUE"
+  roleGroups:
+    default:
+      config: {}
+      replicas: 1</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>

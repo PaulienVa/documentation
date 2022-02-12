@@ -194,8 +194,10 @@
 </aside>
 <article class="doc">
 <h1 class="page">Usage</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>After installation, ensure CRD for this operator must exists or create yourself:</p>
+<p>After installation, ensure that the CRD for this operator exists or create yourself:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -290,6 +292,98 @@ spec:
             password: mypass
             dbType: postgres
 EOF</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration_environment_overrides"><a class="anchor" href="#_configuration_environment_overrides"></a>Configuration &amp; Environment Overrides</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The cluster definition also supports overriding configuration properties and environment variables, either per role or per role group, where the more specific override (role group) has precedence over the less specific one (role).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Overriding certain properties which are set by operator (such as the HTTP port) can interfere with the operator and can lead to problems.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_configuration_properties"><a class="anchor" href="#_configuration_properties"></a>Configuration Properties</h3>
+<div class="paragraph">
+<p>For a role or role group, at the same level of <code>config</code>, you can specify: <code>configOverrides</code> for the <code>hive-site.xml</code>. For example, if you want to set the <code>datanucleus.connectionPool.maxPoolSize</code> for the metastore to 20 adapt the <code>metastore</code> section of the cluster resource like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">metastore:
+  roleGroups:
+    default:
+      config: [...]
+      configOverrides:
+        hive-site.xml:
+          datanucleus.connectionPool.maxPoolSize: "20"
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Just as for the <code>config</code>, it is possible to specify this at role level as well:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">metastore:
+  configOverrides:
+    hive-site.xml:
+      datanucleus.connectionPool.maxPoolSize: "20"
+  roleGroups:
+    default:
+      config: [...]
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All override property values must be strings. The properties will be formatted and escaped correctly into the XML file.</p>
+</div>
+<div class="paragraph">
+<p>For a full list of configuration options we refer to the Hive <a href="https://cwiki.apache.org/confluence/display/hive/configuration+properties">Configuration Reference</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment Variables</h3>
+<div class="paragraph">
+<p>In a similar fashion, environment variables can be (over)written. For example per role group:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">routers:
+  roleGroups:
+    default:
+      config: {}
+      envOverrides:
+        MY_ENV_VAR: "MY_VALUE"
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or per role:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">routers:
+  envOverrides:
+    MY_ENV_VAR: "MY_VALUE"
+  roleGroups:
+    default:
+      config: {}
+      replicas: 1</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </article>

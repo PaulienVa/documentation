@@ -287,150 +287,98 @@ simple-spark-slave-2core2g            ClusterIP   None           &lt;none&gt;   
 </div>
 </div>
 <div class="sect1">
-<h2 id="_configuration_properties"><a class="anchor" href="#_configuration_properties"></a>Configuration properties</h2>
+<h2 id="_configuration_environment_overrides"><a class="anchor" href="#_configuration_environment_overrides"></a>Configuration &amp; Environment Overrides</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are three levels of configuration:</p>
+<p>The cluster definition also supports overriding configuration properties and environment variables, either per role or per role group, where the more specific override (role group) has precedence over the less specific one (role).</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<tbody>
+<div class="admonitionblock important">
+<table>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Common properties</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Contains configuration that is shared within the whole cluster. For example the spark version, secrets, encryption or logging options.</p></td>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Do not override port numbers. This will lead to faulty installations.
+</td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Role properties</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">This configuration is shared for all nodes of a certain type (Master, Worker, History-Server)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Role Group properties</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Options provided in the role group are limited to one specific role and role group.</p></td>
-</tr>
-</tbody>
-</table>
-<div class="sect2">
-<h3 id="_common_properties"><a class="anchor" href="#_common_properties"></a>Common properties</h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Type</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Related Spark properties</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">version</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The spark version used in the format: x.y.z</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">secret</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A secret shared between nodes and required to submit applications via spark-submit</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">spark.authenticate=true, spark.authenticate.secret=secret;</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">maxPortRetries</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum number of retries when binding to a port before giving up. When a port is given a specific value (non 0), each subsequent retry will increment the port used in the previous attempt by 1 before retrying. This essentially allows it to try a range of ports from the start port specified to port + maxRetries.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">spark.port.maxRetries</p></td>
-</tr>
-</tbody>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_role_properties"><a class="anchor" href="#_role_properties"></a>Role properties</h3>
+<h3 id="_configuration_properties"><a class="anchor" href="#_configuration_properties"></a>Configuration Properties</h3>
 <div class="paragraph">
-<p>T.b.d.</p>
+<p>For a role or role group, at the same level of <code>config</code>, you can specify: <code>configOverrides</code> for the <code>spark-env.sh</code> and <code>spark-defaults.conf</code> files. For a list of possible configuration properties see: <a href="https://spark.apache.org/docs/latest/configuration.html" class="bare">https://spark.apache.org/docs/latest/configuration.html</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">masters:
+  roleGroups:
+    default:
+      config: [...]
+      configOverrides:
+        spark-env.sh:
+          JAVA_HOME=/some/other/java
+        spark-defaults.conf:
+          spark.driver.cores: "2"
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Just as for the <code>config</code>, it is possible to specify this at role level as well:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">masters:
+  configOverrides:
+    spark-env.sh:
+      JAVA_HOME=/some/other/java
+    spark-defaults.conf:
+      spark.driver.cores: "2"
+  roleGroups:
+    default:
+      config: [...]
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All override property values must be strings. The properties will be passed on without any escaping or formatting.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_role_group_properties"><a class="anchor" href="#_role_group_properties"></a>Role Group properties</h3>
-<div class="sect3">
-<h4 id="_master"><a class="anchor" href="#_master"></a>Master</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Type</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Related Spark properties</p></td>
-</tr>
-</tbody>
-</table>
+<h3 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment Variables</h3>
+<div class="paragraph">
+<p>Environment variables can be (over)written by adding them to <code>spark-env.sh</code> file as described above or by using the <code>envOverrides</code> property.</p>
 </div>
-<div class="sect3">
-<h4 id="_worker"><a class="anchor" href="#_worker"></a>Worker</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Type</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Related Spark properties</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">cores</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Total number of cores to allow Spark jobs to use on the machine (default: all available cores).</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SPARK_WORKER_CORES</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">memory</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Total amount of memory to allow Spark jobs to use on the machine, e.g. 1000M, 2G (default: total memory minus 1 GB).</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SPARK_WORKER_MEMORY</p></td>
-</tr>
-</tbody>
-</table>
+<div class="paragraph">
+<p>For example per role group:</p>
 </div>
-<div class="sect3">
-<h4 id="_history_server"><a class="anchor" href="#_history_server"></a>History Server</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Type</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Related Spark properties</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">storePath</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A local directory where to cache application data. If set, the history server will store application data on disk instead of keeping it in memory. The data written to disk will be re-used in the event of a history server restart.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">spark.history.store.path</p></td>
-</tr>
-</tbody>
-</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">routers:
+  roleGroups:
+    default:
+      config: {}
+      envOverrides:
+        MY_ENV_VAR: "MY_VALUE"
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or per role:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">routers:
+  envOverrides:
+    MY_ENV_VAR: "MY_VALUE"
+  roleGroups:
+    default:
+      config: {}
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here too, overriding properties such as <code>SPARK_MASTER_PORT</code> will lead to broken installations.</p>
 </div>
 </div>
 </div>

@@ -216,9 +216,6 @@
 <p>Deployed Stackable Apache Hive metastore</p>
 </li>
 <li>
-<p>Deployed Stackable <a href="https://github.com/stackabletech/secret-operator">secret-operator</a></p>
-</li>
-<li>
 <p>Accessible S3 Bucket</p>
 <div class="ulist">
 <ul>
@@ -232,10 +229,13 @@
 </div>
 </li>
 <li>
-<p>Optional for authorization: Deployed Stackable OPA cluster + RegoRule server</p>
+<p>Optional deployed Stackable <a href="https://github.com/stackabletech/secret-operator">Secret-Operator</a> for certificates when deploying for HTTPS</p>
 </li>
 <li>
-<p>Optional to test queries with <a href="https://repo.stackable.tech/#browse/browse:packages:trino-cli%2Ftrino-cli-363-executable.jar">Trino CLI</a></p>
+<p>Optional for authorization: Deployed Stackable <a href="https://github.com/stackabletech/opa-operator">OPA-Operator</a> and <a href="https://github.com/stackabletech/regorule-operator">Regorule-Operator</a></p>
+</li>
+<li>
+<p>Optional <a href="https://repo.stackable.tech/#browse/browse:packages:trino-cli%2Ftrino-cli-363-executable.jar">Trino CLI</a> to test SQL queries</p>
 </li>
 </ul>
 </div>
@@ -273,30 +273,22 @@
 <div class="paragraph">
 <p>We provide user authentication via secret that can be referred in the custom resource:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>authentication:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">authentication:
   method:
     multiUser:
       userCredentialsSecret:
         namespace: default
-        name: simple-trino-users-secret</pre>
+        name: simple-trino-users-secret</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>These secrets need to be created manually before startup (check <code>examples/simple-trino-users-secret.yaml</code>):</p>
+<p>These secrets need to be created manually before startup. The secret may look like the following snippet:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>kubectl apply -f examples/simple-trino-users-secret.yaml</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The secret looks the following:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>apiVersion: v1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
 kind: Secret
 metadata:
   name: simple-trino-users-secret
@@ -304,15 +296,15 @@ type: kubernetes.io/opaque
 stringData:
   admin: $2y$10$89xReovvDLacVzRGpjOyAOONnayOgDAyIS2nW9bs5DJT98q17Dy5i
   alice: $2y$10$HcCa4k9v2DRrD/g7e5vEz.Bk.1xg00YTEHOZjPX7oK3KqMSt2xT8W
-  bob: $2y$10$xVRXtYZnYuQu66SmruijPO8WHFM/UK5QPHTr.Nzf4JMcZSqt3W.2.</pre>
+  bob: $2y$10$xVRXtYZnYuQu66SmruijPO8WHFM/UK5QPHTr.Nzf4JMcZSqt3W.2.</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>The &lt;user&gt;:&lt;password&gt; combinations are provided in the <code>stringData</code> field. The hashes are created using bcrypt with 10 rounds or more.</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>htpasswd -nbBC 10 admin admin</pre>
+<pre class="highlightjs highlight"><code>htpasswd -nbBC 10 admin admin</code></pre>
 </div>
 </div>
 </div>
@@ -329,7 +321,7 @@ stringData:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>apiVersion: opa.stackable.tech/v1alpha1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: opa.stackable.tech/v1alpha1
 kind: RegoRule
 metadata:
   name: simple
@@ -379,36 +371,102 @@ spec:
 <div class="paragraph">
 <p>You can let the Trino operator write its own Rego rules by configuring the <code>authorization</code> field in the custom resource. This is a rudimentary implementation for user access.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">authorization:
+  package: trino
+  permissions:
+    admin:
+      schemas:
+        read: true
+        write: true
+      tables:
+        iris_parquet:
+          read: true
+          write: true
+        iris_csv:
+          read: true
+          write: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here we define permissions for an admin user who can read and write <code>schemas</code>, as well as having full access to the <code>iris_parquet</code> and <code>iris_csv</code> table. Currently, this is more for demonstration purposes. Users should write their own rego rules for more complex OPA authorization.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_trino"><a class="anchor" href="#_trino"></a>Trino</h3>
 <div class="paragraph">
 <p>With the prerequisites fulfilled, the CRD for this operator must be created:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>kubectl apply -f /etc/stackable/trino-operator/crd/trinocluster.crd.yaml</pre>
+<pre class="highlightjs highlight"><code>kubectl apply -f /etc/stackable/trino-operator/crd/trinocluster.crd.yaml</code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_insecure_for_testing"><a class="anchor" href="#_insecure_for_testing"></a>Insecure for testing:</h4>
 <div class="paragraph">
-<p>To create a single node Trino (v362) cluster. Please adapt the <code>s3</code> with your credentials.</p>
+<p>Create an insecure single node Trino (v362) cluster for testing. You will access the UI/CLI via http and no user / password or authorization is required. Please adapt the <code>s3</code> settings with your credentials (check <code>examples/simple-trino-cluster.yaml</code> for an example setting up Hive and Trino):</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: trino.stackable.tech/v1alpha1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: trino.stackable.tech/v1alpha1
 kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
   version: "0.0.362"
   nodeEnvironment: production
-  hive:
-    namespace: default
-    name: simple-derby
-  opa:
-    namespace: default
-    name: simple-opa
+  hiveConfigMapName: simple-hive-derby
+  s3:
+    endPoint: changeme
+    accessKey: changeme
+    secretKey: changeme
+    sslEnabled: false
+    pathStyleAccess: true
+  coordinators:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: 1
+        config: {}
+  workers:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: 1
+        config: {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To access the CLI please execute:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>./trino-cli-362-executable.jar --debug --server http://&lt;node&gt;:&lt;http-port&gt; --user=admin</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_secure_https_for_production"><a class="anchor" href="#_secure_https_for_production"></a>Secure (https) for production:</h4>
+<div class="paragraph">
+<p>Create a secure single node Trino (v362) cluster. This will disable the UI access via http and requires username and password from the secret above. Please adapt the <code>s3</code> settings with your credentials (check <code>examples/simple-trino-cluster-authentication-opa-authorization.yaml</code> for a full example setting up Hive, OPA, Secrets and Trino):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: trino.stackable.tech/v1alpha1
+kind: TrinoCluster
+metadata:
+  name: simple-trino
+spec:
+  version: "0.0.362"
+  nodeEnvironment: production
+  hiveConfigMapName: simple-hive-derby
+  opaConfigMapName: simple-opa
   authentication:
     method:
       multiUser:
@@ -457,33 +515,49 @@ spec:
           matchLabels:
             kubernetes.io/os: linux
         replicas: 1
-        config: {}
-EOF</pre>
+        config: {}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Assuming you&#8217;ve downloaded and installed the Trino client, connect to the Trino coordinator:</p>
+<p>To access the CLI please execute:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>./trino.jar --debug --server https://&lt;node_name&gt;:&lt;https-port&gt; --user=admin --password</pre>
+<pre class="highlightjs highlight"><code>./trino-cli-362-executable.jar --debug --server https://&lt;host&gt;:&lt;https-port&gt; --user=admin --password --insecure</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you use self signed certificates, you also need to add <code>--insecure</code> to the command above.</p>
+<p>If you use self signed certificates, you also need the <code>--insecure</code> flag above which can be omitted otherwise.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_test_trino_with_hive_and_s3"><a class="anchor" href="#_test_trino_with_hive_and_s3"></a>Test Trino with Hive and S3</h3>
+<div class="paragraph">
+<p>Create a schema and a table for the Iris data located in S3 and query data. This assumes to have the Iris data set in the <code>PARQUET</code> format available in the S3 bucket which can be downloaded <a href="https://www.kaggle.com/gpreda/iris-dataset/version/2?select=iris.parquet">here</a></p>
+</div>
+<div class="sect3">
+<h4 id="_create_schema"><a class="anchor" href="#_create_schema"></a>Create schema</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE SCHEMA IF NOT EXISTS hive.iris
+WITH (location = 's3a://iris/');</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>Create a schema and a  table for the Iris data located in S3:</p>
+<p>which should return:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>CREATE SCHEMA IF NOT EXISTS hive.iris
-WITH (location = 's3a://iris/');</pre>
+<pre>CREATE SCHEMA</pre>
 </div>
 </div>
-<div class="literalblock">
+</div>
+<div class="sect3">
+<h4 id="_create_table"><a class="anchor" href="#_create_table"></a>Create table</h4>
+<div class="listingblock">
 <div class="content">
-<pre>CREATE TABLE IF NOT EXISTS hive.iris.iris_parquet (
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE IF NOT EXISTS hive.iris.iris_parquet (
   sepal_length DOUBLE,
   sepal_width  DOUBLE,
   petal_length DOUBLE,
@@ -493,21 +567,62 @@ WITH (location = 's3a://iris/');</pre>
 WITH (
   external_location = 's3a://iris/parq',
   format = 'PARQUET'
-);</pre>
+);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Query the data:</p>
+<p>which should return:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>SELECT
+<pre>CREATE TABLE</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_data"><a class="anchor" href="#_query_data"></a>Query data</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SELECT
     sepal_length,
     class
 FROM hive.iris.iris_parquet
-LIMIT 10;</pre>
+LIMIT 10;</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>which should return something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre> sepal_length |    class
+--------------+-------------
+          5.1 | Iris-setosa
+          4.9 | Iris-setosa
+          4.7 | Iris-setosa
+          4.6 | Iris-setosa
+          5.0 | Iris-setosa
+          5.4 | Iris-setosa
+          4.6 | Iris-setosa
+          5.0 | Iris-setosa
+          4.4 | Iris-setosa
+          4.9 | Iris-setosa
+(10 rows)
+
+Query 20220210_161615_00000_a8nka, FINISHED, 1 node
+https://172.18.0.5:30299/ui/query.html?20220210_161615_00000_a8nka
+Splits: 18 total, 18 done (100.00%)
+CPU Time: 0.7s total,    20 rows/s, 11.3KB/s, 74% active
+Per Node: 0.3 parallelism,     5 rows/s, 3.02KB/s
+Parallelism: 0.3
+Peak Memory: 0B
+2.67 [15 rows, 8.08KB] [5 rows/s, 3.02KB/s]</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tips"><a class="anchor" href="#_tips"></a>Tips</h3>
 <div class="paragraph">
 <p>If you work with opa, try changing some RegoRule entries to false and see if you are not allowed to e.g. list tables or schemas.</p>
 </div>

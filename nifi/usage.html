@@ -240,10 +240,7 @@ metadata:
   name: simple-nifi
 spec:
   version: "1.15.0"
-  zookeeperReference:
-    name: simple-zk
-    namespace: default
-    chroot: /nifi
+  zookeeperConfigMapName: simple-nifi-znode
   authenticationConfig:
     method:
       SingleUser:
@@ -270,14 +267,27 @@ spec:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: v1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
 kind: Secret
 metadata:
   name: nifi-admin-credentials-simple
 stringData:
   username: admin
   password: supersecretpassword</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can create the ZNode config map referenced in <code>zookeeperConfigMapName</code> via (assuming there is a ZooKeeper cluster called <code>simple-zk</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperZnode
+metadata:
+  name: simple-nifi-znode
+spec:
+  clusterRef:
+    name: simple-zk</code></pre>
 </div>
 </div>
 </article>

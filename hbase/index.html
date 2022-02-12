@@ -35,13 +35,7 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
-  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
@@ -199,8 +193,11 @@
 </aside>
 <article class="doc">
 <h1 class="page">Stackable Operator for Apache HBase</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>This is an operator for Kubernetes that can manage <a href="https://https://hbase.apache.org/">Apache HBase</a> clusters.</p>
+<p>This is an operator for Kubernetes that can manage <a href="https://hbase.apache.org/">Apache HBase</a>
+clusters.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -209,14 +206,43 @@
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-This operator only works with images from the <a href="https://repo.stackable.tech/#browse/browse:docker:v2%2Fstackable%2Fhbase">Stackable</a> repository
+This operator is part of the Stackable Data Platform and only works with images from the
+<a href="https://repo.stackable.tech/#browse/browse:docker:v2%2Fstackable%2Fhbase">Stackable</a> repository.
 </td>
 </tr>
 </table>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_supported_versions"><a class="anchor" href="#_supported_versions"></a>Supported Versions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Stackable Operator for Apache HBase currently supports the following versions of Apache HBase:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>2.4.6</p>
+</li>
+<li>
+<p>2.4.8</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getting_the_docker_image"><a class="anchor" href="#_getting_the_docker_image"></a>Getting the Docker image</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>￼</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code>docker pull docker.stackable.tech/stackable/hbase:&lt;version&gt;</code></pre>
+</div>
+</div>
 </div>
 </div>
 </article>

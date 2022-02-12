@@ -35,13 +35,7 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
-  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
@@ -200,39 +194,37 @@
 </aside>
 <article class="doc">
 <h1 class="page">Usage</h1>
+<div class="sect1">
+<h2 id="_requirements"><a class="anchor" href="#_requirements"></a>Requirements</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>After installation, the CRD for this operator must be created:</p>
+<p>A distributed Apache HBase installation depends on a running Apache ZooKeeper and HDFS cluster. See
+the documentation for the <a href="https://docs.stackable.tech/hdfs/usage.html">Stackable Operator for Apache HDFS</a>
+how to set up these clusters.</p>
 </div>
-<div class="literalblock">
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deployment_of_an_apache_hbase_cluster"><a class="anchor" href="#_deployment_of_an_apache_hbase_cluster"></a>Deployment of an Apache HBase cluster</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An Apache HBase cluster can be created with the following cluster specification:</p>
+</div>
+<div class="listingblock">
 <div class="content">
-<pre>kubectl apply -f /etc/stackable/hbase-operator/crd/hbasecluster.crd.yaml</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The Stackable Operator for Apache HBase requires an active Apache ZooKeeper installation provided by Stackable to be present.</p>
-</div>
-<div class="paragraph">
-<p>The Stackable Operator for Apache HBase requires an active Apache HDFS installation provided by Stackable to be present.</p>
-</div>
-<div class="paragraph">
-<p>To create a single node Apache HBase (v2.4.6) cluster with Prometheus metrics exposed on port 9505 (master) and 9506 (region_server):</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: hbase.stackable.tech/v1alpha1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: hbase.stackable.tech/v1alpha1
 kind: HbaseCluster
 metadata:
-  name: simple
+  name: simple-hbase
 spec:
   version: 2.4.6
-  hdfsReference:
-    namespace: default
-    name: simple
-    root: /hbase
-  zookeeperReference:
-    namespace: default
-    name: simple
+  config:
+    hdfsConfigMapName: simple-hdfs-namenode-default
+    zookeeperConfigMapName: simple-hbase-znode
+    hbaseManagesZk: false
+    hbaseOpts:
+    hbaseClusterDistributed: true
+    hbaseRootdir: hdfs://simple-hdfs/hbase
   masters:
     roleGroups:
       default:
@@ -240,9 +232,6 @@ spec:
           matchLabels:
             kubernetes.io/os: linux
         replicas: 1
-        config:
-          masterWebUiPort: 17000
-          metricsPort: 9707
   regionServers:
     roleGroups:
       default:
@@ -250,20 +239,50 @@ spec:
           matchLabels:
             kubernetes.io/os: linux
         replicas: 1
-        config:
-          regionServerWebUiPort: 17001
-          metricsPort: 9708
-EOF</pre>
+  restServers:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: 1
+---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperZnode
+metadata:
+  name: simple-hbase-znode
+spec:
+  clusterRef:
+    name: simple-zk</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you set up an HBase service for the first time, you might need to create the <code>/hbase</code> folder after the pods are created:</p>
+<p><code>hdfsConfigMapName</code> references the config map created by the Stackable HDFS operator.</p>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>export HADOOP_USER_NAME=root
-./hdfs dfs -mkdir hdfs://&lt;namenode&gt;:9000/hbase
-./hdfs dfs -chown stackable hdfs://&lt;namenode&gt;:9000/hbase</pre>
+<div class="paragraph">
+<p><code>zookeeperConfigMapName</code> references the config map created by the Stackable ZooKeeper operator.</p>
+</div>
+<div class="paragraph">
+<p><code>hbaseManagesZk</code> is mapped to the environment variable <code>HBASE_MANAGES_ZK</code> in <code>hbase-env.sh</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>hbaseOpts</code> is mapped to the environment variable <code>HBASE_OPTS</code> in <code>hbase-env.sh</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>hbaseClusterDistributed</code> is mapped to <code>hbase.cluster.distributed</code> in <code>hbase-site.xml</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>hbaseRootdir</code> is mapped to <code>hbase.rootdir</code> in <code>hbase-site.xml</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_monitoring"><a class="anchor" href="#_monitoring"></a>Monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The managed HBase instances are automatically configured to export Prometheus metrics. See
+<a href="../home/monitoring.html" class="page">Monitoring</a> for more details.</p>
+</div>
 </div>
 </div>
 </article>

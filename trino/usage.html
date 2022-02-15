@@ -229,6 +229,9 @@
 </div>
 </li>
 <li>
+<p>A <a href="https://github.com/stackabletech/regorule-operator/blob/main/deploy/crd/regorule.crd.yaml">Rego rule CRD</a> even if no OPA is activated</p>
+</li>
+<li>
 <p>Optional deployed Stackable <a href="https://github.com/stackabletech/secret-operator">Secret-Operator</a> for certificates when deploying for HTTPS</p>
 </li>
 <li>
@@ -621,14 +624,132 @@ Peak Memory: 0B
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration_environment_overrides"><a class="anchor" href="#_configuration_environment_overrides"></a>Configuration &amp; Environment Overrides</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The cluster definition also supports overriding configuration properties and environment variables, either per role or per role group, where the more specific override (role group) has precedence over the less specific one (role).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Do not override port numbers. This will lead to faulty installations.
+</td>
+</tr>
+</table>
+</div>
 <div class="sect2">
-<h3 id="_tips"><a class="anchor" href="#_tips"></a>Tips</h3>
+<h3 id="_configuration_properties"><a class="anchor" href="#_configuration_properties"></a>Configuration Properties</h3>
 <div class="paragraph">
+<p>For a role or role group, at the same level of <code>config</code>, you can specify: <code>configOverrides</code> for:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>config.properties</code></p>
+</li>
+<li>
+<p><code>node.properties</code></p>
+</li>
+<li>
+<p><code>log.properties</code></p>
+</li>
+<li>
+<p><code>password-authenticator.properties</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For a list of possible configuration properties consult the <a href="https://trino.io/docs/current/admin/properties.html">Trino Properties Reference</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">workers:
+  roleGroups:
+    default:
+      config: {}
+      replicas: 1
+      configOverrides:
+        config.properties:
+          query.max-memory-per-node: "2GB"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Just as for the <code>config</code>, it is possible to specify this at role level as well:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">workers:
+  configOverrides:
+    config.properties:
+      query.max-memory-per-node: "2GB"
+  roleGroups:
+    default:
+      config: {}
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All override property values must be strings. The properties will be passed on without any escaping or formatting.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment Variables</h3>
+<div class="paragraph">
+<p>Environment variables can be (over)written by adding the <code>envOverrides</code> property.</p>
+</div>
+<div class="paragraph">
+<p>For example per role group:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">workers:
+  roleGroups:
+    default:
+      config: {}
+      replicas: 1
+      envOverrides:
+        JAVA_HOME: "path/to/java"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or per role:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">workers:
+  envOverrides:
+    JAVA_HOME: "path/to/java"
+  roleGroups:
+    default:
+      config: {}
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here too, overriding properties such as <code>http-server.https.port</code> will lead to broken installations.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tips"><a class="anchor" href="#_tips"></a>Tips</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
 <p>If you work with opa, try changing some RegoRule entries to false and see if you are not allowed to e.g. list tables or schemas.</p>
-</div>
-<div class="paragraph">
+</li>
+<li>
 <p>When changing the automatically generated rego rule package name, a restart of the coordinator pod is required.</p>
-</div>
+</li>
+</ul>
 </div>
 </div>
 </div>

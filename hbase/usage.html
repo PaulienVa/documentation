@@ -285,6 +285,82 @@ spec:
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_configuration_overrides"><a class="anchor" href="#_configuration_overrides"></a>Configuration Overrides</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The cluster definition also supports overriding configuration properties and environment variables, either per role or per role group, where the more specific override (role group) has precedence over the less specific one (role).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Overriding certain properties which are set by operator can interfere with the operator and can lead to problems.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_configuration_properties"><a class="anchor" href="#_configuration_properties"></a>Configuration Properties</h3>
+<div class="paragraph">
+<p>For a role or role group, at the same level of <code>config</code>, you can specify: <code>configOverrides</code> for the following files:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>hbase-site.xml</code></p>
+</li>
+<li>
+<p><code>hbase-env.sh</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, if you want to set the <code>hbase.rest.threads.min</code> to 4 and the <code>HBASE_HEAPSIZE</code> to two GB adapt the <code>restServers</code> section of the cluster resource like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">restServers:
+  roleGroups:
+    default:
+      config: {}
+      configOverrides:
+        hbase-site.xml:
+          hbase.rest.threads.min: "4"
+        hbase-env.sh:
+          HBASE_HEAPSIZE: "2G"
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Just as for the <code>config</code>, it is possible to specify this at role level as well:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">restServers:
+  configOverrides:
+    hbase-site.xml:
+      hbase.rest.threads.min: "4"
+    hbase-env.sh:
+      HBASE_HEAPSIZE: "2G"
+  roleGroups:
+    default:
+      config: {}
+      replicas: 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All override property values must be strings. The properties will be formatted and escaped correctly into the XML file, respectively inserted as is into the <code>env.sh</code> file.</p>
+</div>
+<div class="paragraph">
+<p>For a full list of configuration options we refer to the HBase <a href="https://hbase.apache.org/book.html#config.files">Configuration Documentation</a>.</p>
+</div>
+</div>
+</div>
+</div>
 </article>
   </div>
 </main>

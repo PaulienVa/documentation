@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Stackable Documentation :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/index.html">
+    <title>Untitled :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/release_guide.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -211,150 +211,75 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="index.html" class="home-link is-current"></a>
+  <a href="index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="index.html">Stackable Documentation</a></li>
-  </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/ROOT/pages/release_guide.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Stackable Documentation</h1>
-<div id="preamble">
-<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to Stackable!
-This documentation gives you an overview of our platform, how to install and manage it as well as some tutorials.</p>
+<p>(this is work in progress that is why it&#8217;s not explicitely linked in nav.doc)</p>
 </div>
 <div class="paragraph">
-<p>If you have any feedback regarding the documentation please either open an <a href="https://github.com/stackabletech/documentation/issues">issue</a>, ask a <a href="https://github.com/stackabletech/documentation/discussions">question</a> or look at the source for this documentation in its <a href="https://github.com/stackabletech/documentation">repository</a>.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_introduction"><a class="anchor" href="#_introduction"></a>Introduction</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Our Stackable platform allows you to deploy, scale and manage Big Data infrastructure in any environment as long as it can run <a href="https://kubernetes.io/">Kubernetes</a>.</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-Our platform used to be based on a different architecture (until November 2021) where we built an alternative Kubelet. We abandoned that effort for now and are moving towards a Kubernetes-native experience using the normal <code>kubelet</code>.
-This is an ongoing effort and the documentation might not reflect reality everywhere.
-We aim to update our platform as well as the documentation by the end of 2021 and will remove this note when the migration has completed.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_goal_of_the_project"><a class="anchor" href="#_goal_of_the_project"></a>Goal of the project</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>We are building a distribution of existing Open Source tools that together comprise the components of a modern data platform.</p>
-</div>
-<div class="paragraph">
-<p>There are components to ingest data, to store data, to process and visualize and much more.
-While the platform got started in the <em>Big Data</em> ecosystem we are in no way limited to big data workloads.</p>
-</div>
-<div class="paragraph">
-<p>You can declaratively build these environments, and we don&#8217;t stop at the tool level as we also provide ways for the users to interact with the platform in the "as Code"-approach.</p>
-</div>
-<div class="paragraph">
-<p>We are leveraging the <a href="https://www.openpolicyagent.org/">OpenPolicyAgent</a> to provide Authorization-as-Code.</p>
-</div>
-<div class="paragraph">
-<p>We are building a distribution that includes the “best of breed” of existing Open Source tools, but bundles them in a way, so it is easy to deploy a fully working stack of software. Most of the existing tools are “single purpose” tools, which often do not play nicely together out-of-the-box.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_components"><a class="anchor" href="#_components"></a>Components</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>We are using Kubernetes as our deployment platform.
-And we&#8217;re building <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/operator/">Operators</a> for each of the products we support.</p>
-</div>
-<div class="paragraph">
-<p>At the moment we support the following products (i.e. we have operators for each of those):</p>
+<p>Prerequisites:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://druid.apache.org">Apache Druid</a></p>
+<p>no branch refs in Cargo.toml</p>
 </li>
 <li>
-<p><a href="https://hbase.apache.org">Apache HBase</a></p>
+<p>(integration) tests are successful</p>
 </li>
 <li>
-<p><a href="https://hadoop.apache.org">Apache Hadoop HDFS</a></p>
-</li>
-<li>
-<p><a href="https://hive.apache.org">Apache Hive Metastore</a></p>
-</li>
-<li>
-<p><a href="https://kafka.apache.org">Apache Kafka</a></p>
-</li>
-<li>
-<p><a href="https://nifi.apache.org">Apache NiFi</a></p>
-</li>
-<li>
-<p><a href="https://spark.apache.org">Apache Spark</a></p>
-</li>
-<li>
-<p><a href="https://superset.apache.org">Apache Superset</a></p>
-</li>
-<li>
-<p><a href="https://trino.io">Trino</a></p>
-</li>
-<li>
-<p><a href="https://zookeeper.apache.org">Apache ZooKeeper</a></p>
+<p>the changelog has useful entries</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>We are working on a feature matrix, so you can see which features we support for each of these products.</p>
+<p>Release:</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_supported_kubernetes_versions"><a class="anchor" href="#_supported_kubernetes_versions"></a>Supported Kubernetes Versions</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>The Kubernetes project maintains release branches for the latest three versions, we follow this approach and also support the latest three kubernetes versions which are, at the moment:</p>
+<p>(from main)</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>1.21</p>
-</li>
-<li>
-<p>1.22</p>
-</li>
-<li>
-<p>1.23</p>
-</li>
-</ul>
+<div class="literalblock">
+<div class="content">
+<pre>git sw -c release-0.6.0
+vi CHANGELOG.md
+cargo-version.py --release
+cargo update --workspace
+make regenerate-charts
+git commit -am "Release 0.6.0"
+git tag -a 0.6.0 -m "Release 0.6.0" HEAD</pre>
 </div>
 </div>
+<div class="literalblock">
+<div class="content">
+<pre>git push -u --all origin release-0.6.0</pre>
 </div>
-<div class="sect1">
-<h2 id="_getting_started"><a class="anchor" href="#_getting_started"></a>Getting Started</h2>
-<div class="sectionbody">
+</div>
 <div class="paragraph">
-<p>Stackable provides a tutorial <a href="getting_started.html" class="page">Getting Started</a>, which outlines how to deploy a Stackable cluster and the supported infrastructure. There is also a quickstart shell script in the <a href="https://github.com/stackabletech/stackable-utils">stackable-utils</a> GitHub repository that will quickly bootstrap an example cluster.</p>
+<p>Bump dev version:</p>
 </div>
+<div class="paragraph">
+<p>(from main immediately after a release)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>git sw -c bump-version
+cargo-version.py --next minor
+cargo update --workspace
+make regenerate-charts
+git commit -am 'Bump next development version'</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>git push -u origin bump-version</pre>
 </div>
 </div>
 </article>

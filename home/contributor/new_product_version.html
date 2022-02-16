@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Use Multiple Repositories instead of one Large Repository :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/adr/ADR002-choose_repository_structure.html">
+    <title>New Product Version :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/new_product_version.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -65,10 +65,10 @@
     <span class="nav-text">Contributor&#8217;s Guide</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../contributor/contribution_guide.html">Overview</a>
+    <a class="nav-link" href="contribution_guide.html">Overview</a>
   </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../contributor/new_product_version.html">New Product Version</a>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="new_product_version.html">New Product Version</a>
   </li>
 </ul>
   </li>
@@ -215,227 +215,76 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Stackable Documentation</a></li>
-    <li><a href="ADR002-choose_repository_structure.html">Use Multiple Repositories instead of one Large Repository</a></li>
+    <li>Contributor&#8217;s Guide</li>
+    <li><a href="new_product_version.html">New Product Version</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/adr/pages/ADR002-choose_repository_structure.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/new_product_version.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Use Multiple Repositories instead of one Large Repository</h1>
-<div id="preamble">
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Status: accepted</p>
-</li>
-<li>
-<p>Deciders:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Florian Waibel</p>
-</li>
-<li>
-<p>Lars Francke</p>
-</li>
-<li>
-<p>Lukas Menzel</p>
-</li>
-<li>
-<p>Oliver Hessel</p>
-</li>
-<li>
-<p>Sönke Liebau</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Date: 19.08.2020</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
+<h1 class="page">New Product Version</h1>
 <div class="sect1">
-<h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
+<h2 id="_checklist_adding_a_new_supported_product_version"><a class="anchor" href="#_checklist_adding_a_new_supported_product_version"></a>Checklist: adding a new supported product version</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Should we use one large repository for all components of the project or structure this into multiple smaller repositories?</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_decision_drivers"><a class="anchor" href="#_decision_drivers"></a>Decision Drivers</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Useability of repository structure</p>
-</li>
-<li>
-<p>Impact on related infrastructure like CI / Testing / &#8230;&#8203;</p>
-</li>
-<li>
-<p>Impact on release strategy</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_considered_options"><a class="anchor" href="#_considered_options"></a>Considered Options</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Single Repository</p>
-</li>
-<li>
-<p>Multiple Repositories</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Chosen option: "Multiple Repositories", because it comes out best (see below)].</p>
+<p>This page contains information on the steps that need to be taken when adding a new supported product version to our platform.</p>
 </div>
 <div class="paragraph">
-<p>How to split the components into repositories will be decided throughout the runtime of the project.</p>
+<p>One or more new issues need to be created for each new version we want to support.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<em>Support</em> is meant in the <em>technical</em> term here.
+This does not necessarily mean that we&#8217;re going to provide enterprise support for this version to our customers.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>Initially the following repositories were identified:</p>
+<p>In general these are the steps that need to be taken even though some of them are optional depending on what exactly needs to be done:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Orchestrator</p>
+<p>Open a <em>tracking</em> issue in the relevant operator repository</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This issue serves as the hub for all other issues that might have to be opened</p>
 </li>
 <li>
-<p>Agent</p>
-</li>
-<li>
-<p>ADR / Documentation</p>
-</li>
-<li>
-<p>Operators (most probably one repository per operator)</p>
-</li>
-<li>
-<p>Stackbit Sources (most probably one repository per product)</p>
+<p>This issue should contain information like links to changelogs or release notes, it should also contain information on breaking changes and how they affect our operator etc.</p>
 </li>
 </ul>
 </div>
-<div class="sect2">
-<h3 id="_positive_consequences"><a class="anchor" href="#_positive_consequences"></a>Positive Consequences</h3>
+</li>
+<li>
+<p>Provide an updated Docker image</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The ability to separate changes to different modules</p>
-</li>
-<li>
-<p>Better organization of individual modules</p>
-</li>
-<li>
-<p>Better separation of releases between modules</p>
+<p>Open a separate issue in the <a href="https://github.com/stackabletech/docker-images/">Docker Images</a> repository</p>
 </li>
 </ul>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_negative_consequences"><a class="anchor" href="#_negative_consequences"></a>Negative Consequences</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>No single place to search for things, a little familiarity with the repository structure might be needed</p>
 </li>
 <li>
-<p>Potentially more effort when setting up CI and testing infrastructure</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_single_repository"><a class="anchor" href="#_single_repository"></a>Single Repository</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Good, because it makes implementing dependencies between modules easier</p>
+<p>Optional: Update the documentation include the newly supported version</p>
 </li>
 <li>
-<p>Good, because it provides a single place to search for <em>things</em></p>
+<p>Optional: Update the integration tests to use the new version</p>
 </li>
 <li>
-<p>Bad, because it can become large and difficult to manage</p>
-</li>
-<li>
-<p>Bad, because it keeps things that should be loosely coupled in the same place which might promote tighter coupling</p>
-</li>
-<li>
-<p>Bad, because tagging a release of a component will unnecessarily include the rest of the repository</p>
-</li>
-<li>
-<p>Bad, because changes to a component may accidentally impact other components</p>
-</li>
-<li>
-<p>Bad, because the commit history is mixed for all components</p>
-</li>
-<li>
-<p>Bad, because a single commit may change multiple components making tracking these changes harder</p>
-</li>
-<li>
-<p>Bad, because the CI pipeline would need to identify the changed components to avoid triggering tests for all other components</p>
-</li>
-<li>
-<p>Bad, because clone times might be much higher</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_multiple_repositories"><a class="anchor" href="#_multiple_repositories"></a>Multiple Repositories</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Good, because it keeps the individual repositories simpler</p>
-</li>
-<li>
-<p>Good, because it allows proper separation of modules</p>
-</li>
-<li>
-<p>Good, because it allows proper tagging of releases</p>
-</li>
-<li>
-<p>Bad, because implementing dependent changes in separate components becomes harder</p>
-</li>
-<li>
-<p>Bad, because it makes finding individual pieces of code potentially harder if the repository is unknown</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_links"><a class="anchor" href="#_links"></a>Links</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://medium.com/@johnclarke_82232/mono-or-multi-repo-6c3674142dfc">Mono- or Multi-repo?</a></p>
+<p>Optional: Update examples to use the new versions</p>
 </li>
 </ul>
 </div>

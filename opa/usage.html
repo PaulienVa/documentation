@@ -208,33 +208,30 @@
 <div class="paragraph">
 <p>After installation, the CRD for this operator must be created:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>kubectl apply -f /etc/stackable/opa-operator/crd/openpolicyagent.crd.yaml</pre>
+<pre class="highlightjs highlight"><code>kubectl apply -f /etc/stackable/opa-operator/crd/openpolicyagent.crd.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>To create a single node OPA (v0.27.1) cluster with Prometheus metrics exposed on port 8081:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: opa.stackable.tech/v1alpha1
-kind: OpenPolicyAgent
-metadata:
-  name: simple-opa
-spec:
-  version: "0.27.1"
-  servers:
-    roleGroups:
-      default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        replicas: 1
-        config:
-          regoRuleReference: "http://regorule-operator:3030/opa/v1"
-EOF</pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">    apiVersion: opa.stackable.tech/v1alpha1
+    kind: OpenPolicyAgent
+    metadata:
+      name: simple-opa
+    spec:
+      version: "0.27.1"
+      servers:
+        roleGroups:
+          default:
+            selector:
+              matchLabels:
+                kubernetes.io/os: linux
+            config:
+              regoRuleReference: "http://regorule-operator:3030/opa/v1"</code></pre>
 </div>
 </div>
 </div>
@@ -245,6 +242,64 @@ EOF</pre>
 <div class="paragraph">
 <p>The managed OPA instances are automatically configured to export Prometheus metrics. See
 <a href="../home/monitoring.html" class="page">Monitoring</a> for more details.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration_environment_overrides"><a class="anchor" href="#_configuration_environment_overrides"></a>Configuration &amp; Environment Overrides</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The cluster definition also supports overriding configuration properties and environment variables, either per role or per role group, where the more specific override (role group) has precedence over the less specific one (role).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Do not override port numbers. This will lead to faulty installations.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_configuration_properties"><a class="anchor" href="#_configuration_properties"></a>Configuration Properties</h3>
+<div class="paragraph">
+<p>Currently, not supported for <code>config.yaml</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment Variables</h3>
+<div class="paragraph">
+<p>Environment variables can be (over)written by adding the <code>envOverrides</code> property.</p>
+</div>
+<div class="paragraph">
+<p>For example per role group:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">servers:
+  roleGroups:
+    default:
+      config: {}
+      envOverrides:
+        MY_ENV_VAR: "MY_VALUE"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or per role:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">servers:
+  envOverrides:
+    MY_ENV_VAR: "MY_VALUE"
+  roleGroups:
+    default:
+      config: {}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>

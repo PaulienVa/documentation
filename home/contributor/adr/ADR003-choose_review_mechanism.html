@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Use xxx as storage backend for the orchestrator :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/adr/deprecated/ADR006-choose_orchestrator_storage_backend.html">
+    <title>Use RTC as Review Mechanism for Changes :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR003-choose_review_mechanism.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -49,26 +49,79 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Internal Docs</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../../internal/personas.html">Customer Personas</a>
-  </li>
-</ul>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
     <span class="nav-text">Contributor&#8217;s Guide</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../../contributor/contribution_guide.html">Overview</a>
+    <a class="nav-link" href="../contribution_guide.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../../contributor/new_product_version.html">New Product Version</a>
+    <a class="nav-link" href="../development_dashboard.html">Development Dashboard</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../new_product_version.html">New Product Version</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Architectural Decision Records</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Current</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR001-choose_project_language.adoc">ADR001-choose_project_language.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR002-choose_repository_structure.adoc">ADR002-choose_repository_structure.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR003-choose_review_mechanism.adoc">ADR003-choose_review_mechanism.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR004-choose_agent_programming_language.adoc">ADR004-choose_agent_programming_language.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR005-systemd_unit_file_location.adoc">ADR005-systemd_unit_file_location.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR007-defined_reuse_of_k8s.adoc">ADR007-defined_reuse_of_k8s.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR008-decide_reuse_of_operators.adoc">ADR008-decide_reuse_of_operators.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR009-selector_support.adoc">ADR009-selector_support.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR010-command_pattern.adoc">ADR010-command_pattern.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR011-directory_structure.adoc">ADR011-directory_structure.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR012-authn_token_management.adoc">ADR012-authn_token_management.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Deprecated</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#deprecated/ADR006-choose_orchestrator_storage_backend.adoc">deprecated/ADR006-choose_orchestrator_storage_backend.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Drafts</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#drafts/ADRx-choose_authorization_engine.adoc">drafts/ADRx-choose_authorization_engine.adoc</a>
+  </li>
+</ul>
+  </li>
+</ul>
   </li>
 </ul>
   </li>
@@ -172,26 +225,10 @@
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../../../monitoring/index.html">Stackable Operator for Monitoring and Metrics</a>
-      <ul class="versions">
-        <li class="version is-latest">
-          <a href="../../../monitoring/index.html">master</a>
-        </li>
-      </ul>
-    </li>
-    <li class="component">
       <a class="title" href="../../../opa/index.html">Stackable Operator for OpenPolicyAgent</a>
       <ul class="versions">
         <li class="version is-latest">
           <a href="../../../opa/index.html">master</a>
-        </li>
-      </ul>
-    </li>
-    <li class="component">
-      <a class="title" href="../../../regorule/index.html">Stackable Operator for OpenPolicyAgent Rego rules</a>
-      <ul class="versions">
-        <li class="version is-latest">
-          <a href="../../../regorule/index.html">master</a>
         </li>
       </ul>
     </li>
@@ -215,40 +252,50 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../../index.html">Stackable Documentation</a></li>
-    <li><a href="ADR006-choose_orchestrator_storage_backend.html">Use xxx as storage backend for the orchestrator</a></li>
+    <li><a href="ADR003-choose_review_mechanism.html">Use RTC as Review Mechanism for Changes</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/adr/pages/deprecated/ADR006-choose_orchestrator_storage_backend.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR003-choose_review_mechanism.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Use xxx as storage backend for the orchestrator</h1>
+<h1 class="page">Use RTC as Review Mechanism for Changes</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Status: superseded by ADR7</p>
+<p>Status: accepted</p>
 </li>
 <li>
 <p>Deciders:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Florian Waibel</p>
 </li>
 <li>
-<p>Date:</p>
+<p>Lars Francke</p>
+</li>
+<li>
+<p>Lukas Menzel</p>
+</li>
+<li>
+<p>Oliver Hessel</p>
+</li>
+<li>
+<p>Sönke Liebau</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>Technical Story:
-== Deprecation Notice
-This ADR has been superseded by ADR7, which decided to stop development on the orchestrator for now and use the kube-apiserver instead.
-As the kube-apiserver exclusively supports etcd as backend provider there is no decision to document at this time.</p>
-</div>
-<div class="paragraph">
-<p>This ADR reflects the current state of dicussion at the time of approving ADR7 and should not be considered complete!</p>
+</li>
+<li>
+<p>Date: 19.08.2020</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -256,8 +303,18 @@ As the kube-apiserver exclusively supports etcd as backend provider there is no 
 <h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The orchestrator will need some form of persistent storage backend, for which a decision on the technology to be used has to be taken.
-Our usage of this storage will most probably be extremely simple, even if a SQL database is chosen, the expectation is that it will be used fairly similar to a key value storage.</p>
+<p>We need a review process in place to ensure that any change that is committed into any of this projects repositories is properly reviewed.
+In order to do this there are two main principles that have been coined by the Apache Software Foundation:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Commit the change and then ensure that someone reviews it and commits necessary changes</p>
+</li>
+<li>
+<p>Create a pull request that is reviewed and changed before it gets merged into the main branch</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -267,10 +324,10 @@ Our usage of this storage will most probably be extremely simple, even if a SQL 
 <div class="ulist">
 <ul>
 <li>
-<p>Availability of libraries for chosen programming language for the orchestrator</p>
+<p>Keep the commit history clean</p>
 </li>
 <li>
-<p>How established is the backend at potential customers, will we need to deploy it?</p>
+<p>Ensure only reviewed code ever gets released</p>
 </li>
 </ul>
 </div>
@@ -282,13 +339,10 @@ Our usage of this storage will most probably be extremely simple, even if a SQL 
 <div class="ulist">
 <ul>
 <li>
-<p>etcd</p>
+<p>Review then commit</p>
 </li>
 <li>
-<p>ZooKeeper</p>
-</li>
-<li>
-<p>SQL Database</p>
+<p>Commit then review</p>
 </li>
 </ul>
 </div>
@@ -297,117 +351,34 @@ Our usage of this storage will most probably be extremely simple, even if a SQL 
 <div class="sect1">
 <h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Chosen option: "Review then commit", because it meets both decision drivers.</p>
+</div>
 <div class="sect2">
 <h3 id="_positive_consequences"><a class="anchor" href="#_positive_consequences"></a>Positive Consequences</h3>
-<div class="paragraph">
-<p>*</p>
+<div class="ulist">
+<ul>
+<li>
+<p>It is easy to ensure that no unreviewed code gets into a release</p>
+</li>
+<li>
+<p>No need to track which code still needs to be reviewed</p>
+</li>
+<li>
+<p>The commit history can be kept much cleaner as all commits can be squashed when merging a pull request</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_negative_consequences"><a class="anchor" href="#_negative_consequences"></a>Negative Consequences</h3>
-<div class="paragraph">
-<p>*
-== Pros and Cons of the Options</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_etcd"><a class="anchor" href="#_etcd"></a>etcd</h3>
-<div class="paragraph">
-<p><a href="https://etcd.io/" class="bare">https://etcd.io/</a></p>
-</div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because etcd is used by Kubernetes</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Likelyhood that it is already deployed</p>
+<p>Quick fixes may become harder, as reviewers need to be found before a fix can be merged</p>
 </li>
 <li>
-<p>Expertise with etcd by Kubernetes admins can be reused</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Good, because it offers watch functionality</p>
-</li>
-<li>
-<p>Good, because it offers consensus mechanisms</p>
-</li>
-<li>
-<p>Bad, because it has a hard size limit</p>
-</li>
-<li>
-<p>Bad, because it does not work well with large numbers of requests</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_zookeeper"><a class="anchor" href="#_zookeeper"></a>ZooKeeper</h3>
-<div class="paragraph">
-<p><a href="https://zookeeper.apache.org/" class="bare">https://zookeeper.apache.org/</a></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Good, because it is well established and unterstood</p>
-</li>
-<li>
-<p>Good, because it offers watch functionality</p>
-</li>
-<li>
-<p>Good, because it offers consensus mechanisms</p>
-</li>
-<li>
-<p>Bad, because it offers no real benefit over etcd</p>
-</li>
-<li>
-<p>Bad, because it is known to have trouble with high volume of changes</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_sql_database"><a class="anchor" href="#_sql_database"></a>SQL Database</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Good, because expertise and processes for some form of database will be present at pretty much any customer</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Backup</p>
-</li>
-<li>
-<p>HA</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Good, because deploying in integrated test/dev environment is easy with sqlite</p>
-</li>
-<li>
-<p>Bad, because we would need to potentially support multiple database vendors</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Postgres</p>
-</li>
-<li>
-<p>MS Sql</p>
-</li>
-<li>
-<p>Oracle</p>
-</li>
-<li>
-<p>&#8230;&#8203;</p>
-</li>
-</ul>
-</div>
+<p>Pull requests may go stale and cause a little effort to rebase before they can be merged</p>
 </li>
 </ul>
 </div>
@@ -415,9 +386,59 @@ Our usage of this storage will most probably be extremely simple, even if a SQL 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_links"><a class="anchor" href="#_links"></a>Links</h2>
+<h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
 <div class="sectionbody">
-
+<div class="sect2">
+<h3 id="_review_then_commit"><a class="anchor" href="#_review_then_commit"></a>Review then commit</h3>
+<div class="paragraph">
+<p>This option requires a full review and approval of all changes before they are commited to the development branch.
+Who and how many people need to approve a change will need to be defined in the contribution guidelines at a later time.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because there is no need to keep track of unreviewed commits</p>
+</li>
+<li>
+<p>Good, because it is much easier to keep the commit history clean</p>
+</li>
+<li>
+<p>Good, because discussions during review are kept in the PR which keeps the repository clean</p>
+</li>
+<li>
+<p>Bad, because <em>quick fixes</em> can become harder</p>
+</li>
+<li>
+<p>Bad, because pull requests may go stale</p>
+</li>
+<li>
+<p>Bad, because a large number of old and inactive pull requests may accumulate</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_commit_then_review"><a class="anchor" href="#_commit_then_review"></a>Commit then Review</h3>
+<div class="paragraph">
+<p>With this process any committer is allowed to commit changes straight to the</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because committing a change quickly is much easier</p>
+</li>
+<li>
+<p>Bad, because unreviewed commits could make it into a release or would need to be excluded</p>
+</li>
+<li>
+<p>Bad, because we need to keep track of whether or not a commit has been reviewed yet</p>
+</li>
+<li>
+<p>Bad, because changes during review would create additional commits that clutter up the commit history</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 </article>

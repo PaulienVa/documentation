@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Decide on handling and location of systemd unit files :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/adr/ADR005-systemd_unit_file_location.html">
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR005-systemd_unit_file_location.html">
     <meta name="generator" content="Antora 2.3.4">
-    <link rel="stylesheet" href="../../_/css/site.css">
-    <script>var uiRootPath = '../../_'</script>
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <script>var uiRootPath = '../../../_'</script>
   </head>
   <body class="article">
 <header class="header">
@@ -30,31 +30,18 @@
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="../index.html">Stackable Documentation</a></h3>
+    <h3 class="title"><a href="../../index.html">Stackable Documentation</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../getting_started.html">Getting Started</a>
+    <a class="nav-link" href="../../getting_started.html">Getting Started</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../supported-versions.html">Supported Product Versions</a>
+    <a class="nav-link" href="../../supported-versions.html">Supported Product Versions</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../monitoring.html">Monitoring</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Internal Docs</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../internal/personas.html">Customer Personas</a>
-  </li>
-</ul>
+    <a class="nav-link" href="../../monitoring.html">Monitoring</a>
   </li>
 </ul>
   </li>
@@ -65,10 +52,76 @@
     <span class="nav-text">Contributor&#8217;s Guide</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../contributor/contribution_guide.html">Overview</a>
+    <a class="nav-link" href="../contribution_guide.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../contributor/new_product_version.html">New Product Version</a>
+    <a class="nav-link" href="../development_dashboard.html">Development Dashboard</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../new_product_version.html">New Product Version</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Architectural Decision Records</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Current</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR001-choose_project_language.adoc">ADR001-choose_project_language.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR002-choose_repository_structure.adoc">ADR002-choose_repository_structure.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR003-choose_review_mechanism.adoc">ADR003-choose_review_mechanism.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR004-choose_agent_programming_language.adoc">ADR004-choose_agent_programming_language.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR005-systemd_unit_file_location.adoc">ADR005-systemd_unit_file_location.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR007-defined_reuse_of_k8s.adoc">ADR007-defined_reuse_of_k8s.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR008-decide_reuse_of_operators.adoc">ADR008-decide_reuse_of_operators.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR009-selector_support.adoc">ADR009-selector_support.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR010-command_pattern.adoc">ADR010-command_pattern.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR011-directory_structure.adoc">ADR011-directory_structure.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR012-authn_token_management.adoc">ADR012-authn_token_management.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Deprecated</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#deprecated/ADR006-choose_orchestrator_storage_backend.adoc">deprecated/ADR006-choose_orchestrator_storage_backend.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Drafts</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#drafts/ADRx-choose_authorization_engine.adoc">drafts/ADRx-choose_authorization_engine.adoc</a>
+  </li>
+</ul>
+  </li>
+</ul>
   </li>
 </ul>
   </li>
@@ -84,122 +137,106 @@
   </div>
   <ul class="components">
     <li class="component is-current">
-      <a class="title" href="../index.html">Stackable Documentation</a>
+      <a class="title" href="../../index.html">Stackable Documentation</a>
       <ul class="versions">
         <li class="version is-current is-latest">
-          <a href="../index.html">master</a>
+          <a href="../../index.html">master</a>
         </li>
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../../airflow/index.html">Stackable Operator for Apache Airflow</a>
+      <a class="title" href="../../../airflow/index.html">Stackable Operator for Apache Airflow</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../../airflow/index.html">master</a>
+          <a href="../../../airflow/index.html">master</a>
         </li>
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../../druid/index.html">Stackable Operator for Apache Druid</a>
+      <a class="title" href="../../../druid/index.html">Stackable Operator for Apache Druid</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../../druid/index.html">master</a>
+          <a href="../../../druid/index.html">master</a>
         </li>
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../../hbase/index.html">Stackable Operator for Apache HBase</a>
+      <a class="title" href="../../../hbase/index.html">Stackable Operator for Apache HBase</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../../hbase/index.html">master</a>
+          <a href="../../../hbase/index.html">master</a>
         </li>
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../../hdfs/index.html">Stackable Operator for Apache HDFS</a>
+      <a class="title" href="../../../hdfs/index.html">Stackable Operator for Apache HDFS</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../../hdfs/index.html">master</a>
+          <a href="../../../hdfs/index.html">master</a>
         </li>
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../../hive/index.html">Stackable Operator for Apache Hive</a>
+      <a class="title" href="../../../hive/index.html">Stackable Operator for Apache Hive</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../../hive/index.html">master</a>
+          <a href="../../../hive/index.html">master</a>
         </li>
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../../kafka/index.html">Stackable Operator for Apache Kafka</a>
+      <a class="title" href="../../../kafka/index.html">Stackable Operator for Apache Kafka</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../../kafka/index.html">master</a>
+          <a href="../../../kafka/index.html">master</a>
         </li>
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../../nifi/index.html">Stackable Operator for Apache NiFi</a>
+      <a class="title" href="../../../nifi/index.html">Stackable Operator for Apache NiFi</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../../nifi/index.html">master</a>
+          <a href="../../../nifi/index.html">master</a>
         </li>
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../../spark/index.html">Stackable Operator for Apache Spark</a>
+      <a class="title" href="../../../spark/index.html">Stackable Operator for Apache Spark</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../../spark/index.html">master</a>
+          <a href="../../../spark/index.html">master</a>
         </li>
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../../superset/index.html">Stackable Operator for Apache Superset</a>
+      <a class="title" href="../../../superset/index.html">Stackable Operator for Apache Superset</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../../superset/index.html">master</a>
+          <a href="../../../superset/index.html">master</a>
         </li>
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../../zookeeper/index.html">Stackable Operator for Apache ZooKeeper</a>
+      <a class="title" href="../../../zookeeper/index.html">Stackable Operator for Apache ZooKeeper</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../../zookeeper/index.html">master</a>
+          <a href="../../../zookeeper/index.html">master</a>
         </li>
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../../monitoring/index.html">Stackable Operator for Monitoring and Metrics</a>
+      <a class="title" href="../../../opa/index.html">Stackable Operator for OpenPolicyAgent</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../../monitoring/index.html">master</a>
+          <a href="../../../opa/index.html">master</a>
         </li>
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../../opa/index.html">Stackable Operator for OpenPolicyAgent</a>
+      <a class="title" href="../../../trino/index.html">Stackable Operator for Trino</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../../opa/index.html">master</a>
-        </li>
-      </ul>
-    </li>
-    <li class="component">
-      <a class="title" href="../../regorule/index.html">Stackable Operator for OpenPolicyAgent Rego rules</a>
-      <ul class="versions">
-        <li class="version is-latest">
-          <a href="../../regorule/index.html">master</a>
-        </li>
-      </ul>
-    </li>
-    <li class="component">
-      <a class="title" href="../../trino/index.html">Stackable Operator for Trino</a>
-      <ul class="versions">
-        <li class="version is-latest">
-          <a href="../../trino/index.html">master</a>
+          <a href="../../../trino/index.html">master</a>
         </li>
       </ul>
     </li>
@@ -211,14 +248,14 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="../index.html" class="home-link"></a>
+  <a href="../../index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="../index.html">Stackable Documentation</a></li>
+    <li><a href="../../index.html">Stackable Documentation</a></li>
     <li><a href="ADR005-systemd_unit_file_location.html">Decide on handling and location of systemd unit files</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/adr/pages/ADR005-systemd_unit_file_location.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR005-systemd_unit_file_location.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
@@ -408,7 +445,7 @@ We need to decide where to put these files.</p>
 </div>
 <footer class="footer">
 </footer>
-<script src="../../_/js/site.js"></script>
-<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
   </body>
 </html>

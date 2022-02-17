@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Development Dashboard :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/development_dashboard.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <script>var uiRootPath = '../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://docs.stackable.tech">Stackable Documentation</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="home" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Stackable Documentation</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../getting_started.html">Getting Started</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../supported-versions.html">Supported Product Versions</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../monitoring.html">Monitoring</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Contributor&#8217;s Guide</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="contribution_guide.html">Overview</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="development_dashboard.html">Development Dashboard</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="new_product_version.html">New Product Version</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Architectural Decision Records</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Current</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR001-choose_project_language.adoc">ADR001-choose_project_language.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR002-choose_repository_structure.adoc">ADR002-choose_repository_structure.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR003-choose_review_mechanism.adoc">ADR003-choose_review_mechanism.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR004-choose_agent_programming_language.adoc">ADR004-choose_agent_programming_language.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR005-systemd_unit_file_location.adoc">ADR005-systemd_unit_file_location.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR007-defined_reuse_of_k8s.adoc">ADR007-defined_reuse_of_k8s.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR008-decide_reuse_of_operators.adoc">ADR008-decide_reuse_of_operators.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR009-selector_support.adoc">ADR009-selector_support.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR010-command_pattern.adoc">ADR010-command_pattern.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR011-directory_structure.adoc">ADR011-directory_structure.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#ADR012-authn_token_management.adoc">ADR012-authn_token_management.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Deprecated</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#deprecated/ADR006-choose_orchestrator_storage_backend.adoc">deprecated/ADR006-choose_orchestrator_storage_backend.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Drafts</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="#drafts/ADRx-choose_authorization_engine.adoc">drafts/ADRx-choose_authorization_engine.adoc</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Stackable Documentation</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">Stackable Documentation</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../airflow/index.html">Stackable Operator for Apache Airflow</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../airflow/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../druid/index.html">Stackable Operator for Apache Druid</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../druid/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../hbase/index.html">Stackable Operator for Apache HBase</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../hbase/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../hdfs/index.html">Stackable Operator for Apache HDFS</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../hdfs/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../hive/index.html">Stackable Operator for Apache Hive</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../hive/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../kafka/index.html">Stackable Operator for Apache Kafka</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../kafka/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../nifi/index.html">Stackable Operator for Apache NiFi</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../nifi/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../spark/index.html">Stackable Operator for Apache Spark</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../spark/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../superset/index.html">Stackable Operator for Apache Superset</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../superset/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../zookeeper/index.html">Stackable Operator for Apache ZooKeeper</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../zookeeper/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../opa/index.html">Stackable Operator for OpenPolicyAgent</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../opa/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../trino/index.html">Stackable Operator for Trino</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../trino/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Stackable Documentation</a></li>
+    <li>Contributor&#8217;s Guide</li>
+    <li><a href="development_dashboard.html">Development Dashboard</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/development_dashboard.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Development Dashboard</h1>
+<div class="paragraph">
+<p>This page contains information about our products and relevant links you might need during development.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Product</th>
+<th class="tableblock halign-left valign-top">Homepage</th>
+<th class="tableblock halign-left valign-top">Upstream Git</th>
+<th class="tableblock halign-left valign-top">Operator Git</th>
+<th class="tableblock halign-left valign-top">Our Dockerfile</th>
+<th class="tableblock halign-left valign-top">Jenkins</th>
+<th class="tableblock halign-left valign-top">Documentation</th>
+<th class="tableblock halign-left valign-top">Misc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apache Airflow</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://airflow.apache.org/" class="bare">https://airflow.apache.org/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/apache/airflow" class="bare">https://github.com/apache/airflow</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/airflow-operator" class="bare">https://github.com/stackabletech/airflow-operator</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/docker-images/tree/main/airflow" class="bare">https://github.com/stackabletech/docker-images/tree/main/airflow</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://ci.stackable.tech/job/Airflow%20Operator%20Integration%20Tests/" class="bare">https://ci.stackable.tech/job/Airflow%20Operator%20Integration%20Tests/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.stackable.tech/airflow/index.html" class="bare">https://docs.stackable.tech/airflow/index.html</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apache Druid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://druid.apache.org/" class="bare">https://druid.apache.org/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/apache/druid" class="bare">https://github.com/apache/druid</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/druid-operator" class="bare">https://github.com/stackabletech/druid-operator</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/docker-images/tree/main/druid" class="bare">https://github.com/stackabletech/docker-images/tree/main/druid</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://ci.stackable.tech/job/Druid%20Operator%20Integration%20Tests/" class="bare">https://ci.stackable.tech/job/Druid%20Operator%20Integration%20Tests/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.stackable.tech/druid/index.html" class="bare">https://docs.stackable.tech/druid/index.html</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apache HBase</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://hbase.apache.org/" class="bare">https://hbase.apache.org/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/apache/hbase" class="bare">https://github.com/apache/hbase</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/hbase-operator" class="bare">https://github.com/stackabletech/hbase-operator</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/docker-images/tree/main/hbase" class="bare">https://github.com/stackabletech/docker-images/tree/main/hbase</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://ci.stackable.tech/job/HBase%20Operator%20Integration%20Tests/" class="bare">https://ci.stackable.tech/job/HBase%20Operator%20Integration%20Tests/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.stackable.tech/hbase/index.html" class="bare">https://docs.stackable.tech/hbase/index.html</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apache Hadoop (HDFS)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://hadoop.apache.org/" class="bare">https://hadoop.apache.org/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/apache/hadoop" class="bare">https://github.com/apache/hadoop</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/hdfs-operator" class="bare">https://github.com/stackabletech/hdfs-operator</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/docker-images/tree/main/hadoop" class="bare">https://github.com/stackabletech/docker-images/tree/main/hadoop</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://ci.stackable.tech/job/HDFS%20Operator%20Integration%20Tests/" class="bare">https://ci.stackable.tech/job/HDFS%20Operator%20Integration%20Tests/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.stackable.tech/hdfs/index.html" class="bare">https://docs.stackable.tech/hdfs/index.html</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apache Hive (Metastore)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://hive.apache.org/" class="bare">https://hive.apache.org/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/apache/hive" class="bare">https://github.com/apache/hive</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/hive-operator" class="bare">https://github.com/stackabletech/hive-operator</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/docker-images/tree/main/hive" class="bare">https://github.com/stackabletech/docker-images/tree/main/hive</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://ci.stackable.tech/job/Hive%20Operator%20Integration%20Tests/" class="bare">https://ci.stackable.tech/job/Hive%20Operator%20Integration%20Tests/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.stackable.tech/hive/index.html" class="bare">https://docs.stackable.tech/hive/index.html</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apache Kafka</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://kafka.apache.org/" class="bare">https://kafka.apache.org/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/apache/kafka" class="bare">https://github.com/apache/kafka</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/kafka-operator" class="bare">https://github.com/stackabletech/kafka-operator</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/docker-images/tree/main/kafka" class="bare">https://github.com/stackabletech/docker-images/tree/main/kafka</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://ci.stackable.tech/job/Kafka%20Operator%20Integration%20Tests/" class="bare">https://ci.stackable.tech/job/Kafka%20Operator%20Integration%20Tests/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.stackable.tech/kafka/index.html" class="bare">https://docs.stackable.tech/kafka/index.html</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apache NiFi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://nifi.apache.org/" class="bare">https://nifi.apache.org/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/apache/nifi" class="bare">https://github.com/apache/nifi</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/nifi-operator" class="bare">https://github.com/stackabletech/nifi-operator</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/docker-images/tree/main/nifi" class="bare">https://github.com/stackabletech/docker-images/tree/main/nifi</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://ci.stackable.tech/job/NiFi%20Operator%20Integration%20Tests/" class="bare">https://ci.stackable.tech/job/NiFi%20Operator%20Integration%20Tests/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.stackable.tech/nifi/index.html" class="bare">https://docs.stackable.tech/nifi/index.html</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apache Spark</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://spark.apache.org/" class="bare">https://spark.apache.org/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/apache/spark" class="bare">https://github.com/apache/spark</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/spark-operator" class="bare">https://github.com/stackabletech/spark-operator</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/docker-images/tree/main/spark" class="bare">https://github.com/stackabletech/docker-images/tree/main/spark</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://ci.stackable.tech/job/Spark%20Operator%20Integration%20Tests/" class="bare">https://ci.stackable.tech/job/Spark%20Operator%20Integration%20Tests/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.stackable.tech/spark/index.html" class="bare">https://docs.stackable.tech/spark/index.html</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apache Superset</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://superset.apache.org/" class="bare">https://superset.apache.org/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/apache/superset" class="bare">https://github.com/apache/superset</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/superset-operator" class="bare">https://github.com/stackabletech/superset-operator</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/docker-images/tree/main/superset" class="bare">https://github.com/stackabletech/docker-images/tree/main/superset</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://ci.stackable.tech/job/Superset%20Operator%20Integration%20Tests/" class="bare">https://ci.stackable.tech/job/Superset%20Operator%20Integration%20Tests/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.stackable.tech/superset/index.html" class="bare">https://docs.stackable.tech/superset/index.html</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apache ZooKeeper</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://zookeeper.apache.org/" class="bare">https://zookeeper.apache.org/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/apache/zookeeper" class="bare">https://github.com/apache/zookeeper</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/zookeeper-operator" class="bare">https://github.com/stackabletech/zookeeper-operator</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/docker-images/tree/main/zookeeper" class="bare">https://github.com/stackabletech/docker-images/tree/main/zookeeper</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://ci.stackable.tech/job/Zookeeper%20Operator%20Integration%20Tests/" class="bare">https://ci.stackable.tech/job/Zookeeper%20Operator%20Integration%20Tests/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.stackable.tech/zookeeper/index.html" class="bare">https://docs.stackable.tech/zookeeper/index.html</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OpenPolicyAgent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.openpolicyagent.org/" class="bare">https://www.openpolicyagent.org/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/open-policy-agent/opa" class="bare">https://github.com/open-policy-agent/opa</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/opa-operator" class="bare">https://github.com/stackabletech/opa-operator</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/docker-images/tree/main/opa" class="bare">https://github.com/stackabletech/docker-images/tree/main/opa</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://ci.stackable.tech/job/OPA%20Operator%20Integration%20Tests/" class="bare">https://ci.stackable.tech/job/OPA%20Operator%20Integration%20Tests/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.stackable.tech/opa/index.html" class="bare">https://docs.stackable.tech/opa/index.html</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Trino</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://trino.io/" class="bare">https://trino.io/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/trinodb/trino" class="bare">https://github.com/trinodb/trino</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/trino-operator" class="bare">https://github.com/stackabletech/trino-operator</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/docker-images/tree/main/trino" class="bare">https://github.com/stackabletech/docker-images/tree/main/trino</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://ci.stackable.tech/job/Trino%20Operator%20Integration%20Tests/" class="bare">https://ci.stackable.tech/job/Trino%20Operator%20Integration%20Tests/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.stackable.tech/trino/index.html" class="bare">https://docs.stackable.tech/trino/index.html</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>There are a few other important repositories that come up frequently:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">GitHub repository</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">operator-rs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/operator-rs" class="bare">https://github.com/stackabletech/operator-rs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Rust library with common functionality for our operators</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Secret Operator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/secret-operator" class="bare">https://github.com/stackabletech/secret-operator</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Manages/generates Kubernetes secrets, and mounts them into pods using CSI</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Issues</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/issues" class="bare">https://github.com/stackabletech/issues</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This repository exists solely for the purpose of tracking issues related to the Stackable Platform in general. Large topics that impact many or even all of the platform components are discussed here. There is no code in this repository.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Documentation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/documentation" class="bare">https://github.com/stackabletech/documentation</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Platform wide documentation, such as this page, are hosted here.
+This repository has references to documentation that is hosted in individual operator repositories (see above).
+It is the main source from which the public <a href="https://docs.stackable.tech/">Documentation</a> page is generated.
+The documentation is written in <a href="https://asciidoctor.org">AsciiDoc</a> format and processed with <a href="https://antora.org">Antora</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Docker Images</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/docker-images" class="bare">https://github.com/stackabletech/docker-images</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The Stackable Platform can be used to install and run up several open-source products such as <a href="https://kafka.apache.org">Apache Kafka</a> or <a href="https://trino.io">Trino</a>.
+Container images of these products hosted on the <a href="https://repo.stackable.tech/">Stackable Repository Manager</a> and the sources hosted in this repository.</p>
+<p class="tableblock">NOTE: Operators host their <code>Dockerfile</code>s in their own repository.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integration Tests</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/integration-tests" class="bare">https://github.com/stackabletech/integration-tests</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The Stackable Operators are tested in many environments and across cloud providers.
+Integration tests are currently driven by <code>Kuttl</code> and are hosted here.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">T2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/t2" class="bare">https://github.com/stackabletech/t2</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integration testing across different versions and cloud providers is being developed here.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Operator Templating</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/stackabletech/operator-templating/" class="bare">https://github.com/stackabletech/operator-templating/</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stackable develops and maintains a growing number of operators for open source software.</p>
+<p class="tableblock">The high level structure of the repository is consistent across all repositories, which in the past has led to repetitive maintenance tasks in many repositories even for small changes.</p>
+<p class="tableblock">This repository is intended to help with these changes by keeping common files as templates and offering tooling to roll these out to all repositories that are under management by this tool.</p></td>
+</tr>
+</tbody>
+</table>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+</footer>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

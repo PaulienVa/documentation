@@ -289,6 +289,7 @@ metadata:
   name: airflow
 spec:
   version: 2.2.3-python3.8
+  statsdExporterVersion: v0.22.4
   executor: CeleryExecutor
   loadExamples: true
   exposeConfig: false
@@ -320,6 +321,9 @@ spec:
 </li>
 <li>
 <p>the label of the Docker image provided by Stackable must be set in <code>spec.version</code></p>
+</li>
+<li>
+<p><code>spec.statsdExporterVersion</code> must contain the tag of a statsd-exporter Docker image in the Stackable repository.</p>
 </li>
 <li>
 <p><code>spec.executor</code>: this setting determines how the cluster will run (for more information see <a href="https://airflow.apache.org/docs/apache-airflow/stable/executor/index.html#executor-types" class="bare">https://airflow.apache.org/docs/apache-airflow/stable/executor/index.html#executor-types</a>): the <code>CeleryExecutor</code>
@@ -494,6 +498,15 @@ will run and the job tree will update automatically:</p>
 <div class="content">
 <img src="_images/airflow_running.png" alt="Airflow UI showing a running DAG">
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_monitoring"><a class="anchor" href="#_monitoring"></a>Monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The managed Airflow instances are automatically configured to export Prometheus metrics. See
+<a href="../home/monitoring.html" class="page">Monitoring</a> for more details</p>
 </div>
 </div>
 </div>

@@ -190,6 +190,8 @@
 </aside>
 <article class="doc">
 <h1 class="page">Usage</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
 <p>If you are not installing the operator using Helm then after installation the CRD for this operator must be created:</p>
 </div>
@@ -272,6 +274,68 @@ metadata:
 spec:
   clusterRef:
     name: simple-zk</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration_environment_overrides"><a class="anchor" href="#_configuration_environment_overrides"></a>Configuration &amp; Environment Overrides</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The cluster definition also supports overriding configuration properties and environment variables, either per role or per role group, where the more specific override (role group) has precedence over the less specific one (role).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Do not override port numbers. This will lead to cluster malfunction.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_configuration_properties"><a class="anchor" href="#_configuration_properties"></a>Configuration Properties</h3>
+<div class="paragraph">
+<p>Currently, not supported for any file.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment Variables</h3>
+<div class="paragraph">
+<p>Environment variables can be (over)written by adding the <code>envOverrides</code> property.</p>
+</div>
+<div class="paragraph">
+<p>For example per role group:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">nodes:
+  roleGroups:
+    default:
+      config: {}
+      replicas: 1
+      envOverrides:
+        MY_ENV_VAR: "MY_VALUE"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or per role:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">nodes:
+  envOverrides:
+    MY_ENV_VAR: "MY_VALUE"
+  roleGroups:
+    default:
+      config: {}
+      replicas: 1</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </article>

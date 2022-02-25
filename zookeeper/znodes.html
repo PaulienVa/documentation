@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Stackable Operator for Apache ZooKeeper :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/zookeeper/index.html">
+    <title>ZNodes :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/zookeeper/znodes.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -47,7 +47,7 @@
     <button class="nav-item-toggle"></button>
     <span class="nav-text">Concepts</span>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="znodes.html">ZNodes</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -182,30 +182,42 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Stackable Operator for Apache ZooKeeper</a></li>
+    <li>Concepts</li>
+    <li><a href="znodes.html">ZNodes</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/zookeeper-operator/edit/main/docs/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/zookeeper-operator/edit/main/docs/modules/ROOT/pages/znodes.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Stackable Operator for Apache ZooKeeper</h1>
+<h1 class="page">ZNodes</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This is an operator for Kubernetes that can manage <a href="https://zookeeper.apache.org/">Apache ZooKeeper</a> ensembles.</p>
+<p>Apache ZooKeeper organizes all data into a hierarchical system of <a href="https://zookeeper.apache.org/doc/r3.7.0/zookeeperProgrammers.html#ch_zkDataModel">ZNodes</a>,
+which act as both files (they can have data associated with them) and folders (they can contain other ZNodes) when compared to a traditional (POSIX-like) file system.</p>
 </div>
-<div class="admonitionblock warning">
+<div class="paragraph">
+<p>In order to isolate different clients using the same ZooKeeper cluster, each client application should be assigned a unique root ZNode, which it can then organize
+as it sees fit.</p>
+</div>
+<div class="paragraph">
+<p>In the Stackable Operator for Apache ZooKeeper, we manage this using the <code>ZookeeperZnode</code> Kubernetes resource. The operator creates a new ZNode in the linked
+ZooKeeper cluster, as well as <a href="discovery.html" class="page">Discovery Profiles</a> that are configured to restrict access to the configured ZNode. The operator <em>does not</em> manage the contents
+of the ZNode.</p>
+</div>
+<div class="admonitionblock caution">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
+<i class="fa icon-caution" title="Caution"></i>
 </td>
 <td class="content">
-This operator is part of Stackable Data Platform
-and only works with images from the <a href="https://repo.stackable.tech/#browse/browse:docker:v2%2Fstackable%2Fzookeeper">Stackable</a> repository
+The operator automatically deletes the ZNode from the ZooKeeper cluster if the Kubernetes <code>ZookeeperZnode</code> object is deleted. Recreating the
+<code>ZookeeperZnode</code> object will not restore access to the data.
 </td>
 </tr>
 </table>
@@ -213,27 +225,66 @@ and only works with images from the <a href="https://repo.stackable.tech/#browse
 </div>
 </div>
 <div class="sect1">
-<h2 id="_supported_versions"><a class="anchor" href="#_supported_versions"></a>Supported Versions</h2>
+<h2 id="_usage"><a class="anchor" href="#_usage"></a>Usage</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Stackable Operator for Apache ZooKeeper currently supports the following versions of ZooKeeper:</p>
+<p>The <code>ZookeeperZnode</code> object should be created by the user administering the system that will use the ZNode. For example,
+when using Apache ZooKeeper to manage an Apache Kafka cluster, the <code>ZookeeperZnode</code> object would be created by the user
+creating the <a href="../kafka/configuration.html" class="page"><code>KafkaCluster</code></a> object.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>3.5.8</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>A basic ZNode can be created like so:</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_getting_the_docker_image"><a class="anchor" href="#_getting_the_docker_image"></a>Getting the Docker image</h2>
-<div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>docker pull docker.stackable.tech/stackable/zookeeper:&lt;version&gt;</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperZnode
+metadata:
+  name: example-znode
+spec:
+  clusterRef: <i class="conum" data-value="1"></i><b>(1)</b>
+    name: zookeeper-cluster
+    namespace: my-namespace <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Refererence to the <code>ZookeeperCluster</code> object</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The namespace is implied to be the same as the namespace of the <code>ZookeeperZnode</code> if omitted</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This will create corresponding <a href="discovery.html" class="page">Discovery Profiles</a> referring to the specific ZNode, which will look roughly like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example-znode <i class="conum" data-value="1"></i><b>(1)</b>
+deta:
+  ZOOKEEPER: pod-1:2181,pod-2:2181,pod-3:2181/{path} <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The base name of the discovery profile will be the same as the name of the <code>ZookeeperZnode</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>$PATH</code> will be a unique and unpredictable path that is generated by the operator</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

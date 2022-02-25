@@ -43,6 +43,18 @@
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
   </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Concepts</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="znodes.html">ZNodes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="discovery.html">Discovery Profiles</a>
+  </li>
+</ul>
+  </li>
 </ul>
   </li>
 </ul>
@@ -209,11 +221,11 @@ spec:
       default:
         replicas: 3
         config: {}
-$ sudo kubectl apply -f zookeeper.yaml</pre>
+$ kubectl apply -f zookeeper.yaml</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Afterwards, a ZookeeperZnode root can be created:</p>
+<p>Afterwards, a <a href="znodes.html" class="page">ZNode</a> can be created:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -227,7 +239,7 @@ spec:
   clusterRef:
     name: simple-zk
     namespace: default
-$ sudo kubectl apply -f znode.yaml</pre>
+$ kubectl apply -f znode.yaml</pre>
 </div>
 </div>
 <div class="paragraph">

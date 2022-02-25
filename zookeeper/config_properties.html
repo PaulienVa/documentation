@@ -43,6 +43,18 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
   </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Concepts</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="znodes.html">ZNodes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="discovery.html">Discovery Profiles</a>
+  </li>
+</ul>
+  </li>
 </ul>
   </li>
 </ul>
@@ -176,9 +188,6 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<div class="sect1">
-<h2 id="_kubernetes_custom_resource_options"><a class="anchor" href="#_kubernetes_custom_resource_options"></a>Kubernetes custom resource options</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>The cluster can be configured via a YAML file. This custom resource specifies the amount of replicas for each role group or role specific configuration like port definitions etc.</p>
 </div>
@@ -207,8 +216,6 @@ spec:
         # Set environment variables here
         envOverrides:
           MY_ENV_VAR: "foobar"</code></pre>
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">

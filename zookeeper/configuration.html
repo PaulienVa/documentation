@@ -43,6 +43,18 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
   </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Concepts</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="znodes.html">ZNodes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="discovery.html">Discovery Profiles</a>
+  </li>
+</ul>
+  </li>
 </ul>
   </li>
 </ul>
@@ -198,8 +210,105 @@
 <div class="paragraph">
 <p><strong>Multiple values:</strong> false</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>cargo run -- run --product-config /foo/bar/properties.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_watch_namespace"><a class="anchor" href="#_watch_namespace"></a>watch-namespace</h3>
 <div class="paragraph">
-<p>This file contains property definitions for the Apache Zookeeper configuration.</p>
+<p><strong>Default value</strong>: All namespaces</p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="paragraph">
+<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>cargo run -- run --watch-namespace test</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment variables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This operator accepts the following environment variables:</p>
+</div>
+<div class="sect2">
+<h3 id="_product_config_2"><a class="anchor" href="#_product_config_2"></a>PRODUCT_CONFIG</h3>
+<div class="paragraph">
+<p><strong>Default value</strong>: <code>/etc/stackable/zookeeper-operator/config-spec/properties.yaml</code></p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>export PRODUCT_CONFIG=/foo/bar/properties.yaml
+cargo run -- run</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or via docker:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>docker run \
+    --name zookeeper-operator \
+    --network host \
+    --env KUBECONFIG=/home/stackable/.kube/config \
+    --env PRODUCT_CONFIG=/my/product/config.yaml \
+    --mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
+    docker.stackable.tech/stackable/zookeeper-operator:latest</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_watch_namespace_2"><a class="anchor" href="#_watch_namespace_2"></a>WATCH_NAMESPACE</h3>
+<div class="paragraph">
+<p><strong>Default value</strong>: All namespaces</p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="paragraph">
+<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>export WATCH_NAMESPACE=test
+cargo run -- run</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or via docker:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>docker run \
+--name zookeeper-operator \
+--network host \
+--env KUBECONFIG=/home/stackable/.kube/config \
+--env WATCH_NAMESPACE=test \
+--mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
+docker.stackable.tech/stackable/zookeeper-operator:latest</code></pre>
+</div>
 </div>
 </div>
 </div>

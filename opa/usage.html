@@ -69,13 +69,10 @@
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">Stackable Operator for OpenPolicyAgent</a></h3>
+    <h3 class="title"><a href="index.html">Stackable Operator for OPA</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
@@ -95,7 +92,7 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Stackable Operator for OpenPolicyAgent</span>
+    <span class="title">Stackable Operator for OPA</span>
     <span class="version">master</span>
   </div>
   <ul class="components">
@@ -188,7 +185,7 @@
       </ul>
     </li>
     <li class="component is-current">
-      <a class="title" href="index.html">Stackable Operator for OpenPolicyAgent</a>
+      <a class="title" href="index.html">Stackable Operator for OPA</a>
       <ul class="versions">
         <li class="version is-current is-latest">
           <a href="index.html">master</a>
@@ -214,7 +211,7 @@
   <a href="../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Stackable Operator for OpenPolicyAgent</a></li>
+    <li><a href="index.html">Stackable Operator for OPA</a></li>
     <li><a href="usage.html">Usage</a></li>
   </ul>
 </nav>
@@ -237,25 +234,34 @@
 </div>
 </div>
 <div class="paragraph">
-<p>To create a single node OPA (v0.27.1) cluster with Prometheus metrics exposed on port 8081:</p>
+<p>To create a single node OPA (v0.37.2) cluster with Prometheus metrics exposed on port 8081:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">    apiVersion: opa.stackable.tech/v1alpha1
-    kind: OpenPolicyAgent
+    kind: OpaCluster
     metadata:
       name: simple-opa
     spec:
-      version: "0.27.1"
+      version: "0.37.2"
       servers:
         roleGroups:
           default:
             selector:
               matchLabels:
-                kubernetes.io/os: linux
-            config:
-              regoRuleReference: "http://regorule-operator:3030/opa/v1"</code></pre>
+                kubernetes.io/os: linux</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_bundle_sources"><a class="anchor" href="#_bundle_sources"></a>Bundle Sources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OPA bundles are generated from <code>ConfigMap</code> objects by a side car container running along side the OPA server.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, the OPA servers can load bundles from a remote server when a <code>regoRuleReference</code> is configured in the role group&#8217;s <code>config</code> section.</p>
 </div>
 </div>
 </div>

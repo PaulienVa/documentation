@@ -77,6 +77,9 @@
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
   <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="configuration.html">Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
   </li>
 </ul>
@@ -179,7 +182,7 @@
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../opa/index.html">Stackable Operator for OpenPolicyAgent</a>
+      <a class="title" href="../opa/index.html">Stackable Operator for OPA</a>
       <ul class="versions">
         <li class="version is-latest">
           <a href="../opa/index.html">master</a>
@@ -311,8 +314,8 @@ the time of writing).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">cargo run -- crd | kubectl apply -f -
-cargo run -- run</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">stackable-superset-operator crd | kubectl apply -f -
+stackable-superset-operator run</code></pre>
 </div>
 </div>
 </div>

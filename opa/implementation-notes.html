@@ -69,13 +69,10 @@
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">Stackable Operator for OpenPolicyAgent</a></h3>
+    <h3 class="title"><a href="index.html">Stackable Operator for OPA</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
@@ -95,7 +92,7 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Stackable Operator for OpenPolicyAgent</span>
+    <span class="title">Stackable Operator for OPA</span>
     <span class="version">master</span>
   </div>
   <ul class="components">
@@ -188,7 +185,7 @@
       </ul>
     </li>
     <li class="component is-current">
-      <a class="title" href="index.html">Stackable Operator for OpenPolicyAgent</a>
+      <a class="title" href="index.html">Stackable Operator for OPA</a>
       <ul class="versions">
         <li class="version is-current is-latest">
           <a href="index.html">master</a>
@@ -214,7 +211,7 @@
   <a href="../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Stackable Operator for OpenPolicyAgent</a></li>
+    <li><a href="index.html">Stackable Operator for OPA</a></li>
     <li><a href="implementation-notes.html">Implementation Notes</a></li>
   </ul>
 </nav>
@@ -240,6 +237,15 @@ but should not be required reading for regular use.</p>
 <div class="paragraph">
 <p>We run an OPA on each node, because we want to avoid requiring network round trips for services making
 policy queries (which are often chained in serial, and block other tasks in the products).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_opa_bundle_builder"><a class="anchor" href="#_opa_bundle_builder"></a>OPA Bundle Builder</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Each OPA pod runs a container that watches for <code>ConfigMap</code> objects labeled <code>opa.stackable.tech/bundle</code>.
+All <code>ConfigMap`s are bundled together in a single `bundle.tar.gz</code> file that is served to the colocated OPA container.</p>
 </div>
 </div>
 </div>

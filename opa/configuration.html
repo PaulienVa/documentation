@@ -69,13 +69,10 @@
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">Stackable Operator for OpenPolicyAgent</a></h3>
+    <h3 class="title"><a href="index.html">Stackable Operator for OPA</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
@@ -95,7 +92,7 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Stackable Operator for OpenPolicyAgent</span>
+    <span class="title">Stackable Operator for OPA</span>
     <span class="version">master</span>
   </div>
   <ul class="components">
@@ -188,7 +185,7 @@
       </ul>
     </li>
     <li class="component is-current">
-      <a class="title" href="index.html">Stackable Operator for OpenPolicyAgent</a>
+      <a class="title" href="index.html">Stackable Operator for OPA</a>
       <ul class="versions">
         <li class="version is-current is-latest">
           <a href="index.html">master</a>
@@ -214,7 +211,7 @@
   <a href="../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Stackable Operator for OpenPolicyAgent</a></li>
+    <li><a href="index.html">Stackable Operator for OPA</a></li>
     <li><a href="configuration.html">Configuration</a></li>
   </ul>
 </nav>
@@ -243,8 +240,120 @@
 <div class="paragraph">
 <p><strong>Multiple values:</strong> false</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">cargo run -- run --product-config /foo/bar/properties.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_watch_namespace"><a class="anchor" href="#_watch_namespace"></a>watch-namespace</h3>
 <div class="paragraph">
-<p>This file contains property definitions for the Open Policy Agent configuration.</p>
+<p><strong>Default value</strong>: All namespaces</p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="paragraph">
+<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">cargo run -- run --watch-namespace test</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_run_opa_builder_clusterrole"><a class="anchor" href="#_run_opa_builder_clusterrole"></a>run --opa-builder-clusterrole</h3>
+<div class="paragraph">
+<p><strong>Default value</strong>: <code>None</code>. A value is generated automatically by Helm.</p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false. When not specified, the environment variable <code>OPA_BUILDER_CLUSTERROLE</code> must be present.</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="paragraph">
+<p>The name of the <code>ClusterRole</code> object that is referenced by the OPA pods. This object must exist in the Kubernetes cluster and is created by Helm.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment variables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This operator accepts the following environment variables:</p>
+</div>
+<div class="sect2">
+<h3 id="_product_config_2"><a class="anchor" href="#_product_config_2"></a>PRODUCT_CONFIG</h3>
+<div class="paragraph">
+<p><strong>Default value</strong>: <code>/etc/stackable/opa-operator/config-spec/properties.yaml</code></p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">export PRODUCT_CONFIG=/foo/bar/properties.yaml
+cargo run -- run</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or via docker:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>docker run \
+    --name opa-operator \
+    --network host \
+    --env KUBECONFIG=/home/stackable/.kube/config \
+    --env PRODUCT_CONFIG=/my/product/config.yaml \
+    --mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
+    docker.stackable.tech/stackable/opa-operator:latest</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_watch_namespace_2"><a class="anchor" href="#_watch_namespace_2"></a>WATCH_NAMESPACE</h3>
+<div class="paragraph">
+<p><strong>Default value</strong>: All namespaces</p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="paragraph">
+<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">export WATCH_NAMESPACE=test
+cargo run -- run</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or via docker:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">docker run \
+--name opa-operator \
+--network host \
+--env KUBECONFIG=/home/stackable/.kube/config \
+--env WATCH_NAMESPACE=test \
+--mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
+docker.stackable.tech/stackable/opa-operator:latest</code></pre>
+</div>
 </div>
 </div>
 </div>

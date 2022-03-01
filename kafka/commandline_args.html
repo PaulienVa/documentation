@@ -74,9 +74,6 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
-  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="dependencies.html">Dependencies</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -188,7 +185,7 @@
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../opa/index.html">Stackable Operator for OpenPolicyAgent</a>
+      <a class="title" href="../opa/index.html">Stackable Operator for OPA</a>
       <ul class="versions">
         <li class="version is-latest">
           <a href="../opa/index.html">master</a>
@@ -232,8 +229,30 @@
 <div class="paragraph">
 <p><strong>Multiple values:</strong> false</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">stackable-kafka-operator run --product-config /foo/bar/properties.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_watch_namespace"><a class="anchor" href="#_watch_namespace"></a>watch-namespace</h3>
 <div class="paragraph">
-<p>This file contains property definitions for the Apache Kafka configuration.</p>
+<p><strong>Default value</strong>: All namespaces</p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="paragraph">
+<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">stackable-kafka-operator run --watch-namespace test</code></pre>
+</div>
 </div>
 </div>
 </article>

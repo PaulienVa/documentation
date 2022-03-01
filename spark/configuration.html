@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Building the Operator :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/kafka/building.html">
+    <title>Configuration :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/spark/configuration.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -64,25 +64,19 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="kafka" data-version="master">
+<div class="nav-container" data-component="spark" data-version="master">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">Stackable Operator for Apache Kafka</a></h3>
+    <h3 class="title"><a href="index.html">Stackable Operator for Apache Spark</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="dependencies.html">Dependencies</a>
-  </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -95,7 +89,7 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Stackable Operator for Apache Kafka</span>
+    <span class="title">Stackable Operator for Apache Spark</span>
     <span class="version">master</span>
   </div>
   <ul class="components">
@@ -147,11 +141,11 @@
         </li>
       </ul>
     </li>
-    <li class="component is-current">
-      <a class="title" href="index.html">Stackable Operator for Apache Kafka</a>
+    <li class="component">
+      <a class="title" href="../kafka/index.html">Stackable Operator for Apache Kafka</a>
       <ul class="versions">
-        <li class="version is-current is-latest">
-          <a href="index.html">master</a>
+        <li class="version is-latest">
+          <a href="../kafka/index.html">master</a>
         </li>
       </ul>
     </li>
@@ -163,11 +157,11 @@
         </li>
       </ul>
     </li>
-    <li class="component">
-      <a class="title" href="../spark/index.html">Stackable Operator for Apache Spark</a>
+    <li class="component is-current">
+      <a class="title" href="index.html">Stackable Operator for Apache Spark</a>
       <ul class="versions">
-        <li class="version is-latest">
-          <a href="../spark/index.html">master</a>
+        <li class="version is-current is-latest">
+          <a href="index.html">master</a>
         </li>
       </ul>
     </li>
@@ -188,7 +182,7 @@
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../opa/index.html">Stackable Operator for OpenPolicyAgent</a>
+      <a class="title" href="../opa/index.html">Stackable Operator for OPA</a>
       <ul class="versions">
         <li class="version is-latest">
           <a href="../opa/index.html">master</a>
@@ -214,27 +208,136 @@
   <a href="../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Stackable Operator for Apache Kafka</a></li>
-    <li><a href="building.html">Building the Operator</a></li>
+    <li><a href="index.html">Stackable Operator for Apache Spark</a></li>
+    <li><a href="configuration.html">Configuration</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/kafka-operator/edit/main/docs/modules/ROOT/pages/building.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/spark-operator/edit/main/docs/modules/ROOT/pages/configuration.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Building the Operator</h1>
+<h1 class="page">Configuration</h1>
+<div class="sect1">
+<h2 id="_command_line_parameters"><a class="anchor" href="#_command_line_parameters"></a>Command Line Parameters</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>This operator is written in Rust.</p>
+<p>This operator accepts the following command line parameters:</p>
+</div>
+<div class="sect2">
+<h3 id="_product_config"><a class="anchor" href="#_product_config"></a>product-config</h3>
+<div class="paragraph">
+<p><strong>Default value</strong>: <code>/etc/stackable/spark-operator/config-spec/properties.yaml</code></p>
 </div>
 <div class="paragraph">
-<p>It is developed against the latest stable Rust release, and we currently don&#8217;t support any older versions.</p>
+<p><strong>Required</strong>: false</p>
 </div>
-<div class="literalblock">
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="listingblock">
 <div class="content">
-<pre>cargo build</pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">stackable-spark-operator run --product-config /foo/bar/properties.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_watch_namespace"><a class="anchor" href="#_watch_namespace"></a>watch-namespace</h3>
+<div class="paragraph">
+<p><strong>Default value</strong>: All namespaces</p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="paragraph">
+<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">stackable-spark-operator run --watch-namespace test</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment variables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This operator accepts the following environment variables:</p>
+</div>
+<div class="sect2">
+<h3 id="_product_config_2"><a class="anchor" href="#_product_config_2"></a>PRODUCT_CONFIG</h3>
+<div class="paragraph">
+<p><strong>Default value</strong>: <code>/etc/stackable/spark-operator/config-spec/properties.yaml</code></p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">export PRODUCT_CONFIG=/foo/bar/properties.yaml
+stackable-spark-operator run</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or via docker:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>docker run \
+    --name spark-operator \
+    --network host \
+    --env KUBECONFIG=/home/stackable/.kube/config \
+    --env PRODUCT_CONFIG=/my/product/config.yaml \
+    --mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
+    docker.stackable.tech/stackable/spark-operator:latest</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_watch_namespace_2"><a class="anchor" href="#_watch_namespace_2"></a>WATCH_NAMESPACE</h3>
+<div class="paragraph">
+<p><strong>Default value</strong>: All namespaces</p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="paragraph">
+<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">export WATCH_NAMESPACE=test
+stackable-spark-operator run</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or via docker:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">docker run \
+--name spark-operator \
+--network host \
+--env KUBECONFIG=/home/stackable/.kube/config \
+--env WATCH_NAMESPACE=test \
+--mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
+docker.stackable.tech/stackable/spark-operator:latest</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </article>

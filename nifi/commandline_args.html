@@ -74,9 +74,6 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
-  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="dependencies.html">Dependencies</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -191,7 +188,7 @@
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../opa/index.html">Stackable Operator for OpenPolicyAgent</a>
+      <a class="title" href="../opa/index.html">Stackable Operator for OPA</a>
       <ul class="versions">
         <li class="version is-latest">
           <a href="../opa/index.html">master</a>
@@ -225,15 +222,40 @@
 </aside>
 <article class="doc">
 <div class="sect2">
-<h3 id="_command_line_arguments"><a class="anchor" href="#_command_line_arguments"></a>Command Line Arguments</h3>
+<h3 id="_product_config"><a class="anchor" href="#_product_config"></a>product-config</h3>
 <div class="paragraph">
-<p>The operator accepts the following commands:</p>
+<p><strong>Default value</strong>: <code>/etc/stackable/nifi-operator/config-spec/properties.yaml</code></p>
 </div>
 <div class="paragraph">
-<p><strong>run</strong>: Run the operator and start deploying pods.</p>
+<p><strong>Required</strong>: false</p>
 </div>
 <div class="paragraph">
-<p><strong>crd</strong>: Print the current version of CRDs which the operator requires to be deployed to Kubernetes.</p>
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">stackable-nifi-operator run --product-config /foo/bar/properties.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_watch_namespace"><a class="anchor" href="#_watch_namespace"></a>watch-namespace</h3>
+<div class="paragraph">
+<p><strong>Default value</strong>: All namespaces</p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="paragraph">
+<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">stackable-nifi-operator run --watch-namespace test</code></pre>
+</div>
 </div>
 </div>
 </article>

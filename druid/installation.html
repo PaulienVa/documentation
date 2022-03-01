@@ -73,9 +73,6 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
@@ -185,7 +182,7 @@
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../opa/index.html">Stackable Operator for OpenPolicyAgent</a>
+      <a class="title" href="../opa/index.html">Stackable Operator for OPA</a>
       <ul class="versions">
         <li class="version is-latest">
           <a href="../opa/index.html">master</a>
@@ -237,7 +234,7 @@
 <p>As a Docker container</p>
 </li>
 <li>
-<p>Build from source. This is documented in <a href="building.html" class="xref page">Building the Operator</a>.</p>
+<p>Build from source</p>
 </li>
 </ol>
 </div>
@@ -298,6 +295,19 @@ for this operator.</p>
     --env KUBECONFIG=/home/stackable/.kube/config \
     --mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
     docker.stackable.tech/stackable/druid-operator:latest</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_building_the_operator_from_source"><a class="anchor" href="#_building_the_operator_from_source"></a>Building the operator from source</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This operator is written in Rust and is developed against the latest stable Rust release.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">cargo build</code></pre>
 </div>
 </div>
 </div>

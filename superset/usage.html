@@ -235,9 +235,9 @@ database.</p>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm repo add bitnami https://charts.bitnami.com/bitnami
 
 helm install superset bitnami/postgresql \
-    --set postgresqlUsername=superset \
-    --set postgresqlPassword=superset \
-    --set postgresqlDatabase=superset</code></pre>
+    --set auth.username=superset \
+    --set auth.password=superset \
+    --set auth.database=superset</code></pre>
 </div>
 </div>
 </div>
@@ -339,7 +339,7 @@ browser.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl port-forward superset-node-default-0 8088</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl port-forward service/simple-superset-external 8088</code></pre>
 </div>
 </div>
 <div class="paragraph">

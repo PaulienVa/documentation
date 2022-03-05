@@ -223,7 +223,7 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Druid requires a Zookeeper to run, as well as a database.</p>
+<p>Druid requires a Zookeeper to run, as well as a database. If HDFS is used as the backend-storage (so called "deep storage") then the HDFS operator is required as well.</p>
 </div>
 </div>
 </div>
@@ -234,6 +234,12 @@
 <h3 id="_zookeeper_operator"><a class="anchor" href="#_zookeeper_operator"></a>Zookeeper operator</h3>
 <div class="paragraph">
 <p>Please refer to the <a href="https://github.com/stackabletech/zookeeper-operator">Zookeeper</a> operator and <a href="https://docs.stackable.tech/zookeeper/index.html">docs</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hdfs_operator_optional"><a class="anchor" href="#_hdfs_operator_optional"></a>HDFS operator (optional)</h3>
+<div class="paragraph">
+<p>Please refer to the <a href="https://github.com/stackabletech/hdfs-operator">HDFS</a> operator and <a href="https://docs.stackable.tech/hdfs/index.html">docs</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -276,7 +282,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>Then a cluster can be deployed using the example below. Make sure you have <strong>exactly one node</strong> labeled with <code>nodeType=druid-data</code> as used in the deep storage selector. Having more than one data node is not supported when using local storage.</p>
+<p>Then a cluster can be deployed using the example below.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -295,10 +301,8 @@ spec:
     user: druid
     password: druid
   deepStorage:
-    storageType: local
-    dataNodeSelector:
-      nodeType: druid-data
-    storageDirectory: /path/to/druidDeepStorage
+    storageType: hdfs
+    storageDirectory: hdfs://path/to/druidDeepStorage
   brokers:
     roleGroups:
       default:

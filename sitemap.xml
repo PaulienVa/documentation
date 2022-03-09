@@ -28,6 +28,9 @@
 <loc>https://docs.stackable.tech/sitemap-opa.xml</loc>
 </sitemap>
 <sitemap>
+<loc>https://docs.stackable.tech/sitemap-secret-operator.xml</loc>
+</sitemap>
+<sitemap>
 <loc>https://docs.stackable.tech/sitemap-spark.xml</loc>
 </sitemap>
 <sitemap>

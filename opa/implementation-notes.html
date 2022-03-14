@@ -85,6 +85,15 @@
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="implementation-notes.html">Implementation Notes</a>
   </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Concepts</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="discovery.html">Discovery</a>
+  </li>
+</ul>
+  </li>
 </ul>
   </li>
 </ul>
@@ -245,6 +254,9 @@ but should not be required reading for regular use.</p>
 <div class="paragraph">
 <p>We run an OPA on each node, because we want to avoid requiring network round trips for services making
 policy queries (which are often chained in serial, and block other tasks in the products).</p>
+</div>
+<div class="paragraph">
+<p>We ensure local access via an <a href="https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/"><code>InternalTrafficPolicy</code></a>. This means that <a href="https://kubernetes.io/docs/concepts/workloads/pods/"><code>Pods</code></a> accessing OPA via the service discovery will be routed to the OPA <code>Pod</code> on the same <a href="https://kubernetes.io/docs/concepts/architecture/nodes/"><code>Node</code></a> to reduce request latency and network traffic. This feature is only activated per default in Kubernetes versions <a href="https://github.com/kubernetes/kubernetes/pull/103462"><code>1.22</code></a> or higher.</p>
 </div>
 </div>
 </div>

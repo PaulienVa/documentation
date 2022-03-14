@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Untitled :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/kafka/env_var_args.html">
+    <title>Discovery :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/kafka/discovery.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -89,7 +89,7 @@
     <button class="nav-item-toggle"></button>
     <span class="nav-text">Concepts</span>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="discovery.html">Discovery</a>
   </li>
 </ul>
@@ -227,78 +227,86 @@
 <button class="nav-toggle"></button>
   <a href="../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Stackable Operator for Apache Kafka</a></li>
+    <li>Concepts</li>
+    <li><a href="discovery.html">Discovery</a></li>
+  </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/kafka-operator/edit/main/docs/modules/ROOT/pages/env_var_args.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/kafka-operator/edit/main/docs/modules/ROOT/pages/discovery.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<div class="sect2">
-<h3 id="_product_config"><a class="anchor" href="#_product_config"></a>PRODUCT_CONFIG</h3>
+<h1 class="page">Discovery</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p><strong>Default value</strong>: <code>/etc/stackable/kafka-operator/config-spec/properties.yaml</code></p>
+<p>The Stackable Operator for Apache Kafka publishes a discovery <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#configmap-v1-core"><code>ConfigMap</code></a>, which exposes a client configuration bundle that allows access to the Apache Kafka cluster.</p>
 </div>
 <div class="paragraph">
-<p><strong>Required</strong>: false</p>
+<p>The bundle includes a thrift connection string to access the Kafka broker service. This string may be used by other operators or tools to configure their products with access to Kafka. This is limited to internal cluster access.</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example"><a class="anchor" href="#_example"></a>Example</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p><strong>Multiple values:</strong> false</p>
+<p>Given the following Kafka cluster:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">export PRODUCT_CONFIG=/foo/bar/properties.yaml
-stackable-kafka-operator run</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: kafka.stackable.tech/v1alpha1
+kind: KafkaCluster
+metadata:
+  name: simple-kafka  <i class="conum" data-value="1"></i><b>(1)</b>
+  namespace: stackable <i class="conum" data-value="2"></i><b>(2)</b>
+spec:
+  [&#8230;&#8203;]</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The name of the Kafka cluster, which is also the name of the created discovery <code>ConfigMap</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The namespace of the discovery <code>ConfigMap</code>.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>or via docker:</p>
+<p>The resulting discovery <code>ConfigMap</code> is <code>stackable/simple-kafka</code>.</p>
 </div>
-<div class="listingblock">
+</div>
+</div>
+<div class="sect1">
+<h2 id="_contents"><a class="anchor" href="#_contents"></a>Contents</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>stackable/simple-kafka</code> discovery <code>ConfigMap</code> contains the following fields where <code>simple-kafka</code> represents the name and <code>stackable</code> the namespace of the cluster:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>KAFKA</code></dt>
+</dl>
+</div>
+<div class="exampleblock">
 <div class="content">
-<pre>docker run \
-    --name kafka-operator \
-    --network host \
-    --env KUBECONFIG=/home/stackable/.kube/config \
-    --env PRODUCT_CONFIG=/my/product/config.yaml \
-    --mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
-    docker.stackable.tech/stackable/kafka-operator:latest</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_watch_namespace"><a class="anchor" href="#_watch_namespace"></a>WATCH_NAMESPACE</h3>
 <div class="paragraph">
-<p><strong>Default value</strong>: All namespaces</p>
+<p>Contains the thrift protocol connection string for the Kafka cluster:</p>
 </div>
-<div class="paragraph">
-<p><strong>Required</strong>: false</p>
-</div>
-<div class="paragraph">
-<p><strong>Multiple values:</strong> false</p>
-</div>
-<div class="paragraph">
-<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
-</div>
-<div class="listingblock">
+<div class="literalblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">export WATCH_NAMESPACE=test
-stackable-kafka-operator run</code></pre>
+<pre>simple-kafka.stackable.svc.cluster.local:9092</pre>
 </div>
 </div>
-<div class="paragraph">
-<p>or via docker:</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">docker run \
---name kafka-operator \
---network host \
---env KUBECONFIG=/home/stackable/.kube/config \
---env WATCH_NAMESPACE=test \
---mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
-docker.stackable.tech/stackable/kafka-operator:latest</code></pre>
 </div>
 </div>
 </div>

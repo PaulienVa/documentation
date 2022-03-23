@@ -391,7 +391,86 @@ stringData:
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">deepStorage:
   storageType: s3
   bucket: druid-deepstorage
-  baseKey: storage           # the base key is the prefix to be used; optional</code></pre>
+  baseKey: storage <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The base key is the prefix to be used; optional</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_open_policy_agent_opa_for_authorization"><a class="anchor" href="#_using_open_policy_agent_opa_for_authorization"></a>Using Open Policy Agent (OPA) for Authorization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Druid can connect to an Open Policy Agent (OPA) instance for authorization policy decisions. You need to run an OPA instance to connect to, for which we refer to the <a href="https://docs.stackable.tech/opa/index.html">OPA Operator docs</a>. How you can write RegoRules for Druid is explained <a href="#_defining_regorules">below</a>.</p>
+</div>
+<div class="paragraph">
+<p>Once you have defined your rules, you need to configure the OPA cluster name and endpoint to use for Druid authorization requests. Add a section to the <code>spec</code> for OPA:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">opa:
+  configMapName: simple-opa <i class="conum" data-value="1"></i><b>(1)</b>
+  package: my-druid-rules <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The name of your OPA cluster (<code>simple-opa</code> in this case)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The RegoRule package to use for policy decisions. The package should contain an <code>allow</code> rule. This is optional and will default to the name of the Druid cluster.</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_defining_regorules"><a class="anchor" href="#_defining_regorules"></a>Defining RegoRules</h3>
+<div class="paragraph">
+<p>For a general explanation of how rules are written, we refer to the <a href="https://www.openpolicyagent.org/docs/latest/#rego">OPA documentation</a>. Inside your rule you will have access to input from Druid. Druid provides this data to you to base your policy decisions on:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "user": "someUsername", <i class="conum" data-value="1"></i><b>(1)</b>
+  "action": "READ", <i class="conum" data-value="2"></i><b>(2)</b>
+  "resource": {
+    "type": "DATASOURCE", <i class="conum" data-value="3"></i><b>(3)</b>
+    "name": "myTable" <i class="conum" data-value="4"></i><b>(4)</b>
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The authenticated identity of the user that wants to perform the action</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The action type, can be either <code>READ</code> or <code>WRITE</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The resource type, one of <code>STATE</code>, <code>CONFIG</code> and <code>DATASOURCE</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>In case of a datasource this is the table name, for <code>STATE</code> this will simply be <code>STATE</code>, the same for <code>CONFIG</code>.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For more details consult the <a href="https://druid.apache.org/docs/latest/operations/security-user-auth.html#authentication-and-authorization-model">Druid Authentication and Authorization Model</a>.</p>
 </div>
 </div>
 </div>

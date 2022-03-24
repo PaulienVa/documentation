@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Configuration :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/hive/configuration.html">
+    <title>Discovery :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/hive/discovery.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -77,7 +77,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -87,7 +87,7 @@
     <button class="nav-item-toggle"></button>
     <span class="nav-text">Concepts</span>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="discovery.html">Discovery</a>
   </li>
 </ul>
@@ -227,132 +227,101 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Stackable Operator for Apache Hive</a></li>
-    <li><a href="configuration.html">Configuration</a></li>
+    <li>Concepts</li>
+    <li><a href="discovery.html">Discovery</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/hive-operator/edit/main/docs/modules/ROOT/pages/configuration.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/hive-operator/edit/main/docs/modules/ROOT/pages/discovery.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Configuration</h1>
-<div class="sect1">
-<h2 id="_command_line_parameters"><a class="anchor" href="#_command_line_parameters"></a>Command Line Parameters</h2>
+<h1 class="page">Discovery</h1>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This operator accepts the following command line parameters:</p>
-</div>
-<div class="sect2">
-<h3 id="_product_config"><a class="anchor" href="#_product_config"></a>product-config</h3>
-<div class="paragraph">
-<p><strong>Default value</strong>: <code>/etc/stackable/hive-operator/config-spec/properties.yaml</code></p>
+<p>The Stackable Operator for Apache Hive publishes a discovery <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#configmap-v1-core"><code>ConfigMap</code></a>, which exposes a client configuration bundle that allows access to the Apache Hive cluster.</p>
 </div>
 <div class="paragraph">
-<p><strong>Required</strong>: false</p>
-</div>
-<div class="paragraph">
-<p><strong>Multiple values:</strong> false</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">stackable-hive-operator run --product-config /foo/bar/properties.yaml</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_watch_namespace"><a class="anchor" href="#_watch_namespace"></a>watch-namespace</h3>
-<div class="paragraph">
-<p><strong>Default value</strong>: All namespaces</p>
-</div>
-<div class="paragraph">
-<p><strong>Required</strong>: false</p>
-</div>
-<div class="paragraph">
-<p><strong>Multiple values:</strong> false</p>
-</div>
-<div class="paragraph">
-<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">stackable-hive-operator run --watch-namespace test</code></pre>
-</div>
-</div>
+<p>The bundle includes an Apache Thrift connection string to access the Hive Metastore service. This string may be used by other operators or tools to configure their products with access to Hive. Access is limited to services within the same Kubernetes cluster.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment variables</h2>
+<h2 id="_example"><a class="anchor" href="#_example"></a>Example</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This operator accepts the following environment variables:</p>
-</div>
-<div class="sect2">
-<h3 id="_product_config_2"><a class="anchor" href="#_product_config_2"></a>PRODUCT_CONFIG</h3>
-<div class="paragraph">
-<p><strong>Default value</strong>: <code>/etc/stackable/hive-operator/config-spec/properties.yaml</code></p>
-</div>
-<div class="paragraph">
-<p><strong>Required</strong>: false</p>
-</div>
-<div class="paragraph">
-<p><strong>Multiple values:</strong> false</p>
+<p>Given the following Hive cluster:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">export PRODUCT_CONFIG=/foo/bar/properties.yaml
-stackable-hive-operator run</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: hive.stackable.tech/v1alpha1
+kind: HiveCluster
+metadata:
+  name: {clusterName} <i class="conum" data-value="1"></i><b>(1)</b>
+  namespace: {namespace} <i class="conum" data-value="2"></i><b>(2)</b>
+spec:
+  metastore:
+    roleGroups:
+      default: <i class="conum" data-value="3"></i><b>(3)</b>
+  [&#8230;&#8203;]</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The name of the Hive cluster, which is also the name of the created discovery <code>ConfigMap</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The namespace of the discovery <code>ConfigMap</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A role group name of the metastore role.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>or via docker:</p>
+<p>The resulting discovery <code>ConfigMap</code> is <code>{namespace}/{clusterName}</code>.</p>
 </div>
-<div class="listingblock">
+</div>
+</div>
+<div class="sect1">
+<h2 id="_contents"><a class="anchor" href="#_contents"></a>Contents</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>{namespace}/{clusterName}</code> discovery <code>ConfigMap</code> contains the following fields where <code>{clusterName}</code> represents the name, <code>{namespace}</code> the namespace of the cluster and <code>{roleGroup}</code> a role group of the <code>metastore</code> role:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>HIVE</code></dt>
+</dl>
+</div>
+<div class="exampleblock">
 <div class="content">
-<pre>docker run \
-    --name hive-operator \
-    --network host \
-    --env KUBECONFIG=/home/stackable/.kube/config \
-    --env PRODUCT_CONFIG=/my/product/config.yaml \
-    --mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
-    docker.stackable.tech/stackable/hive-operator:latest</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_watch_namespace_2"><a class="anchor" href="#_watch_namespace_2"></a>WATCH_NAMESPACE</h3>
 <div class="paragraph">
-<p><strong>Default value</strong>: All namespaces</p>
+<p>Contains the thrift protocol connection string for the Hive metastore:</p>
 </div>
-<div class="paragraph">
-<p><strong>Required</strong>: false</p>
-</div>
-<div class="paragraph">
-<p><strong>Multiple values:</strong> false</p>
-</div>
-<div class="paragraph">
-<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
-</div>
-<div class="listingblock">
+<div class="literalblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">export WATCH_NAMESPACE=test
-stackable-hive-operator run</code></pre>
+<pre>thrift://{clusterName}-metastore-{roleGroup}-0.{clusterName}-metastore-{roleGroup}.{namespace}.svc.cluster.local:9083</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>or via docker:</p>
+<p>or</p>
 </div>
-<div class="listingblock">
+<div class="literalblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">docker run \
---name hive-operator \
---network host \
---env KUBECONFIG=/home/stackable/.kube/config \
---env WATCH_NAMESPACE=test \
---mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
-docker.stackable.tech/stackable/hive-operator:latest</code></pre>
+<pre>thrift://{clusterName}-metastore-{roleGroup}-0.{clusterName}-metastore-{roleGroup}.{namespace}.svc.cluster.local:9083
+thrift://{clusterName}-metastore-{roleGroup}-1.{clusterName}-metastore-{roleGroup}.{namespace}.svc.cluster.local:9083</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>for the role group <code>replicas</code> greater than one (two in this case), which should be avoided since the metastore instances do not sync between each other.</p>
 </div>
 </div>
 </div>

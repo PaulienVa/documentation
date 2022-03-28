@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Overview :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/contribution_guide.html">
+    <title>Service Discovery :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/service_discovery.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -91,7 +91,7 @@
     <button class="nav-item-toggle"></button>
     <span class="nav-text">Contributor&#8217;s Guide</span>
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="2">
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="contribution_guide.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -100,7 +100,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="development_dashboard.html">Development Dashboard</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="service_discovery.html">Service Discovery</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -307,191 +307,241 @@
   <ul>
     <li><a href="../index.html">Stackable Documentation</a></li>
     <li>Contributor&#8217;s Guide</li>
-    <li><a href="contribution_guide.html">Overview</a></li>
+    <li><a href="service_discovery.html">Service Discovery</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/contribution_guide.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/service_discovery.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Overview</h1>
+<h1 class="page">Service Discovery</h1>
 <div class="sect1">
 <h2 id="_introduction"><a class="anchor" href="#_introduction"></a>Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to Stackable!</p>
+<p>Several products deployed by the Stackable platform depend on other (Stackable) products. This could be a product that requires an external database, high availability support or synchronization.</p>
 </div>
 <div class="paragraph">
-<p>This document will show you the steps needed to contribute to the Stackable Platform. Contributions can come in many shapes and forms but in this document we&#8217;ll focus on code and documentation improvements. We&#8217;ll assume you already know what the Stackable Platform is and have a specific issue that you want solved.</p>
+<p>In order to programmatically resolve this dependency, the Stackable platform uses <em>service discovery</em>. A Stackable operator is aware of interfaces and connections that have to be exposed and may be consumed by other operators to configure their products. These interfaces or connections are usually referred to as <em>connection string</em>.</p>
 </div>
 <div class="paragraph">
-<p>This document aims at getting your contribution posted as soon as possible.</p>
+<p>As a real world example, the Stackable Operator for Apache Kafka has to configure Kafka brokers with an Apache ZooKeeper connection string in order to store and share information about e.g. Kafka topics. This connection string is provided by the Stackable Operator for Apache ZooKeeper, which is aware of all the pods and services related to ZooKeeper.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_contribution_workflow"><a class="anchor" href="#_contribution_workflow"></a>Contribution Workflow</h2>
+<h2 id="_examples_for_connection_strings"><a class="anchor" href="#_examples_for_connection_strings"></a>Examples for connection strings</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>The development of the Stackable Platform takes place on <a href="https://github.com/stackabletech">GitHub</a>. On GitHub, each repository has its own issue tracker and since Stackable is a platform, there are several repositories where issues and pull-requests can be created. If you already have a good idea where the issue or pull-request belongs, then you can skip reading to the contribution steps below. Otherwise, you might want to a have a look at the <a href="development_dashboard.html" class="xref page">Development Dashboard</a> for hints.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>JDBC SQL connection strings: <code>jdbc:postgresql://localhost:12345</code></p>
+</li>
+<li>
+<p>thrift protocol: <code>thrift://localhost:12345</code></p>
+</li>
+<li>
+<p>spark protocol: <code>spark://master:7077</code></p>
+</li>
+<li>
+<p>REST API: <code>http://localhost:8080</code></p>
+</li>
+<li>
+<p>HDFS: <code>hdfs://localhost:12345</code></p>
+</li>
+<li>
+<p>ZooKeeper ZNode: <code>host1:2181,host2:2181/my-chroot</code></p>
+</li>
+</ul>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_concepts_of_service_discovery"><a class="anchor" href="#_concepts_of_service_discovery"></a>Concepts of Service Discovery</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_architecture"><a class="anchor" href="#_architecture"></a>Architecture</h3>
 <div class="paragraph">
-<p>Contribution steps:</p>
+<p>The Operator that provides service discovery writes a <code>ConfigMap</code> with all necessary information about its exposed services. Each service has its own entry in the <code>ConfigMap</code> as can be seen with the <code>ZOOKEEPER</code> entry below:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/service_discovery_arch.png" alt="Service Discovery">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_best_practices"><a class="anchor" href="#_best_practices"></a>Best practices</h3>
+<div class="sect3">
+<h4 id="_exposing_config_maps_for_service_discovery"><a class="anchor" href="#_exposing_config_maps_for_service_discovery"></a>Exposing config maps for service discovery</h4>
+<div class="paragraph">
+<p>The question about which interfaces to expose varies from product to product and must be decided on an individual basis. However, as far as possible the exposed services should be reachable via Kubernetes services like <code>ClusterIP</code> or <code>NodePort</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_consuming_config_maps_for_service_discovery"><a class="anchor" href="#_consuming_config_maps_for_service_discovery"></a>Consuming config maps for service discovery</h4>
+<div class="paragraph">
+<p>The operator that discovers a service has two options for retrieving the information and providing it into the pods:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Lookup if an existing issue already covers your problem</p>
+<p>Mount the discovery <code>ConfigMap</code> into the <code>Pod</code> directly as an environment variable. This can be used for products supporting setting values via CLI or can work with environment variables in their respective configuration files.</p>
 </li>
 <li>
-<p>Submit a new issue. If it is only a trivial change like fixing a typo then an issue is not necessary and a pull-request can be created directly.</p>
-</li>
-<li>
-<p>Submit a pull-request if you want. The necessary steps to successfully create an approvable pull-request are detailed in <a href="steps.html" class="xref page">Steps to contribute</a>.</p>
-</li>
-<li>
-<p>Respond to questions or feedback</p>
-</li>
-<li>
-<p>Improve your submission if necessary</p>
-</li>
-<li>
-<p>Closing your contribution</p>
+<p>Read the discovery <code>ConfigMap</code> and provide its content via the usual product configuration <code>ConfigMap</code>. This is in general a cleaner way if the product does not support setting values via CLI or environment variables in the configuration files because it avoids writing shell scripts to override the values manually.</p>
 </li>
 </ol>
 </div>
-<div class="paragraph">
-<p>Before submitting a new issue or pull-request, it&#8217;s always a good idea to check if the issue has already been discussed in the past and if there is a resolution for it. If that is the case, consider contributing to the existing issue by either adding new feedback or code.</p>
-</div>
-<div class="paragraph">
-<p>When creating a new issue please provide as much information as you consider relevant. Issues can be bug reports, feature requests and so on. The Stackable repositories provide templates to make it easier to submit high-quality issues.</p>
-</div>
-<div class="paragraph">
-<p>When submitting a pull-request, you might be interested in knowing about the necessary <a href="#_development_environment">Development Environment</a>.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_repo_walkthrough"><a class="anchor" href="#_repo_walkthrough"></a>Repo Walkthrough</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Please see the <a href="development_dashboard.html" class="xref page">Development Dashboard</a> page to get an overview of the most important Git repositories used by us.</p>
-</div>
-<div class="sect2">
-<h3 id="_operator_repositories"><a class="anchor" href="#_operator_repositories"></a>Operator Repositories</h3>
-<div class="paragraph">
-<p>At the core of the Stackable Platform are Kubernetes operators used to install and manage various data products.
-Each operator has its own repository, and therefore its own issue tracker and build pipeline.
-Every operator repository contains:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>The operator&#8217;s source code</p>
-</li>
-<li>
-<p>One or more Custom Resource Definitions owned by the operator</p>
-</li>
-<li>
-<p><code>Helm</code> chart to easily install the operator</p>
-</li>
-<li>
-<p>Documentation</p>
-</li>
-<li>
-<p><code>Dockerfile</code> and related artifacts to generate the operator image</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>See the <a href="development_dashboard.html" class="xref page">Development Dashboard</a> for a detailed overview.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_development_environment"><a class="anchor" href="#_development_environment"></a>Development Environment</h2>
+<h2 id="_implementation_details"><a class="anchor" href="#_implementation_details"></a>Implementation details</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In order to contribute source code, you need an environment that is capable of running the following tools:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://www.docker.com/">Docker</a></p>
-</li>
-<li>
-<p><a href="https://kind.sigs.k8s.io/">Kind</a></p>
-</li>
-<li>
-<p><a href="https://helm.sh/">Helm</a></p>
-</li>
-<li>
-<p><a href="https://kuttl.dev/">Kuttl</a></p>
-</li>
-<li>
-<p><a href="https://www.rust-lang.org/">Rust</a></p>
-</li>
-<li>
-<p><a href="https://www.python.org/">Python</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The documentation is written in <a href="https://asciidoctor.org">AsciiDoc</a> format and processed with <a href="https://antora.org">Antora</a></p>
-</div>
-<div class="paragraph">
-<p>Almost all build scripts assume a Unix based environment (preferably Linux).</p>
+<p>The following section offers some Rust code snippets to get an idea on how to create or retrieve the information in the discovery <code>ConfigMap</code>. As a convention, the name of that discovery <code>ConfigMap</code> is the name of the cluster. A deployed Stackable ZooKeeper cluster named <code>simple-zk</code> in namespace <code>production</code> will deploy a discovery <code>ConfigMap</code> <code>production/simple-zk</code>.</p>
 </div>
 <div class="sect2">
-<h3 id="_ides_and_editors"><a class="anchor" href="#_ides_and_editors"></a>IDEs and Editors</h3>
+<h3 id="_create_a_discovery_configmap"><a class="anchor" href="#_create_a_discovery_configmap"></a>Create a discovery ConfigMap</h3>
 <div class="paragraph">
-<p>Of course you are free to use whatever works for you best. No editor is perfect but we have positive experience with:</p>
+<p>Remember, per convention the discovery <code>ConfigMap</code> name of a cluster must be equal to the cluster name. The following code demonstrates how to create a discovery <code>ConfigMap</code> using the <code>ConfigMapBuilder</code> of the <a href="https://github.com/stackabletech/operator-rs"><code>operator-rs</code></a> framework:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-rust hljs" data-lang="rust">use stackable_operator::builder::{ConfigMapBuilder, ObjectMetaBuilder};
+
+let cm = ConfigMapBuilder::new()
+    .metadata(
+        ObjectMetaBuilder::new()
+            .name_and_namespace(my_cluster)
+            .ownerreference_from_resource(my_cluster, None, Some(true))?
+            .build()?,
+    )
+    .add_data("CONNECT_STRING", "http://localhost:12345")
+    .build();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_consume_a_discovery_configmap"><a class="anchor" href="#_consume_a_discovery_configmap"></a>Consume a discovery ConfigMap</h3>
+<div class="paragraph">
+<p>Given a discovery <code>ConfigMap</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config-map-name
+  namespace: production
+data:
+  CONNECT_STRING: "http://localhost:12345"</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_mounting_the_discovery_configmap"><a class="anchor" href="#_mounting_the_discovery_configmap"></a>Mounting the discovery ConfigMap</h4>
+<div class="paragraph">
+<p>This is a method to retrieve an <code>EnvVar</code> from a <code>ConfigMap</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-rust hljs" data-lang="rust">use stackable_operator::k8s_openapi::api::{
+    core::v1::{
+       ConfigMapKeySelector, EnvVar, EnvVarSource,
+    },
+};
+
+fn env_var_from_cm(name: &amp;str, configmap_name: &amp;str) -&gt; EnvVar {
+    EnvVar {
+        name: name.to_string(),
+        value_from: Some(EnvVarSource {
+            config_map_key_ref: Some(ConfigMapKeySelector {
+                name: Some(configmap_name.to_string()),
+                key: name.to_string(),
+                ..ConfigMapKeySelector::default()
+            }),
+            ..EnvVarSource::default()
+        }),
+        ..EnvVar::default()
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The returned <code>EnvVar</code> then can be added to a <code>Pod</code> container and used in the <code>command</code> or <code>args</code> field using the <a href="https://github.com/stackabletech/operator-rs"><code>operator-rs</code></a> framework container builder:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-rust hljs" data-lang="rust">use stackable_operator::builder::ContainerBuilder;
+
+let container = ContainerBuilder::new("my-container")
+    .command(vec!["/bin/bash".to_string(), "-c".to_string()])
+    .args(vec!["./do_magic", "--with-env-var", "${CONNECT_STRING}"])
+    .add_env_var(env_var_from_cm("CONNECT_STRING", "my-config-map-name"))
+    .build();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_reading_the_discovery_configmap"><a class="anchor" href="#_reading_the_discovery_configmap"></a>Reading the discovery ConfigMap</h4>
+<div class="paragraph">
+<p>This is a method to read one entry of a discovery <code>ConfigMap</code> from an operator:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-rust hljs" data-lang="rust">use stackable_operator::{
+    client::Client,
+    error::OperatorResult,
+    k8s_openapi::api::core::v1::ConfigMap,
+};
+
+async fn entry_from_cm(
+    client: &amp;Client,
+    name: &amp;str,
+    namespace: Option&lt;&amp;str&gt;,
+    entry: &amp;str,
+) -&gt; OperatorResult&lt;String&gt; {
+    Ok(client
+        .get::&lt;ConfigMap&gt;(name, namespace)
+        .await?
+        .data
+        .and_then(|mut data| data.remove(entry))
+        .unwrap())
+}
+
+let connection_string = entry_from_cm(client, "my-config-map-name", Some("production"), "CONNECT_STRING").await?;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The retrieved connection string can be used to configure the product to connect to the discovered service.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_existing_libraries"><a class="anchor" href="#_existing_libraries"></a>Existing libraries</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Currently, there is not much support from the <a href="https://github.com/stackabletech/operator-rs"><code>operator-rs</code></a> framework to assist with service discovery. The related code is mostly contained in each operator and similar to the examples above.</p>
+</div>
+<div class="paragraph">
+<p>The following list should indicate support for certain products or helper methods:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://www.jetbrains.com/idea/">IntelliJ Idea</a> with the <code>Rust</code> plug-in</p>
+<p><code>ConfigMapBuilder</code> in combination with <code>ObjectMetaBuilder</code> assists with building the discovery <code>ConfigMap</code></p>
 </li>
 <li>
-<p><a href="https://code.visualstudio.com/">VisualStudio Code</a> with the <code>rust-analyzer</code> extension</p>
+<p><code>OPA</code>: The <a href="https://github.com/stackabletech/operator-rs"><code>operator-rs</code></a> framework has a module called <code>opa.rs</code> that supports the creation of the data API connection string</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>For <code>VisualStudio Code</code> we also recommend the following extensions:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Better Toml</p>
-</li>
-<li>
-<p>CodeLLDB (for debugging)</p>
-</li>
-<li>
-<p>Error Lens (inline error messages)</p>
-</li>
-<li>
-<p>AsciiDoc</p>
-</li>
-<li>
-<p>GitHub Pull requests and Issues</p>
-</li>
-<li>
-<p>GitLens</p>
-</li>
-<li>
-<p>Python</p>
-</li>
-<li>
-<p>Docker</p>
-</li>
-</ul>
-</div>
 </div>
 </div>
 </div>

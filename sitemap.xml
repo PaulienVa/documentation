@@ -4,6 +4,9 @@
 <loc>https://docs.stackable.tech/sitemap-airflow.xml</loc>
 </sitemap>
 <sitemap>
+<loc>https://docs.stackable.tech/sitemap-commons-operator.xml</loc>
+</sitemap>
+<sitemap>
 <loc>https://docs.stackable.tech/sitemap-druid.xml</loc>
 </sitemap>
 <sitemap>

@@ -86,6 +86,15 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="implementation.html">Implementation</a>
   </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Concepts</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="discovery.html">Discovery</a>
+  </li>
+</ul>
+  </li>
 </ul>
   </li>
 </ul>
@@ -327,6 +336,18 @@ spec:
 EOF</code></pre>
 </div>
 </div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+When scaling namenodes up, make sure to increase the replica count only by one and not more nodes at once.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -351,7 +372,7 @@ EOF</code></pre>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Overriding certain properties can lead to faulty clusters. In general this means, do not change ports, hostnames or properties related to high-availability or security.
+Overriding certain properties can lead to faulty clusters. In general this means, do not change ports, hostnames or properties related to data dirs, high-availability or security.
 </td>
 </tr>
 </table>

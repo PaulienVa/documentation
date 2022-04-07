@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Configuration :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/hdfs/configuration.html">
+    <title>Discovery :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/hdfs/discovery.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -77,7 +77,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -90,7 +90,7 @@
     <button class="nav-item-toggle"></button>
     <span class="nav-text">Concepts</span>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="discovery.html">Discovery</a>
   </li>
 </ul>
@@ -238,134 +238,83 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Stackable Operator for Apache HDFS</a></li>
-    <li><a href="configuration.html">Configuration</a></li>
+    <li>Concepts</li>
+    <li><a href="discovery.html">Discovery</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/hdfs-operator/edit/main/docs/modules/ROOT/pages/configuration.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/hdfs-operator/edit/main/docs/modules/ROOT/pages/discovery.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Configuration</h1>
-<div class="sect1">
-<h2 id="_command_line_parameters"><a class="anchor" href="#_command_line_parameters"></a>Command Line Parameters</h2>
+<h1 class="page">Discovery</h1>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This operator accepts the following command line parameters:</p>
-</div>
-<div class="sect2">
-<h3 id="_product_config"><a class="anchor" href="#_product_config"></a>product-config</h3>
-<div class="paragraph">
-<p><strong>Default value</strong>: <code>/etc/stackable/hdfs-operator/config-spec/properties.yaml</code></p>
-</div>
-<div class="paragraph">
-<p><strong>Required</strong>: false</p>
-</div>
-<div class="paragraph">
-<p><strong>Multiple values:</strong> false</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">stackable-hdfs-operator run --product-config /foo/bar/properties.yaml</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_watch_namespace"><a class="anchor" href="#_watch_namespace"></a>watch-namespace</h3>
-<div class="paragraph">
-<p><strong>Default value</strong>: All namespaces</p>
-</div>
-<div class="paragraph">
-<p><strong>Required</strong>: false</p>
-</div>
-<div class="paragraph">
-<p><strong>Multiple values:</strong> false</p>
-</div>
-<div class="paragraph">
-<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">stackable-hdfs-operator run --watch-namespace test</code></pre>
-</div>
-</div>
+<p>The Stackable Operator for Apache HDFS publishes a discovery <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#configmap-v1-core"><code>ConfigMap</code></a>, which exposes a client configuration bundle that allows access to the Apache HDFS cluster.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment variables</h2>
+<h2 id="_example"><a class="anchor" href="#_example"></a>Example</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This operator accepts the following environment variables:</p>
-</div>
-<div class="sect2">
-<h3 id="_product_config_2"><a class="anchor" href="#_product_config_2"></a>PRODUCT_CONFIG</h3>
-<div class="paragraph">
-<p><strong>Default value</strong>: <code>/etc/stackable/hdfs-operator/config-spec/properties.yaml</code></p>
-</div>
-<div class="paragraph">
-<p><strong>Required</strong>: false</p>
-</div>
-<div class="paragraph">
-<p><strong>Multiple values:</strong> false</p>
+<p>Given the following HDFS cluster:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">export PRODUCT_CONFIG=/foo/bar/properties.yaml
-stackable-hdfs-operator run</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: hdfs.stackable.tech/v1alpha1
+kind: HdfsCluster
+metadata:
+  name: {clusterName} <i class="conum" data-value="1"></i><b>(1)</b>
+  namespace: {namespace} <i class="conum" data-value="2"></i><b>(2)</b>
+spec:
+  namenode:
+    roleGroups:
+      default: <i class="conum" data-value="3"></i><b>(3)</b>
+  [&#8230;&#8203;]</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>or via docker:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>docker run \
-    --name hdfs-operator \
-    --network host \
-    --env KUBECONFIG=/home/stackable/.kube/config \
-    --env PRODUCT_CONFIG=/my/product/config.yaml \
-    --mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
-    docker.stackable.tech/stackable/hdfs-operator:latest</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_watch_namespace_2"><a class="anchor" href="#_watch_namespace_2"></a>WATCH_NAMESPACE</h3>
-<div class="paragraph">
-<p><strong>Default value</strong>: All namespaces</p>
-</div>
-<div class="paragraph">
-<p><strong>Required</strong>: false</p>
-</div>
-<div class="paragraph">
-<p><strong>Multiple values:</strong> false</p>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The name of the HDFS cluster, which is also the name of the created discovery <code>ConfigMap</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The namespace of the discovery <code>ConfigMap</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A role group name of the <code>namenode</code> role.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">export WATCH_NAMESPACE=test
-stackable-hdfs-operator run</code></pre>
+<p>The resulting discovery <code>ConfigMap</code> is located at <code>{namespace}/{clusterName}</code>.</p>
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_contents"><a class="anchor" href="#_contents"></a>Contents</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>or via docker:</p>
+<p>The <code>ConfigMap</code> data values are formatted as Hadoop XML files which allows simple mounting of that ConfigMap into pods that require access to HDFS.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">docker run \
---name hdfs-operator \
---network host \
---env KUBECONFIG=/home/stackable/.kube/config \
---env WATCH_NAMESPACE=test \
---mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
-docker.stackable.tech/stackable/hdfs-operator:latest</code></pre>
-</div>
-</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>core-site.xml</code></dt>
+<dd>
+<p>Contains the <code>fs.DefaultFS</code> which defaults to <code>hdfs://{clusterName}/</code>.</p>
+</dd>
+<dt class="hdlist1"><code>hdfs-site.xml</code></dt>
+<dd>
+<p>Contains the <code>dfs.namenode.*</code> properties for <code>rpc</code> and <code>http</code> addresses for the <code>namenodes</code> as well as the <code>dfs.nameservices</code> property which defaults to <code>hdfs://{clusterName}/</code>.</p>
+</dd>
+</dl>
 </div>
 </div>
 </div>

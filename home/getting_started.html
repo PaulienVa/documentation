@@ -368,6 +368,12 @@
 <p>Stackable’s control plane is built around Kubernetes, and we&#8217;ll give some brief examples of how to install Kubernetes on your machine.</p>
 </div>
 <div class="sect2">
+<h3 id="_installing_kubectl"><a class="anchor" href="#_installing_kubectl"></a>Installing kubectl</h3>
+<div class="paragraph">
+<p>Stackable operators and their services are managed by applying manifest files to the Kubernetes cluster. For this purpose, you need to have the <code>kubectl</code> tool installed. Follow the instructions <a href="https://kubernetes.io/docs/tasks/tools/#kubectl">here</a> for your platform.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_installing_kubernetes_using_kind"><a class="anchor" href="#_installing_kubernetes_using_kind"></a>Installing Kubernetes using Kind</h3>
 <div class="paragraph">
 <p>Kind offers a very quick and easy way to bootstrap your Kubernetes infrastructure in Docker. The big advantage of this is that you can simply remove the Docker containers when you&#8217;re finished and clean up easily, making it great for testing and development.</p>
@@ -380,7 +386,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">kind create cluster --name quickstart --config - &lt;&lt; EOF
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kind create cluster --name quickstart --config - &lt;&lt; EOF
 ---
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
@@ -404,39 +410,18 @@ EOF</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -sfL https://get.k3s.io | sh -s - --node-label 'node=quickstart-1' --write-kubeconfig-mode 644</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>So long as you have an Internet connection K3s will download and automatically configure a simple Kubernetes environment.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">root@kubernetes:~# curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
-[INFO]  Finding release for channel stable
-[INFO]  Using v1.21.3+k3s1 as release
-[INFO]  Downloading hash https://github.com/k3s-io/k3s/releases/download/v1.21.3+k3s1/sha256sum-amd64.txt
-[INFO]  Downloading binary https://github.com/k3s-io/k3s/releases/download/v1.21.3+k3s1/k3s
-[INFO]  Verifying binary download
-[INFO]  Installing k3s to /usr/local/bin/k3s
-[INFO]  Creating /usr/local/bin/kubectl symlink to k3s
-[INFO]  Creating /usr/local/bin/crictl symlink to k3s
-[INFO]  Creating /usr/local/bin/ctr symlink to k3s
-[INFO]  Creating killall script /usr/local/bin/k3s-killall.sh
-[INFO]  Creating uninstall script /usr/local/bin/k3s-uninstall.sh
-[INFO]  env: Creating environment file /etc/systemd/system/k3s.service.env
-[INFO]  systemd: Creating service file /etc/systemd/system/k3s.service
-[INFO]  systemd: Enabling k3s unit
-Created symlink /etc/systemd/system/multi-user.target.wants/k3s.service → /etc/systemd/system/k3s.service.
-[INFO]  systemd: Starting k3s</code></pre>
-</div>
 </div>
 <div class="paragraph">
 <p>Create a symlink to the Kubernetes configuration from your home directory to allow tools like Helm to find the correct configuration.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mkdir ~/.kube
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir ~/.kube
 ln -s /etc/rancher/k3s/k3s.yaml ~/.kube/config</code></pre>
 </div>
 </div>
@@ -444,14 +429,13 @@ ln -s /etc/rancher/k3s/k3s.yaml ~/.kube/config</code></pre>
 <div class="sect2">
 <h3 id="_testing_your_kubernetes_installation"><a class="anchor" href="#_testing_your_kubernetes_installation"></a>Testing your Kubernetes installation</h3>
 <div class="paragraph">
-<p>To check if everything worked as expected you can use <code>kubectl cluster-info</code> to retrieve the cluster information.</p>
+<p>To check if everything worked as expected you can use <code>kubectl cluster-info</code> to retrieve the cluster information. The output should look similar to:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">$ kubectl cluster-info
-Kubernetes control plane is running at https://127.0.0.1:6443
+<pre>Kubernetes control plane is running at https://127.0.0.1:6443
 CoreDNS is running at https://127.0.0.1:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
-Metrics-server is running at https://127.0.0.1:6443/api/v1/namespaces/kube-system/services/https:metrics-server:/proxy</code></pre>
+Metrics-server is running at https://127.0.0.1:6443/api/v1/namespaces/kube-system/services/https:metrics-server:/proxy</pre>
 </div>
 </div>
 </div>
@@ -462,7 +446,7 @@ Metrics-server is running at https://127.0.0.1:6443/api/v1/namespaces/kube-syste
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">curl -sfL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | /bin/bash -</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -sfL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | /bin/bash -</code></pre>
 </div>
 </div>
 </div>
@@ -478,7 +462,7 @@ Metrics-server is running at https://127.0.0.1:6443/api/v1/namespaces/kube-syste
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">helm repo add stackable-stable https://repo.stackable.tech/repository/helm-stable/</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm repo add stackable-stable https://repo.stackable.tech/repository/helm-stable/</code></pre>
 </div>
 </div>
 </div>
@@ -491,10 +475,10 @@ Metrics-server is running at https://127.0.0.1:6443/api/v1/namespaces/kube-syste
 <p>Stackable operators are installed using Helm charts. Run the following commands to install the operators for ZooKeeper, Kafka and NiFi using the repo configured earlier. The --devel flag will choose the latest available version; alternatively the --version flag can be used to deploy a specific version.</p>
 </div>
 <div class="sect3">
-<h4 id="_installing_from_the_stackable_test_repository"><a class="anchor" href="#_installing_from_the_stackable_test_repository"></a>Installing from the Stackable test repository</h4>
+<h4 id="_install_operators_from_the_stackable_repository"><a class="anchor" href="#_install_operators_from_the_stackable_repository"></a>Install operators from the Stackable repository</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">helm install zookeeper-operator stackable-stable/zookeeper-operator --version=0.9.0
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install zookeeper-operator stackable-stable/zookeeper-operator --version=0.9.0
 helm install kafka-operator stackable-stable/kafka-operator --version=0.5.0
 helm install secret-operator stackable-stable/secret-operator --version=0.2.0
 helm install nifi-operator stackable-stable/nifi-operator --version=0.5.0</code></pre>
@@ -505,12 +489,11 @@ helm install nifi-operator stackable-stable/nifi-operator --version=0.5.0</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">user@quickstart:~/stackable-utils/quickstart$ helm list
-NAME              	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART                   	APP VERSION
+<pre>NAME              	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART                   	APP VERSION
 kafka-operator    	default  	1       	2022-02-15 08:17:26.84659409 +0000 UTC 	deployed	kafka-operator-0.5.0    	0.5.0
 nifi-operator     	default  	1       	2022-02-15 08:17:37.93720808 +0000 UTC 	deployed	nifi-operator-0.5.0     	0.5.0
 secret-operator   	default  	1       	2022-02-15 08:17:32.700301793 +0000 UTC	deployed	secret-operator-0.2.0   	0.2.0
-zookeeper-operator	default  	1       	2022-02-15 08:17:17.893844595 +0000 UTC	deployed	zookeeper-operator-0.9.0	0.9.0</code></pre>
+zookeeper-operator	default  	1       	2022-02-15 08:17:17.893844595 +0000 UTC	deployed	zookeeper-operator-0.9.0	0.9.0</pre>
 </div>
 </div>
 </div>
@@ -530,7 +513,7 @@ zookeeper-operator	default  	1       	2022-02-15 08:17:17.893844595 +0000 UTC	de
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f - &lt;&lt;EOF
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f - &lt;&lt;EOF
 ---
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperCluster
@@ -544,7 +527,6 @@ spec:
         config:
           myidOffset: 10
   version: 3.5.8
-  stopped: false
 EOF</code></pre>
 </div>
 </div>
@@ -556,7 +538,7 @@ EOF</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f - &lt;&lt;EOF
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f - &lt;&lt;EOF
 ---
 apiVersion: kafka.stackable.tech/v1alpha1
 kind: KafkaCluster
@@ -569,6 +551,9 @@ spec:
     roleGroups:
       brokers:
         replicas: 1
+        selector:
+          matchLabels:
+            node: quickstart-1
 ---
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperZnode
@@ -589,7 +574,7 @@ EOF</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f - &lt;&lt;EOF
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f - &lt;&lt;EOF
 ---
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperZnode
@@ -628,7 +613,7 @@ spec:
       default:
         selector:
           matchLabels:
-            kubernetes.io/os: linux
+            node: quickstart-1
         config:
           log:
             rootLogLevel: INFO
@@ -641,20 +626,18 @@ EOF</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">root@kubernetes:~# kubectl get pods
-$ kubectl get pods
-NAME                                             READY   STATUS    RESTARTS   AGE
+<pre>NAME                                             READY   STATUS    RESTARTS   AGE
 nifi-operator-deployment-64c98c779c-nw6h8        1/1     Running   0          24m
 kafka-operator-deployment-54df9f86c7-psqgd       1/1     Running   0          24m
 zookeeper-operator-deployment-767458d4f5-2czb9   1/1     Running   0          24m
 secret-operator-daemonset-pddkv                  2/2     Running   0          24m
 simple-zk-server-primary-0                       1/1     Running   0          23m
 simple-kafka-broker-brokers-0                    2/2     Running   0          21m
-simple-nifi-node-default-0                       1/1     Running   0          22m</code></pre>
+simple-nifi-node-default-0                       1/1     Running   0          22m</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Since this is the first time that each of these services has been deployed to these nodes the Stackable Agent needs to download the software from the Stackable repository. It may take a few minutes to complete the download and deploy the services. Once all of the pods are in the running state your cluster should be ready to use.</p>
+<p>Since this is the first time that each of these services has been deployed to these nodes, it will take some time to download the software from the Stackable repository and deploy the services. Once all of the pods are in the running state your cluster is ready to use.</p>
 </div>
 </div>
 </div>
@@ -672,7 +655,7 @@ simple-nifi-node-default-0                       1/1     Running   0          22
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">kubectl exec -i -t simple-zk-server-primary-0 -- bin/zkCli.sh</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl exec -i -t simple-zk-server-primary-0 -- bin/zkCli.sh</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -680,73 +663,84 @@ simple-nifi-node-default-0                       1/1     Running   0          22
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">[zk: localhost:2181(CONNECTED) 0] ls /
-[nifi, znode-17b28a7e-0d45-450b-8209-871225c6efa1, zookeeper]</code></pre>
+<pre>[zk: localhost:2181(CONNECTED) 0] ls /
+[nifi, znode-17b28a7e-0d45-450b-8209-871225c6efa1, zookeeper]</pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_apache_kafka_2"><a class="anchor" href="#_apache_kafka_2"></a>Apache Kafka</h3>
 <div class="paragraph">
-<p>To test Kafka we&#8217;ll use the tool <code>kafkacat</code>.</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>sudo apt install kafkacat</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>With <code>kafkacat</code> installed we can connect to Kafka and query the metadata on the broker running on localhost. To do this we first need to find which port Kafka is listening on.</p>
+<p>To test Kafka we&#8217;ll create a topic, and verify that it was created.
+First create the topic with the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">$ kubectl get svc simple-kafka
-NAME           TYPE       CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE
-simple-kafka   NodePort   10.43.20.5   &lt;none&gt;        9092:31909/TCP   44m</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl exec -i -t simple-kafka-broker-brokers-0 -c kafka -- \
+  bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic demo
+Created topic demo.</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Here we can the see default Kafka port 9092 has been mapped to port 31909. We can use this to configure kafkacat to connect to the broker.</p>
+<p>Now let&#8217;s check if it was actually created:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">$ kafkacat -b localhost:31909 -L
-Metadata for all topics (from broker -1: localhost:31909/bootstrap):
-1 brokers:
-broker 1001 at 192.168.40.120:31976 (controller)
-0 topics:</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl exec -i -t simple-kafka-broker-brokers-0 -c kafka -- \
+  bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+demo</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_apache_nifi_2"><a class="anchor" href="#_apache_nifi_2"></a>Apache NiFi</h3>
 <div class="paragraph">
-<p>Apache NiFi provides a web interface and the easiest way to test it is to view this in a web browser. As with the Kafka example above we need to find which port NiFi is listening on.</p>
+<p>Apache NiFi provides a web interface and the easiest way to test it is to view this in a web browser.
+To access the web interface we first need to get the ip address and port Nifi is listening on.
+To get the IP address we need to connect to (in this case <code>172.18.0.2</code>), run:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">$ kubectl get svc simple-nifi
-NAME          TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
-simple-nifi   NodePort   10.43.75.25   &lt;none&gt;        8443:30247/TCP   49m</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get nodes --selector=node=quickstart-1 -o wide</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME                STATUS   ROLES    AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE       KERNEL-VERSION      CONTAINER-RUNTIME
+quickstart-worker   Ready    &lt;none&gt;   45m   v1.21.1   172.18.0.2    &lt;none&gt;        Ubuntu 21.04   5.15.0-25-generic   containerd://1.5.2</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Browse to the address of your Kubernetes node on port 30247 e.g. <a href="https://quickstart.local:30247/nifi" class="bare">https://quickstart.local:30247/nifi</a> and you should see the NiFi login screen.</p>
+<p>With the following command we get the port (in this case <code>30247</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get svc simple-nifi</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME          TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
+simple-nifi   NodePort   10.43.75.25   &lt;none&gt;        8443:30247/TCP   49m</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Browse to the address of your Kubernetes node on port <code>30247</code> e.g. <a href="https://172.18.0.2:30247/nifi" class="bare">https://172.18.0.2:30247/nifi</a> and you should see the NiFi login screen.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="_images/nifi_login_screen.png" alt="The Apache NiFi web interface login screen"></span></p>
 </div>
 <div class="paragraph">
-<p>The Apache NiFi operator will automatically generate the admin user credentials with a random password and store it as a Kubernetes secret in order to provide some security out of the box. You can retrieve this password for the admin user with the following kubectl command.</p>
+<p>The Apache NiFi operator will automatically generate the admin user credentials with a random password and store it as a Kubernetes secret in order to provide some security out of the box. You can retrieve this password for the <code>admin</code> user with the following kubectl command.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">kubectl get secrets nifi-admin-credentials-simple -o jsonpath="{.data.password}" | base64 -d &amp;&amp; echo
-4tkInc6UyBuWvbc</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get secrets nifi-admin-credentials-simple \
+-o jsonpath="{.data.password}" | base64 -d &amp;&amp; echo</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Your password will be different to the one above and will be different every time you install a new cluster. Once you have these credentials you can login and you should see a blank NiFi canvas.</p>
+<p>Once you have these credentials you can log in and you should see a blank NiFi canvas.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="_images/nifi_menu.png" alt="The Apache NiFi web interface canvas"></span></p>

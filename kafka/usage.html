@@ -289,7 +289,7 @@ EOF</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you wish to include integration with <a href="https://docs.stackable.tech/opa/index.html">Open Policy Agent</a> and already have an opa cluster, then you can include an <code>opaConfigMapName</code> pointing to the cluster:</p>
+<p>If you wish to include integration with <a href="https://docs.stackable.tech/opa/index.html">Open Policy Agent</a> and already have an OPA cluster, then you can include an <code>opa</code> field pointing to the OPA cluster discovery <code>ConfigMap</code> and the required package. The package is optional and will default to the <code>metadata.name</code> field:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -301,7 +301,9 @@ metadata:
 spec:
   version: 3.1.0
   zookeeperConfigMapName: simple-kafka-znode
-  opaConfigMapName: simple-opa
+  opa:
+    configMapName: simple-opa
+    package: kafka/authz
   brokers:
     roleGroups:
       default:
@@ -322,7 +324,9 @@ metadata:
 spec:
   version: 3.1.0
   zookeeperConfigMapName: simple-kafka-znode
-  opaConfigMapName: simple-opa
+  opa:
+    configMapName: simple-opa
+    package: kafka/authz
   brokers:
     configOverrides:
       server.properties:

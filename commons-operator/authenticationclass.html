@@ -48,7 +48,8 @@
     <a class="drop-down-item" href="../hive/index.html">Apache Hive</a>
     <a class="drop-down-item" href="../kafka/index.html">Apache Kafka</a>
     <a class="drop-down-item" href="../nifi/index.html">Apache NiFi</a>
-    <a class="drop-down-item" href="../spark/index.html">Apache Spark</a>
+    <a class="drop-down-item" href="../spark/index.html">Apache Spark (standalone)</a>
+    <a class="drop-down-item" href="../spark-k8s/index.html">Apache Spark on K8S</a>
     <a class="drop-down-item" href="../superset/index.html">Apache Superset</a>
     <a class="drop-down-item" href="../trino/index.html">Trino</a>
     <a class="drop-down-item" href="../zookeeper/index.html">Apache ZooKeeper</a>
@@ -89,6 +90,9 @@
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="authenticationclass.html"><code>AuthenticationClass</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="tls.html">TLS</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="reloader.html"><code>Reloader</code></a>
@@ -187,6 +191,14 @@
       </ul>
     </li>
     <li class="component">
+      <a class="title" href="../spark-k8s/index.html">Stackable Operator for Apache Spark on Kubernetes</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../spark-k8s/index.html">master</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
       <a class="title" href="../superset/index.html">Stackable Operator for Apache Superset</a>
       <ul class="versions">
         <li class="version is-latest">
@@ -250,8 +262,213 @@
 </aside>
 <article class="doc">
 <h1 class="page"><code>AuthenticationClass</code></h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>TODO</p>
+<p><code>AuthenticationClass</code> is a CRD describing a generic authentication method like LDAP or Kerberos.
+Multiple operators use this CRD as a way to express the authentication of the product.</p>
+</div>
+<div class="paragraph">
+<p>At the moment the following Authentication providers are supported:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#_ldap">LDAP</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ldap"><a class="anchor" href="#_ldap"></a>LDAP</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A very simple <code>AuthenticationClass</code> with LDAP Authentication looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: ldap-simple
+spec:
+  provider:
+    ldap:
+      hostname: my.ldap.server <i class="conum" data-value="1"></i><b>(1)</b>
+      port: 389 <i class="conum" data-value="2"></i><b>(2)</b>
+      searchBase: ou=users,dc=example,dc=org <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The hostname of the LDAP server without any protocol or port</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The port of the LDAP server. If TLS is used it defaults to <code>636</code> otherwise to <code>389</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>An optional searchBase where the users should be searched</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_openldap"><a class="anchor" href="#_openldap"></a>OpenLDAP</h3>
+<div class="paragraph">
+<p>Here is an example that is tuned for an OpenLDAP LDAP server and is configured to read bind user credentials from a secret:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: openldap-simple
+spec:
+  provider:
+    ldap:
+      hostname: my.openldap.server
+      port: 1389
+      searchBase: ou=users,dc=example,dc=org
+      bindCredentials:
+        secretClass: openldap-simple-bind <i class="conum" data-value="1"></i><b>(1)</b>
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: openldap-simple-bind <i class="conum" data-value="2"></i><b>(2)</b>
+spec:
+  backend:
+    k8sSearch:
+      searchNamespace:
+        pod: {} <i class="conum" data-value="3"></i><b>(3)</b>
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: openldap-simple-bind <i class="conum" data-value="4"></i><b>(4)</b>
+  labels:
+    secrets.stackable.tech/class: openldap-simple-bind <i class="conum" data-value="5"></i><b>(5)</b>
+stringData:
+  user: cn=admin,dc=example,dc=org
+  password: admin</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The name of the <a href="../secret-operator/secretclass.html" class="xref page"><code>SecretClass</code></a> providing the bind credentials (username and password). Must match the name of the <a href="../secret-operator/secretclass.html" class="xref page"><code>SecretClass</code></a> in this example in ②</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The name of the <a href="../secret-operator/secretclass.html" class="xref page"><code>SecretClass</code></a> we are creating that is referred to by ➀. See <a href="../secret-operator/secretclass.html" class="xref page"><code>SecretClass</code></a></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>This determines the namespace in which the referenced <code>Secret</code> will be looked for. In this case it searches for a <code>Secret</code> in the same namespace as the product runs in. See <a href="../secret-operator/secretclass.html#backend-k8ssearch" class="xref page">the documentation of SecretClass</a></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The <code>Secret</code> containing the actual bind credentials. Please keep in mind that the <code>Secret</code> needs to be in the same namespace as the product</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The name of the <a href="../secret-operator/secretclass.html" class="xref page"><code>SecretClass</code></a> that wants to refer to this <code>Secret</code>. Must match the name of the <a href="../secret-operator/secretclass.html" class="xref page"><code>SecretClass</code></a> in this example in ②</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The following diagram describes the relationship between the created CRDs</p>
+</div>
+<div class="imageblock kroki">
+<div class="content">
+<img src="https://kroki.io/plantuml/svg/eNqNkjFrwzAQhXf9CpGx1HuH2pC6Q4cOhUBXczldE1FZEpLcBEr-e3VyEkgxjj2Juye9754PjHGHXh-13QmhIMEWIsn31_WHED14udoQBkrSebJGga-i7r2haqutWkmIMpZ-d-l3Y7_jvvwVMn9DpCDrRqKtQfXaPiqs6Qgs46MLuyLzEOPBBcXSohOneQSEOQCEsz1CSyHxq8-5hvmsvzRCIonOJrKp-WfUmkxyd2Bk1dzY309xQxBwLx-qZi6mRfa3w06bX0deZI1wNV4PaZ-D4FS0s5MAxR1udNMUZwSuvLmYMkFGKPvE5WQyWfih8Elh_A35oVFzZ7RyneNqAymGABMXXCwBX4DGUF54w_M6uKHm1YwT-3j6A7H2Fp4=" alt="Diagram">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_all_possible_attributes"><a class="anchor" href="#_all_possible_attributes"></a>All possible attributes</h3>
+<div class="paragraph">
+<p>The following example shows all possible attributes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: ldap-full
+spec:
+  provider:
+    ldap:
+      hostname: my.ldap.server <i class="conum" data-value="1"></i><b>(1)</b>
+      port: 389 <i class="conum" data-value="2"></i><b>(2)</b>
+      searchBase: ou=users,dc=example,dc=org <i class="conum" data-value="3"></i><b>(3)</b>
+      searchFilter: (memberOf=cn=myTeam,ou=teams,dc=example,dc=org) <i class="conum" data-value="4"></i><b>(4)</b>
+      ldapFieldNames: <i class="conum" data-value="5"></i><b>(5)</b>
+        uid: uid
+        group: memberof
+        givenName: givenName
+        surname: sn
+        email: mail
+      bindCredentials:
+        secretClass: ldap-full-bind <i class="conum" data-value="6"></i><b>(6)</b>
+        scope: <i class="conum" data-value="7"></i><b>(7)</b>
+          pod: true
+          node: false
+          services:
+            - ldap-full
+      tls: <i class="conum" data-value="8"></i><b>(8)</b>
+        verification:
+          server:
+            caCert:
+              secretClass: ldap-full-ca-cert</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The hostname of the LDAP server without any protocol or port</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The port of the LDAP server. If TLS is used defaults to <code>636</code> otherwise to <code>389</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The searchBase where the users should be searched</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Additional filter that filters the allowed users</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The name of the corresponding field names in the LDAP objects</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The name of the <a href="../secret-operator/secretclass.html" class="xref page"><code>SecretClass</code></a> providing the bind credentials (username and password)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The <a href="../secret-operator/scope.html" class="xref page">Scope</a> of the <a href="../secret-operator/secretclass.html" class="xref page"><code>SecretClass</code></a></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td><a href="tls.html" class="xref page">TLS</a> connection to the LDAP server</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
 </div>
 </article>
   </div>

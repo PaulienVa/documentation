@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://docs.stackable.tech/spark-k8s/commandline_args.html</loc>
+<lastmod>2022-04-11T15:04:59.497Z</lastmod>
+</url>
+<url>
+<loc>https://docs.stackable.tech/spark-k8s/configuration.html</loc>
+<lastmod>2022-04-11T15:04:59.497Z</lastmod>
+</url>
+<url>
+<loc>https://docs.stackable.tech/spark-k8s/env_var_args.html</loc>
+<lastmod>2022-04-11T15:04:59.497Z</lastmod>
+</url>
+<url>
+<loc>https://docs.stackable.tech/spark-k8s/index.html</loc>
+<lastmod>2022-04-11T15:04:59.497Z</lastmod>
+</url>
+<url>
+<loc>https://docs.stackable.tech/spark-k8s/installation.html</loc>
+<lastmod>2022-04-11T15:04:59.497Z</lastmod>
+</url>
+<url>
+<loc>https://docs.stackable.tech/spark-k8s/job_dependencies.html</loc>
+<lastmod>2022-04-11T15:04:59.497Z</lastmod>
+</url>
+<url>
+<loc>https://docs.stackable.tech/spark-k8s/rbac.html</loc>
+<lastmod>2022-04-11T15:04:59.497Z</lastmod>
+</url>
+<url>
+<loc>https://docs.stackable.tech/spark-k8s/usage.html</loc>
+<lastmod>2022-04-11T15:04:59.497Z</lastmod>
+</url>
+</urlset>

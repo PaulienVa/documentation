@@ -54,6 +54,7 @@
     <a class="drop-down-item" href="../trino/index.html">Trino</a>
     <a class="drop-down-item" href="../zookeeper/index.html">Apache ZooKeeper</a>
     <a class="drop-down-item" href="../opa/index.html">OpenPolicyAgent</a>
+    <a class="drop-down-item" href="../commons-operator/index.html">Commons</a>
     <a class="drop-down-item" href="../secret-operator/index.html">Secret</a>
     </div>
 </div>
@@ -270,13 +271,11 @@ metadata:
   name: simple-hbase
 spec:
   version: 2.4.11
+  hdfsConfigMapName: simple-hdfs-namenode-default
+  zookeeperConfigMapName: simple-hbase-znode
   config:
-    hdfsConfigMapName: simple-hdfs-namenode-default
-    zookeeperConfigMapName: simple-hbase-znode
-    hbaseManagesZk: false
     hbaseOpts:
-    hbaseClusterDistributed: true
-    hbaseRootdir: hdfs://simple-hdfs/hbase
+    hbaseRootdir: /hbase
   masters:
     roleGroups:
       default:
@@ -308,23 +307,21 @@ spec:
     name: simple-zk</code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="ulist">
+<ul>
+<li>
 <p><code>hdfsConfigMapName</code> references the config map created by the Stackable HDFS operator.</p>
-</div>
-<div class="paragraph">
+</li>
+<li>
 <p><code>zookeeperConfigMapName</code> references the config map created by the Stackable ZooKeeper operator.</p>
-</div>
-<div class="paragraph">
-<p><code>hbaseManagesZk</code> is mapped to the environment variable <code>HBASE_MANAGES_ZK</code> in <code>hbase-env.sh</code>.</p>
-</div>
-<div class="paragraph">
+</li>
+<li>
 <p><code>hbaseOpts</code> is mapped to the environment variable <code>HBASE_OPTS</code> in <code>hbase-env.sh</code>.</p>
-</div>
-<div class="paragraph">
-<p><code>hbaseClusterDistributed</code> is mapped to <code>hbase.cluster.distributed</code> in <code>hbase-site.xml</code>.</p>
-</div>
-<div class="paragraph">
+</li>
+<li>
 <p><code>hbaseRootdir</code> is mapped to <code>hbase.rootdir</code> in <code>hbase-site.xml</code>.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>

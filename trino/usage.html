@@ -358,11 +358,11 @@ stringData:
 <div class="sect2">
 <h3 id="_authorization"><a class="anchor" href="#_authorization"></a>Authorization</h3>
 <div class="paragraph">
-<p>In order to authorize Trino via OPA, a <code>ConfigMap</code> containing Rego rules for Trino has to be applied. The following example is an all access Rego rule for testing. Do not use that in production!</p>
+<p>In order to authorize Trino via OPA, a <code>ConfigMap</code> containing Rego rules for Trino has to be applied. The following example is an all access Rego rule for testing. Do not use it in production!</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: opa.stackable.tech/v1alpha1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
 kind: ConfigMap
 metadata:
   name: opa-bundle-trino
@@ -400,28 +400,7 @@ data:
 </div>
 </div>
 <div class="paragraph">
-<p>You can let the Trino operator write its own Rego rules by configuring the <code>authorization</code> field in the custom resource. This is a rudimentary implementation for user access.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">authorization:
-  package: trino
-  permissions:
-    admin:
-      schemas:
-        read: true
-        write: true
-      tables:
-        iris_parquet:
-          read: true
-          write: true
-        iris_csv:
-          read: true
-          write: true</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Here we define permissions for an admin user who can read and write <code>schemas</code>, as well as having full access to the <code>iris_parquet</code> and <code>iris_csv</code> table. Currently, this is more for demonstration purposes. Users should write their own rego rules for more complex OPA authorization.</p>
+<p>Users should write their own rego rules for more complex OPA authorization.</p>
 </div>
 </div>
 <div class="sect2">
@@ -495,31 +474,15 @@ metadata:
 spec:
   version: "0.0.362"
   hiveConfigMapName: simple-hive-derby
-  opaConfigMapName: simple-opa
+  opa:
+    configMapName: simple-opa
+    package: trino
   authentication:
     method:
       multiUser:
         userCredentialsSecret:
           namespace: default
           name: simple-trino-users-secret
-  authorization:
-    package: trino
-    permissions:
-      admin:
-        schemas:
-          read: true
-          write: true
-        tables:
-          iris_parquet:
-            read: true
-            write: true
-      bob:
-        schemas:
-          read: true
-          write: false
-        tables:
-          iris_parquet:
-            read: false
   s3:
     endPoint: changeme
     accessKey: changeme

@@ -325,7 +325,8 @@ spec:
   nodes:
     roleGroups:
       default:
-        config:</code></pre>
+        config:
+          rowLimit: 10000</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -342,6 +343,9 @@ spec:
 </div>
 <div class="paragraph">
 <p>The <code>spec.loadExamplesOnInit</code> key is optional and defaults to <code>false</code>, it can be set to <code>true</code> to load example data into superset when the database is initialized.</p>
+</div>
+<div class="paragraph">
+<p>The <code>rowLimit</code> configuration option defines the row limit when requesting chart data.</p>
 </div>
 <div class="sect2">
 <h3 id="_initialization_of_the_superset_database"><a class="anchor" href="#_initialization_of_the_superset_database"></a>Initialization of the Superset database</h3>
@@ -436,6 +440,115 @@ spec:
 <div class="paragraph">
 <p>The managed Superset instances are automatically configured to export Prometheus metrics. See
 <a href="../home/monitoring.html" class="xref page">Monitoring</a> for more details.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration_environment_overrides"><a class="anchor" href="#_configuration_environment_overrides"></a>Configuration &amp; Environment Overrides</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The cluster definition also supports overriding configuration properties and environment variables,
+either per role or per role group, where the more specific override (role group) has precedence over
+the less specific one (role).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Overriding certain properties which are set by the operator (such as the <code>STATS_LOGGER</code>)
+can interfere with the operator and can lead to problems.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_configuration_properties"><a class="anchor" href="#_configuration_properties"></a>Configuration Properties</h3>
+<div class="paragraph">
+<p>For a role or role group, at the same level of <code>config</code>, you can specify <code>configOverrides</code> for the
+<code>superset_config.py</code>. For example, if you want to set the CSV export encoding and the preferred
+databases adapt the <code>nodes</code> section of the cluster resource like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">nodes:
+  roleGroups:
+    default:
+      config: {}
+      configOverrides:
+        superset_config.py:
+          CSV_EXPORT: "{'encoding': 'utf-8'}"
+          PREFERRED_DATABASES: |-
+            [
+                'PostgreSQL',
+                'Presto',
+                'MySQL',
+                'SQLite',
+                # etc.
+            ]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Just as for the <code>config</code>, it is possible to specify this at the role level as well:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">nodes:
+  configOverrides:
+    superset_config.py:
+      CSV_EXPORT: "{'encoding': 'utf-8'}"
+      PREFERRED_DATABASES: |-
+        [
+            'PostgreSQL',
+            'Presto',
+            'MySQL',
+            'SQLite',
+            # etc.
+        ]
+  roleGroups:
+    default:
+      config: {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All override property values must be strings. They are treated as Python expressions. So care must
+be taken to not produce an invalid configuration.</p>
+</div>
+<div class="paragraph">
+<p>For a full list of configuration options we refer to the
+<a href="https://github.com/apache/superset/blob/master/superset/config.py">main config file for Superset</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment Variables</h3>
+<div class="paragraph">
+<p>In a similar fashion, environment variables can be (over)written. For example per role group:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">nodes:
+  roleGroups:
+    default:
+      config: {}
+      envOverrides:
+        FLASK_ENV: development</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or per role:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">nodes:
+  envOverrides:
+    FLASK_ENV: development
+  roleGroups:
+    default:
+      config: {}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>

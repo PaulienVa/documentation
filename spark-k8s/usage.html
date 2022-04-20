@@ -590,7 +590,7 @@ spec:
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Job python artifact (local)</td>
+<td>Job python artifact (located in S3)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -598,7 +598,7 @@ spec:
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>S3 section, specifying the existing secret and S3 end-point ( in this case, Min-IO)</td>
+<td>S3 section, specifying the existing secret and S3 end-point (in this case, MinIO)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
@@ -619,6 +619,100 @@ spec:
 <tr>
 <td><i class="conum" data-value="8"></i><b>8</b></td>
 <td>the path on the volume mount: this is referenced in the <code>sparkConf</code> section where the extra class path is defined for the driver and executors</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_jvm_scala_externally_located_artifact_accessed_with_job_arguments_provided_via_configuration_map"><a class="anchor" href="#_jvm_scala_externally_located_artifact_accessed_with_job_arguments_provided_via_configuration_map"></a>JVM (Scala): externally located artifact accessed with job arguments provided via configuration map</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-job-arguments <i class="conum" data-value="1"></i><b>(1)</b>
+data:
+  job-args.txt: |
+    s3a://nyc-tlc/trip data/yellow_tripdata_2021-07.csv <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: spark.stackable.tech/v1alpha1
+kind: SparkApplication
+metadata:
+  name: ny-tlc-report-configmap
+  namespace: default
+spec:
+  version: "1.0"
+  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.2.1-hadoop3.2-stackable0.4.0
+  mode: cluster
+  mainApplicationFile: s3a://stackable-spark-k8s-jars/jobs/ny-tlc-report-1.1.0.jar <i class="conum" data-value="3"></i><b>(3)</b>
+  mainClass: tech.stackable.demo.spark.NYTLCReport
+  volumes:
+    - name: job-deps
+      persistentVolumeClaim:
+        claimName: pvc-ksv
+    - name: cm-job-arguments
+      configMap:
+        name: cm-job-arguments <i class="conum" data-value="4"></i><b>(4)</b>
+  args:
+    - "--input /arguments/job-args.txt" <i class="conum" data-value="5"></i><b>(5)</b>
+  sparkConf:
+    "spark.hadoop.fs.s3a.aws.credentials.provider": "org.apache.hadoop.fs.s3a.AnonymousAWSCredentialsProvider"
+    "spark.driver.extraClassPath": "/dependencies/jars/hadoop-aws-3.2.0.jar:/dependencies/jars/aws-java-sdk-bundle-1.11.375.jar"
+    "spark.executor.extraClassPath": "/dependencies/jars/hadoop-aws-3.2.0.jar:/dependencies/jars/aws-java-sdk-bundle-1.11.375.jar"
+  driver:
+    cores: 1
+    coreLimit: "1200m"
+    memory: "512m"
+    volumeMounts:
+      - name: job-deps
+        mountPath: /dependencies
+      - name: cm-job-arguments <i class="conum" data-value="6"></i><b>(6)</b>
+        mountPath: /arguments  <i class="conum" data-value="7"></i><b>(7)</b>
+  executor:
+    cores: 1
+    instances: 3
+    memory: "512m"
+    volumeMounts:
+      - name: job-deps
+        mountPath: /dependencies
+      - name: cm-job-arguments <i class="conum" data-value="6"></i><b>(6)</b>
+        mountPath: /arguments <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Name of the configuration map</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Argument required by the job</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Job scala artifact that requires an input argument</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The volume backed by the configuration map</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The expected job argument, accessed via the mounted configuration map file</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The name of the volume backed by the configuration map that will be mounted to the driver/executor</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The mount location of the volume (this will contain a file <code>/arguments/job-args.txt</code>)</td>
 </tr>
 </table>
 </div>

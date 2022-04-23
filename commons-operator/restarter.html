@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Reloader :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/commons-operator/reloader.html">
+    <title>Restarter :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/commons-operator/restarter.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -96,7 +96,7 @@
     <a class="nav-link" href="tls.html">TLS</a>
   </li>
   <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="reloader.html"><code>Reloader</code></a>
+    <a class="nav-link" href="restarter.html">Restarter</a>
   </li>
 </ul>
   </li>
@@ -252,19 +252,81 @@
   <ul>
     <li><a href="index.html">Stackable Commons Operator</a></li>
     <li>Concepts</li>
-    <li><a href="reloader.html"><code>Reloader</code></a></li>
+    <li><a href="restarter.html">Restarter</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/commons-operator/edit/main/docs/modules/ROOT/pages/reloader.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/commons-operator/edit/main/docs/modules/ROOT/pages/restarter.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page"><code>Reloader</code></h1>
+<h1 class="page">Restarter</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>TODO</p>
+<p>The Stackable Commons Operator can automatically restart <code>Pod</code> objects based on certain criteria. This can be applied to
+either the <code>Pod</code> or certain controller objects (such as <code>StatefulSet</code>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pod"><a class="anchor" href="#_pod"></a><code>Pod</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Pods are evicted when any of their restart criteria (listed below) expire, with the expectation that their owning controller
+is then responsible for restarting them.</p>
+</div>
+<div class="paragraph">
+<p>Because they are evicted rather than deleted, this process should respect <code>PodDisruptionBudget</code> constraints, allowing users
+to ensure that clusters are restarted gracefully.</p>
+</div>
+<div class="sect2">
+<h3 id="_expiration_date"><a class="anchor" href="#_expiration_date"></a>Expiration date</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Annotation</dt>
+<dd>
+<p><code>restarter.stackable.tech/expires-at.{tag}</code></p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Pods can be configured to expire at a certain point in time. In this case, the <code>Pod</code> should have the annotation
+<code>restarter.stackable.tech/expires-at.{tag}</code> set to a datetime formatted according to RFC 3339 (such as
+<code>"2022-04-21T13:24:15.225774724+00:00"</code>).
+<code>{tag}</code> should be a deterministic but unique ID identifying the reason for the expiry.</p>
+</div>
+<div class="paragraph">
+<p>Multiple <code>expires-at</code> annotations can be set on the same <code>Pod</code>, in which case the <strong>earliest</strong> expiration datetime
+takes precedence.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_statefulset"><a class="anchor" href="#_statefulset"></a><code>StatefulSet</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>StatefulSets are rolling-restarted when any of their restart criteria (listed below) expire.</p>
+</div>
+<div class="sect2">
+<h3 id="_stale_configuration"><a class="anchor" href="#_stale_configuration"></a>Stale configuration</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Label</dt>
+<dd>
+<p><code>restarter.stackable.tech/enabled</code></p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>StatefulSets can be configured to restart when any referenced configuration object (<code>ConfigMap</code> or <code>Secret</code>) changes.
+To enable this, set the <code>restarter.stackable.tech/enabled</code> label on the <code>StatefulSet</code> to <code>true</code>.</p>
+</div>
+</div>
+</div>
 </div>
 </article>
   </div>

@@ -261,18 +261,17 @@
 <div class="paragraph">
 <p>After installation, ensure that the CRD for this operator exists or create yourself:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>kubectl apply -f /etc/stackable/hive-operator/crd/hivecluster.crd.yaml</pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f /etc/stackable/hive-operator/crd/hivecluster.crd.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>To create a single node Apache Hive Metastore (v2.3.9) cluster with derby:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: hive.stackable.tech/v1alpha1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: hive.stackable.tech/v1alpha1
 kind: HiveCluster
 metadata:
   name: simple-hive-derby
@@ -290,50 +289,70 @@ spec:
             connString: jdbc:derby:;databaseName=/tmp/metastore_db;create=true
             user: APP
             password: mine
-            dbType: derby
-EOF</pre>
+            dbType: derby</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>To create a single node Apache Hive Metastore (v2.3.9) cluster with derby and S3 access:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: hive.stackable.tech/v1alpha1
-kind: HiveCluster
-metadata:
-  name: simple-hive-derby
-spec:
-  version: 2.3.9
-  metastore:
-    roleGroups:
-      default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        replicas: 1
-        config:
-          database:
-            connString: jdbc:derby:;databaseName=/stackable/metastore_db;create=true
-            user: APP
-            password: mine
-            dbType: derby
-          s3Connection:
-            endPoint: changeme
-            accessKey: changeme
-            secretKey: changeme
-            sslEnabled: false
-            pathStyleAccess: true
-EOF</pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">    apiVersion: hive.stackable.tech/v1alpha1
+    kind: HiveCluster
+    metadata:
+      name: simple-hive-derby
+    spec:
+      version: 2.3.9
+      metastore:
+        roleGroups:
+          default:
+            selector:
+              matchLabels:
+                kubernetes.io/os: linux
+            replicas: 1
+            config:
+              database:
+                connString: jdbc:derby:;databaseName=/stackable/metastore_db;create=true
+                user: APP
+                password: mine
+                dbType: derby
+              s3Connection:
+                endPoint: changeme
+                accessKey: changeme
+                secretKey: changeme
+                sslEnabled: false
+                pathStyleAccess: true</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To create a single node Apache Hive Metastore (v2.3.9) cluster with PostgreSQL:</p>
+<p>To create a single node Apache Hive Metastore (v2.3.9) cluster with PostgreSQL, deploy a PostgreSQL instance via helm.</p>
 </div>
-<div class="literalblock">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+PostgreSQL versions 11 or higher are currently not supported (see <a href="https://github.com/stackabletech/hive-operator/issues/167" class="bare">https://github.com/stackabletech/hive-operator/issues/167</a>):
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
 <div class="content">
-<pre>apiVersion: hive.stackable.tech/v1alpha1
+<pre class="highlightjs highlight"><code class="language-none hljs">helm install hive bitnami/postgresql --version=10 \
+--set postgresqlUsername=hive \
+--set postgresqlPassword=hive \
+--set postgresqlDatabase=hive</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then deploy the example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: hive.stackable.tech/v1alpha1
 kind: HiveCluster
 metadata:
   name: simple-hive-postgres
@@ -347,13 +366,11 @@ spec:
             kubernetes.io/os: linux
         replicas: 1
         config:
-          warehouseDir: /stackable/metastore
           database:
-            connString: jdbc:postgresql://localhost:5432/metastoredb
-            user: hiveuser
-            password: mypass
-            dbType: postgres
-EOF</pre>
+            connString: jdbc:postgresql://hive-postgresql.default.svc.cluster.local:5432/hive
+            user: hive
+            password: hive
+            dbType: postgres</code></pre>
 </div>
 </div>
 </div>

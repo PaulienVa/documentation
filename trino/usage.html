@@ -358,7 +358,7 @@ stringData:
 <div class="sect2">
 <h3 id="_authorization"><a class="anchor" href="#_authorization"></a>Authorization</h3>
 <div class="paragraph">
-<p>In order to authorize Trino via OPA, a <code>ConfigMap</code> containing Rego rules for Trino has to be applied. The following example is an all access Rego rule for testing. Do not use it in production!</p>
+<p>In order to authorize Trino via OPA, a <code>ConfigMap</code> containing Rego rules for Trino has to be applied. The following example is an all access Rego rule for testing with the user <code>admin</code>. Do not use it in production!</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -372,31 +372,17 @@ data:
   trino.rego: |
     package trino
 
-    can_execute_query = true
+    import future.keywords.in
 
-    can_access_catalog = true
+    default allow = false
 
-    can_create_schema = true
+    allow {
+      is_admin
+    }
 
-    can_drop_schema = true
-
-    can_access_schema = true
-
-    can_create_table = true
-
-    can_drop_table = true
-
-    can_access_table = true
-
-    can_access_column = true
-
-    can_show_schemas = true
-
-    can_show_tables = true
-
-    can_select_from_columns = true
-
-    can_view_query_owned_by = true</code></pre>
+    is_admin() {
+      input.context.identity.user == "admin"
+    }</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -416,7 +402,7 @@ data:
 <div class="sect3">
 <h4 id="_insecure_for_testing"><a class="anchor" href="#_insecure_for_testing"></a>Insecure for testing:</h4>
 <div class="paragraph">
-<p>Create an insecure single node Trino (v362) cluster for testing. You will access the UI/CLI via http and no user / password or authorization is required. Please adapt the <code>s3</code> settings with your credentials (check <code>examples/simple-trino-cluster.yaml</code> for an example setting up Hive and Trino):</p>
+<p>Create an insecure single node Trino (v377) cluster for testing. You will access the UI/CLI via http and no user / password or authorization is required. Please adapt the <code>s3</code> settings with your credentials (check <code>examples/simple-trino-cluster.yaml</code> for an example setting up Hive and Trino):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -425,7 +411,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: "0.0.362"
+  version: "0.0.377"
   hiveConfigMapName: simple-hive-derby
   s3:
     endPoint: changeme
@@ -456,14 +442,14 @@ spec:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-362-executable.jar --debug --server http://&lt;node&gt;:&lt;http-port&gt; --user=admin</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-377-executable.jar --debug --server http://&lt;node&gt;:&lt;http-port&gt; --user=admin</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_secure_https_for_production"><a class="anchor" href="#_secure_https_for_production"></a>Secure (https) for production:</h4>
 <div class="paragraph">
-<p>Create a secure single node Trino (v362) cluster. This will disable the UI access via http and requires username and password from the secret above. Please adapt the <code>s3</code> settings with your credentials (check <code>examples/simple-trino-cluster-authentication-opa-authorization.yaml</code> for a full example setting up Hive, OPA, Secrets and Trino):</p>
+<p>Create a secure single node Trino (v377) cluster. This will disable the UI access via http and requires username and password from the secret above. Please adapt the <code>s3</code> settings with your credentials (check <code>examples/simple-trino-cluster-authentication-opa-authorization.yaml</code> for a full example setting up Hive, OPA, Secrets and Trino):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -472,7 +458,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: "0.0.362"
+  version: "0.0.377"
   hiveConfigMapName: simple-hive-derby
   opa:
     configMapName: simple-opa
@@ -508,11 +494,11 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>To access the CLI please execute:</p>
+<p>To access the CLI please download the <a href="https://repo1.maven.org/maven2/io/trino/trino-cli/377/trino-cli-377-executable.jar">Trino CLI</a> and execute:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-362-executable.jar --debug --server https://&lt;host&gt;:&lt;https-port&gt; --user=admin --password --insecure</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-377-executable.jar --debug --server https://&lt;host&gt;:&lt;https-port&gt; --user=admin --password --insecure</code></pre>
 </div>
 </div>
 <div class="paragraph">

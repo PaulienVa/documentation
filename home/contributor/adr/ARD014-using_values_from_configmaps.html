@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ADR002: Use Multiple Repositories instead of one Large Repository :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR002-choose_repository_structure.html">
+    <title>ADR014: How Should Operators Use Values from ConfigMaps &amp; Secrets :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ARD014-using_values_from_configmaps.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -119,7 +119,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR001-choose_project_language.html">ADR001: Use English as Documentation Language</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="4">
+  <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR002-choose_repository_structure.html">ADR002: Use Multiple Repositories instead of one Large Repository</a>
   </li>
   <li class="nav-item" data-depth="4">
@@ -152,7 +152,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR013-user_authentication_for_products.html">ADR013: User Authentication for Products</a>
   </li>
-  <li class="nav-item" data-depth="4">
+  <li class="nav-item is-current-page" data-depth="4">
     <a class="nav-link" href="ARD014-using_values_from_configmaps.html">ADR014: How Should Operators Use Values from ConfigMaps &amp; Secrets</a>
   </li>
 </ul>
@@ -333,17 +333,17 @@
     <li>Contributor&#8217;s Guide</li>
     <li>Architectural Decision Records</li>
     <li>Current</li>
-    <li><a href="ADR002-choose_repository_structure.html">ADR002: Use Multiple Repositories instead of one Large Repository</a></li>
+    <li><a href="ARD014-using_values_from_configmaps.html">ADR014: How Should Operators Use Values from ConfigMaps &amp; Secrets</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR002-choose_repository_structure.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ARD014-using_values_from_configmaps.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">ADR002: Use Multiple Repositories instead of one Large Repository</h1>
+<h1 class="page">ADR014: How Should Operators Use Values from ConfigMaps &amp; Secrets</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="ulist">
@@ -356,27 +356,30 @@
 <div class="ulist">
 <ul>
 <li>
-<p>Florian Waibel</p>
+<p>Felix Hennig</p>
 </li>
 <li>
-<p>Lars Francke</p>
+<p>Razvan Mihai</p>
 </li>
 <li>
-<p>Lukas Menzel</p>
-</li>
-<li>
-<p>Oliver Hessel</p>
+<p>Sebastian Bernauer</p>
 </li>
 <li>
 <p>Sönke Liebau</p>
+</li>
+<li>
+<p>Teo Klestrup Röijezon</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Date: 19.08.2020</p>
+<p>Date: 2022-04-28</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>Technical Story: <a href="https://github.com/stackabletech/issues/issues/208">#208</a></p>
 </div>
 </div>
 </div>
@@ -384,25 +387,26 @@
 <h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Should we use one large repository for all components of the project or structure this into multiple smaller repositories?</p>
+<p>One of the main focus areas of Stackable is making components of the stack work together well.
+This requires a high degree of composability where one component refers to another compenent in its definition.
+While this is a simple concept in principle it requires that operators obtain information about the object that is referred to and inject this information into the configuration of the object that refers to it.
+An example for this is a NiFi cluster definition referring to a ZooKeeper cluster definition via a znode name:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: nifi.stackable.tech/v1alpha1
+kind: NifiCluster
+metadata:
+  name: simple-nifi
+spec:
+  zookeeperConfigMapName: simple-nifi-znode</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>For this example the NiFi operator needs to somehow insert the content of this config map into specific NiFi config files.</p>
 </div>
-<div class="sect1">
-<h2 id="_decision_drivers"><a class="anchor" href="#_decision_drivers"></a>Decision Drivers</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Useability of repository structure</p>
-</li>
-<li>
-<p>Impact on related infrastructure like CI / Testing / &#8230;&#8203;</p>
-</li>
-<li>
-<p>Impact on release strategy</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>This ADR is about the preferred way of implementing dependencies like described above.</p>
 </div>
 </div>
 </div>
@@ -412,10 +416,10 @@
 <div class="ulist">
 <ul>
 <li>
-<p>Single Repository</p>
+<p><a href="#option1">Option 1:</a> Inserting ConfigMap/Secret content into target config in the operator</p>
 </li>
 <li>
-<p>Multiple Repositories</p>
+<p><a href="#option2">Option 2:</a> Mounting ConfigMap/Secret into the pods</p>
 </li>
 </ul>
 </div>
@@ -425,45 +429,25 @@
 <h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Chosen option: "Multiple Repositories", because it comes out best (see below)].</p>
+<p>Chosen option: "<a href="#option2">Option 2</a>", because it makes better use of Kubernetes features to model dependencies between definitions which in turn will make restart implementations and general debugging easier and more predictable.</p>
 </div>
 <div class="paragraph">
-<p>How to split the components into repositories will be decided throughout the runtime of the project.</p>
+<p>This decision will not hold true for all possible scenarios, but should be understood more as a implementation guideline:</p>
 </div>
-<div class="paragraph">
-<p>Initially the following repositories were identified:</p>
+<div class="sidebarblock">
+<div class="content">
+If a pod needs to access the content of a ConfigMap or Secret it should do this by mounting the ConfigMap/Secret unless there is a good reason to access the ConfigMap directly in the operator instead.
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>Orchestrator</p>
-</li>
-<li>
-<p>Agent</p>
-</li>
-<li>
-<p>ADR / Documentation</p>
-</li>
-<li>
-<p>Operators (most probably one repository per operator)</p>
-</li>
-<li>
-<p>Stackbit Sources (most probably one repository per product)</p>
-</li>
-</ul>
 </div>
 <div class="sect2">
 <h3 id="_positive_consequences"><a class="anchor" href="#_positive_consequences"></a>Positive Consequences</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>The ability to separate changes to different modules</p>
+<p>Dependencies will be clearly modelled in Kubernetes by mounts, which makes behavior of the entire architecture more predictable</p>
 </li>
 <li>
-<p>Better organization of individual modules</p>
-</li>
-<li>
-<p>Better separation of releases between modules</p>
+<p>Operators need to implement a much simpler logic around watches, as triggering reconciliations is handled via k8s dependencies (mounts)</p>
 </li>
 </ul>
 </div>
@@ -473,10 +457,10 @@
 <div class="ulist">
 <ul>
 <li>
-<p>No single place to search for things, a little familiarity with the repository structure might be needed</p>
+<p>Complexity is moved from the operator code into init containers that need to perform insertion of the ConfigMap/Secret content into actual config files</p>
 </li>
 <li>
-<p>Potentially more effort when setting up CI and testing infrastructure</p>
+<p>Debugging a running configuration becomes harder in cases where users have no access to a shell in the pods, as this would be the only way to actually see the running configuration (<a href="https://github.com/stackabletech/issues/issues/210)">#210</a> has been created to investigate mitigating this)</p>
 </li>
 </ul>
 </div>
@@ -487,75 +471,62 @@
 <h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_single_repository"><a class="anchor" href="#_single_repository"></a>Single Repository</h3>
+<h3 id="option1"><a class="anchor" href="#option1"></a>Option 1 - Inserting ConfigMap/Secret content into target config in the operator</h3>
+<div class="paragraph">
+<p>The operator can retrieve the content from ConfigMaps/Secrets during reconciliation and insert the values directly into the target config.
+The target config would then be written either to a ConfigMap or a Secret, depending on whether sensitive input data is contained in it.</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because it makes implementing dependencies between modules easier</p>
+<p>Good, because it isolates most of the complexity in the operator</p>
 </li>
 <li>
-<p>Good, because it provides a single place to search for <em>things</em></p>
+<p>Good, because it would allow referencing ConfigMaps and Secrets in different namespaces which would potentially allow for less duplication</p>
 </li>
 <li>
-<p>Bad, because it can become large and difficult to manage</p>
+<p>Good, because it gives an almost complete manifestation of a running config in k8s objects that can be used for debugging</p>
 </li>
 <li>
-<p>Bad, because it keeps things that should be loosely coupled in the same place which might promote tighter coupling</p>
+<p>Bad, because it would allow referencing ConfigMaps and Secrets in different namespaces, which would dilute namespace separation</p>
 </li>
 <li>
-<p>Bad, because tagging a release of a component will unnecessarily include the rest of the repository</p>
+<p>Bad, because it makes debugging startup issues of products much harder, as pods will simply not appear if required ConfigMaps are missing, effectively bypassing well established k8s patterns (like a pod missing a mount not starting and writing events about why it is not starting)</p>
 </li>
 <li>
-<p>Bad, because changes to a component may accidentally impact other components</p>
+<p>Bad, because the dependencies between pods and configmaps / secrets become very complex and hard to debug as they are not modelled in any way as k8s dependencies (mounts)</p>
 </li>
 <li>
-<p>Bad, because the commit history is mixed for all components</p>
+<p>Bad, because setting up the correct watches in the operator becomes very complex, with a likelyhood of inadvertently forgetting to add a new watch that becomes necessary as CRDs evolve</p>
 </li>
 <li>
-<p>Bad, because a single commit may change multiple components making tracking these changes harder</p>
+<p>Bad, because it potentially propagates sensitive values to multiple places by copying secret content to additional places</p>
 </li>
 <li>
-<p>Bad, because the CI pipeline would need to identify the changed components to avoid triggering tests for all other components</p>
-</li>
-<li>
-<p>Bad, because clone times might be much higher</p>
+<p>Bad, because the Operator is seeing the Secrets. This is not a problem <em>now</em>, but if we could avoid it that would be better</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_multiple_repositories"><a class="anchor" href="#_multiple_repositories"></a>Multiple Repositories</h3>
+<h3 id="option2"><a class="anchor" href="#option2"></a>Option 2 - Mounting ConfigMap/Secret into the pods</h3>
+<div class="paragraph">
+<p>Instead of accessing the content of ConfigMaps/Secrets in the operator, the operator would simply mount these object into the generated pods.
+Accessing the content of these mounted objects would then need to be done in an init container, currently this is done with shell commands, but this would be replaced with a more suitable tool in a follow-up ADR.</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because it keeps the individual repositories simpler</p>
+<p>Good, because mounting the ConfigMap/Secret directly into the pod allows the restart controller to automatically restart a Pod if a mounted object changes. Otherwise, changes would not be propagated or the Operator would have to watch the ConfigMap/Secret for changes itself. The watching/restarting is done once by Kubernetes + the restart controller and makes our Operators simpler</p>
 </li>
 <li>
-<p>Good, because it allows proper separation of modules</p>
+<p>Bad, because the mounted properties cannot be validated by the Operator. Although Kubernetes at least verifies that all the properties that should be mounted exist</p>
 </li>
 <li>
-<p>Good, because it allows proper tagging of releases</p>
-</li>
-<li>
-<p>Bad, because implementing dependent changes in separate components becomes harder</p>
-</li>
-<li>
-<p>Bad, because it makes finding individual pieces of code potentially harder if the repository is unknown</p>
+<p>Bad, because it is more difficult to see which config is actually used to run the product, as the actual config is only finally assembled inside of the container</p>
 </li>
 </ul>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_links"><a class="anchor" href="#_links"></a>Links</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://medium.com/@johnclarke_82232/mono-or-multi-repo-6c3674142dfc">Mono- or Multi-repo?</a></p>
-</li>
-</ul>
 </div>
 </div>
 </div>

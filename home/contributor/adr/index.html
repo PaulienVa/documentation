@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ADR010: Expressing one-shot commands in a Kubernetes-native way :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR010-command_pattern.html">
+    <title>Architectural Decision Records :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/index.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -175,7 +175,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../opa_configuration.html">OPA Configuration</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="index.html">Architectural Decision Records</a>
 <ul class="nav-list">
@@ -207,7 +207,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR009-selector_support.html">ADR009: Assigning Services to Nodes</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="4">
+  <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR010-command_pattern.html">ADR010: Expressing one-shot commands in a Kubernetes-native way</a>
   </li>
   <li class="nav-item" data-depth="4">
@@ -402,201 +402,64 @@
     <li><a href="../../index.html">Stackable Documentation</a></li>
     <li><a href="../index.html">Contributor&#8217;s Guide</a></li>
     <li><a href="index.html">Architectural Decision Records</a></li>
-    <li>Current</li>
-    <li><a href="ADR010-command_pattern.html">ADR010: Expressing one-shot commands in a Kubernetes-native way</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR010-command_pattern.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/index.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">ADR010: Expressing one-shot commands in a Kubernetes-native way</h1>
-<div id="preamble">
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Status: accepted</p>
-</li>
-<li>
-<p>Deciders:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Lars Francke</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Date: 1.3.2021</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
-<div class="sectionbody">
+<h1 class="page">Architectural Decision Records</h1>
 <div class="paragraph">
-<p>Kubernetes follows a declarative model where a user describes the desired state of the world.
-There are some things that cannot be easily or naturally modeled in a declarative way.
-Some examples being: <code>restart</code>, <code>start</code>, <code>stop</code>, <code>repair</code>, <code>finalize upgrade</code>, etc.</p>
+<p>This section contains a decision log on architectural decisions in the form of architectural decision records (ADRs). Find the list of below:</p>
 </div>
-<div class="paragraph">
-<p>We still need to support those actions.
-This ADR is about finding a way to do so.
-As can be seen in the <a href="https://github.com/kubernetes/kubernetes/issues/72637">linked issue</a> others are facing the same issue and various workarounds are in-use.
-Kubernetes offers no native way to achieve our goal.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_considered_options"><a class="anchor" href="#_considered_options"></a>Considered Options</h2>
-<div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Have the Operators start a Web server that accepts requests for these actions</p>
+<p><a href="ADR001-choose_project_language.html" class="xref page">ADR001: Use English as Documentation Language</a></p>
 </li>
 <li>
-<p>Add CRDs for these kinds of actions</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Have a single CRD: FooCommand which takes a string with the command (e.g. "restart")</p>
+<p><a href="ADR002-choose_repository_structure.html" class="xref page">ADR002: Use Multiple Repositories instead of one Large Repository</a></p>
 </li>
 <li>
-<p>Have a CRD per command (e.g. FooRestart, FooStart)</p>
+<p><a href="ADR003-choose_review_mechanism.html" class="xref page">ADR003: Use RTC as Review Mechanism for Changes</a></p>
+</li>
+<li>
+<p><a href="ADR004-choose_agent_programming_language.html" class="xref page">ADR004: Use Rust as programming language for the agent</a></p>
+</li>
+<li>
+<p><a href="ADR005-systemd_unit_file_location.html" class="xref page">ADR005: Decide on handling and location of systemd unit files</a></p>
+</li>
+<li>
+<p><a href="ADR007-defined_reuse_of_k8s.html" class="xref page">ADR007: Decide if Kubernetes Components Are to be Reused for Stackable</a></p>
+</li>
+<li>
+<p><a href="ADR008-decide_reuse_of_operators.html" class="xref page">ADR008: Allow Reuse of Existing Kubernetes Operators</a></p>
+</li>
+<li>
+<p><a href="ADR009-selector_support.html" class="xref page">ADR009: Assigning Services to Nodes</a></p>
+</li>
+<li>
+<p><a href="ADR010-command_pattern.html" class="xref page">ADR010: Expressing one-shot commands in a Kubernetes-native way</a></p>
+</li>
+<li>
+<p><a href="ADR011-directory_structure.html" class="xref page">ADR011: Directory Structure Used by Stackable Components on Managed Hosts</a></p>
+</li>
+<li>
+<p><a href="ADR012-authn_token_management.html" class="xref page">ADR012: Authentication token management</a></p>
+</li>
+<li>
+<p><a href="ADR013-user_authentication_for_products.html" class="xref page">ADR013: User Authentication for Products</a></p>
+</li>
+<li>
+<p><a href="ARD014-using_values_from_configmaps.html" class="xref page">ADR014: How Should Operators Use Values from ConfigMaps &amp; Secrets</a></p>
+</li>
+<li>
+<p><a href="ADR015_definition_of_s3_objects.html" class="xref page">ADR015: Representation of S3 Buckets in CRDs</a></p>
 </li>
 </ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_decision"><a class="anchor" href="#_decision"></a>Decision</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>We decided to go with a single CRD per command.
-We decided against a web server (for now) because it&#8217;d mean we&#8217;d need to reimplement authentication and authorization from scratch and this&#8217;d need to be consistent with the way Kubernetes works.</p>
-</div>
-<div class="paragraph">
-<p>Unfortunately, Kubernetes doesn&#8217;t support arbitrary subresources for CRDs yet (only <code>scale</code> and <code>status</code> are supported)</p>
-</div>
-<div class="ulist">
-<div class="title">Our implementation idea is as follows:</div>
-<ul>
-<li>
-<p>Create a CRD</p>
-<div class="ulist">
-<ul>
-<li>
-<p>It needs to have a reference to the parent resource (i.e. a name and a namespace)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Write an operator (<em>command operator</em>) which should be made generic and reusable</p>
-</li>
-<li>
-<p>This operator watches this new custom resource</p>
-<div class="ulist">
-<ul>
-<li>
-<p>For each command object it tries to find the referenced resource and sets the ownerReference of the command-CR to the one of the parent</p>
-</li>
-<li>
-<p>In theory users could do this themselves but it&#8217;s harder to use (i.e. having to find the uid)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>The parent controller will be notified and during its reconcile it can get a list of all commands sorted by creationTimestamp</p>
-</li>
-<li>
-<p>It can then work on the command - tracking progress in the status - and also potentially update the command-CR</p>
-</li>
-</ul>
-</div>
-<div class="ulist">
-<div class="title">Open questions:</div>
-<ul>
-<li>
-<p>Should the command CR be deleted immediately after it has been completed?</p>
-</li>
-<li>
-<p>Should the command CR be used to track progress in addition to or instead of the parent resource?</p>
-</li>
-</ul>
-</div>
-<div class="sect2">
-<h3 id="_positive_consequences"><a class="anchor" href="#_positive_consequences"></a>Positive Consequences</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>We do not change the spec of the main objects so we can keep imperative actions out of it</p>
-<div class="ulist">
-<ul>
-<li>
-<p>This allows users to keep the spec in version control</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_negative_consequences"><a class="anchor" href="#_negative_consequences"></a>Negative Consequences</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Implementation effort because each CRD needs a new controller</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Can be mitigated somehow because the controllers should be pretty uniform</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Can be harder to use</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Instead of being able to issue a simple command like <code>spark restart</code> users first have to construct a proper YAML file and then use kubectl to apply it</p>
-</li>
-<li>
-<p>Can be mitigated with custom CLIs</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_links"><a class="anchor" href="#_links"></a>Links</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/kubernetes/kubernetes/issues/72637" class="bare">https://github.com/kubernetes/kubernetes/issues/72637</a></p>
-</li>
-</ul>
-</div>
-</div>
 </div>
 </article>
   </div>

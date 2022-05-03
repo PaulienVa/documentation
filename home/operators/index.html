@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Overview :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/contribution_guide.html">
+    <title>Operators :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/operators/index.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -35,13 +35,13 @@
     </nav>
     <nav class="navbar-sub">
       <div class="container">
-        <a class="navbar-sub-item" href="../index.html">Overview</a>
-<a class="navbar-sub-item" href="../index.html">Architecture</a>
+        <a class="navbar-sub-item" href="../index.html">Home</a>
 <a class="navbar-sub-item" href="../getting_started.html">Getting Started</a>
 <a class="navbar-sub-item" href="../tutorials/end-to-end_data_pipeline_example.html">Tutorials</a>
 <div class="navbar-sub-item drop-down">
     Operators
     <div class="drop-down-content">
+    <a class="drop-down-item" href="index.html">Overview</a>
     <a class="drop-down-item" href="../../airflow/index.html">Apache Airflow</a>
     <a class="drop-down-item" href="../../druid/index.html">Apache Druid</a>
     <a class="drop-down-item" href="../../hbase/index.html">Apache HBase</a>
@@ -59,6 +59,7 @@
     <a class="drop-down-item" href="../../secret-operator/index.html">Secret</a>
     </div>
 </div>
+<a class="navbar-sub-item" href="../contributor/index.html">Contribute</a>
 
         <a class="arrow" href="javascript:document.querySelector('.navbar-sub').classList.toggle('open')">
           <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>
@@ -80,12 +81,6 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="../getting_started.html">Getting Started</a>
   </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../supported-versions.html">Supported Product Versions</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../monitoring.html">Monitoring</a>
-  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="0">
@@ -103,74 +98,132 @@
   </li>
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">Operators</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="supported_versions.html">Supported Product Versions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="monitoring.html">Monitoring</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../airflow/index.html">Apache Airflow</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../druid/index.html">Apache Druid</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../hbase/index.html">Apache HBase</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../hdfs/index.html">Apache Hadoop HDFS</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../hive/index.html">Apache Hive</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../kafka/index.html">Apache Kafka</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../nifi/index.html">Apache NiFi</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../spark/index.html">Apache Spark (standalone)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../spark-k8s/index.html">Apache Spark on K8S</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../superset/index.html">Apache Superset</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../trino/index.html">Trino</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../zookeeper/index.html">Apache ZooKeeper</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../opa/index.html">OpenPolicyAgent</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../commons-operator/index.html">Commons</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../secret-operator/index.html">Secret</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Contributor&#8217;s Guide</span>
+    <a class="nav-link" href="../contributor/index.html">Contributor&#8217;s Guide</a>
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="contribution_guide.html">Overview</a>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../contributor/steps.html">Steps to contribute</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="steps.html">Steps to contribute</a>
+    <a class="nav-link" href="../contributor/development_dashboard.html">Development Dashboard</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="development_dashboard.html">Development Dashboard</a>
+    <a class="nav-link" href="../contributor/service_discovery.html">Service Discovery</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="service_discovery.html">Service Discovery</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="opa_configuration.html">OPA Configuration</a>
+    <a class="nav-link" href="../contributor/opa_configuration.html">OPA Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Architectural Decision Records</span>
+    <a class="nav-link" href="../contributor/adr/index.html">Architectural Decision Records</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
     <button class="nav-item-toggle"></button>
     <span class="nav-text">Current</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ADR001-choose_project_language.html">ADR001: Use English as Documentation Language</a>
+    <a class="nav-link" href="../contributor/adr/ADR001-choose_project_language.html">ADR001: Use English as Documentation Language</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ADR002-choose_repository_structure.html">ADR002: Use Multiple Repositories instead of one Large Repository</a>
+    <a class="nav-link" href="../contributor/adr/ADR002-choose_repository_structure.html">ADR002: Use Multiple Repositories instead of one Large Repository</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ADR003-choose_review_mechanism.html">ADR003: Use RTC as Review Mechanism for Changes</a>
+    <a class="nav-link" href="../contributor/adr/ADR003-choose_review_mechanism.html">ADR003: Use RTC as Review Mechanism for Changes</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ADR004-choose_agent_programming_language.html">ADR004: Use Rust as programming language for the agent</a>
+    <a class="nav-link" href="../contributor/adr/ADR004-choose_agent_programming_language.html">ADR004: Use Rust as programming language for the agent</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ADR005-systemd_unit_file_location.html">ADR005: Decide on handling and location of systemd unit files</a>
+    <a class="nav-link" href="../contributor/adr/ADR005-systemd_unit_file_location.html">ADR005: Decide on handling and location of systemd unit files</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ADR007-defined_reuse_of_k8s.html">ADR007: Decide if Kubernetes Components Are to be Reused for Stackable</a>
+    <a class="nav-link" href="../contributor/adr/ADR007-defined_reuse_of_k8s.html">ADR007: Decide if Kubernetes Components Are to be Reused for Stackable</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ADR008-decide_reuse_of_operators.html">ADR008: Allow Reuse of Existing Kubernetes Operators</a>
+    <a class="nav-link" href="../contributor/adr/ADR008-decide_reuse_of_operators.html">ADR008: Allow Reuse of Existing Kubernetes Operators</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ADR009-selector_support.html">ADR009: Assigning Services to Nodes</a>
+    <a class="nav-link" href="../contributor/adr/ADR009-selector_support.html">ADR009: Assigning Services to Nodes</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ADR010-command_pattern.html">ADR010: Expressing one-shot commands in a Kubernetes-native way</a>
+    <a class="nav-link" href="../contributor/adr/ADR010-command_pattern.html">ADR010: Expressing one-shot commands in a Kubernetes-native way</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ADR011-directory_structure.html">ADR011: Directory Structure Used by Stackable Components on Managed Hosts</a>
+    <a class="nav-link" href="../contributor/adr/ADR011-directory_structure.html">ADR011: Directory Structure Used by Stackable Components on Managed Hosts</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ADR012-authn_token_management.html">ADR012: Authentication token management</a>
+    <a class="nav-link" href="../contributor/adr/ADR012-authn_token_management.html">ADR012: Authentication token management</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ADR013-user_authentication_for_products.html">ADR013: User Authentication for Products</a>
+    <a class="nav-link" href="../contributor/adr/ADR013-user_authentication_for_products.html">ADR013: User Authentication for Products</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ARD014-using_values_from_configmaps.html">ADR014: How Should Operators Use Values from ConfigMaps &amp; Secrets</a>
+    <a class="nav-link" href="../contributor/adr/ARD014-using_values_from_configmaps.html">ADR014: How Should Operators Use Values from ConfigMaps &amp; Secrets</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/ADR015_definition_of_s3_objects.html">Representation of S3 Buckets in CRDs</a>
+    <a class="nav-link" href="../contributor/adr/ADR015_definition_of_s3_objects.html">ADR015: Representation of S3 Buckets in CRDs</a>
   </li>
 </ul>
   </li>
@@ -179,7 +232,7 @@
     <span class="nav-text">Deprecated</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/deprecated/ADR006-choose_orchestrator_storage_backend.html">Use xxx as storage backend for the orchestrator</a>
+    <a class="nav-link" href="../contributor/adr/deprecated/ADR006-choose_orchestrator_storage_backend.html">Use xxx as storage backend for the orchestrator</a>
   </li>
 </ul>
   </li>
@@ -188,7 +241,7 @@
     <span class="nav-text">Drafts</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="adr/drafts/ADRx-choose_authorization_engine.html">Choose Authorization Engine</a>
+    <a class="nav-link" href="../contributor/adr/drafts/ADRx-choose_authorization_engine.html">Choose Authorization Engine</a>
   </li>
 </ul>
   </li>
@@ -347,194 +400,71 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Stackable Documentation</a></li>
-    <li>Contributor&#8217;s Guide</li>
-    <li><a href="contribution_guide.html">Overview</a></li>
+    <li><a href="index.html">Operators</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/contribution_guide.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/operators/pages/index.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Overview</h1>
-<div class="sect1">
-<h2 id="_introduction"><a class="anchor" href="#_introduction"></a>Introduction</h2>
-<div class="sectionbody">
+<h1 class="page">Operators</h1>
 <div class="paragraph">
-<p>Welcome to Stackable!</p>
+<p>This section of the Stackable documentation contains information about the individual Operators, as well as related information such as an overview over the <a href="supported_versions.html" class="xref page">supported product versions</a> and how to enable <a href="monitoring.html" class="xref page">monitoring</a> in all Operators.</p>
 </div>
 <div class="paragraph">
-<p>This document will show you the steps needed to contribute to the Stackable Platform. Contributions can come in many shapes and forms but in this document we&#8217;ll focus on code and documentation improvements. We&#8217;ll assume you already know what the Stackable Platform is and have a specific issue that you want solved.</p>
-</div>
-<div class="paragraph">
-<p>This document aims at getting your contribution posted as soon as possible.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_contribution_workflow"><a class="anchor" href="#_contribution_workflow"></a>Contribution Workflow</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The development of the Stackable Platform takes place on <a href="https://github.com/stackabletech">GitHub</a>. On GitHub, each repository has its own issue tracker and since Stackable is a platform, there are several repositories where issues and pull-requests can be created. If you already have a good idea where the issue or pull-request belongs, then you can skip reading to the contribution steps below. Otherwise, you might want to a have a look at the <a href="development_dashboard.html" class="xref page">Development Dashboard</a> for hints.</p>
-</div>
-<div class="paragraph">
-<p>Contribution steps:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Lookup if an existing issue already covers your problem</p>
-</li>
-<li>
-<p>Submit a new issue. If it is only a trivial change like fixing a typo then an issue is not necessary and a pull-request can be created directly.</p>
-</li>
-<li>
-<p>Submit a pull-request if you want. The necessary steps to successfully create an approvable pull-request are detailed in <a href="steps.html" class="xref page">Steps to contribute</a>.</p>
-</li>
-<li>
-<p>Respond to questions or feedback</p>
-</li>
-<li>
-<p>Improve your submission if necessary</p>
-</li>
-<li>
-<p>Closing your contribution</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Before submitting a new issue or pull-request, it&#8217;s always a good idea to check if the issue has already been discussed in the past and if there is a resolution for it. If that is the case, consider contributing to the existing issue by either adding new feedback or code.</p>
-</div>
-<div class="paragraph">
-<p>When creating a new issue please provide as much information as you consider relevant. Issues can be bug reports, feature requests and so on. The Stackable repositories provide templates to make it easier to submit high-quality issues.</p>
-</div>
-<div class="paragraph">
-<p>When submitting a pull-request, you might be interested in knowing about the necessary <a href="#_development_environment">Development Environment</a>.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_repo_walkthrough"><a class="anchor" href="#_repo_walkthrough"></a>Repo Walkthrough</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Please see the <a href="development_dashboard.html" class="xref page">Development Dashboard</a> page to get an overview of the most important Git repositories used by us.</p>
-</div>
-<div class="sect2">
-<h3 id="_operator_repositories"><a class="anchor" href="#_operator_repositories"></a>Operator Repositories</h3>
-<div class="paragraph">
-<p>At the core of the Stackable Platform are Kubernetes operators used to install and manage various data products.
-Each operator has its own repository, and therefore its own issue tracker and build pipeline.
-Every operator repository contains:</p>
+<p>Find a list of all Operators below:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>The operator&#8217;s source code</p>
+<p><a href="../../airflow/index.html" class="xref page">Apache Airflow</a></p>
 </li>
 <li>
-<p>One or more Custom Resource Definitions owned by the operator</p>
+<p><a href="../../druid/index.html" class="xref page">Apache Druid</a></p>
 </li>
 <li>
-<p><code>Helm</code> chart to easily install the operator</p>
+<p><a href="../../hbase/index.html" class="xref page">Apache HBase</a></p>
 </li>
 <li>
-<p>Documentation</p>
+<p><a href="../../hdfs/index.html" class="xref page">Apache Hadoop HDFS</a></p>
 </li>
 <li>
-<p><code>Dockerfile</code> and related artifacts to generate the operator image</p>
+<p><a href="../../hive/index.html" class="xref page">Apache Hive</a></p>
+</li>
+<li>
+<p><a href="../../kafka/index.html" class="xref page">Apache Kafka</a></p>
+</li>
+<li>
+<p><a href="../../nifi/index.html" class="xref page">Apache NiFi</a></p>
+</li>
+<li>
+<p><a href="../../spark/index.html" class="xref page">Apache Spark (standalone)</a></p>
+</li>
+<li>
+<p><a href="../../spark-k8s/index.html" class="xref page">Apache Spark on K8S</a></p>
+</li>
+<li>
+<p><a href="../../superset/index.html" class="xref page">Apache Superset</a></p>
+</li>
+<li>
+<p><a href="../../trino/index.html" class="xref page">Trino</a></p>
+</li>
+<li>
+<p><a href="../../zookeeper/index.html" class="xref page">Apache ZooKeeper</a></p>
+</li>
+<li>
+<p><a href="../../opa/index.html" class="xref page">OpenPolicyAgent</a></p>
+</li>
+<li>
+<p><a href="../../commons-operator/index.html" class="xref page">Commons</a></p>
+</li>
+<li>
+<p><a href="../../secret-operator/index.html" class="xref page">Secret</a></p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>See the <a href="development_dashboard.html" class="xref page">Development Dashboard</a> for a detailed overview.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_development_environment"><a class="anchor" href="#_development_environment"></a>Development Environment</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In order to contribute source code, you need an environment that is capable of running the following tools:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://www.docker.com/">Docker</a></p>
-</li>
-<li>
-<p><a href="https://kind.sigs.k8s.io/">Kind</a></p>
-</li>
-<li>
-<p><a href="https://helm.sh/">Helm</a></p>
-</li>
-<li>
-<p><a href="https://kuttl.dev/">Kuttl</a></p>
-</li>
-<li>
-<p><a href="https://www.rust-lang.org/">Rust</a></p>
-</li>
-<li>
-<p><a href="https://www.python.org/">Python</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The documentation is written in <a href="https://asciidoctor.org">AsciiDoc</a> format and processed with <a href="https://antora.org">Antora</a></p>
-</div>
-<div class="paragraph">
-<p>Almost all build scripts assume a Unix based environment (preferably Linux).</p>
-</div>
-<div class="sect2">
-<h3 id="_ides_and_editors"><a class="anchor" href="#_ides_and_editors"></a>IDEs and Editors</h3>
-<div class="paragraph">
-<p>Of course you are free to use whatever works for you best. No editor is perfect but we have positive experience with:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://www.jetbrains.com/idea/">IntelliJ Idea</a> with the <code>Rust</code> plug-in</p>
-</li>
-<li>
-<p><a href="https://code.visualstudio.com/">VisualStudio Code</a> with the <code>rust-analyzer</code> extension</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>For <code>VisualStudio Code</code> we also recommend the following extensions:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Better Toml</p>
-</li>
-<li>
-<p>CodeLLDB (for debugging)</p>
-</li>
-<li>
-<p>Error Lens (inline error messages)</p>
-</li>
-<li>
-<p>AsciiDoc</p>
-</li>
-<li>
-<p>GitHub Pull requests and Issues</p>
-</li>
-<li>
-<p>GitLens</p>
-</li>
-<li>
-<p>Python</p>
-</li>
-<li>
-<p>Docker</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
 </div>
 </article>
   </div>

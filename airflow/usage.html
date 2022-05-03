@@ -586,6 +586,331 @@ will run and the job tree will update automatically:</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_mounting_dags"><a class="anchor" href="#_mounting_dags"></a>Mounting DAGs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>DAGs can be mounted by using a <code>ConfigMap</code> or a <code>PersistentVolumeClaim</code>. This is best illustrated with an example of each, shown in the next section.</p>
+</div>
+<div class="sect2">
+<h3 id="_via_configmap"><a class="anchor" href="#_via_configmap"></a>via <code>ConfigMap</code></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-dag <i class="conum" data-value="1"></i><b>(1)</b>
+data:
+  test_airflow_dag.py: | <i class="conum" data-value="2"></i><b>(2)</b>
+    from datetime import datetime, timedelta
+    from airflow import DAG
+    from airflow.operators.bash import BashOperator
+    from airflow.operators.dummy import DummyOperator
+
+    with DAG(
+        dag_id='test_airflow_dag',
+        schedule_interval='0 0 * * *',
+        start_date=datetime(2021, 1, 1),
+        catchup=False,
+        dagrun_timeout=timedelta(minutes=60),
+        tags=['example', 'example2'],
+        params={"example_key": "example_value"},
+    ) as dag:
+        run_this_last = DummyOperator(
+            task_id='run_this_last',
+        )
+
+        # [START howto_operator_bash]
+        run_this = BashOperator(
+            task_id='run_after_loop',
+            bash_command='echo 1',
+        )
+        # [END howto_operator_bash]
+
+        run_this &gt;&gt; run_this_last
+
+        for i in range(3):
+            task = BashOperator(
+                task_id='runme_' + str(i),
+                bash_command='echo "{{ task_instance_key_str }}" &amp;&amp; sleep 1',
+            )
+            task &gt;&gt; run_this
+
+        # [START howto_operator_bash_template]
+        also_run_this = BashOperator(
+            task_id='also_run_this',
+            bash_command='echo "run_id={{ run_id }} | dag_run={{ dag_run }}"',
+        )
+        # [END howto_operator_bash_template]
+        also_run_this &gt;&gt; run_this_last
+
+    # [START howto_operator_bash_skip]
+    this_will_skip = BashOperator(
+        task_id='this_will_skip',
+        bash_command='echo "hello world"; exit 99;',
+        dag=dag,
+    )
+    # [END howto_operator_bash_skip]
+    this_will_skip &gt;&gt; run_this_last
+
+    if __name__ == "__main__":
+        dag.cli()</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>---
+apiVersion: airflow.stackable.tech/v1alpha1
+kind: AirflowCluster
+metadata:
+  name: airflow
+spec:
+  version: 2.2.5-python39
+  statsdExporterVersion: v0.22.4
+  executor: CeleryExecutor
+  loadExamples: false
+  exposeConfig: false
+  volumes:
+    - name: cm-dag <i class="conum" data-value="3"></i><b>(3)</b>
+      configMap:
+        name: cm-dag <i class="conum" data-value="4"></i><b>(4)</b>
+  volumeMounts:
+    - name: cm-dag <i class="conum" data-value="5"></i><b>(5)</b>
+      mountPath: /dags/test_airflow_dag.py <i class="conum" data-value="6"></i><b>(6)</b>
+      subPath: test_airflow_dag.py <i class="conum" data-value="7"></i><b>(7)</b>
+  webservers:
+    roleGroups:
+      default:
+        envOverrides:
+          AIRFLOW__CORE__DAGS_FOLDER: "/dags" <i class="conum" data-value="8"></i><b>(8)</b>
+        config:
+          credentialsSecret: simple-airflow-credentials
+  workers:
+    roleGroups:
+      default:
+        envOverrides:
+          AIRFLOW__CORE__DAGS_FOLDER: "/dags" <i class="conum" data-value="8"></i><b>(8)</b>
+        config:
+          credentialsSecret: simple-airflow-credentials
+        replicas: 2
+  schedulers:
+    roleGroups:
+      default:
+        envOverrides:
+          AIRFLOW__CORE__DAGS_FOLDER: "/dags" <i class="conum" data-value="8"></i><b>(8)</b>
+        config:
+          credentialsSecret: simple-airflow-credentials</pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The name of the configuration map</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The name of the DAG (this is a renamed copy of the <code>example_bash_operator.py</code> from the Airflow examples)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The volume backed by the configuration map</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The name of the configuration map referenced by the Airflow cluster</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The name of the mounted volume</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The path of the mounted resource. Note that should map to a single DAG.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The resource has to be defined using <code>subPath</code>: this is to prevent the versioning of configuration map elements which may cause a conflict with how Airflow propagates DAGs between its components.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>If the mount path described above is anything other than the standard location (the default is <code>$AIRFLOW_HOME/dags</code>), then the location should be defined using the relevant environment variable.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The advantage of this approach is that a DAG can be provided "in-line", as it were. This becomes cumbersome when multiple DAGs are to be made available in this way, as each one has to be mapped individually. For multiple DAGs it is probably easier to expose them all via a mounted volume, which is shown below.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_via_persistentvolumeclaim"><a class="anchor" href="#_via_persistentvolumeclaim"></a>via <code>PersistentVolumeclaim</code></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-airflow <i class="conum" data-value="1"></i><b>(1)</b>
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: batch/v1
+kind: Job <i class="conum" data-value="2"></i><b>(2)</b>
+metadata:
+  name: airflow-dags
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      volumes:
+        - name: external-dags <i class="conum" data-value="3"></i><b>(3)</b>
+          persistentVolumeClaim:
+            claimName: pvc-airflow <i class="conum" data-value="4"></i><b>(4)</b>
+      initContainers:
+        - name: dest-dir
+          image: docker.stackable.tech/stackable/tools:0.2.0-stackable0
+          env:
+            - name: DEST_DIR
+              value: "/stackable/externals"
+          command:
+            [
+              "bash",
+              "-x",
+              "-c",
+              "mkdir -p $DEST_DIR &amp;&amp; chown stackable:stackable ${DEST_DIR} &amp;&amp; chmod -R a=,u=rwX,g=rwX ${DEST_DIR}",
+            ]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: external-dags <i class="conum" data-value="5"></i><b>(5)</b>
+              mountPath: /stackable/externals <i class="conum" data-value="6"></i><b>(6)</b>
+      containers:
+        - name: airflow-dags
+          image: docker.stackable.tech/stackable/tools:0.2.0-stackable0
+          env:
+            - name: DEST_DIR
+              value: "/stackable/externals"
+          command: <i class="conum" data-value="7"></i><b>(7)</b>
+            [
+              "bash",
+              "-x",
+              "-c",
+              "curl -L  https://raw.githubusercontent.com/apache/airflow/2.2.5/airflow/example_dags/example_bash_operator.py \
+              -o ${DEST_DIR}/example_bash_operator.py &amp;&amp; \
+              curl -L  https://raw.githubusercontent.com/apache/airflow/2.2.5/airflow/example_dags/example_complex.py \
+              -o ${DEST_DIR}/example_complex.py &amp;&amp; \
+              curl -L  https://raw.githubusercontent.com/apache/airflow/2.2.5/airflow/example_dags/example_branch_datetime_operator.py \
+              -o ${DEST_DIR}/example_branch_datetime_operator.py",
+            ]
+          volumeMounts:
+            - name: external-dags <i class="conum" data-value="5"></i><b>(5)</b>
+              mountPath: /stackable/externals <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: airflow.stackable.tech/v1alpha1
+kind: AirflowCluster
+metadata:
+  name: airflow
+spec:
+  version: 2.2.4-python39
+  statsdExporterVersion: v0.22.4
+  executor: CeleryExecutor
+  loadExamples: false
+  exposeConfig: false
+  volumes:
+    - name: external-dags <i class="conum" data-value="8"></i><b>(8)</b>
+      persistentVolumeClaim:
+        claimName: pvc-airflow <i class="conum" data-value="9"></i><b>(9)</b>
+  volumeMounts:
+    - name: external-dags <i class="conum" data-value="10"></i><b>(10)</b>
+      mountPath: /stackable/external-dags <i class="conum" data-value="11"></i><b>(11)</b>
+  webservers:
+    roleGroups:
+      default:
+        envOverrides:
+          AIRFLOW__CORE__DAGS_FOLDER: "/stackable/external-dags" <i class="conum" data-value="12"></i><b>(12)</b>
+        config:
+          credentialsSecret: simple-airflow-credentials
+  workers:
+    roleGroups:
+      default:
+        envOverrides:
+          AIRFLOW__CORE__DAGS_FOLDER: "/stackable/external-dags" <i class="conum" data-value="12"></i><b>(12)</b>
+        config:
+          credentialsSecret: simple-airflow-credentials
+        replicas: 2
+  schedulers:
+    roleGroups:
+      default:
+        envOverrides:
+          AIRFLOW__CORE__DAGS_FOLDER: "/stackable/external-dags" <i class="conum" data-value="12"></i><b>(12)</b>
+        config:
+          credentialsSecret: simple-airflow-credentials</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The name of the <code>PersistentVolumeClaim</code> that references the PV</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Job used to populate the <code>PersistentVolumeClaim</code> with DAG files</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The volume name that will be mounted as a target for the DAG files</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Defines the <code>Volume</code> backed by the PVC, local to the Custom Resource</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The <code>VolumeMount</code> used by the Custom Resource</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The path for the <code>VolumeMount</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The command used to access/download the DAG files to a specified location</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>The <code>Volume</code> used by this Custom Resource</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>The <code>PersistentVolumeClaim</code> that backs this <code>Volume</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>The <code>VolumeMount</code> referencing the <code>Volume</code> in the previous step</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>The path where this <code>Volume</code> is located for each role (webserver, worker, scheduler)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
+<td>If the mount path described above is anything other than the standard location (the default is <code>$AIRFLOW_HOME/dags</code>), then the location should be defined using the relevant environment variable.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
 </article>
   </div>
 </main>

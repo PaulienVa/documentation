@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ADR013: User Authentication for Products :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR013-user_authentication_for_products.html">
+    <title>TLS authentication :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR016-tls-authentication.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -216,7 +216,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR012-authn_token_management.html">ADR012: Authentication token management</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="4">
+  <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR013-user_authentication_for_products.html">ADR013: User Authentication for Products</a>
   </li>
   <li class="nav-item" data-depth="4">
@@ -225,7 +225,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR015_definition_of_s3_objects.html">ADR015: Representation of S3 Buckets in CRDs</a>
   </li>
-  <li class="nav-item" data-depth="4">
+  <li class="nav-item is-current-page" data-depth="4">
     <a class="nav-link" href="ADR016-tls-authentication.html">TLS authentication</a>
   </li>
 </ul>
@@ -406,17 +406,17 @@
     <li><a href="../index.html">Contributor&#8217;s Guide</a></li>
     <li><a href="index.html">Architectural Decision Records</a></li>
     <li>Current</li>
-    <li><a href="ADR013-user_authentication_for_products.html">ADR013: User Authentication for Products</a></li>
+    <li><a href="ADR016-tls-authentication.html">TLS authentication</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR013-user_authentication_for_products.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR016-tls-authentication.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">ADR013: User Authentication for Products</h1>
+<h1 class="page">TLS authentication</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="ulist">
@@ -429,27 +429,27 @@
 <div class="ulist">
 <ul>
 <li>
-<p>Teo Klestrup Röijezon</p>
+<p>Malte Sander</p>
+</li>
+<li>
+<p>Sebastian Bernauer</p>
 </li>
 <li>
 <p>Sönke Liebau</p>
 </li>
 <li>
-<p>Jim Halfpenny</p>
-</li>
-<li>
-<p>Sebastian Bernauer</p>
+<p>Teo Klestrup Röijezon</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Date: 2022-03-03</p>
+<p>Date: 2022-05-04</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Technical Story: <a href="https://github.com/stackabletech/issues/issues/170" class="bare">https://github.com/stackabletech/issues/issues/170</a></p>
+<p>Technical Story: <a href="https://github.com/stackabletech/zookeeper-operator/issues/466" class="bare">https://github.com/stackabletech/zookeeper-operator/issues/466</a></p>
 </div>
 </div>
 </div>
@@ -457,8 +457,8 @@
 <h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Customers will generally want to configure all user-facing products to authenticate the user against a common user directory.
-We&#8217;re aiming for a unified user experience when authenticating users in different products.</p>
+<p>Our products use TLS to encrypt network traffic and/or to authenticate themselves and their clients.
+We want to define a common way - across all the products - to configure these mechanisms.</p>
 </div>
 </div>
 </div>
@@ -468,10 +468,13 @@ We&#8217;re aiming for a unified user experience when authenticating users in di
 <div class="ulist">
 <ul>
 <li>
-<p>Multiple authentication systems and protocols exist, and not all products support all protocols</p>
+<p>Must support using no TLS usage, TLS only for encryption and TLS for encryption and authentication</p>
 </li>
 <li>
-<p>The cluster administrator will typically want to use the same underlying authentication system for all services</p>
+<p>Should fit into out existing authentication concept from <a href="ADR013-user_authentication_for_products.html" class="xref page">ADR013: User Authentication for Products</a></p>
+</li>
+<li>
+<p>Should be easy to understand and use for the user</p>
 </li>
 </ul>
 </div>
@@ -480,18 +483,18 @@ We&#8217;re aiming for a unified user experience when authenticating users in di
 <div class="sect1">
 <h2 id="_considered_options"><a class="anchor" href="#_considered_options"></a>Considered Options</h2>
 <div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
+<div class="ulist">
+<ul>
 <li>
-<p>Manage authentication configuration inline in the <code>ProductCluster</code> CRD</p>
+<p>Handle TLS as special case</p>
 </li>
 <li>
-<p>Introduce a new <code>ProductAuthentication</code> CRD per product that the <code>ProductCluster</code> CRD refers to</p>
+<p>Extend <code>AuthenticationClass</code> to support TLS</p>
 </li>
 <li>
-<p>Introduce a new <code>AuthenticationClass</code> CRD that the product CRDs reference</p>
+<p>Split server-side and client-side authentication into separate config sections</p>
 </li>
-</ol>
+</ul>
 </div>
 </div>
 </div>
@@ -499,7 +502,7 @@ We&#8217;re aiming for a unified user experience when authenticating users in di
 <h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><strong>Option 3: Introduce a new <code>AuthenticationClass</code> CRD that the product CRDs reference</strong></p>
+<p>Chosen option: "Split server-side and client-side authentication into separate config sections", because separating them allowed us to model the underlying structs the best way.</p>
 </div>
 </div>
 </div>
@@ -507,175 +510,295 @@ We&#8217;re aiming for a unified user experience when authenticating users in di
 <h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_authentication_in_productcluster"><a class="anchor" href="#_authentication_in_productcluster"></a>Authentication in <code>ProductCluster</code></h3>
+<h3 id="_handle_tls_as_special_case"><a class="anchor" href="#_handle_tls_as_special_case"></a>Handle TLS as special case</h3>
 <div class="paragraph">
-<p>We embed a the authentication settings directly into the product&#8217;s primary CRD. This would look something like:</p>
+<p>We don&#8217;t support TLS inside <code>AuthenticationClass</code>.
+We need a new <code>tlsConfig</code> attribute on every product CRD.
+An implementation could look something like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: nifi.stackable.tech/v1alpha1
-kind: NifiCluster
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperCluster
 metadata:
-  name: nifi
+  name: ssl-zk
 spec:
-  authenticationConfig:
-    methods:
-    - ldap:
-        hostname: ldap.server
-        port: 389
-        domain: domain.local
-        bindCredentialsSecret: nifi-ldap-bind-credentials</code></pre>
+  config:
+    tlsConfiguration: # optional
+      quorum: # Communication between between different Zookeeper nodes
+        tls: # commons tls config
+          verification:
+              none: {}
+              # OR
+              server:
+                caCert:
+                    webPki: {}
+                    # OR
+                    secretClass: tls # Reference to SecretClass below
+              # OR
+              mutual:
+                certSecretClass: tls # Reference to SecretClass below
+      clients: # Communication between Zookeeper clients and Zookeeper nodes
+        tls: # commons tls config
+          verification:
+              none: {}
+              # OR
+              server:
+                caCert:
+                    webPki: {}
+                    # OR
+                    secretClass: tls # Reference to SecretClass below
+              # OR
+              mutual:
+                certSecretClass: tls # Reference to SecretClass below
+  servers:
+    roleGroups:
+      primary:
+        replicas: 2
+        config:
+          myidOffset: 10
+      secondary:
+        replicas: 1
+        config:
+          myidOffset: 20
+  version: 3.8.0
+  stopped: false
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: tls
+spec:
+  backend:
+    autoTls:
+      ca:
+        secret:
+          name: secret-provisioner-tls-ca
+          namespace: default
+        autoGenerate: true</code></pre>
 </div>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because we can expose exactly the options that each product supports</p>
+<p>Good, because simple (no indirection through <code>AuthenticationClass</code> object)</p>
 </li>
 <li>
-<p>Good, because it is (relatively) simple to implement and requires no new components</p>
-</li>
-<li>
-<p>Bad, because it will be difficult to keep the option schema consistent between Stackable operators</p>
-</li>
-<li>
-<p>Bad, because it will be difficult for customers to keep their configuration synchronized across their Stackable Data Platform installation</p>
-</li>
-<li>
-<p>Bad, because it forces application administrators to know about authentication directory details</p>
+<p>Bad, because TLS is a special case and does not fit in our <code>AuthenticationClass</code> mechanism.</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_productauthentication_crd_per_product"><a class="anchor" href="#_productauthentication_crd_per_product"></a><code>ProductAuthentication</code> CRD per product</h3>
+<h3 id="_extend_authenticationclass_to_support_tls"><a class="anchor" href="#_extend_authenticationclass_to_support_tls"></a>Extend <code>AuthenticationClass</code> to support TLS</h3>
 <div class="paragraph">
-<p>Every product defines its own CRD that contains exactly the authentication options that that product supports. For example:</p>
+<p>We already have a common <code>AuthenticationClass</code> structure discussed in <a href="ADR013-user_authentication_for_products.html" class="xref page">ADR013: User Authentication for Products</a>
+This option extends the <code>AuthenticationClass</code> so that it also support TLS authentication.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: nifi.stackable.tech/v1alpha1
-kind: NifiCluster
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperCluster
 metadata:
-  name: nifi
+  name: ssl-zk
 spec:
-  authenticationConfig:
-    methods:
-    - nifi-ldap-authn
+  config:
+    tlsAuthenticationConfig:
+      quorum:
+        authenticationClass: zookeeper-tls-mutual
+      clients:
+        authenticationClass: zookeeper-tls
+  servers:
+    roleGroups:
+      primary:
+        replicas: 2
+        config:
+          myidOffset: 10
+      secondary:
+        replicas: 1
+        config:
+          myidOffset: 20
+  version: 3.8.0
+  stopped: false
 ---
-apiVersion: nifi.stackable.tech/v1alpha1
-kind: NifiAuthenticationMethod
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
 metadata:
-  name: nifi-ldap-authn
+  name: zookeeper-tls-mutual
 spec:
-  ldap:
-    hostname: ldap.server
-    port: 389
-    domain: domain.local
-    bindCredentials:
-      secretClass: nifi-ldap-bind-credentials
-      scope: Service</code></pre>
+  provider:
+    tls:
+      verification:
+          none: {}
+          # OR
+          server:
+            caCert:
+                webPki: {}
+                # OR
+                secretClass: tls # Reference to SecretClass below
+          # OR
+          mutual:
+          certSecretClass: tls # Reference to SecretClass below
+---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: zookeeper-tls
+spec:
+  provider:
+    tls:
+      verification:
+          none: {}
+          # OR
+          server:
+            caCert:
+                webPki: {}
+                # OR
+                secretClass: tls # Reference to SecretClass below
+          # OR
+          mutual:
+          certSecretClass: tls # Reference to SecretClass below
+      verification:
+        mutual:
+          caCert:
+            secretClass: tls # Reference to SecretClass below
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: tls
+spec:
+  backend:
+    autoTls:
+      ca:
+        secret:
+          name: secret-provisioner-tls-ca
+          namespace: default
+        autoGenerate: true</code></pre>
 </div>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because we can expose exactly the options that each product supports</p>
+<p>Good, because TLS is handled via the generic <code>AuthenticationClass</code> mechanism.</p>
 </li>
 <li>
-<p>Good, because it allows separation of ownership between products and authentication system</p>
-</li>
-<li>
-<p>Bad, because it will be difficult to keep the option schema consistent between Stackable operators</p>
-</li>
-<li>
-<p>Bad, because it will be difficult for customers to keep their configuration synchronized across their Stackable Data Platform products</p>
-</li>
-<li>
-<p>Bad, because it forces authentication administrators to know about each product</p>
+<p>Bad, because an <code>AuthenticationClass</code> can express: Don&#8217;t do any authentication at all</p>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_global_authenticationclass"><a class="anchor" href="#_global_authenticationclass"></a>Global <code>AuthenticationClass</code></h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_split_server_side_and_client_side_authentication_into_separate_config_sections"><a class="anchor" href="#_split_server_side_and_client_side_authentication_into_separate_config_sections"></a>Split server-side and client-side authentication into separate config sections</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperCluster
+metadata:
+  name: ssl-zk
+spec:
+  config:
+    tls: # optional, defaults to "secretClass: tls"
+      secretClass: tls # enables encryption and server verification
+    clientAuthentication: # optional, if we should authn the clients via TLS
+      authenticationClass: zookeeper-tls
+    # would probably just be left as default in the vast majority of clusters
+    # Use mutual verification between Zookeeper Nodes
+    # mandatory
+    quorumTlsSecretClass: tls
+  servers:
+    roleGroups:
+      primary:
+        replicas: 2
+        config:
+          myidOffset: 10
+      secondary:
+        replicas: 1
+        config:
+          myidOffset: 20
+  version: 3.8.0
+  stopped: false
+---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: zookeeper-tls
+spec:
+  provider:
+    # triggers TLS config to also be used for client authn
+    tls: {}
+    # OR...
+    tls:
+      # overrides secretclass used for provisioning client certs
+      clientCertSecretClass: tls-client
+    # OR...
+    # TLS is still used for server authn, but another
+    # method is used for client authn
+    ldap: ldapStuff{...}
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: tls
+spec:
+  backend:
+    autoTls:
+      ca:
+        secret:
+          name: secret-provisioner-tls-ca
+          namespace: default
+        autoGenerate: true</code></pre>
+</div>
+</div>
 <div class="paragraph">
-<p>We define a common <code>AuthenticationClass</code> CRD that we try to share between all operators.
-It&#8217;s cluster-scoped so that a LDAP bind can be shared between multiple namespaces.
-For example:</p>
+<p>As a recap:
+This is how our products connect to TLS-secured services outside of the Stackable Cluster (e.g. Superset to LDAP).
+Mutual verification is not supported this way, as client-side authentication is handled via <code>AuthenticationClass</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: nifi.stackable.tech/v1alpha1
-kind: NifiCluster
-metadata:
-  name: nifi
-spec:
-  authenticationConfig:
-    methods:
-    - authenticationClass: ldap-1
-    - authenticationClass: ldap-2
-      ldapOverwrite: # optional
-        ignoreCase: true
-    - authenticationClass: kerberos # We check for the correct AuthenticationClass type =&gt; Otherwise we throw a warning
-      kerberosOverwrite: # optional. we have to check for the correct overwrite type =&gt; Warning otherwise. Is we try ldapOverwrite to kerberos AuthenticationClass they will be ignored
-        udp: true
----
-apiVersion: auth.stackable.tech/v1alpha1
-kind: AuthenticationClass
-metadata:
-  name: ldap-1
-spec:
-  ldap: # Enum(ldap, kerberos, etc.)
-    hostname: ldap.server
-    port: 389
-    domain: domain.local
-    bindCredentials:
-      secretClass: ldap-bind-credentials
-      scope: Service
----
-apiVersion: auth.stackable.tech/v1alpha1
-kind: AuthenticationClass
-metadata:
-  name: kerberos
-spec:
-  kerberos:
-    ticketServer: my.kerberos.server
-    realm: myrealm</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+[ProductCRD...]
+  tls:
+    verification:
+      none: {}
+      # OR
+      server:
+        caCert:
+          webPki: {}
+          # OR
+          secretClass: tls # Reference to a SecretClass providing the ca.crt</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Here, <code>bindCredentials</code> is specified as a reference to a <code>SecretClass</code>, which allows secret-operator to bind in separate
-credentials for each cluster (or even <code>Pod</code>, depending on how things are set up) that uses the <code>AuthenticationClass</code>,
-while letting a cluster administrator centralize the management of the <code>AuthenticationClass</code>.</p>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/adr/16_option3.png" alt="16 option3">
+</div>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because it allows complete separation between product and authentication ownership</p>
+<p>Good, because TLS is handled via the generic <code>AuthenticationClass</code> mechanism.</p>
 </li>
 <li>
-<p>Good, because it allows a single interface for authentication owners to integrate with</p>
+<p>Good, because clients don&#8217;t need to know/understand <code>AuthenticationClass</code> objects. They only read the Discovery <code>ConfigMap</code> and the contained SecretClasses.</p>
 </li>
 <li>
-<p>Good, because it enforces a consistent interface between Stackable operators</p>
+<p>Bad, because it&#8217;s more complicated because of the indirection via <code>AuthenticationClass</code>.</p>
 </li>
 <li>
-<p>Bad, because it requires us to set up a new commons operator with the <code>AuthenticationClass</code> CRD</p>
+<p>Bad, because the client operator needs to read the Discovery <code>ConfigMap</code> rather than simply mounting it into the client product.</p>
 </li>
 <li>
-<p>Bad, because it requires introducing a new dependency on the commons operator for all Stackable operators</p>
-</li>
-<li>
-<p>Bad, because not all options (either whole authentication providers or individual config fields) are supported by all products.
-Additional options can be specified in the <code>ProductCluster</code> <code>authenticationConfig</code> section.</p>
+<p>Bad, because doing so external clients (outside of Stackable) must need to take more effort to connect to Stackable services e.g. retrieve ca cert from <code>SecretClass</code>.</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>Initially we will start to implement the <code>AuthenticationClass</code> in a concrete operator as a spike.
-Before releasing the new CRD it will be moved into a new separate operator that contains common CRDs that are shared between all operators (there will be some other shared CRDs in the future)</p>
-</div>
 </div>
 </div>
 </div>

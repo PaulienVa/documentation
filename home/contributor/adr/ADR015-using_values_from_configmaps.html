@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ADR012: Supported Kubernetes versions :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR012-supported-kubernetes-versions.html">
+    <title>ADR015: How Should Operators Use Values from ConfigMaps &amp; Secrets :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR015-using_values_from_configmaps.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -217,16 +217,19 @@
     <a class="nav-link" href="ADR012-authn_token_management.html">ADR012: Authentication token management</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="ADR013-user_authentication_for_products.html">ADR013: User Authentication for Products</a>
+    <a class="nav-link" href="ADR013-supported_kubernetes_versions.html">ADR013: Supported Kubernetes versions</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="ARD014-using_values_from_configmaps.html">ADR014: How Should Operators Use Values from ConfigMaps &amp; Secrets</a>
+    <a class="nav-link" href="ADR014-user_authentication_for_products.html">ADR014: User Authentication for Products</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="4">
+    <a class="nav-link" href="ADR015-using_values_from_configmaps.html">ADR015: How Should Operators Use Values from ConfigMaps &amp; Secrets</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="ADR015_definition_of_s3_objects.html">ADR015: Representation of S3 Buckets in CRDs</a>
+    <a class="nav-link" href="ADR016-definition_of_s3_objects.html">ADR016: Representation of S3 Buckets in CRDs</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="ADR016-tls-authentication.html">TLS authentication</a>
+    <a class="nav-link" href="ADR017-tls_authentication.html">ADR017: TLS authentication</a>
   </li>
 </ul>
   </li>
@@ -403,173 +406,83 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../../index.html">Stackable Documentation</a></li>
-    <li><a href="ADR012-supported-kubernetes-versions.html">ADR012: Supported Kubernetes versions</a></li>
+    <li><a href="../index.html">Contributor&#8217;s Guide</a></li>
+    <li><a href="index.html">Architectural Decision Records</a></li>
+    <li>Current</li>
+    <li><a href="ADR015-using_values_from_configmaps.html">ADR015: How Should Operators Use Values from ConfigMaps &amp; Secrets</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR012-supported-kubernetes-versions.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR015-using_values_from_configmaps.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">ADR012: Supported Kubernetes versions</h1>
+<h1 class="page">ADR015: How Should Operators Use Values from ConfigMaps &amp; Secrets</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Status: draft</p>
+<p>Status: accepted</p>
 </li>
 <li>
-<p>Deciders: Lars Francke</p>
+<p>Deciders:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Felix Hennig</p>
 </li>
 <li>
-<p>Date: 2022-02-04</p>
+<p>Razvan Mihai</p>
+</li>
+<li>
+<p>Sebastian Bernauer</p>
+</li>
+<li>
+<p>Sönke Liebau</p>
+</li>
+<li>
+<p>Teo Klestrup Röijezon</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Date: 2022-04-28</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Technical Story: <a href="https://github.com/stackabletech/documentation/issues/83">Document supported Kubernetes versions</a></p>
+<p>Technical Story: <a href="https://github.com/stackabletech/issues/issues/208">#208</a></p>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_kubernetes_version_policy"><a class="anchor" href="#_kubernetes_version_policy"></a>Kubernetes Version Policy</h3>
 <div class="paragraph">
-<p>Multiple new versions of Kubernetes are released every year (currently 3). Security fixes might come in between. Different Kubernetes components (including kubectl) will only support a limited number of versions, as mandated by kubernetes' <a href="https://kubernetes.io/releases/version-skew-policy/">Version Skew Policy</a>. Therefore, we need to define the supported Kubernetes versions.</p>
+<p>One of the main focus areas of Stackable is making components of the stack work together well.
+This requires a high degree of composability where one component refers to another compenent in its definition.
+While this is a simple concept in principle it requires that operators obtain information about the object that is referred to and inject this information into the configuration of the object that refers to it.
+An example for this is a NiFi cluster definition referring to a ZooKeeper cluster definition via a znode name:</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: nifi.stackable.tech/v1alpha1
+kind: NifiCluster
+metadata:
+  name: simple-nifi
+spec:
+  zookeeperConfigMapName: simple-nifi-znode</code></pre>
 </div>
-<div class="sect2">
-<h3 id="_deprecation_and_removal_of_older_resource_variants"><a class="anchor" href="#_deprecation_and_removal_of_older_resource_variants"></a>Deprecation and Removal of older resource variants</h3>
-<div class="paragraph">
-<p>The API overview provides an overview of the <a href="https://kubernetes.io/docs/reference/using-api/deprecation-policy/#deprecating-a-feature-or-behavior">Kubernetes Deprecation Policy</a>. In there, we find rules that can guide our decisions.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>"Rule #4a: minimum API lifetime is determined by the API stability level"</p>
-<div class="ulist">
-<ul>
-<li>
-<p>"Alpha API versions may be removed in any release without prior deprecation notice"</p>
-</li>
-<li>
-<p>"Beta API versions must be supported for 9 months or 3 releases (whichever is longer) after deprecation"</p>
-</li>
-<li>
-<p>"GA API versions may be marked as deprecated, but must not be removed within a major version of Kubernetes"</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>"Rule #7: Deprecated behaviors must function for no less than 1 year after their announced deprecation."</p>
-</li>
-</ul>
 </div>
 <div class="paragraph">
-<p>This means that a codebase relying on alpha features can only reliably be developed against a single kubernetes version. For beta features, 3 kubernetes versions can be covered with the same codebase. The linked document also shows the overlapping of versions. When a feature matures from beta into stable, the beta version can still be used for 3 releases. After that, the stable version has to be used.</p>
+<p>For this example the NiFi operator needs to somehow insert the content of this config map into specific NiFi config files.</p>
 </div>
 <div class="paragraph">
-<p>For actually deprecated features (not just moved from beta to stable), the grace period is also more than three releases; as specified a deprecated feature has to be supported for at least a year.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_stackables_behavior"><a class="anchor" href="#_stackables_behavior"></a>Stackables behavior</h3>
-<div class="paragraph">
-<p>The stackable operators depend on a specific kubernetes version through the <a href="https://github.com/stackabletech/operator-rs">operator framework</a>. At the moment we do not have an explicit version compatibility, and the software will work with different versions of the objects we use are the same in different kubernetes versions (i.e. an operator uses 1.21 but all resource definitions we rely on are identical in 1.20 so the operator works in 1.20 too).</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_support_policies_of_kubernetes_and_managed_cluster_providers"><a class="anchor" href="#_support_policies_of_kubernetes_and_managed_cluster_providers"></a>Support Policies of Kubernetes and Managed Cluster Providers</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_kubernetes"><a class="anchor" href="#_kubernetes"></a>Kubernetes</h3>
-<div class="paragraph">
-<p>Kubernetes maintains release branches for the most recent three minor releases. Any minor version for 1.19 onwards receives one year of patch support. Most providers of managed kubernetes refer to this schedule when defining their own support windows.</p>
-</div>
-<div class="paragraph">
-<p>See <a href="https://kubernetes.io/releases/" class="bare">https://kubernetes.io/releases/</a> and <a href="https://kubernetes.io/releases/version-skew-policy/" class="bare">https://kubernetes.io/releases/version-skew-policy/</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_azure_kubernetes_service_aks"><a class="anchor" href="#_azure_kubernetes_service_aks"></a>Azure Kubernetes Service (AKS)</h3>
-<div class="paragraph">
-<p>AKS supports three kubernetes versions, where they seem to try to make these the three latest versions.</p>
-</div>
-<div class="paragraph">
-<p>See <a href="https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions?tabs=azure-cli#kubernetes-version-support-policy" class="bare">https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions?tabs=azure-cli#kubernetes-version-support-policy</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_amazon_eks"><a class="anchor" href="#_amazon_eks"></a>Amazon EKS</h3>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>Each minor version is supported for approximately twelve months after it&#8217;s first released.</p>
-</div>
-</blockquote>
-</div>
-<div class="paragraph">
-<p>See <a href="https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html" class="bare">https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_google_gke"><a class="anchor" href="#_google_gke"></a>Google GKE</h3>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>Google provides a total of 14 months of support for each GKE minor version once the version has been made available in the Regular channel. [&#8230;&#8203;] After 12 months, a supported version will enter a 2-month maintenance period before reaching end of life.</p>
-</div>
-</blockquote>
-</div>
-<div class="paragraph">
-<p>See <a href="https://cloud.google.com/kubernetes-engine/versioning" class="bare">https://cloud.google.com/kubernetes-engine/versioning</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_ionos"><a class="anchor" href="#_ionos"></a>IONOS</h3>
-<div class="paragraph">
-<p>IONOS seems to support the latest three versions; as of January 2022 the supported versions are 1.20, 1.21 and 1.22.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_openshift"><a class="anchor" href="#_openshift"></a>OpenShift</h3>
-<div class="paragraph">
-<p>As of September 2021, the supported OpenShift Container Platforms are 4.6, 4.7, and 4.8 which in turn use Kubernetes v1.19, v1.20, and v1.21.</p>
-</div>
-<div class="paragraph">
-<p>see <a href="https://docs.openshift.com/container-platform/4.6/release_notes/ocp-4-6-release-notes.html#ocp-4-6-about-this-release" class="bare">https://docs.openshift.com/container-platform/4.6/release_notes/ocp-4-6-release-notes.html#ocp-4-6-about-this-release</a>
-see <a href="https://docs.openshift.com/container-platform/4.7/release_notes/ocp-4-7-release-notes.html#ocp-4-7-about-this-release" class="bare">https://docs.openshift.com/container-platform/4.7/release_notes/ocp-4-7-release-notes.html#ocp-4-7-about-this-release</a>
-see <a href="https://docs.openshift.com/container-platform/4.8/release_notes/ocp-4-8-release-notes.html#ocp-4-8-about-this-release" class="bare">https://docs.openshift.com/container-platform/4.8/release_notes/ocp-4-8-release-notes.html#ocp-4-8-about-this-release</a></p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_decision_drivers"><a class="anchor" href="#_decision_drivers"></a>Decision Drivers</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Some customers told us they have troubles keeping the pace at which Kubernetes moves. They are only slowly adopting new Kubernetes releases, or even refrain completely from using Kubernetes. Customers might even be lagging behind in their Kubernetes clusters. This means that too fast a pace is not good for customers.</p>
-</li>
-<li>
-<p>Tech is fast moving: major Kubernetes improvements are released multiple times a year. This means that we need to stay up to date, supporting versions that are not supported by the kubernetes project is potentially difficult.</p>
-</li>
-<li>
-<p>Managed Kubernetes offerings (GKE &amp; Co.) typically only support fairly recent k8s releases. We should be able to run on all large managed kubernetes services.</p>
-</li>
-<li>
-<p>How can we upgrade the Kubernetes we run without customer intervention?</p>
-</li>
-</ul>
+<p>This ADR is about the preferred way of implementing dependencies like described above.</p>
 </div>
 </div>
 </div>
@@ -579,34 +492,10 @@ see <a href="https://docs.openshift.com/container-platform/4.8/release_notes/ocp
 <div class="ulist">
 <ul>
 <li>
-<p>follow Kubernetes support timeline/version skew policy</p>
-<div class="ulist">
-<ul>
-<li>
-<p>needs an outline of migration strategy, announcements, communications and paths</p>
-</li>
-</ul>
-</div>
+<p><a href="#option1">Option 1:</a> Inserting ConfigMap/Secret content into target config in the operator</p>
 </li>
 <li>
-<p>support any Kubernetes Version for n months</p>
-<div class="ulist">
-<ul>
-<li>
-<p>needs an outline of migration strategy</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>identify Stackable&#8217;s own long-term-support version of Kubernetes</p>
-<div class="ulist">
-<ul>
-<li>
-<p>outline additional effort, like handling of security patches, and how to deal with missing new mainstream features</p>
-</li>
-</ul>
-</div>
+<p><a href="#option2">Option 2:</a> Mounting ConfigMap/Secret into the pods</p>
 </li>
 </ul>
 </div>
@@ -616,40 +505,104 @@ see <a href="https://docs.openshift.com/container-platform/4.8/release_notes/ocp
 <h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>It was decided that we will support the latest three kubernetes versions. Kubernetes release cycle is approximately 15 weeks, which means we support each version for 45 weeks or a little over 10 months.</p>
+<p>Chosen option: "<a href="#option2">Option 2</a>", because it makes better use of Kubernetes features to model dependencies between definitions which in turn will make restart implementations and general debugging easier and more predictable.</p>
+</div>
+<div class="paragraph">
+<p>This decision will not hold true for all possible scenarios, but should be understood more as a implementation guideline:</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+If a pod needs to access the content of a ConfigMap or Secret it should do this by mounting the ConfigMap/Secret unless there is a good reason to access the ConfigMap directly in the operator instead.
+</div>
 </div>
 <div class="sect2">
 <h3 id="_positive_consequences"><a class="anchor" href="#_positive_consequences"></a>Positive Consequences</h3>
-<div class="paragraph">
-<p>According to the deprecation policy this means that we will have a single API version for every object across all 3 versions available, so we will be able to compile a single binary that works with all 3 versions of kubernetes.</p>
-</div>
-<div class="paragraph">
-<p>In general, having to support less means we can focus more on building new features instead of maintaining compatibility over a large range of kubernetes versions.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Dependencies will be clearly modelled in Kubernetes by mounts, which makes behavior of the entire architecture more predictable</p>
+</li>
+<li>
+<p>Operators need to implement a much simpler logic around watches, as triggering reconciliations is handled via k8s dependencies (mounts)</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_negative_consequences"><a class="anchor" href="#_negative_consequences"></a>Negative Consequences</h3>
-<div class="paragraph">
-<p>This speed might be too fast for some users.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Complexity is moved from the operator code into init containers that need to perform insertion of the ConfigMap/Secret content into actual config files</p>
+</li>
+<li>
+<p>Debugging a running configuration becomes harder in cases where users have no access to a shell in the pods, as this would be the only way to actually see the running configuration (<a href="https://github.com/stackabletech/issues/issues/210)">#210</a> has been created to investigate mitigating this)</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_links"><a class="anchor" href="#_links"></a>Links</h2>
+<h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="option1"><a class="anchor" href="#option1"></a>Option 1 - Inserting ConfigMap/Secret content into target config in the operator</h3>
+<div class="paragraph">
+<p>The operator can retrieve the content from ConfigMaps/Secrets during reconciliation and insert the values directly into the target config.
+The target config would then be written either to a ConfigMap or a Secret, depending on whether sensitive input data is contained in it.</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://kubernetes.io/releases/version-skew-policy/">Kubernetes Version Skew Policy</a></p>
+<p>Good, because it isolates most of the complexity in the operator</p>
 </li>
 <li>
-<p><a href="https://kubernetes.io/blog/2021/07/20/new-kubernetes-release-cadence/">Kubernetes Release Cadence</a></p>
+<p>Good, because it would allow referencing ConfigMaps and Secrets in different namespaces which would potentially allow for less duplication</p>
 </li>
 <li>
-<p><a href="https://kubernetes.io/docs/reference/using-api/deprecation-policy/">Kubernetes Deprecation Policy</a></p>
+<p>Good, because it gives an almost complete manifestation of a running config in k8s objects that can be used for debugging</p>
+</li>
+<li>
+<p>Bad, because it would allow referencing ConfigMaps and Secrets in different namespaces, which would dilute namespace separation</p>
+</li>
+<li>
+<p>Bad, because it makes debugging startup issues of products much harder, as pods will simply not appear if required ConfigMaps are missing, effectively bypassing well established k8s patterns (like a pod missing a mount not starting and writing events about why it is not starting)</p>
+</li>
+<li>
+<p>Bad, because the dependencies between pods and configmaps / secrets become very complex and hard to debug as they are not modelled in any way as k8s dependencies (mounts)</p>
+</li>
+<li>
+<p>Bad, because setting up the correct watches in the operator becomes very complex, with a likelyhood of inadvertently forgetting to add a new watch that becomes necessary as CRDs evolve</p>
+</li>
+<li>
+<p>Bad, because it potentially propagates sensitive values to multiple places by copying secret content to additional places</p>
+</li>
+<li>
+<p>Bad, because the Operator is seeing the Secrets. This is not a problem <em>now</em>, but if we could avoid it that would be better</p>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="option2"><a class="anchor" href="#option2"></a>Option 2 - Mounting ConfigMap/Secret into the pods</h3>
+<div class="paragraph">
+<p>Instead of accessing the content of ConfigMaps/Secrets in the operator, the operator would simply mount these object into the generated pods.
+Accessing the content of these mounted objects would then need to be done in an init container, currently this is done with shell commands, but this would be replaced with a more suitable tool in a follow-up ADR.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because mounting the ConfigMap/Secret directly into the pod allows the restart controller to automatically restart a Pod if a mounted object changes. Otherwise, changes would not be propagated or the Operator would have to watch the ConfigMap/Secret for changes itself. The watching/restarting is done once by Kubernetes + the restart controller and makes our Operators simpler</p>
+</li>
+<li>
+<p>Bad, because the mounted properties cannot be validated by the Operator. Although Kubernetes at least verifies that all the properties that should be mounted exist</p>
+</li>
+<li>
+<p>Bad, because it is more difficult to see which config is actually used to run the product, as the actual config is only finally assembled inside of the container</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>

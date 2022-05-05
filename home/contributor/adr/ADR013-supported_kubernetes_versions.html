@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>TLS authentication :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR016-tls-authentication.html">
+    <title>ADR013: Supported Kubernetes versions :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR013-supported_kubernetes_versions.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -216,17 +216,20 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR012-authn_token_management.html">ADR012: Authentication token management</a>
   </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="ADR013-user_authentication_for_products.html">ADR013: User Authentication for Products</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="ARD014-using_values_from_configmaps.html">ADR014: How Should Operators Use Values from ConfigMaps &amp; Secrets</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="ADR015_definition_of_s3_objects.html">ADR015: Representation of S3 Buckets in CRDs</a>
-  </li>
   <li class="nav-item is-current-page" data-depth="4">
-    <a class="nav-link" href="ADR016-tls-authentication.html">TLS authentication</a>
+    <a class="nav-link" href="ADR013-supported_kubernetes_versions.html">ADR013: Supported Kubernetes versions</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="ADR014-user_authentication_for_products.html">ADR014: User Authentication for Products</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="ADR015-using_values_from_configmaps.html">ADR015: How Should Operators Use Values from ConfigMaps &amp; Secrets</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="ADR016-definition_of_s3_objects.html">ADR016: Representation of S3 Buckets in CRDs</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="ADR017-tls_authentication.html">ADR017: TLS authentication</a>
   </li>
 </ul>
   </li>
@@ -406,59 +409,152 @@
     <li><a href="../index.html">Contributor&#8217;s Guide</a></li>
     <li><a href="index.html">Architectural Decision Records</a></li>
     <li>Current</li>
-    <li><a href="ADR016-tls-authentication.html">TLS authentication</a></li>
+    <li><a href="ADR013-supported_kubernetes_versions.html">ADR013: Supported Kubernetes versions</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR016-tls-authentication.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR013-supported_kubernetes_versions.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">TLS authentication</h1>
+<h1 class="page">ADR013: Supported Kubernetes versions</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Status: accepted</p>
+<p>Status: draft</p>
 </li>
 <li>
-<p>Deciders:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Malte Sander</p>
+<p>Deciders: Lars Francke</p>
 </li>
 <li>
-<p>Sebastian Bernauer</p>
-</li>
-<li>
-<p>Sönke Liebau</p>
-</li>
-<li>
-<p>Teo Klestrup Röijezon</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Date: 2022-05-04</p>
+<p>Date: 2022-02-04</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Technical Story: <a href="https://github.com/stackabletech/zookeeper-operator/issues/466" class="bare">https://github.com/stackabletech/zookeeper-operator/issues/466</a></p>
+<p>Technical Story: <a href="https://github.com/stackabletech/documentation/issues/83">Document supported Kubernetes versions</a></p>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_kubernetes_version_policy"><a class="anchor" href="#_kubernetes_version_policy"></a>Kubernetes Version Policy</h3>
 <div class="paragraph">
-<p>Our products use TLS to encrypt network traffic and/or to authenticate themselves and their clients.
-We want to define a common way - across all the products - to configure these mechanisms.</p>
+<p>Multiple new versions of Kubernetes are released every year (currently 3). Security fixes might come in between. Different Kubernetes components (including kubectl) will only support a limited number of versions, as mandated by kubernetes' <a href="https://kubernetes.io/releases/version-skew-policy/">Version Skew Policy</a>. Therefore, we need to define the supported Kubernetes versions.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deprecation_and_removal_of_older_resource_variants"><a class="anchor" href="#_deprecation_and_removal_of_older_resource_variants"></a>Deprecation and Removal of older resource variants</h3>
+<div class="paragraph">
+<p>The API overview provides an overview of the <a href="https://kubernetes.io/docs/reference/using-api/deprecation-policy/#deprecating-a-feature-or-behavior">Kubernetes Deprecation Policy</a>. In there, we find rules that can guide our decisions.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>"Rule #4a: minimum API lifetime is determined by the API stability level"</p>
+<div class="ulist">
+<ul>
+<li>
+<p>"Alpha API versions may be removed in any release without prior deprecation notice"</p>
+</li>
+<li>
+<p>"Beta API versions must be supported for 9 months or 3 releases (whichever is longer) after deprecation"</p>
+</li>
+<li>
+<p>"GA API versions may be marked as deprecated, but must not be removed within a major version of Kubernetes"</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>"Rule #7: Deprecated behaviors must function for no less than 1 year after their announced deprecation."</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This means that a codebase relying on alpha features can only reliably be developed against a single kubernetes version. For beta features, 3 kubernetes versions can be covered with the same codebase. The linked document also shows the overlapping of versions. When a feature matures from beta into stable, the beta version can still be used for 3 releases. After that, the stable version has to be used.</p>
+</div>
+<div class="paragraph">
+<p>For actually deprecated features (not just moved from beta to stable), the grace period is also more than three releases; as specified a deprecated feature has to be supported for at least a year.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_stackables_behavior"><a class="anchor" href="#_stackables_behavior"></a>Stackables behavior</h3>
+<div class="paragraph">
+<p>The stackable operators depend on a specific kubernetes version through the <a href="https://github.com/stackabletech/operator-rs">operator framework</a>. At the moment we do not have an explicit version compatibility, and the software will work with different versions of the objects we use are the same in different kubernetes versions (i.e. an operator uses 1.21 but all resource definitions we rely on are identical in 1.20 so the operator works in 1.20 too).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_support_policies_of_kubernetes_and_managed_cluster_providers"><a class="anchor" href="#_support_policies_of_kubernetes_and_managed_cluster_providers"></a>Support Policies of Kubernetes and Managed Cluster Providers</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_kubernetes"><a class="anchor" href="#_kubernetes"></a>Kubernetes</h3>
+<div class="paragraph">
+<p>Kubernetes maintains release branches for the most recent three minor releases. Any minor version for 1.19 onwards receives one year of patch support. Most providers of managed kubernetes refer to this schedule when defining their own support windows.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="https://kubernetes.io/releases/" class="bare">https://kubernetes.io/releases/</a> and <a href="https://kubernetes.io/releases/version-skew-policy/" class="bare">https://kubernetes.io/releases/version-skew-policy/</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_azure_kubernetes_service_aks"><a class="anchor" href="#_azure_kubernetes_service_aks"></a>Azure Kubernetes Service (AKS)</h3>
+<div class="paragraph">
+<p>AKS supports three kubernetes versions, where they seem to try to make these the three latest versions.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions?tabs=azure-cli#kubernetes-version-support-policy" class="bare">https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions?tabs=azure-cli#kubernetes-version-support-policy</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_amazon_eks"><a class="anchor" href="#_amazon_eks"></a>Amazon EKS</h3>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Each minor version is supported for approximately twelve months after it&#8217;s first released.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>See <a href="https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html" class="bare">https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_google_gke"><a class="anchor" href="#_google_gke"></a>Google GKE</h3>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Google provides a total of 14 months of support for each GKE minor version once the version has been made available in the Regular channel. [&#8230;&#8203;] After 12 months, a supported version will enter a 2-month maintenance period before reaching end of life.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>See <a href="https://cloud.google.com/kubernetes-engine/versioning" class="bare">https://cloud.google.com/kubernetes-engine/versioning</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ionos"><a class="anchor" href="#_ionos"></a>IONOS</h3>
+<div class="paragraph">
+<p>IONOS seems to support the latest three versions; as of January 2022 the supported versions are 1.20, 1.21 and 1.22.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_openshift"><a class="anchor" href="#_openshift"></a>OpenShift</h3>
+<div class="paragraph">
+<p>As of September 2021, the supported OpenShift Container Platforms are 4.6, 4.7, and 4.8 which in turn use Kubernetes v1.19, v1.20, and v1.21.</p>
+</div>
+<div class="paragraph">
+<p>see <a href="https://docs.openshift.com/container-platform/4.6/release_notes/ocp-4-6-release-notes.html#ocp-4-6-about-this-release" class="bare">https://docs.openshift.com/container-platform/4.6/release_notes/ocp-4-6-release-notes.html#ocp-4-6-about-this-release</a>
+see <a href="https://docs.openshift.com/container-platform/4.7/release_notes/ocp-4-7-release-notes.html#ocp-4-7-about-this-release" class="bare">https://docs.openshift.com/container-platform/4.7/release_notes/ocp-4-7-release-notes.html#ocp-4-7-about-this-release</a>
+see <a href="https://docs.openshift.com/container-platform/4.8/release_notes/ocp-4-8-release-notes.html#ocp-4-8-about-this-release" class="bare">https://docs.openshift.com/container-platform/4.8/release_notes/ocp-4-8-release-notes.html#ocp-4-8-about-this-release</a></p>
+</div>
 </div>
 </div>
 </div>
@@ -468,13 +564,16 @@ We want to define a common way - across all the products - to configure these me
 <div class="ulist">
 <ul>
 <li>
-<p>Must support using no TLS usage, TLS only for encryption and TLS for encryption and authentication</p>
+<p>Some customers told us they have troubles keeping the pace at which Kubernetes moves. They are only slowly adopting new Kubernetes releases, or even refrain completely from using Kubernetes. Customers might even be lagging behind in their Kubernetes clusters. This means that too fast a pace is not good for customers.</p>
 </li>
 <li>
-<p>Should fit into out existing authentication concept from <a href="ADR013-user_authentication_for_products.html" class="xref page">ADR013: User Authentication for Products</a></p>
+<p>Tech is fast moving: major Kubernetes improvements are released multiple times a year. This means that we need to stay up to date, supporting versions that are not supported by the kubernetes project is potentially difficult.</p>
 </li>
 <li>
-<p>Should be easy to understand and use for the user</p>
+<p>Managed Kubernetes offerings (GKE &amp; Co.) typically only support fairly recent k8s releases. We should be able to run on all large managed kubernetes services.</p>
+</li>
+<li>
+<p>How can we upgrade the Kubernetes we run without customer intervention?</p>
 </li>
 </ul>
 </div>
@@ -486,13 +585,34 @@ We want to define a common way - across all the products - to configure these me
 <div class="ulist">
 <ul>
 <li>
-<p>Handle TLS as special case</p>
+<p>follow Kubernetes support timeline/version skew policy</p>
+<div class="ulist">
+<ul>
+<li>
+<p>needs an outline of migration strategy, announcements, communications and paths</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p>Extend <code>AuthenticationClass</code> to support TLS</p>
+<p>support any Kubernetes Version for n months</p>
+<div class="ulist">
+<ul>
+<li>
+<p>needs an outline of migration strategy</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p>Split server-side and client-side authentication into separate config sections</p>
+<p>identify Stackable&#8217;s own long-term-support version of Kubernetes</p>
+<div class="ulist">
+<ul>
+<li>
+<p>outline additional effort, like handling of security patches, and how to deal with missing new mainstream features</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -502,301 +622,38 @@ We want to define a common way - across all the products - to configure these me
 <h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Chosen option: "Split server-side and client-side authentication into separate config sections", because separating them allowed us to model the underlying structs the best way.</p>
+<p>It was decided that we will support the latest three kubernetes versions. Kubernetes release cycle is approximately 15 weeks, which means we support each version for 45 weeks or a little over 10 months.</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_handle_tls_as_special_case"><a class="anchor" href="#_handle_tls_as_special_case"></a>Handle TLS as special case</h3>
+<h3 id="_positive_consequences"><a class="anchor" href="#_positive_consequences"></a>Positive Consequences</h3>
 <div class="paragraph">
-<p>We don&#8217;t support TLS inside <code>AuthenticationClass</code>.
-We need a new <code>tlsConfig</code> attribute on every product CRD.
-An implementation could look something like this:</p>
+<p>According to the deprecation policy this means that we will have a single API version for every object across all 3 versions available, so we will be able to compile a single binary that works with all 3 versions of kubernetes.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: zookeeper.stackable.tech/v1alpha1
-kind: ZookeeperCluster
-metadata:
-  name: ssl-zk
-spec:
-  config:
-    tlsConfiguration: # optional
-      quorum: # Communication between between different Zookeeper nodes
-        tls: # commons tls config
-          verification:
-              none: {}
-              # OR
-              server:
-                caCert:
-                    webPki: {}
-                    # OR
-                    secretClass: tls # Reference to SecretClass below
-              # OR
-              mutual:
-                certSecretClass: tls # Reference to SecretClass below
-      clients: # Communication between Zookeeper clients and Zookeeper nodes
-        tls: # commons tls config
-          verification:
-              none: {}
-              # OR
-              server:
-                caCert:
-                    webPki: {}
-                    # OR
-                    secretClass: tls # Reference to SecretClass below
-              # OR
-              mutual:
-                certSecretClass: tls # Reference to SecretClass below
-  servers:
-    roleGroups:
-      primary:
-        replicas: 2
-        config:
-          myidOffset: 10
-      secondary:
-        replicas: 1
-        config:
-          myidOffset: 20
-  version: 3.8.0
-  stopped: false
----
-apiVersion: secrets.stackable.tech/v1alpha1
-kind: SecretClass
-metadata:
-  name: tls
-spec:
-  backend:
-    autoTls:
-      ca:
-        secret:
-          name: secret-provisioner-tls-ca
-          namespace: default
-        autoGenerate: true</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Good, because simple (no indirection through <code>AuthenticationClass</code> object)</p>
-</li>
-<li>
-<p>Bad, because TLS is a special case and does not fit in our <code>AuthenticationClass</code> mechanism.</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>In general, having to support less means we can focus more on building new features instead of maintaining compatibility over a large range of kubernetes versions.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_extend_authenticationclass_to_support_tls"><a class="anchor" href="#_extend_authenticationclass_to_support_tls"></a>Extend <code>AuthenticationClass</code> to support TLS</h3>
+<h3 id="_negative_consequences"><a class="anchor" href="#_negative_consequences"></a>Negative Consequences</h3>
 <div class="paragraph">
-<p>We already have a common <code>AuthenticationClass</code> structure discussed in <a href="ADR013-user_authentication_for_products.html" class="xref page">ADR013: User Authentication for Products</a>
-This option extends the <code>AuthenticationClass</code> so that it also support TLS authentication.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: zookeeper.stackable.tech/v1alpha1
-kind: ZookeeperCluster
-metadata:
-  name: ssl-zk
-spec:
-  config:
-    tlsAuthenticationConfig:
-      quorum:
-        authenticationClass: zookeeper-tls-mutual
-      clients:
-        authenticationClass: zookeeper-tls
-  servers:
-    roleGroups:
-      primary:
-        replicas: 2
-        config:
-          myidOffset: 10
-      secondary:
-        replicas: 1
-        config:
-          myidOffset: 20
-  version: 3.8.0
-  stopped: false
----
-apiVersion: authentication.stackable.tech/v1alpha1
-kind: AuthenticationClass
-metadata:
-  name: zookeeper-tls-mutual
-spec:
-  provider:
-    tls:
-      verification:
-          none: {}
-          # OR
-          server:
-            caCert:
-                webPki: {}
-                # OR
-                secretClass: tls # Reference to SecretClass below
-          # OR
-          mutual:
-          certSecretClass: tls # Reference to SecretClass below
----
-apiVersion: authentication.stackable.tech/v1alpha1
-kind: AuthenticationClass
-metadata:
-  name: zookeeper-tls
-spec:
-  provider:
-    tls:
-      verification:
-          none: {}
-          # OR
-          server:
-            caCert:
-                webPki: {}
-                # OR
-                secretClass: tls # Reference to SecretClass below
-          # OR
-          mutual:
-          certSecretClass: tls # Reference to SecretClass below
-      verification:
-        mutual:
-          caCert:
-            secretClass: tls # Reference to SecretClass below
----
-apiVersion: secrets.stackable.tech/v1alpha1
-kind: SecretClass
-metadata:
-  name: tls
-spec:
-  backend:
-    autoTls:
-      ca:
-        secret:
-          name: secret-provisioner-tls-ca
-          namespace: default
-        autoGenerate: true</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Good, because TLS is handled via the generic <code>AuthenticationClass</code> mechanism.</p>
-</li>
-<li>
-<p>Bad, because an <code>AuthenticationClass</code> can express: Don&#8217;t do any authentication at all</p>
-</li>
-</ul>
+<p>This speed might be too fast for some users.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_split_server_side_and_client_side_authentication_into_separate_config_sections"><a class="anchor" href="#_split_server_side_and_client_side_authentication_into_separate_config_sections"></a>Split server-side and client-side authentication into separate config sections</h2>
+<h2 id="_links"><a class="anchor" href="#_links"></a>Links</h2>
 <div class="sectionbody">
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: zookeeper.stackable.tech/v1alpha1
-kind: ZookeeperCluster
-metadata:
-  name: ssl-zk
-spec:
-  config:
-    tls: # optional, defaults to "secretClass: tls"
-      secretClass: tls # enables encryption and server verification
-    clientAuthentication: # optional, if we should authn the clients via TLS
-      authenticationClass: zookeeper-tls
-    # would probably just be left as default in the vast majority of clusters
-    # Use mutual verification between Zookeeper Nodes
-    # mandatory
-    quorumTlsSecretClass: tls
-  servers:
-    roleGroups:
-      primary:
-        replicas: 2
-        config:
-          myidOffset: 10
-      secondary:
-        replicas: 1
-        config:
-          myidOffset: 20
-  version: 3.8.0
-  stopped: false
----
-apiVersion: authentication.stackable.tech/v1alpha1
-kind: AuthenticationClass
-metadata:
-  name: zookeeper-tls
-spec:
-  provider:
-    # triggers TLS config to also be used for client authn
-    tls: {}
-    # OR...
-    tls:
-      # overrides secretclass used for provisioning client certs
-      clientCertSecretClass: tls-client
-    # OR...
-    # TLS is still used for server authn, but another
-    # method is used for client authn
-    ldap: ldapStuff{...}
----
-apiVersion: secrets.stackable.tech/v1alpha1
-kind: SecretClass
-metadata:
-  name: tls
-spec:
-  backend:
-    autoTls:
-      ca:
-        secret:
-          name: secret-provisioner-tls-ca
-          namespace: default
-        autoGenerate: true</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>As a recap:
-This is how our products connect to TLS-secured services outside of the Stackable Cluster (e.g. Superset to LDAP).
-Mutual verification is not supported this way, as client-side authentication is handled via <code>AuthenticationClass</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-[ProductCRD...]
-  tls:
-    verification:
-      none: {}
-      # OR
-      server:
-        caCert:
-          webPki: {}
-          # OR
-          secretClass: tls # Reference to a SecretClass providing the ca.crt</code></pre>
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/adr/16_option3.png" alt="16 option3">
-</div>
-</div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because TLS is handled via the generic <code>AuthenticationClass</code> mechanism.</p>
+<p><a href="https://kubernetes.io/releases/version-skew-policy/">Kubernetes Version Skew Policy</a></p>
 </li>
 <li>
-<p>Good, because clients don&#8217;t need to know/understand <code>AuthenticationClass</code> objects. They only read the Discovery <code>ConfigMap</code> and the contained SecretClasses.</p>
+<p><a href="https://kubernetes.io/blog/2021/07/20/new-kubernetes-release-cadence/">Kubernetes Release Cadence</a></p>
 </li>
 <li>
-<p>Bad, because it&#8217;s more complicated because of the indirection via <code>AuthenticationClass</code>.</p>
-</li>
-<li>
-<p>Bad, because the client operator needs to read the Discovery <code>ConfigMap</code> rather than simply mounting it into the client product.</p>
-</li>
-<li>
-<p>Bad, because doing so external clients (outside of Stackable) must need to take more effort to connect to Stackable services e.g. retrieve ca cert from <code>SecretClass</code>.</p>
+<p><a href="https://kubernetes.io/docs/reference/using-api/deprecation-policy/">Kubernetes Deprecation Policy</a></p>
 </li>
 </ul>
 </div>

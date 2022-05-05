@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ADR014: How Should Operators Use Values from ConfigMaps &amp; Secrets :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ARD014-using_values_from_configmaps.html">
+    <title>ADR017: TLS authentication :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR017-tls_authentication.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -217,16 +217,19 @@
     <a class="nav-link" href="ADR012-authn_token_management.html">ADR012: Authentication token management</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="ADR013-user_authentication_for_products.html">ADR013: User Authentication for Products</a>
+    <a class="nav-link" href="ADR013-supported_kubernetes_versions.html">ADR013: Supported Kubernetes versions</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="ADR014-user_authentication_for_products.html">ADR014: User Authentication for Products</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="ADR015-using_values_from_configmaps.html">ADR015: How Should Operators Use Values from ConfigMaps &amp; Secrets</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="ADR016-definition_of_s3_objects.html">ADR016: Representation of S3 Buckets in CRDs</a>
   </li>
   <li class="nav-item is-current-page" data-depth="4">
-    <a class="nav-link" href="ARD014-using_values_from_configmaps.html">ADR014: How Should Operators Use Values from ConfigMaps &amp; Secrets</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="ADR015_definition_of_s3_objects.html">ADR015: Representation of S3 Buckets in CRDs</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="ADR016-tls-authentication.html">TLS authentication</a>
+    <a class="nav-link" href="ADR017-tls_authentication.html">ADR017: TLS authentication</a>
   </li>
 </ul>
   </li>
@@ -406,17 +409,17 @@
     <li><a href="../index.html">Contributor&#8217;s Guide</a></li>
     <li><a href="index.html">Architectural Decision Records</a></li>
     <li>Current</li>
-    <li><a href="ARD014-using_values_from_configmaps.html">ADR014: How Should Operators Use Values from ConfigMaps &amp; Secrets</a></li>
+    <li><a href="ADR017-tls_authentication.html">ADR017: TLS authentication</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ARD014-using_values_from_configmaps.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR017-tls_authentication.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">ADR014: How Should Operators Use Values from ConfigMaps &amp; Secrets</h1>
+<h1 class="page">ADR017: TLS authentication</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="ulist">
@@ -429,10 +432,7 @@
 <div class="ulist">
 <ul>
 <li>
-<p>Felix Hennig</p>
-</li>
-<li>
-<p>Razvan Mihai</p>
+<p>Malte Sander</p>
 </li>
 <li>
 <p>Sebastian Bernauer</p>
@@ -447,12 +447,12 @@
 </div>
 </li>
 <li>
-<p>Date: 2022-04-28</p>
+<p>Date: 2022-05-04</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Technical Story: <a href="https://github.com/stackabletech/issues/issues/208">#208</a></p>
+<p>Technical Story: <a href="https://github.com/stackabletech/zookeeper-operator/issues/466" class="bare">https://github.com/stackabletech/zookeeper-operator/issues/466</a></p>
 </div>
 </div>
 </div>
@@ -460,26 +460,26 @@
 <h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>One of the main focus areas of Stackable is making components of the stack work together well.
-This requires a high degree of composability where one component refers to another compenent in its definition.
-While this is a simple concept in principle it requires that operators obtain information about the object that is referred to and inject this information into the configuration of the object that refers to it.
-An example for this is a NiFi cluster definition referring to a ZooKeeper cluster definition via a znode name:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: nifi.stackable.tech/v1alpha1
-kind: NifiCluster
-metadata:
-  name: simple-nifi
-spec:
-  zookeeperConfigMapName: simple-nifi-znode</code></pre>
+<p>Our products use TLS to encrypt network traffic and/or to authenticate themselves and their clients.
+We want to define a common way - across all the products - to configure these mechanisms.</p>
 </div>
 </div>
-<div class="paragraph">
-<p>For this example the NiFi operator needs to somehow insert the content of this config map into specific NiFi config files.</p>
 </div>
-<div class="paragraph">
-<p>This ADR is about the preferred way of implementing dependencies like described above.</p>
+<div class="sect1">
+<h2 id="_decision_drivers"><a class="anchor" href="#_decision_drivers"></a>Decision Drivers</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Must support using no TLS usage, TLS only for encryption and TLS for encryption and authentication</p>
+</li>
+<li>
+<p>Should fit into out existing authentication concept from <a href="ADR014-user_authentication_for_products.html" class="xref page">ADR014: User Authentication for Products</a></p>
+</li>
+<li>
+<p>Should be easy to understand and use for the user</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -489,10 +489,13 @@ spec:
 <div class="ulist">
 <ul>
 <li>
-<p><a href="#option1">Option 1:</a> Inserting ConfigMap/Secret content into target config in the operator</p>
+<p>Handle TLS as special case</p>
 </li>
 <li>
-<p><a href="#option2">Option 2:</a> Mounting ConfigMap/Secret into the pods</p>
+<p>Extend <code>AuthenticationClass</code> to support TLS</p>
+</li>
+<li>
+<p>Split server-side and client-side authentication into separate config sections</p>
 </li>
 </ul>
 </div>
@@ -502,41 +505,7 @@ spec:
 <h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Chosen option: "<a href="#option2">Option 2</a>", because it makes better use of Kubernetes features to model dependencies between definitions which in turn will make restart implementations and general debugging easier and more predictable.</p>
-</div>
-<div class="paragraph">
-<p>This decision will not hold true for all possible scenarios, but should be understood more as a implementation guideline:</p>
-</div>
-<div class="sidebarblock">
-<div class="content">
-If a pod needs to access the content of a ConfigMap or Secret it should do this by mounting the ConfigMap/Secret unless there is a good reason to access the ConfigMap directly in the operator instead.
-</div>
-</div>
-<div class="sect2">
-<h3 id="_positive_consequences"><a class="anchor" href="#_positive_consequences"></a>Positive Consequences</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Dependencies will be clearly modelled in Kubernetes by mounts, which makes behavior of the entire architecture more predictable</p>
-</li>
-<li>
-<p>Operators need to implement a much simpler logic around watches, as triggering reconciliations is handled via k8s dependencies (mounts)</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_negative_consequences"><a class="anchor" href="#_negative_consequences"></a>Negative Consequences</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Complexity is moved from the operator code into init containers that need to perform insertion of the ConfigMap/Secret content into actual config files</p>
-</li>
-<li>
-<p>Debugging a running configuration becomes harder in cases where users have no access to a shell in the pods, as this would be the only way to actually see the running configuration (<a href="https://github.com/stackabletech/issues/issues/210)">#210</a> has been created to investigate mitigating this)</p>
-</li>
-</ul>
-</div>
+<p>Chosen option: "Split server-side and client-side authentication into separate config sections", because separating them allowed us to model the underlying structs the best way.</p>
 </div>
 </div>
 </div>
@@ -544,62 +513,295 @@ If a pod needs to access the content of a ConfigMap or Secret it should do this 
 <h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="option1"><a class="anchor" href="#option1"></a>Option 1 - Inserting ConfigMap/Secret content into target config in the operator</h3>
+<h3 id="_handle_tls_as_special_case"><a class="anchor" href="#_handle_tls_as_special_case"></a>Handle TLS as special case</h3>
 <div class="paragraph">
-<p>The operator can retrieve the content from ConfigMaps/Secrets during reconciliation and insert the values directly into the target config.
-The target config would then be written either to a ConfigMap or a Secret, depending on whether sensitive input data is contained in it.</p>
+<p>We don&#8217;t support TLS inside <code>AuthenticationClass</code>.
+We need a new <code>tlsConfig</code> attribute on every product CRD.
+An implementation could look something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperCluster
+metadata:
+  name: ssl-zk
+spec:
+  config:
+    tlsConfiguration: # optional
+      quorum: # Communication between between different Zookeeper nodes
+        tls: # commons tls config
+          verification:
+              none: {}
+              # OR
+              server:
+                caCert:
+                    webPki: {}
+                    # OR
+                    secretClass: tls # Reference to SecretClass below
+              # OR
+              mutual:
+                certSecretClass: tls # Reference to SecretClass below
+      clients: # Communication between Zookeeper clients and Zookeeper nodes
+        tls: # commons tls config
+          verification:
+              none: {}
+              # OR
+              server:
+                caCert:
+                    webPki: {}
+                    # OR
+                    secretClass: tls # Reference to SecretClass below
+              # OR
+              mutual:
+                certSecretClass: tls # Reference to SecretClass below
+  servers:
+    roleGroups:
+      primary:
+        replicas: 2
+        config:
+          myidOffset: 10
+      secondary:
+        replicas: 1
+        config:
+          myidOffset: 20
+  version: 3.8.0
+  stopped: false
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: tls
+spec:
+  backend:
+    autoTls:
+      ca:
+        secret:
+          name: secret-provisioner-tls-ca
+          namespace: default
+        autoGenerate: true</code></pre>
+</div>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because it isolates most of the complexity in the operator</p>
+<p>Good, because simple (no indirection through <code>AuthenticationClass</code> object)</p>
 </li>
 <li>
-<p>Good, because it would allow referencing ConfigMaps and Secrets in different namespaces which would potentially allow for less duplication</p>
-</li>
-<li>
-<p>Good, because it gives an almost complete manifestation of a running config in k8s objects that can be used for debugging</p>
-</li>
-<li>
-<p>Bad, because it would allow referencing ConfigMaps and Secrets in different namespaces, which would dilute namespace separation</p>
-</li>
-<li>
-<p>Bad, because it makes debugging startup issues of products much harder, as pods will simply not appear if required ConfigMaps are missing, effectively bypassing well established k8s patterns (like a pod missing a mount not starting and writing events about why it is not starting)</p>
-</li>
-<li>
-<p>Bad, because the dependencies between pods and configmaps / secrets become very complex and hard to debug as they are not modelled in any way as k8s dependencies (mounts)</p>
-</li>
-<li>
-<p>Bad, because setting up the correct watches in the operator becomes very complex, with a likelyhood of inadvertently forgetting to add a new watch that becomes necessary as CRDs evolve</p>
-</li>
-<li>
-<p>Bad, because it potentially propagates sensitive values to multiple places by copying secret content to additional places</p>
-</li>
-<li>
-<p>Bad, because the Operator is seeing the Secrets. This is not a problem <em>now</em>, but if we could avoid it that would be better</p>
+<p>Bad, because TLS is a special case and does not fit in our <code>AuthenticationClass</code> mechanism.</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="option2"><a class="anchor" href="#option2"></a>Option 2 - Mounting ConfigMap/Secret into the pods</h3>
+<h3 id="_extend_authenticationclass_to_support_tls"><a class="anchor" href="#_extend_authenticationclass_to_support_tls"></a>Extend <code>AuthenticationClass</code> to support TLS</h3>
 <div class="paragraph">
-<p>Instead of accessing the content of ConfigMaps/Secrets in the operator, the operator would simply mount these object into the generated pods.
-Accessing the content of these mounted objects would then need to be done in an init container, currently this is done with shell commands, but this would be replaced with a more suitable tool in a follow-up ADR.</p>
+<p>We already have a common <code>AuthenticationClass</code> structure discussed in <a href="ADR014-user_authentication_for_products.html" class="xref page">ADR014: User Authentication for Products</a>
+This option extends the <code>AuthenticationClass</code> so that it also support TLS authentication.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperCluster
+metadata:
+  name: ssl-zk
+spec:
+  config:
+    tlsAuthenticationConfig:
+      quorum:
+        authenticationClass: zookeeper-tls-mutual
+      clients:
+        authenticationClass: zookeeper-tls
+  servers:
+    roleGroups:
+      primary:
+        replicas: 2
+        config:
+          myidOffset: 10
+      secondary:
+        replicas: 1
+        config:
+          myidOffset: 20
+  version: 3.8.0
+  stopped: false
+---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: zookeeper-tls-mutual
+spec:
+  provider:
+    tls:
+      verification:
+          none: {}
+          # OR
+          server:
+            caCert:
+                webPki: {}
+                # OR
+                secretClass: tls # Reference to SecretClass below
+          # OR
+          mutual:
+          certSecretClass: tls # Reference to SecretClass below
+---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: zookeeper-tls
+spec:
+  provider:
+    tls:
+      verification:
+          none: {}
+          # OR
+          server:
+            caCert:
+                webPki: {}
+                # OR
+                secretClass: tls # Reference to SecretClass below
+          # OR
+          mutual:
+          certSecretClass: tls # Reference to SecretClass below
+      verification:
+        mutual:
+          caCert:
+            secretClass: tls # Reference to SecretClass below
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: tls
+spec:
+  backend:
+    autoTls:
+      ca:
+        secret:
+          name: secret-provisioner-tls-ca
+          namespace: default
+        autoGenerate: true</code></pre>
+</div>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because mounting the ConfigMap/Secret directly into the pod allows the restart controller to automatically restart a Pod if a mounted object changes. Otherwise, changes would not be propagated or the Operator would have to watch the ConfigMap/Secret for changes itself. The watching/restarting is done once by Kubernetes + the restart controller and makes our Operators simpler</p>
+<p>Good, because TLS is handled via the generic <code>AuthenticationClass</code> mechanism.</p>
 </li>
 <li>
-<p>Bad, because the mounted properties cannot be validated by the Operator. Although Kubernetes at least verifies that all the properties that should be mounted exist</p>
-</li>
-<li>
-<p>Bad, because it is more difficult to see which config is actually used to run the product, as the actual config is only finally assembled inside of the container</p>
+<p>Bad, because an <code>AuthenticationClass</code> can express: Don&#8217;t do any authentication at all</p>
 </li>
 </ul>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_split_server_side_and_client_side_authentication_into_separate_config_sections"><a class="anchor" href="#_split_server_side_and_client_side_authentication_into_separate_config_sections"></a>Split server-side and client-side authentication into separate config sections</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperCluster
+metadata:
+  name: ssl-zk
+spec:
+  config:
+    tls: # optional, defaults to "secretClass: tls"
+      secretClass: tls # enables encryption and server verification
+    clientAuthentication: # optional, if we should authn the clients via TLS
+      authenticationClass: zookeeper-tls
+    # would probably just be left as default in the vast majority of clusters
+    # Use mutual verification between Zookeeper Nodes
+    # mandatory
+    quorumTlsSecretClass: tls
+  servers:
+    roleGroups:
+      primary:
+        replicas: 2
+        config:
+          myidOffset: 10
+      secondary:
+        replicas: 1
+        config:
+          myidOffset: 20
+  version: 3.8.0
+  stopped: false
+---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: zookeeper-tls
+spec:
+  provider:
+    # triggers TLS config to also be used for client authn
+    tls: {}
+    # OR...
+    tls:
+      # overrides secretclass used for provisioning client certs
+      clientCertSecretClass: tls-client
+    # OR...
+    # TLS is still used for server authn, but another
+    # method is used for client authn
+    ldap: ldapStuff{...}
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: tls
+spec:
+  backend:
+    autoTls:
+      ca:
+        secret:
+          name: secret-provisioner-tls-ca
+          namespace: default
+        autoGenerate: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As a recap:
+This is how our products connect to TLS-secured services outside of the Stackable Cluster (e.g. Superset to LDAP).
+Mutual verification is not supported this way, as client-side authentication is handled via <code>AuthenticationClass</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+[ProductCRD...]
+  tls:
+    verification:
+      none: {}
+      # OR
+      server:
+        caCert:
+          webPki: {}
+          # OR
+          secretClass: tls # Reference to a SecretClass providing the ca.crt</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/adr/16_option3.png" alt="16 option3">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because TLS is handled via the generic <code>AuthenticationClass</code> mechanism.</p>
+</li>
+<li>
+<p>Good, because clients don&#8217;t need to know/understand <code>AuthenticationClass</code> objects. They only read the Discovery <code>ConfigMap</code> and the contained SecretClasses.</p>
+</li>
+<li>
+<p>Bad, because it&#8217;s more complicated because of the indirection via <code>AuthenticationClass</code>.</p>
+</li>
+<li>
+<p>Bad, because the client operator needs to read the Discovery <code>ConfigMap</code> rather than simply mounting it into the client product.</p>
+</li>
+<li>
+<p>Bad, because doing so external clients (outside of Stackable) must need to take more effort to connect to Stackable services e.g. retrieve ca cert from <code>SecretClass</code>.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>

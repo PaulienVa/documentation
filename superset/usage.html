@@ -22,7 +22,7 @@
           <input id="search-input" type="text" placeholder="Search the docs">
         </div>
       </div>
-      <button class="navbar-burger" data-target="topbar-nav">
+      <button class="navbar-burger" data-target="navbar-sub">
         <span></span>
         <span></span>
         <span></span>
@@ -33,7 +33,7 @@
       </div>
       </div>
     </nav>
-    <nav class="navbar-sub">
+    <nav id="navbar-sub" class="navbar-sub">
       <div class="container">
         <a class="navbar-sub-item" href="../home/index.html">Home</a>
 <a class="navbar-sub-item" href="../home/getting_started.html">Getting Started</a>
@@ -421,10 +421,16 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>The <code>name</code> and <code>namespace</code> in <code>spec.superset</code> refer to the superset cluster that you want to connect. Following our example above, the name is <code>superset</code>.</p>
+<p>The <code>name</code> and <code>namespace</code> in <code>spec.superset</code> refer to the Superset cluster that you want to connect. Following our example above, the name is <code>superset</code>.</p>
 </div>
 <div class="paragraph">
 <p>In <code>spec.druid</code> you specify the <code>name</code> and <code>namespace</code> of your Druid cluster.</p>
+</div>
+<div class="paragraph">
+<p>The <code>namespace</code> part is optional; if it is omitted it will default to the namespace of the DruidConnection.</p>
+</div>
+<div class="paragraph">
+<p>The namespace for the Superset and Druid cluster can be omitted, in that case the Operator will assume that they are in the same namespace as the DruidConnection.</p>
 </div>
 <div class="paragraph">
 <p>Once the database is initialized, the connection will be added to the cluster by the operator. You can see it in the user interface under Data &gt; Databases:</p>

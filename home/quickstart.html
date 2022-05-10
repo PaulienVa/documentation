@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Untitled :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/release_guide.html">
+    <title>Quickstart :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/quickstart.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -78,7 +78,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="quickstart.html">Quickstart</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -410,73 +410,55 @@
 <button class="nav-toggle"></button>
   <a href="index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Stackable Documentation</a></li>
+    <li><a href="quickstart.html">Quickstart</a></li>
+  </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/ROOT/pages/release_guide.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/ROOT/pages/quickstart.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
+<h1 class="page">Quickstart</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>(this is work in progress that is why it&#8217;s not explicitely linked in nav.doc)</p>
+<p>This is the super-short getting started guide that should enable you to get something up and running in less than three minutes (excluding download times).</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_setup"><a class="anchor" href="#_setup"></a>Setup</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Prerequisites:</p>
+<p>Download the cluster script.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>no branch refs in Cargo.toml</p>
-</li>
-<li>
-<p>(integration) tests are successful</p>
-</li>
-<li>
-<p>the changelog has useful entries</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Release:</p>
-</div>
-<div class="paragraph">
-<p>(from main)</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>git sw -c release-0.6.0
-vi CHANGELOG.md
-cargo-version.py --release
-cargo update --workspace
-make regenerate-charts
-git commit -am "Release 0.6.0"
-git tag -a 0.6.0 -m "Release 0.6.0" HEAD</pre>
+<pre>curl -L https://raw.githubusercontent.com/stackabletech/integration-tests/main/create_test_cluster.py &gt; create_test_cluster.py
+
+chmod +x create_test_cluster.py</pre>
 </div>
 </div>
-<div class="literalblock">
+</div>
+</div>
+<div class="sect1">
+<h2 id="_install_example_architecture"><a class="anchor" href="#_install_example_architecture"></a>Install Example Architecture</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Using the following command you will can install the Stackable Operators for Apache NiFi, Druid and Superset and deploy example definitions at the same time.</p>
+</div>
+<div class="listingblock">
 <div class="content">
-<pre>git push -u --all origin release-0.6.0</pre>
+<pre>./create-test-cluster.py -o nifi druid superset --example</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Bump dev version:</p>
+<p>After this has finished you will have working installations of the three mentioned tools.</p>
 </div>
-<div class="paragraph">
-<p>(from main immediately after a release)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>git sw -c bump-version
-cargo-version.py --next minor
-cargo update --workspace
-make regenerate-charts
-git commit -am 'Bump next development version'</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>git push -u origin bump-version</pre>
 </div>
 </div>
 </article>

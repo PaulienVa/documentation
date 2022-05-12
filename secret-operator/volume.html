@@ -272,7 +272,7 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>The primary entry point for applications is by mounting a secret into a <code>Pod</code> object&#8217;s <code>volume</code> set. This is done by using Kubernetes'
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#csivolumesource-v1-core"><code>CSIVolumeSource</code></a> type.
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#ephemeralvolumesource-v1-core"><code>EphemeralVolumeSource</code></a> type.
 For example:</p>
 </div>
 <div class="listingblock">
@@ -284,36 +284,60 @@ metadata:
   name: example-secret-consumer
 spec:
   volumes:
-  - name: secret
-    csi:
-      driver: secrets.stackable.tech <i class="conum" data-value="1"></i><b>(1)</b>
-      volumeAttributes:
-        secrets.stackable.tech/class: tls <i class="conum" data-value="2"></i><b>(2)</b>
-        secrets.stackable.tech/scope: node,pod,service=secret-consumer <i class="conum" data-value="3"></i><b>(3)</b>
+    - name: secret
+      ephemeral:
+        volumeClaimTemplate:
+          metadata:
+            annotations:
+              secrets.stackable.tech/class: secret <i class="conum" data-value="1"></i><b>(1)</b>
+              secrets.stackable.tech/scope: node <i class="conum" data-value="2"></i><b>(2)</b>
+          spec:
+            storageClassName: secrets.stackable.tech <i class="conum" data-value="3"></i><b>(3)</b>
+            accessModes: <i class="conum" data-value="4"></i><b>(4)</b>
+              - ReadWriteOnce
+            resources: <i class="conum" data-value="4"></i><b>(4)</b>
+              requests:
+                storage: "1"
   containers:
-  - name: ubuntu
-    volumeMounts:
-    - name: tls <i class="conum" data-value="4"></i><b>(4)</b>
-      mountPath: /tls</code></pre>
+    - name: ubuntu
+      volumeMounts:
+        - name: tls <i class="conum" data-value="5"></i><b>(5)</b>
+          mountPath: /tls</code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Tells Kubernetes that the Stackable Secret Operator is responsible for mounting this volume</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>This secret is provided by the <a href="secretclass.html" class="xref page"><code>SecretClass</code></a> named <code>tls</code></td>
 </tr>
 <tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>This secret should be <a href="scope.html" class="xref page">scoped</a> by the intersection of <a href="scope.html#node" class="xref page"><code>node</code></a>, <a href="scope.html#pod" class="xref page"><code>pod</code></a>, and the <a href="scope.html#service" class="xref page"><code>service</code></a> named <code>secret-consumer</code></td>
 </tr>
 <tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Tells Kubernetes that the Stackable Secret Operator is responsible for mounting this volume</td>
+</tr>
+<tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Kubernetes requires us to specify some boilerplate settings for a <code>PersistentVolumeClaim</code> to be well-formed</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
 <td>The injected volume can then be mounted into a container, just like any other volume. In this example, the secrets are provided in the <code>/tls</code> directory of the container.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Only ephemeral volumes are supported, the Secret Operator does <strong>not</strong> support declaring standalone <code>PersistentVolumeClaim</code> objects.
+</td>
 </tr>
 </table>
 </div>

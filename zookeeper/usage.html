@@ -274,10 +274,9 @@
 <div class="paragraph">
 <p>To create a three-node Apache ZooKeeper (v3.8.0) cluster:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>$ cat zookeeper.yaml
----
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperCluster
 metadata:
@@ -288,17 +287,15 @@ spec:
     roleGroups:
       default:
         replicas: 3
-        config: {}
-$ kubectl apply -f zookeeper.yaml</pre>
+        config: {}</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Afterwards, a <a href="znodes.html" class="xref page">ZNode</a> can be created:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>$ cat znode.yaml
----
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperZnode
 metadata:
@@ -306,8 +303,7 @@ metadata:
 spec:
   clusterRef:
     name: simple-zk
-    namespace: default
-$ kubectl apply -f znode.yaml</pre>
+    namespace: default</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -318,6 +314,151 @@ $ kubectl apply -f znode.yaml</pre>
 <pre>$ kubectl get configmap simple-znode-nodeport -o yaml
 $ $ZOOKEEPER_HOME/bin/zkCli.sh -server $(kubectl get configmap simple-znode-nodeport -o jsonpath='{.data.ZOOKEEPER}')</pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_encryption"><a class="anchor" href="#_encryption"></a>Encryption</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The quorum and client communication are encrypted by default via TLS. This requires the <a href="https://github.com/stackabletech/secret-operator">Secret Operator</a> to be present in order to provide certificates. The utilized certificates can be changed in a top-level config.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperCluster
+metadata:
+  name: simple-zk
+spec:
+  version: 3.8.0
+  config:
+    tls:
+      secretClass: tls <i class="conum" data-value="1"></i><b>(1)</b>
+    quorumTlsSecretClass: tls <i class="conum" data-value="2"></i><b>(2)</b>
+  servers:
+    roleGroups:
+      default:
+        replicas: 3</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>tls.secretClass</code> refers to the client-to-server encryption. Defaults to the <code>tls</code> secret.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>quorumTlsSecretClass</code> refers to the server-to-server quorum encryption. Defaults to the <code>tls</code> secret.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>tls</code> secret is deployed from the <a href="https://github.com/stackabletech/secret-operator">Secret Operator</a> and looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: tls
+spec:
+  backend:
+    autoTls:
+      ca:
+        secret:
+          name: secret-provisioner-tls-ca
+          namespace: default
+        autoGenerate: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can create your own secrets and reference them e.g. in the <code>tls.secretClass</code> to use different certificates.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authentication"><a class="anchor" href="#_authentication"></a>Authentication</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The quorum or server-to-server communication is authenticated via TLS per default. In order to enforce TLS authentication for client-to-server communication, you can set an <code>AuthenticationClass</code> reference in the custom resource provided by the <a href="https://github.com/stackabletech/commons-operator">Commons Operator</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperCluster
+metadata:
+  name: simple-zk
+spec:
+  version: 3.8.0
+  config:
+    tls:
+      secretClass: tls
+    clientAuthentication:
+      authenticationClass: zk-client-tls <i class="conum" data-value="1"></i><b>(1)</b>
+    quorumTlsSecretClass: tls
+  servers:
+    roleGroups:
+      default:
+        replicas: 3
+---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: zk-client-tls <i class="conum" data-value="2"></i><b>(2)</b>
+spec:
+  provider:
+    tls:
+      clientCertSecretClass: zk-client-auth-secret <i class="conum" data-value="3"></i><b>(3)</b>
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: zk-client-auth-secret <i class="conum" data-value="4"></i><b>(4)</b>
+spec:
+  backend:
+    autoTls:
+      ca:
+        secret:
+          name: secret-provisioner-tls-zk-client-ca
+          namespace: default
+        autoGenerate: true</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>config.clientAuthentication.authenticationClass</code> can be set to use TLS for authentication. This is optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The referenced <code>AuthenticationClass</code> that references a <code>SecretClass</code> to provide certificates.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The reference to a <code>SecretClass</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The <code>SecretClass</code> that is referenced by the <code>AuthenticationClass</code> in order to provide certificates.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Due to a <a href="https://issues.apache.org/jira/browse/ZOOKEEPER-4276">bug</a> in ZooKeeper, the <code>clientPort</code> property in combination with <code>client.portUnification=true</code> is used instead of the <code>secureClientPort</code>. This means that unencrypted and unauthenticated access to the ZooKeeper cluster is still possible.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

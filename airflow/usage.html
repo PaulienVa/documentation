@@ -361,22 +361,19 @@ spec:
   executor: CeleryExecutor
   loadExamples: true
   exposeConfig: false
+  credentialsSecret: simple-airflow-credentials
   webservers:
     roleGroups:
       default:
-        config:
-          credentialsSecret: simple-airflow-credentials
+        replicas: 1
   workers:
     roleGroups:
       default:
-        config:
-          credentialsSecret: simple-airflow-credentials
         replicas: 2
   schedulers:
     roleGroups:
       default:
-        config:
-          credentialsSecret: simple-airflow-credentials</code></pre>
+        replicas: 1</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -477,8 +474,7 @@ and currently only the latter is implemented. This is described in the following
       AIRFLOW__WEBSERVER__AUTO_REFRESH_INTERVAL: "8"
     roleGroups:
       default:
-        config:
-          credentialsSecret: simple-airflow-credentials</code></pre>
+        replicas: 1</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -491,8 +487,7 @@ and currently only the latter is implemented. This is described in the following
       default:
         envOverrides:
           AIRFLOW__WEBSERVER__AUTO_REFRESH_INTERVAL: "8"
-        config:
-          credentialsSecret: simple-airflow-credentials</code></pre>
+        replicas: 1</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -505,31 +500,7 @@ and currently only the latter is implemented. This is described in the following
 <h2 id="_initializing_the_airflow_database"><a class="anchor" href="#_initializing_the_airflow_database"></a>Initializing the Airflow database</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If the database is not initialized yet for Airflow, the <code>init</code> command must be executed: the
-command initializes the database by creating the necessary database tables, creating the admin user
-account, and loading examples if desired. The webserver will not be available/ready until this initialization
-step has been completed.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: command.airflow.stackable.tech/v1alpha1
-kind: Init
-metadata:
-  name: airflow-cluster-command-init
-spec:
-  clusterRef:
-    name: airflow
-  credentialsSecret: simple-airflow-credentials</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>spec.clusterRef.name</code> refers to the name of the Airflow cluster.</p>
-</div>
-<div class="paragraph">
-<p>The previously created secret must be referenced in <code>spec.credentialsSecret</code>.</p>
-</div>
-<div class="paragraph">
-<p>A Kubernetes job is created which starts a pod to initialize the database. This can take a while.</p>
+<p>Airflow comes with a default embedded database (intended only for standalone mode): for cluster usage an external database is used such as PostgreSQL, described above. This database must be initialized with an airflow schema and the Admin user defined in the airflow credentials <code>Secret</code>. This is done the first time the cluster is created and can take a few moments.</p>
 </div>
 </div>
 </div>
@@ -672,6 +643,7 @@ spec:
   executor: CeleryExecutor
   loadExamples: false
   exposeConfig: false
+  credentialsSecret: simple-airflow-credentials
   volumes:
     - name: cm-dag <i class="conum" data-value="3"></i><b>(3)</b>
       configMap:
@@ -685,23 +657,19 @@ spec:
       default:
         envOverrides:
           AIRFLOW__CORE__DAGS_FOLDER: "/dags" <i class="conum" data-value="8"></i><b>(8)</b>
-        config:
-          credentialsSecret: simple-airflow-credentials
+        replicas: 1
   workers:
     roleGroups:
       default:
         envOverrides:
           AIRFLOW__CORE__DAGS_FOLDER: "/dags" <i class="conum" data-value="8"></i><b>(8)</b>
-        config:
-          credentialsSecret: simple-airflow-credentials
         replicas: 2
   schedulers:
     roleGroups:
       default:
         envOverrides:
           AIRFLOW__CORE__DAGS_FOLDER: "/dags" <i class="conum" data-value="8"></i><b>(8)</b>
-        config:
-          credentialsSecret: simple-airflow-credentials</pre>
+        replicas: 1</pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -826,6 +794,7 @@ spec:
   executor: CeleryExecutor
   loadExamples: false
   exposeConfig: false
+  credentialsSecret: simple-airflow-credentials
   volumes:
     - name: external-dags <i class="conum" data-value="8"></i><b>(8)</b>
       persistentVolumeClaim:
@@ -838,23 +807,19 @@ spec:
       default:
         envOverrides:
           AIRFLOW__CORE__DAGS_FOLDER: "/stackable/external-dags" <i class="conum" data-value="12"></i><b>(12)</b>
-        config:
-          credentialsSecret: simple-airflow-credentials
+        replicas: 1
   workers:
     roleGroups:
       default:
         envOverrides:
           AIRFLOW__CORE__DAGS_FOLDER: "/stackable/external-dags" <i class="conum" data-value="12"></i><b>(12)</b>
-        config:
-          credentialsSecret: simple-airflow-credentials
         replicas: 2
   schedulers:
     roleGroups:
       default:
         envOverrides:
           AIRFLOW__CORE__DAGS_FOLDER: "/stackable/external-dags" <i class="conum" data-value="12"></i><b>(12)</b>
-        config:
-          credentialsSecret: simple-airflow-credentials</code></pre>
+        replicas: 1</code></pre>
 </div>
 </div>
 <div class="colist arabic">

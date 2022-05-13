@@ -303,7 +303,8 @@ for any other security related needs by extensions. It should be a long random s
 the Superset metadata.</p>
 </div>
 <div class="paragraph">
-<p>The <code>adminUser</code> fields are used to create an admin user.</p>
+<p>The <code>adminUser</code> fields are used to create an admin user.
+Please note that the admin user will be disabled if you use a non-default authentication mechanism like LDAP.</p>
 </div>
 </div>
 </div>
@@ -393,6 +394,15 @@ browser.</p>
 <div class="content">
 <img src="_images/superset-dashboard.png" alt="Superset dashboard showing birth names">
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authenticate_users_using_ldap"><a class="anchor" href="#_authenticate_users_using_ldap"></a>Authenticate users using LDAP</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Superset supports authentication of users against an LDAP server.
+Have a look at <a href="https://github.com/stackabletech/superset-operator/blob/main/examples/superset-with-ldap.yaml">the LDAP example</a> and the general <a href="../commons-operator/authenticationclass.html" class="xref page">Stackable Authentication</a> documentation.</p>
 </div>
 </div>
 </div>

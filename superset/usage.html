@@ -398,11 +398,63 @@ browser.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_authenticate_users_using_ldap"><a class="anchor" href="#_authenticate_users_using_ldap"></a>Authenticate users using LDAP</h2>
+<h2 id="_authentication"><a class="anchor" href="#_authentication"></a>Authentication</h2>
 <div class="sectionbody">
 <div class="paragraph">
+<p>Every user has to authenticate themselves before using Superset.
+There are multiple options to set up the authentication of users.</p>
+</div>
+<div class="sect2">
+<h3 id="_webinterface"><a class="anchor" href="#_webinterface"></a>Webinterface</h3>
+<div class="paragraph">
+<p>The default setting is to manually set up users via the Webinterface.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ldap"><a class="anchor" href="#_ldap"></a>LDAP</h3>
+<div class="paragraph">
 <p>Superset supports authentication of users against an LDAP server.
-Have a look at <a href="https://github.com/stackabletech/superset-operator/blob/main/examples/superset-with-ldap.yaml">the LDAP example</a> and the general <a href="../commons-operator/authenticationclass.html" class="xref page">Stackable Authentication</a> documentation.</p>
+Have a look at <a href="https://github.com/stackabletech/superset-operator/blob/main/examples/superset-with-ldap.yaml">the LDAP example</a> and the general <a href="../commons-operator/authenticationclass.html" class="xref page">Stackable Authentication</a> documentation on how to set it up.
+In general it requires you to specify a xref:commons-operator::authenticationclass.adoc which is used to authenticate the users. In this example we assign all the users the <code>Admin</code> role once they log into Superset.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: superset.stackable.tech/v1alpha1
+kind: SupersetCluster
+metadata:
+  name: superset-with-ldap-server-veri-tls
+spec:
+  version: 1.4.1
+  [...]
+  authenticationConfig:
+    authenticationClass: superset-with-ldap-server-veri-tls-ldap
+    userRegistrationRole: Admin</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authorization"><a class="anchor" href="#_authorization"></a>Authorization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Superset has a concept called <code>Roles</code> which allows you to grant user permissions based on roles.
+Have a look at the <a href="https://superset.apache.org/docs/security">Superset documentation on Security</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="_webinterface_2"><a class="anchor" href="#_webinterface_2"></a>Webinterface</h3>
+<div class="paragraph">
+<p>You can see all the available roles in the Webinterface of Superset.
+You can view all the available roles in the Webinterface of Superset and can also assign users to these roles.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ldap_2"><a class="anchor" href="#_ldap_2"></a>LDAP</h3>
+<div class="paragraph">
+<p>Superset supports assigning roles to users based on their LDAP group membership.
+This is not supported yet.
+Currently all the users logging in via LDAP get assigned the same role which you can configure via the attribute <code>authenticationConfig.userRegistrationRole</code> on the <code>SupersetCluster</code> object.</p>
+</div>
 </div>
 </div>
 </div>

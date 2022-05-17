@@ -258,122 +258,23 @@
 </aside>
 <article class="doc">
 <h1 class="page">Usage</h1>
-<div id="preamble">
+<div class="sect1">
+<h2 id="_requirements"><a class="anchor" href="#_requirements"></a>Requirements</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>After installation, ensure that the CRD for this operator exists or create yourself:</p>
+<p>Apache Hive Metastores need a relational database to store their state.
+We currently support <a href="https://www.postgresql.org/">PostgreSQL</a> and <a href="https://db.apache.org/derby/">Apache Derby</a> (embedded database, not recommended for production).
+Other databases might work if JDBC drivers are available.
+Please open an <a href="https://github.com/stackabletech/hive-operator/issues">issue</a> if you require support for another database.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f /etc/stackable/hive-operator/crd/hivecluster.crd.yaml</code></pre>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_s3_support"><a class="anchor" href="#_s3_support"></a>S3 Support</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>To create a single node Apache Hive Metastore (v2.3.9) cluster with derby:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: hive.stackable.tech/v1alpha1
-kind: HiveCluster
-metadata:
-  name: simple-hive-derby
-spec:
-  version: 2.3.9
-  metastore:
-    roleGroups:
-      default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        replicas: 1
-        config:
-          database:
-            connString: jdbc:derby:;databaseName=/tmp/metastore_db;create=true
-            user: APP
-            password: mine
-            dbType: derby</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To create a single node Apache Hive Metastore (v2.3.9) cluster with derby and S3 access:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">    apiVersion: hive.stackable.tech/v1alpha1
-    kind: HiveCluster
-    metadata:
-      name: simple-hive-derby
-    spec:
-      version: 2.3.9
-      metastore:
-        roleGroups:
-          default:
-            selector:
-              matchLabels:
-                kubernetes.io/os: linux
-            replicas: 1
-            config:
-              database:
-                connString: jdbc:derby:;databaseName=/stackable/metastore_db;create=true
-                user: APP
-                password: mine
-                dbType: derby
-              s3Connection:
-                endPoint: changeme
-                accessKey: changeme
-                secretKey: changeme
-                sslEnabled: false
-                pathStyleAccess: true</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To create a single node Apache Hive Metastore (v2.3.9) cluster with PostgreSQL, deploy a PostgreSQL instance via helm.</p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-PostgreSQL versions 11 or higher are currently not supported (see <a href="https://github.com/stackabletech/hive-operator/issues/167" class="bare">https://github.com/stackabletech/hive-operator/issues/167</a>):
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">helm install hive bitnami/postgresql --version=10 \
---set postgresqlUsername=hive \
---set postgresqlPassword=hive \
---set postgresqlDatabase=hive</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then deploy the example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: hive.stackable.tech/v1alpha1
-kind: HiveCluster
-metadata:
-  name: simple-hive-postgres
-spec:
-  version: 2.3.9
-  metastore:
-    roleGroups:
-      default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        replicas: 1
-        config:
-          database:
-            connString: jdbc:postgresql://hive-postgresql.default.svc.cluster.local:5432/hive
-            user: hive
-            password: hive
-            dbType: postgres</code></pre>
-</div>
+<p>Hive supports creating tables in S3 compatible object stores.
+To use this feature you need to provide connection details for the object store.</p>
 </div>
 </div>
 </div>
@@ -399,7 +300,7 @@ spec:
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Overriding certain properties which are set by operator (such as the HTTP port) can interfere with the operator and can lead to problems.
+Overriding certain properties, which are set by the operator (such as the HTTP port) can interfere with the operator and can lead to problems.
 </td>
 </tr>
 </table>
@@ -450,7 +351,7 @@ Overriding certain properties which are set by operator (such as the HTTP port) 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">routers:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">metastore:
   roleGroups:
     default:
       config: {}
@@ -464,7 +365,7 @@ Overriding certain properties which are set by operator (such as the HTTP port) 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">routers:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">metastore:
   envOverrides:
     MY_ENV_VAR: "MY_VALUE"
   roleGroups:
@@ -472,6 +373,114 @@ Overriding certain properties which are set by operator (such as the HTTP port) 
       config: {}
       replicas: 1</code></pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples"><a class="anchor" href="#_examples"></a>Examples</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="title">Create a single node Apache Hive Metastore cluster using Derby:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: hive.stackable.tech/v1alpha1
+kind: HiveCluster
+metadata:
+  name: simple-hive-derby
+spec:
+  version: 2.3.9
+  metastore:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: 1
+        config:
+          database:
+            connString: jdbc:derby:;databaseName=/tmp/metastore_db;create=true
+            user: APP
+            password: mine
+            dbType: derby</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Create a single node Apache Hive Metastore with Derby and S3 access:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">    apiVersion: hive.stackable.tech/v1alpha1
+    kind: HiveCluster
+    metadata:
+      name: simple-hive-derby
+    spec:
+      version: 2.3.9
+      metastore:
+        roleGroups:
+          default:
+            selector:
+              matchLabels:
+                kubernetes.io/os: linux
+            replicas: 1
+            config:
+              database:
+                connString: jdbc:derby:;databaseName=/stackable/metastore_db;create=true
+                user: APP
+                password: mine
+                dbType: derby
+              s3Connection:
+                endPoint: changeme
+                accessKey: changeme
+                secretKey: changeme
+                sslEnabled: false
+                pathStyleAccess: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To create a single node Apache Hive Metastore using PostgreSQL, deploy a PostgreSQL instance via helm.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+PostgreSQL introduced a new way to encrypt its passwords in version 10.
+This is called <code>scram-sha-256</code> and has been the default as of PostgreSQL 14.
+Unfortunately, Hive up until the latest 3.3.x version ships with JDBC drivers that do <a href="https://wiki.postgresql.org/wiki/List_of_drivers"><em>not</em> support</a> this method.
+You might see an error message like this:
+<code>The authentication type 10 is not supported.</code>
+If this is the case please either use an older PostgreSQL version or change its <a href="https://www.postgresql.org/docs/current/runtime-config-connection.html#GUC-PASSWORD-ENCRYPTION"><code>password_encryption</code></a> setting to <code>md5</code>.
+</div>
+</div>
+<div class="paragraph">
+<p>This installs PostgreSQL in version 10 to work around the issue mentioned above:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install hive bitnami/postgresql --version=10 \
+--set postgresqlUsername=hive \
+--set postgresqlPassword=hive \
+--set postgresqlDatabase=hive</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Create Hive Metastore using a PostgreSQL database</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: hive.stackable.tech/v1alpha1
+kind: HiveCluster
+metadata:
+  name: simple-hive-postgres
+spec:
+  version: 2.3.9
+  metastore:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: 1
+        config:
+          database:
+            connString: jdbc:postgresql://hive-postgresql.default.svc.cluster.local:5432/hive
+            user: hive
+            password: hive
+            dbType: postgres</code></pre>
 </div>
 </div>
 </div>

@@ -293,11 +293,13 @@
 <p><strong>Multiple values:</strong> false</p>
 </div>
 <div class="paragraph">
-<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
+<p>If provided the operator will <strong>only</strong> watch for resources in the provided namespace.
+If not provided it will watch in <strong>all</strong> namespaces.</p>
 </div>
 <div class="listingblock">
+<div class="title">Example: Only watch the <code>test</code> namespace</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">stackable-hive-operator run --watch-namespace test</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">stackable-hive-operator run --watch-namespace test</code></pre>
 </div>
 </div>
 </div>

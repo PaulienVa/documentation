@@ -287,7 +287,7 @@ installation method. First ensure that you have installed the Stackable Operator
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ helm repo add stackable https://repo.stackable.tech/repository/helm-stable/</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm repo add stackable https://repo.stackable.tech/repository/helm-stable/</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -295,7 +295,7 @@ installation method. First ensure that you have installed the Stackable Operator
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ helm install hive-operator stackable/hive-operator</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install hive-operator stackable/hive-operator</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -345,12 +345,12 @@ for this operator.</p>
 <h2 id="_building_the_operator_from_source"><a class="anchor" href="#_building_the_operator_from_source"></a>Building the operator from source</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This operator is written in Rust and is developed against the latest stable Rust release (1.57 at the time of writing).</p>
+<p>This operator is written in Rust and is developed against the latest stable Rust release (1.60 at the time of writing).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">stackable-hive-operator crd | kubectl apply -f -
-stackable-hive-operator run</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cargo run crd | kubectl apply -f -
+cargo run run</code></pre>
 </div>
 </div>
 </div>

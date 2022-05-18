@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Architectural Decision Records :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/index.html">
+    <title>ADR019: Trino catalog definitions :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR019-trino_catalog_definitions.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -178,7 +178,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../opa_configuration.html">OPA Configuration</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
+  <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="index.html">Architectural Decision Records</a>
 <ul class="nav-list">
@@ -237,7 +237,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR018-product_image_versioning.html">ADR018: Product Image Versioning</a>
   </li>
-  <li class="nav-item" data-depth="4">
+  <li class="nav-item is-current-page" data-depth="4">
     <a class="nav-link" href="ADR019-trino_catalog_definitions.html">ADR019: Trino catalog definitions</a>
   </li>
   <li class="nav-item" data-depth="4">
@@ -420,79 +420,225 @@
     <li><a href="../../index.html">Stackable Documentation</a></li>
     <li><a href="../index.html">Contributor&#8217;s Guide</a></li>
     <li><a href="index.html">Architectural Decision Records</a></li>
+    <li>Current</li>
+    <li><a href="ADR019-trino_catalog_definitions.html">ADR019: Trino catalog definitions</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/index.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR019-trino_catalog_definitions.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Architectural Decision Records</h1>
+<h1 class="page">ADR019: Trino catalog definitions</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Status: accepted</p>
+</li>
+<li>
+<p>Deciders:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Felix Hennig</p>
+</li>
+<li>
+<p>Malte Sander</p>
+</li>
+<li>
+<p>Sebastian Bernauer</p>
+</li>
+<li>
+<p>Sönke Liebau</p>
+</li>
+<li>
+<p>Teo Klestrup Röijezon</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Date: 17.05.2022</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>This section contains a decision log on architectural decisions in the form of architectural decision records (ADRs). Find the list of below:</p>
+<p><a href="https://trino.io">Trino</a> allows user to specify multiple catalogs to connect to a variety of different data-sources.
+We need to agree on a mechanism to</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Specifying Trino catalog definitions (this ADR)</p>
+</li>
+<li>
+<p>Connect a catalog definition to an Trino cluster (<a href="ADR020-trino_catalog_usage.html" class="xref page">ADR020: Trino catalog usage</a>)</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_decision_drivers"><a class="anchor" href="#_decision_drivers"></a>Decision Drivers</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Multiple different types of connectors must be supported, e.g. <code>Hive</code>, <code>Iceberg</code>, <code>Oracle</code> and <code>PostgreSQL</code>.</p>
+</li>
+<li>
+<p>In case of catalogs that use distributed file-systems such as HDFS or S3 the access needs to be configured.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_considered_options"><a class="anchor" href="#_considered_options"></a>Considered Options</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>TrinoCatalog CRD with discovery ConfigMaps from same namespace</p>
+</li>
+<li>
+<p>TrinoCatalog CRD with discovery ConfigMaps from potentially other namespaces</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Chosen option: "TrinoCatalog CRD with discovery ConfigMaps from same namespace".
+This option lines up with the way we want to handle discovery ConfigMaps:
+The operator of the service connecting to (e.g. hdfs) watches for HdfsDirectory objects and provides us with a discovery ConfigMap in the target namespace.
+We will start only implementing the <code>Hive</code> connector and support more connectors in the future.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A TrinoCatalog has a top-level complex enum to distinguish between the different connector types.
+This way every connector can define it&#8217;s own set of attributes that it supports.</p>
+</div>
+<div class="sect2">
+<h3 id="_trinocatalog_crd_with_discovery_configmaps_from_same_namespace"><a class="anchor" href="#_trinocatalog_crd_with_discovery_configmaps_from_same_namespace"></a>TrinoCatalog CRD with discovery ConfigMaps from same namespace</h3>
+<div class="paragraph">
+<p>Here all references to discovery ConfigMaps such as HDFS or Hive only are a string that contains the name of the ConfigMap. The ConfigMap must reside in the same namespace as the TrinoCatalog object</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+# Pseudo code!
+TrinoCatalog
+metadata:
+    name: trino-catalog
+    namespace: default
+spec:
+    hive:
+        metastore: # mandatory
+            configMap: my-hive-metastore
+        s3: # S3ConnectionDef, optional
+            inline:
+                host: minio
+            # OR
+            reference: my-minio-connection
+        hdfs: # optional
+            configMap: my-hdfs # will provide hdfs-site.xml
+            impersonation: true # optional, defaults to false
+            # there is no kerberos or wireEncryption attribute, as the information about kerberos comes from the discovery configmap
+    # OR
+    iceberg: {} # Attributes need to be defined later on when we support iceberg
+    # OR
+    postgresql: {} # Attributes need to be defined later on when we support postgresql
+    # OR [...]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Looking at the example of hdfs the hdfs discovery ConfigMap will be created by the hdfs-operator.
+That can be the case because we are running in the same namespace as hdfs or we place a HdfsDirectory object into the Trino namespace.
+The hdfs-operator then detects the HdfsDirectory object and places a discovery ConfigMap into the Trino namespace.
+(This is similar to the way ZooKeeper&#8217;s ZNodes currently work)</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="ADR001-choose_project_language.html" class="xref page">ADR001: Use English as Documentation Language</a></p>
+<p>Good, because it&#8217;s simple and we don&#8217;t have to worry about cross-namespace access</p>
 </li>
 <li>
-<p><a href="ADR002-choose_repository_structure.html" class="xref page">ADR002: Use Multiple Repositories instead of one Large Repository</a></p>
-</li>
-<li>
-<p><a href="ADR003-choose_review_mechanism.html" class="xref page">ADR003: Use RTC as Review Mechanism for Changes</a></p>
-</li>
-<li>
-<p><a href="ADR004-choose_agent_programming_language.html" class="xref page">ADR004: Use Rust as programming language for the agent</a></p>
-</li>
-<li>
-<p><a href="ADR005-systemd_unit_file_location.html" class="xref page">ADR005: Decide on handling and location of systemd unit files</a></p>
-</li>
-<li>
-<p><a href="ADR007-defined_reuse_of_k8s.html" class="xref page">ADR007: Decide if Kubernetes Components Are to be Reused for Stackable</a></p>
-</li>
-<li>
-<p><a href="ADR008-decide_reuse_of_operators.html" class="xref page">ADR008: Allow Reuse of Existing Kubernetes Operators</a></p>
-</li>
-<li>
-<p><a href="ADR009-selector_support.html" class="xref page">ADR009: Assigning Services to Nodes</a></p>
-</li>
-<li>
-<p><a href="ADR010-command_pattern.html" class="xref page">ADR010: Expressing one-shot commands in a Kubernetes-native way</a></p>
-</li>
-<li>
-<p><a href="ADR011-directory_structure.html" class="xref page">ADR011: Directory Structure Used by Stackable Components on Managed Hosts</a></p>
-</li>
-<li>
-<p><a href="ADR012-authn_token_management.html" class="xref page">ADR012: Authentication token management</a></p>
-</li>
-<li>
-<p><a href="ADR013-supported_kubernetes_versions.html" class="xref page">ADR013: Supported Kubernetes versions</a></p>
-</li>
-<li>
-<p><a href="ADR014-user_authentication_for_products.html" class="xref page">ADR014: User Authentication for Products</a></p>
-</li>
-<li>
-<p><a href="ADR015-using_values_from_configmaps.html" class="xref page">ADR015: How Should Operators Use Values from ConfigMaps &amp; Secrets</a></p>
-</li>
-<li>
-<p><a href="ADR016-definition_of_s3_objects.html" class="xref page">ADR016: Representation of S3 Buckets in CRDs</a></p>
-</li>
-<li>
-<p><a href="ADR017-tls_authentication.html" class="xref page">ADR017: TLS authentication</a></p>
-</li>
-<li>
-<p><a href="ADR018-product_image_versioning.html" class="xref page">ADR018: Product Image Versioning</a></p>
-</li>
-<li>
-<p><a href="ADR019-trino_catalog_definitions.html" class="xref page">ADR019: Trino catalog definitions</a></p>
-</li>
-<li>
-<p><a href="ADR020-trino_catalog_usage.html" class="xref page">ADR020: Trino catalog usage</a></p>
+<p>Bad, because it prohibits the usage of an HDFS in a different namespace than the TrinoCatalog namespace. This can be solved by letting the hdfs-operator put the same discovery configmap into multiple namespaces (including the one with the TrinoCatalog)</p>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_trinocatalog_crd_with_discovery_configmaps_from_potentially_other_namespaces"><a class="anchor" href="#_trinocatalog_crd_with_discovery_configmaps_from_potentially_other_namespaces"></a>TrinoCatalog CRD with discovery ConfigMaps from potentially other namespaces</h3>
+<div class="paragraph">
+<p>Here all references to discovery ConfigMaps such as HDFS or Hive are a tuple of the name and the namespace of the ConfigMap. The namespace is optional, if not provided the same namespace from the TrinoCatalog will be used. The ConfigMap can reside in a different namespace as the TrinoCatalog object</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+# Pseudo code!
+TrinoCatalog
+metadata:
+    name: trino-catalog
+    namespace: default
+spec:
+    hive:
+        metastore: # mandatory
+            configMap:
+                name: my-hive-metastore
+                namespace: default # optional
+        s3: # S3ConnectionDef, optional
+            inline:
+                host: minio
+            # OR
+            reference:
+                name: my-minio-connection
+                namespace: default # optional
+        hdfs: # optional
+            configMap: # will provide hdfs-site.xml
+                name: my-hdfs
+                namespace: default # optional
+            impersonation: true # optional, defaults to false
+            # there is no kerberos or wireEncryption attribute, as the information about kerberos comes from the discovery configmap
+    # OR
+    iceberg: {} # Attributes need to be defined later on when we support iceberg
+    # OR
+    postgresql: {} # Attributes need to be defined later on when we support postgresql
+    # OR [...]</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because it allows easy cross-namespace access</p>
+</li>
+<li>
+<p>Bad, because it&#8217;s more complicated</p>
+</li>
+<li>
+<p>Bad, because we can&#8217;t simply mount the ConfigMap (e.g. with hdfs-site.xml) but instead somehow need to "transfer" it between different namespaces and watch the original ConfigMap.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 </article>
   </div>

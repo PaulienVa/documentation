@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Architectural Decision Records :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/index.html">
+    <title>ADR020: Trino catalog usage :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR020-trino_catalog_usage.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -178,7 +178,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../opa_configuration.html">OPA Configuration</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
+  <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="index.html">Architectural Decision Records</a>
 <ul class="nav-list">
@@ -240,7 +240,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR019-trino_catalog_definitions.html">ADR019: Trino catalog definitions</a>
   </li>
-  <li class="nav-item" data-depth="4">
+  <li class="nav-item is-current-page" data-depth="4">
     <a class="nav-link" href="ADR020-trino_catalog_usage.html">ADR020: Trino catalog usage</a>
   </li>
 </ul>
@@ -420,79 +420,233 @@
     <li><a href="../../index.html">Stackable Documentation</a></li>
     <li><a href="../index.html">Contributor&#8217;s Guide</a></li>
     <li><a href="index.html">Architectural Decision Records</a></li>
+    <li>Current</li>
+    <li><a href="ADR020-trino_catalog_usage.html">ADR020: Trino catalog usage</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/index.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR020-trino_catalog_usage.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Architectural Decision Records</h1>
+<h1 class="page">ADR020: Trino catalog usage</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Status: accepted</p>
+</li>
+<li>
+<p>Deciders:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Felix Hennig</p>
+</li>
+<li>
+<p>Malte Sander</p>
+</li>
+<li>
+<p>Sebastian Bernauer</p>
+</li>
+<li>
+<p>Sönke Liebau</p>
+</li>
+<li>
+<p>Teo Klestrup Röijezon</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Date: 17.05.2022</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>This section contains a decision log on architectural decisions in the form of architectural decision records (ADRs). Find the list of below:</p>
+<p><a href="https://trino.io">Trino</a> allows user to specify multiple catalogs to connect to a variety of different data-sources.
+We need to agree on a mechanism to</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Specifying Trino catalog definitions (<a href="ADR019-trino_catalog_definitions.html" class="xref page">ADR019: Trino catalog definitions</a>)</p>
+</li>
+<li>
+<p>Connect a catalog definition to an Trino cluster (this ADR)</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_decision_drivers"><a class="anchor" href="#_decision_drivers"></a>Decision Drivers</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Catalogs must somehow be added to Trino clusters</p>
+</li>
+<li>
+<p>Catalogs should be reusable between multiple Trino clusters - e.g. users have two identical Trino clusters - one for adhoc queries, on for scheduled jobs.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_considered_options"><a class="anchor" href="#_considered_options"></a>Considered Options</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Catalog references Clusters</p>
+</li>
+<li>
+<p>Cluster references Catalogs</p>
+</li>
+<li>
+<p>Mapping object between Catalog and Cluster</p>
+</li>
+<li>
+<p>Catalog references Cluster</p>
+</li>
+<li>
+<p>Mapping via labels and label selectors</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Chosen option: "Mapping via labels and label selectors", because it&#8217;s the most flexible solution and delegates implementation details to kubernetes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_catalog_references_clusters"><a class="anchor" href="#_catalog_references_clusters"></a>Catalog references Clusters</h3>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/adr/20_option1.png" alt="20 option1">
+</div>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="ADR001-choose_project_language.html" class="xref page">ADR001: Use English as Documentation Language</a></p>
+<p>Good, because if Trino instances in different stages have different catalogs, a Trino Object can be reused over the different stages</p>
 </li>
 <li>
-<p><a href="ADR002-choose_repository_structure.html" class="xref page">ADR002: Use Multiple Repositories instead of one Large Repository</a></p>
-</li>
-<li>
-<p><a href="ADR003-choose_review_mechanism.html" class="xref page">ADR003: Use RTC as Review Mechanism for Changes</a></p>
-</li>
-<li>
-<p><a href="ADR004-choose_agent_programming_language.html" class="xref page">ADR004: Use Rust as programming language for the agent</a></p>
-</li>
-<li>
-<p><a href="ADR005-systemd_unit_file_location.html" class="xref page">ADR005: Decide on handling and location of systemd unit files</a></p>
-</li>
-<li>
-<p><a href="ADR007-defined_reuse_of_k8s.html" class="xref page">ADR007: Decide if Kubernetes Components Are to be Reused for Stackable</a></p>
-</li>
-<li>
-<p><a href="ADR008-decide_reuse_of_operators.html" class="xref page">ADR008: Allow Reuse of Existing Kubernetes Operators</a></p>
-</li>
-<li>
-<p><a href="ADR009-selector_support.html" class="xref page">ADR009: Assigning Services to Nodes</a></p>
-</li>
-<li>
-<p><a href="ADR010-command_pattern.html" class="xref page">ADR010: Expressing one-shot commands in a Kubernetes-native way</a></p>
-</li>
-<li>
-<p><a href="ADR011-directory_structure.html" class="xref page">ADR011: Directory Structure Used by Stackable Components on Managed Hosts</a></p>
-</li>
-<li>
-<p><a href="ADR012-authn_token_management.html" class="xref page">ADR012: Authentication token management</a></p>
-</li>
-<li>
-<p><a href="ADR013-supported_kubernetes_versions.html" class="xref page">ADR013: Supported Kubernetes versions</a></p>
-</li>
-<li>
-<p><a href="ADR014-user_authentication_for_products.html" class="xref page">ADR014: User Authentication for Products</a></p>
-</li>
-<li>
-<p><a href="ADR015-using_values_from_configmaps.html" class="xref page">ADR015: How Should Operators Use Values from ConfigMaps &amp; Secrets</a></p>
-</li>
-<li>
-<p><a href="ADR016-definition_of_s3_objects.html" class="xref page">ADR016: Representation of S3 Buckets in CRDs</a></p>
-</li>
-<li>
-<p><a href="ADR017-tls_authentication.html" class="xref page">ADR017: TLS authentication</a></p>
-</li>
-<li>
-<p><a href="ADR018-product_image_versioning.html" class="xref page">ADR018: Product Image Versioning</a></p>
-</li>
-<li>
-<p><a href="ADR019-trino_catalog_definitions.html" class="xref page">ADR019: Trino catalog definitions</a></p>
-</li>
-<li>
-<p><a href="ADR020-trino_catalog_usage.html" class="xref page">ADR020: Trino catalog usage</a></p>
+<p>Bad, because if a Trino Cluster has multiple catalogs and you want a similar Trino Cluster you need to modify all catalogs (and maybe restart your first Trino multiple times), not just simply create a new Trino Cluster copy</p>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cluster_references_catalogs"><a class="anchor" href="#_cluster_references_catalogs"></a>Cluster references Catalogs</h3>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/adr/20_option2.png" alt="20 option2">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because it&#8217;s the normal flow that our Product CRDs point to other objects, not the other direction</p>
+</li>
+<li>
+<p>Bad, because people adding new catalogs need to be able to modify the <code>TrinoCluster</code> object. There may be companies out there where different people operate Trino and manage the catalogs</p>
+</li>
+<li>
+<p>Bad, because if Trino instances in different stages have different catalogs a Trino Object can not be reused over the different stages</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mapping_object_between_catalog_and_cluster"><a class="anchor" href="#_mapping_object_between_catalog_and_cluster"></a>Mapping object between Catalog and Cluster</h3>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/adr/20_option3.png" alt="20 option3">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Bad, because more complicated for the users</p>
+</li>
+<li>
+<p>Bad, because more complicated watches needed</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_catalog_references_cluster"><a class="anchor" href="#_catalog_references_cluster"></a>Catalog references Cluster</h3>
+<div class="paragraph">
+<p>This is the same as <a href="#_catalog_references_clusters">Catalog references Clusters</a> but instead of a list of Clusters the Catalog only contains a single Cluster.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/adr/20_option4.png" alt="20 option4">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because if Trino instances in different stages have different catalogs a Trino Object can be reused over the different stages</p>
+</li>
+<li>
+<p>Good compared to <a href="#_catalog_references_clusters">Catalog references Clusters</a>, because an <code>TrinoCatalog</code> is associated with an <code>TrinoCluster</code> and the cluster can add additional information to it like the current deployment status</p>
+</li>
+<li>
+<p>Bad, because catalogs can not be reused between multiple Trino clusters</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mapping_via_labels_and_label_selectors"><a class="anchor" href="#_mapping_via_labels_and_label_selectors"></a>Mapping via labels and label selectors</h3>
+<div class="paragraph">
+<p>This is option <a href="#_mapping_object_between_catalog_and_cluster">Mapping object between Catalog and Cluster</a> the "kubernetes way".</p>
+</div>
+<div class="paragraph">
+<p>Every <code>TrinoCatalog</code> object provides a set of labels.
+The <code>TrinoCluster</code> objects provide a LabelSelector which defines which catalogs should be included in the Trino instance.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/adr/20_option5.png" alt="20 option5">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because flexible (Trino cluster administrators can add new catalogs and teams can add their needed catalogs to an managed Trino instance)</p>
+</li>
+<li>
+<p>Good, because the usage of well-known kubernetes patterns</p>
+</li>
+<li>
+<p>Good, because delegates implementation details to kubernetes (e.g. easier watches)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 </article>
   </div>

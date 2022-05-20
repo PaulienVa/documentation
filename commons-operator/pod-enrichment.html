@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Usage :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/secret-operator/usage.html">
+    <title>Pod Enricher :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/commons-operator/pod-enrichment.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -55,8 +55,8 @@
     <a class="drop-down-item" href="../trino/index.html">Trino</a>
     <a class="drop-down-item" href="../zookeeper/index.html">Apache ZooKeeper</a>
     <a class="drop-down-item" href="../opa/index.html">OpenPolicyAgent</a>
-    <a class="drop-down-item" href="../commons-operator/index.html">Commons</a>
-    <a class="drop-down-item" href="index.html">Secret</a>
+    <a class="drop-down-item" href="index.html">Commons</a>
+    <a class="drop-down-item" href="../secret-operator/index.html">Secret</a>
     </div>
 </div>
 <a class="navbar-sub-item" href="../home/contributor/index.html">Contribute</a>
@@ -69,25 +69,22 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="secret-operator" data-version="master">
+<div class="nav-container" data-component="commons-operator" data-version="master">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">Stackable Secret Operator</a></h3>
+    <h3 class="title"><a href="index.html">Stackable Commons Operator</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="building.html">Building the Operator</a>
-  </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -95,13 +92,13 @@
     <span class="nav-text">Concepts</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="secretclass.html"><code>SecretClass</code></a>
+    <a class="nav-link" href="authenticationclass.html"><code>AuthenticationClass</code></a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="scope.html">Scope</a>
+    <a class="nav-link" href="tls.html">TLS</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="volume.html">Volume</a>
+    <a class="nav-link" href="restarter.html">Restarter</a>
   </li>
 </ul>
   </li>
@@ -112,15 +109,15 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Stackable Secret Operator</span>
+    <span class="title">Stackable Commons Operator</span>
     <span class="version">master</span>
   </div>
   <ul class="components">
-    <li class="component">
-      <a class="title" href="../commons-operator/index.html">Stackable Commons Operator</a>
+    <li class="component is-current">
+      <a class="title" href="index.html">Stackable Commons Operator</a>
       <ul class="versions">
-        <li class="version is-latest">
-          <a href="../commons-operator/index.html">master</a>
+        <li class="version is-current is-latest">
+          <a href="index.html">master</a>
         </li>
       </ul>
     </li>
@@ -236,11 +233,11 @@
         </li>
       </ul>
     </li>
-    <li class="component is-current">
-      <a class="title" href="index.html">Stackable Secret Operator</a>
+    <li class="component">
+      <a class="title" href="../secret-operator/0.4.0/index.html">Stackable Secret Operator</a>
       <ul class="versions">
-        <li class="version is-current is-latest">
-          <a href="index.html">master</a>
+        <li class="version is-latest">
+          <a href="../secret-operator/0.4.0/index.html">0.4.0</a>
         </li>
       </ul>
     </li>
@@ -255,76 +252,54 @@
   <a href="../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Stackable Secret Operator</a></li>
-    <li><a href="usage.html">Usage</a></li>
+    <li><a href="index.html">Stackable Commons Operator</a></li>
+    <li><a href="pod-enrichment.html">Pod Enricher</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/secret-operator/edit/main/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/commons-operator/edit/main/docs/modules/ROOT/pages/pod-enrichment.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Usage</h1>
+<h1 class="page">Pod Enricher</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>The operator injects secret data into <a href="volume.html" class="xref page">Volume</a> mounts that declare a CSI volume with <code>driver: secrets.stackable.tech</code>.</p>
+<p>The Stackable Commons Operator automatically adds commonly used information to <code>Pod</code> objects, which
+would otherwise have to be inferred by traversing the Kubernetes object graph.</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_usage"><a class="anchor" href="#_usage"></a>Usage</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>A minimal secret-consuming <code>Pod</code> looks like this:</p>
+<p>The pod enricher is only enabled for <code>Pod</code> objects that set the label <code>enrichment.stackable.tech/enabled</code> to <code>true</code>.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: v1
-kind: Pod
-metadata:
-  name: example-secret-consumer
-spec:
-  volumes:
-    - name: tls
-      ephemeral:
-        volumeClaimTemplate:
-          metadata:
-            annotations:
-              secrets.stackable.tech/class: secret
-              secrets.stackable.tech/scope: node,pod,service=secret-consumer-nginx
-          spec:
-            storageClassName: secrets.stackable.tech
-            accessModes:
-              - ReadWriteOnce
-            resources:
-              requests:
-                storage: "1"
-  containers:
-    - name: ubuntu
-      image: ubuntu
-      stdin: true
-      tty: true
-      volumeMounts:
-        - name: tls
-          mountPath: /tls</code></pre>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_node_address"><a class="anchor" href="#_node_address"></a>Node Address</h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Annotation</dt>
+<dd>
+<p><code>enrichment.stackable.tech/node-address</code></p>
+</dd>
+</dl>
 </div>
 <div class="paragraph">
-<p><a href="secretclass.html" class="xref page"><code>SecretClass</code></a> defines where the secrets come from. For example, the following <code>SecretClass</code>
-issues TLS certificates, storing its CA certificate in the Kubernetes <code>Secret</code> object named <code>secret-provisioner-tls-ca</code>:</p>
+<p>The hostname or IP address of the <code>Node</code> that the <code>Pod</code> is scheduled to run on.
+Compared to <code>Pod.status.nodeIP</code>, this can also (but doesn&#8217;t have to) be a hostname, and prefers
+externally routable addresses.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: secrets.stackable.tech/v1alpha1
-kind: SecretClass
-metadata:
-  name: tls
-spec:
-  backend:
-    autoTls:
-      ca:
-        secret:
-          name: secret-provisioner-tls-ca
-          namespace: default
-        autoGenerate: true</code></pre>
+<div class="paragraph">
+<p>This is intended to be used for components that need to register an accessible address (such as Kafka brokers,
+or HDFS DataNodes).</p>
+</div>
 </div>
 </div>
 </article>

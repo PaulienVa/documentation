@@ -234,10 +234,10 @@
       </ul>
     </li>
     <li class="component">
-      <a class="title" href="../secret-operator/index.html">Stackable Secret Operator</a>
+      <a class="title" href="../secret-operator/0.4.0/index.html">Stackable Secret Operator</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../secret-operator/index.html">master</a>
+          <a href="../secret-operator/0.4.0/index.html">0.4.0</a>
         </li>
       </ul>
     </li>
@@ -339,7 +339,7 @@ tls:
 </div>
 <div class="paragraph">
 <p>This example will use TLS and verify the server using the provided ca certificate.
-For this to work you need to create a <a href="../secret-operator/secretclass.html" class="xref page"><code>SecretClass</code></a> that - at least - contains the ca certificate.
+For this to work you need to create a <a href="../secret-operator/0.4.0/secretclass.html" class="xref page"><code>SecretClass</code></a> that - at least - contains the ca certificate.
 Note that a SecretClass does not need to have a key but can also work with just a ca cert.
 So if you got provided with a ca cert but don&#8217;t have access to the key you can still use this method.</p>
 </div>
@@ -358,8 +358,8 @@ tls:
 <h3 id="_mutual_verification"><a class="anchor" href="#_mutual_verification"></a>Mutual verification</h3>
 <div class="paragraph">
 <p>This example will use TLS and verify both - the server and the client using certificates.
-For this to work you need to create a <a href="../secret-operator/secretclass.html" class="xref page"><code>SecretClass</code></a> containing the ca certificate and a key to create new client-certificates.
-The <a href="../secret-operator/index.html" class="xref page">Stackable Secret Operator</a> will automatically provide the product with a <code>ca.crt</code>, <code>tls.crt</code> and <code>tls.key</code> so that the product can authenticate the server and it can authenticate itself at the server.</p>
+For this to work you need to create a <a href="../secret-operator/0.4.0/secretclass.html" class="xref page"><code>SecretClass</code></a> containing the ca certificate and a key to create new client-certificates.
+The <a href="../secret-operator/0.4.0/index.html" class="xref page">Stackable Secret Operator</a> will automatically provide the product with a <code>ca.crt</code>, <code>tls.crt</code> and <code>tls.key</code> so that the product can authenticate the server and it can authenticate itself at the server.</p>
 </div>
 <div class="listingblock">
 <div class="content">

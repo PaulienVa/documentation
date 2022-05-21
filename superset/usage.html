@@ -275,7 +275,7 @@ helm install superset bitnami/postgresql \
 <h2 id="_secret_with_superset_credentials"><a class="anchor" href="#_secret_with_superset_credentials"></a>Secret with Superset credentials</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A secret with the necessary credentials must be created, this entails database connection credentials as well as an admin account for superset itself:</p>
+<p>A secret with the necessary credentials must be created, this entails database connection credentials as well as an admin account for Superset itself:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -345,7 +345,7 @@ spec:
 <p>The previously created secret must be referenced in <code>spec.credentialsSecret</code>.</p>
 </div>
 <div class="paragraph">
-<p>The <code>spec.loadExamplesOnInit</code> key is optional and defaults to <code>false</code>, it can be set to <code>true</code> to load example data into superset when the database is initialized.</p>
+<p>The <code>spec.loadExamplesOnInit</code> key is optional and defaults to <code>false</code>, it can be set to <code>true</code> to load example data into Superset when the database is initialized.</p>
 </div>
 <div class="paragraph">
 <p>The <code>rowLimit</code> configuration option defines the row limit when requesting chart data.</p>
@@ -415,7 +415,7 @@ There are multiple options to set up the authentication of users.</p>
 <div class="paragraph">
 <p>Superset supports authentication of users against an LDAP server.
 Have a look at <a href="https://github.com/stackabletech/superset-operator/blob/main/examples/superset-with-ldap.yaml">the LDAP example</a> and the general <a href="../commons-operator/authenticationclass.html" class="xref page">Stackable Authentication</a> documentation on how to set it up.
-In general it requires you to specify a xref:commons-operator::authenticationclass.adoc which is used to authenticate the users. In this example we assign all the users the <code>Admin</code> role once they log into Superset.</p>
+In general, it requires you to specify a <a href="../commons-operator/authenticationclass.html" class="xref page"><code>AuthenticationClass</code></a> which is used to authenticate the users. In this example we assign all the users the <code>Admin</code> role once they log into Superset.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -462,7 +462,7 @@ Currently all the users logging in via LDAP get assigned the same role which you
 <h2 id="_connecting_apache_druid_clusters"><a class="anchor" href="#_connecting_apache_druid_clusters"></a>Connecting Apache Druid Clusters</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The operator can automatically connect superset clusters to Apache Druid clusters managed by the <a href="https://docs.stackable.tech/druid/index.html">Stackable Druid Cluster</a>.</p>
+<p>The operator can automatically connect Superset to Apache Druid clusters managed by the <a href="https://docs.stackable.tech/druid/index.html">Stackable Druid Cluster</a>.</p>
 </div>
 <div class="paragraph">
 <p>To do so, create a <code>DruidConnection</code> resource:</p>

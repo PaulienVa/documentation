@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Scope :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/secret-operator/0.4.0/scope.html">
+    <title>Untitled :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/secret-operator/nightly/commandline_args.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -69,7 +69,7 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="secret-operator" data-version="0.4.0">
+<div class="nav-container" data-component="secret-operator" data-version="nightly">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -97,7 +97,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="secretclass.html"><code>SecretClass</code></a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="scope.html">Scope</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -113,7 +113,7 @@
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
     <span class="title">Stackable Secret Operator</span>
-    <span class="version">0.4.0</span>
+    <span class="version">nightly</span>
   </div>
   <ul class="components">
     <li class="component">
@@ -240,7 +240,7 @@
       <a class="title" href="index.html">Stackable Secret Operator</a>
       <ul class="versions">
         <li class="version is-current is-latest">
-          <a href="index.html">0.4.0</a>
+          <a href="index.html">nightly</a>
         </li>
       </ul>
     </li>
@@ -254,86 +254,28 @@
 <button class="nav-toggle"></button>
   <a href="../../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="index.html">Stackable Secret Operator</a></li>
-    <li>Concepts</li>
-    <li><a href="scope.html">Scope</a></li>
-  </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/secret-operator/edit/main/docs/modules/ROOT/pages/scope.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/secret-operator/edit/main/docs/modules/ROOT/pages/commandline_args.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Scope</h1>
-<div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p>Secrets often cover some specific aspect of a workload. For example:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>A Kerberos credential may be bound to one node IP</p>
-</li>
-<li>
-<p>An internal TLS certificate&#8217;s <code>subjectAlternateName</code> section must match the <code>Pod</code> object&#8217;s name and service</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>To solve this, the Stackable Secret Operator has a concept of "scopes", which allow a <a href="volume.html" class="xref page">Volume</a> to selectively
-include this extra context. The exact effect of the scope depends on which <a href="secretclass.html#backend" class="xref page"><code>backend</code></a> is used.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_supported_scopes"><a class="anchor" href="#_supported_scopes"></a>Supported Scopes</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="node"><a class="anchor" href="#node"></a><code>node</code></h3>
+<h3 id="_csi_endpoint"><a class="anchor" href="#_csi_endpoint"></a>--csi-endpoint</h3>
 <div class="paragraph">
-<p>The <code>node</code> scope is resolved to the name of the Kubernetes <code>Node</code> object that the <code>Pod</code> is running on. This will typically
-be the DNS name of the node.</p>
+<p><strong>Required</strong>: true</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="pod"><a class="anchor" href="#pod"></a><code>pod</code></h3>
 <div class="paragraph">
-<p>The <code>pod</code> scope is resolved to the name of the Kubernetes <code>Pod</code>. This allows the secret to differentiate between <code>StatefulSet</code> replicas.</p>
+<p><strong>Multiple values</strong>: false</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="service"><a class="anchor" href="#service"></a><code>service</code></h3>
 <div class="paragraph">
-<p>The <code>service</code> scope allows <code>Pod</code> objects to specify custom scopes. This should typically correspond to <code>Service</code> objects that the
-<code>Pod</code> participate in.</p>
+<p><strong>Environment variable:</strong> <code>CSI_ENDPOINT</code></p>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_example"><a class="anchor" href="#_example"></a>Example</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>For example, a TLS certificate provisioned by the <a href="secretclass.html#backend-autotls" class="xref page"><code>autoTls</code></a> backend, with the scopes
-<a href="#node"><code>node</code></a> and <a href="#pod"><code>pod</code></a> would contain the following values in its <code>subjectAlternateName</code> (SAN) extension field:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>The node&#8217;s IP address</p>
-</li>
-<li>
-<p>The node&#8217;s fully qualified domain name (<code>my-node.example.com</code>)</p>
-</li>
-<li>
-<p>The pod&#8217;s fully qualified domain name (<code>my-pod.my-service.my-namespace.svc.cluster.local</code>)</p>
-</li>
-</ul>
-</div>
+<p>The path to the <a href="https://github.com/container-storage-interface/spec/blob/master/spec.md">Container Storage Interface</a> Unix Domain Socket
+that the operator should listen on.</p>
 </div>
 </div>
 </article>

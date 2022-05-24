@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Usage :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/secret-operator/0.4.0/usage.html">
+    <title>Building the Operator :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/secret-operator/nightly/building.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -69,7 +69,7 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="secret-operator" data-version="0.4.0">
+<div class="nav-container" data-component="secret-operator" data-version="nightly">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -78,7 +78,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="building.html">Building the Operator</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -87,7 +87,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -113,7 +113,7 @@
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
     <span class="title">Stackable Secret Operator</span>
-    <span class="version">0.4.0</span>
+    <span class="version">nightly</span>
   </div>
   <ul class="components">
     <li class="component">
@@ -240,7 +240,7 @@
       <a class="title" href="index.html">Stackable Secret Operator</a>
       <ul class="versions">
         <li class="version is-current is-latest">
-          <a href="index.html">0.4.0</a>
+          <a href="index.html">nightly</a>
         </li>
       </ul>
     </li>
@@ -256,75 +256,129 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Stackable Secret Operator</a></li>
-    <li><a href="usage.html">Usage</a></li>
+    <li><a href="building.html">Building the Operator</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/secret-operator/edit/main/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/secret-operator/edit/main/docs/modules/ROOT/pages/building.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Usage</h1>
+<h1 class="page">Building the Operator</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>The operator injects secret data into <a href="volume.html" class="xref page">Volume</a> mounts that declare a CSI volume with <code>driver: secrets.stackable.tech</code>.</p>
+<p>This operator is written in Rust.</p>
 </div>
 <div class="paragraph">
-<p>A minimal secret-consuming <code>Pod</code> looks like this:</p>
+<p>It is developed against the latest stable Rust release, and we currently don&#8217;t support any older versions.</p>
+</div>
+<div class="paragraph">
+<p>However, the Secret Operator is a <a href="https://github.com/container-storage-interface/spec/blob/master/spec.md">Container Storage Interface (CSI)</a> provider plugin
+for the local Kubelet, which means that it should only be executed inside of a Kubernetes <code>Pod</code>. We currently support two ways of building the
+Secret Operator: <code>docker build</code> and <a href="https://nixos.org/">Nix</a>. <code>docker build</code> is currently our primary deployment target, and our official images are built
+using it. However, Nix has much faster incremental build and deploy times, making it ideal for local development.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_docker"><a class="anchor" href="#_docker"></a>Docker</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To build and deploy to the active Kind cluster, run:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: v1
-kind: Pod
-metadata:
-  name: example-secret-consumer
-spec:
-  volumes:
-    - name: tls
-      ephemeral:
-        volumeClaimTemplate:
-          metadata:
-            annotations:
-              secrets.stackable.tech/class: secret
-              secrets.stackable.tech/scope: node,pod,service=secret-consumer-nginx
-          spec:
-            storageClassName: secrets.stackable.tech
-            accessModes:
-              - ReadWriteOnce
-            resources:
-              requests:
-                storage: "1"
-  containers:
-    - name: ubuntu
-      image: ubuntu
-      stdin: true
-      tty: true
-      volumeMounts:
-        - name: tls
-          mountPath: /tls</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ echo Building with Docker
+# Ensure that all submodules are up-to-date
+$ git submodule update --recursive --init
+# Update the Chart metadata and CRD definitions
+$ make compile-chart
+# Create a unique image ID
+$ REPO=secret-operator
+$ TAG="$(uuidgen)"
+# Build the image
+$ docker build . -f docker/Dockerfile -t "$REPO:$TAG"
+# Load the image onto the Kind nodes
+$ kind load docker-image "$REPO:$TAG"
+# Deploy
+$ helm upgrade secret-operator deploy/helm/secret-operator \
+       --install \
+       --set-string "image.repository=$REPO,image.tag=$TAG"</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_nix"><a class="anchor" href="#_nix"></a>Nix</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p><a href="secretclass.html" class="xref page"><code>SecretClass</code></a> defines where the secrets come from. For example, the following <code>SecretClass</code>
-issues TLS certificates, storing its CA certificate in the Kubernetes <code>Secret</code> object named <code>secret-provisioner-tls-ca</code>:</p>
+<p>To build and deploy to the active Kind cluster, run:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: secrets.stackable.tech/v1alpha1
-kind: SecretClass
-metadata:
-  name: tls
-spec:
-  backend:
-    autoTls:
-      ca:
-        secret:
-          name: secret-provisioner-tls-ca
-          namespace: default
-        autoGenerate: true</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ echo Building with Nix
+# Ensure that all submodules are up-to-date
+$ git submodule update --recursive --init
+# Ensure that the Cargo.lock is up-to-date
+# This is not required if you use a tool that invokes Cargo regularly anyway, such as Rust-Analyzer
+$ cargo generate-lockfile
+# Use crate2nix (https://github.com/kolloch/crate2nix) to convert Cargo.lock into a Nix derivation
+$ nix run -f . crate2nix generate
+# Build the Docker images
+$ nix build -f . docker
+# Load the images onto the Kind nodes
+# Nix does not use the Docker daemon, instead it builds individual layers, as well as a script (`result/load-image`) that combines them into a Docker image archive
+$ kind load image-archive &lt;(./result/load-image)
+# Deploy
+$ kubectl apply -f result/crds.yaml -f provisioner.yaml
+$ kubectl rollout restart ds/secret-provisioner</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You may need to add <code>extra-experimental-features = nix-command</code> to <code>/etc/nix/nix.conf</code>, or add <code>--experimental-features nix-command</code> to the Nix commands.</p>
+</div>
+<div class="paragraph">
+<p>You can also use <a href="https://tilt.dev/">Tilt</a> to automatically recompile and redeploy when files are changed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ nix run -f . tilt up</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_k3d"><a class="anchor" href="#_k3d"></a>K3d</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Secret-Operator, as with most CSI providers, requires the Kubernetes node&#8217;s root folder to be mounted as <code>rshared</code>. K3d does not do this by default,
+but can be prodded into doing this by running <code>mount --make-rshared /</code> in each node container.</p>
+</div>
+<div class="paragraph">
+<p>To do this for each running node K3d node, run the following script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">for i in $(k3d node list -o json | jq -r .[].name); do
+  docker exec -it $i mount --make-rshared /
+done</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This is <em>not</em> persistent, and must be re-executed every time the cluster (or a node in it) is restarted.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </article>

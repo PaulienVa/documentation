@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Stackable Secret Operator :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/secret-operator/0.4.0/index.html">
+    <title>Installation :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/secret-operator/nightly/installation.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -69,7 +69,7 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="secret-operator" data-version="0.4.0">
+<div class="nav-container" data-component="secret-operator" data-version="nightly">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -81,7 +81,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="building.html">Building the Operator</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -113,7 +113,7 @@
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
     <span class="title">Stackable Secret Operator</span>
-    <span class="version">0.4.0</span>
+    <span class="version">nightly</span>
   </div>
   <ul class="components">
     <li class="component">
@@ -240,7 +240,7 @@
       <a class="title" href="index.html">Stackable Secret Operator</a>
       <ul class="versions">
         <li class="version is-current is-latest">
-          <a href="index.html">0.4.0</a>
+          <a href="index.html">nightly</a>
         </li>
       </ul>
     </li>
@@ -256,18 +256,65 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Stackable Secret Operator</a></li>
+    <li><a href="installation.html">Installation</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/secret-operator/edit/main/docs/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/secret-operator/edit/main/docs/modules/ROOT/pages/installation.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Stackable Secret Operator</h1>
+<h1 class="page">Installation</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>This is an operator for Kubernetes that provisions and injects secrets into Kubernetes Pods.</p>
+<p>There are two ways to run the Stackable Secret Operator:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Helm managed Docker container deployment on Kubernetes</p>
+</li>
+<li>
+<p>Build from source</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_helm"><a class="anchor" href="#_helm"></a>Helm</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Helm allows you to download and deploy Stackable operators on Kubernetes and is by far the easiest installation method. First ensure that you have installed the Stackable Operators Helm repository:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ helm repo add stackable https://repo.stackable.tech/repository/helm-stable/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then install the Stackable Secret Operator</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ helm install secret-operator stackable/secret-operator</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Helm will deploy the operator in Kubernetes containers and apply the CRDs. You&#8217;re now ready to deploy secrets!</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_building_the_operator_from_source"><a class="anchor" href="#_building_the_operator_from_source"></a>Building the operator from source</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>See <a href="building.html" class="xref page">Building the Operator</a> for more information.</p>
+</div>
+</div>
 </div>
 </article>
   </div>

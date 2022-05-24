@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Untitled :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/secret-operator/0.4.0/commandline_args.html">
+    <title>Configuration :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/secret-operator/nightly/configuration.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -69,7 +69,7 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="secret-operator" data-version="0.4.0">
+<div class="nav-container" data-component="secret-operator" data-version="nightly">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -84,7 +84,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -113,7 +113,7 @@
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
     <span class="title">Stackable Secret Operator</span>
-    <span class="version">0.4.0</span>
+    <span class="version">nightly</span>
   </div>
   <ul class="components">
     <li class="component">
@@ -240,7 +240,7 @@
       <a class="title" href="index.html">Stackable Secret Operator</a>
       <ul class="versions">
         <li class="version is-current is-latest">
-          <a href="index.html">0.4.0</a>
+          <a href="index.html">nightly</a>
         </li>
       </ul>
     </li>
@@ -254,14 +254,25 @@
 <button class="nav-toggle"></button>
   <a href="../../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Stackable Secret Operator</a></li>
+    <li><a href="configuration.html">Configuration</a></li>
+  </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/secret-operator/edit/main/docs/modules/ROOT/pages/commandline_args.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/secret-operator/edit/main/docs/modules/ROOT/pages/configuration.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
+<h1 class="page">Configuration</h1>
+<div class="sect1">
+<h2 id="_command_line_parameters"><a class="anchor" href="#_command_line_parameters"></a>Command Line Parameters</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This operator accepts the following command line parameters:</p>
+</div>
 <div class="sect2">
 <h3 id="_csi_endpoint"><a class="anchor" href="#_csi_endpoint"></a>--csi-endpoint</h3>
 <div class="paragraph">
@@ -276,6 +287,8 @@
 <div class="paragraph">
 <p>The path to the <a href="https://github.com/container-storage-interface/spec/blob/master/spec.md">Container Storage Interface</a> Unix Domain Socket
 that the operator should listen on.</p>
+</div>
+</div>
 </div>
 </div>
 </article>

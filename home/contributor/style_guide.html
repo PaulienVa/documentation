@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Steps to contribute :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/steps.html">
+    <title>Documentation style guide :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/style_guide.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -166,7 +166,7 @@
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="index.html">Contributor&#8217;s Guide</a>
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="2">
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="steps.html">Steps to contribute</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -178,7 +178,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="opa_configuration.html">OPA Configuration</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="style_guide.html">Documentation style guide</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -434,221 +434,72 @@
   <ul>
     <li><a href="../index.html">Stackable Documentation</a></li>
     <li><a href="index.html">Contributor&#8217;s Guide</a></li>
-    <li><a href="steps.html">Steps to contribute</a></li>
+    <li><a href="style_guide.html">Documentation style guide</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/steps.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/style_guide.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Steps to contribute</h1>
-<div id="preamble">
-<div class="sectionbody">
+<h1 class="page">Documentation style guide</h1>
 <div class="paragraph">
-<p>This guide covers the steps for internal and external contributors. Differences will be outlined.</p>
+<p>This page provides guidelines on how to write documentation for the Stackable platform.</p>
 </div>
 <div class="paragraph">
-<p>Depending on the project, not all steps make sense. For instance, if the documentation was changed then the integration tests need not to be adapted. Please skip the steps which are not applicable.</p>
+<p>Style guidelines specify things such as capitalization rules, which format to use for emphasis or how API objects and other components should be styled in the documentation - formatting and "superficial" aspects of text.
+Grammar, tone and voice guidelines make the documentation consistent across the pages and as clear as possible.
+These guidelines include using a conversational tone, using second person and active voice.</p>
 </div>
+<div class="paragraph">
+<p>For formatting text and code, follow the <a href="https://kubernetes.io/docs/contribute/style/style-guide/">Kubernetes documentation style guide</a>. The Stackable platform is built on Kubernetes and the documentation often refers to Kubernetes API objects, custom resources and snippets of resource specifications, as well as command line snippets to interact with Kubernetes clusters.
+The Kubernetes documentation style guide specifies how these terms and snippets should be formatted. Some examples:</p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_preparation"><a class="anchor" href="#_preparation"></a>Preparation</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>As an external contributor, please fork the according repository on GitHub.</p>
-</li>
-<li>
-<p>Clone the repository to the local machine or if it is already cloned then make sure to pull the latest changes. Backports to previous releases are not covered in this guide.</p>
-</li>
-<li>
-<p>Create a feature branch. As for now, there is no naming convention.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_changes_in_rust_projects"><a class="anchor" href="#_changes_in_rust_projects"></a>Changes in Rust projects</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Make your desired changes in the according repository and test them manually. Ensure that the code compiles without warnings (<code>cargo clippy --all-targets</code>) and that the code is formatted with <code>cargo fmt</code>.</p>
-</li>
-<li>
-<p>If code was added or adapted then please create or adapt the unit tests in the same file. Ensure that all unit tests run successfully (<code>cargo test</code>).</p>
-</li>
-<li>
-<p>Comment your code and check with <code>cargo doc --document-private-items</code> that there are no syntax errors.</p>
-</li>
-<li>
-<p>The YAML schemas of the custom resource definitions (CRDs) are rebuilt when the project is compiled (see <code>rust/operator-binary/build.rs</code> if changing an operator). These CRDs as well as the product configuration are also required in the Helm chart and the Kubernetes manifest. To ensure that everything is in a consistent state, please execute <code>make regenerate-charts</code>.</p>
-</li>
-<li>
-<p>If it is useful for the users of the project to know about the change then it must be added to the changelog. For instance, if only the dependencies in an operator are upgraded but nothing changes for the user then the upgrade should not be added to the changelog. Conversely, if the dependencies in the <a href="https://github.com/stackabletech/operator-rs">operator framework</a> are upgraded then changes are probably required in the operators (which are the clients of the framework) and therefore the upgrade must be mentioned in the changelog. The changelog must be formatted according to <a href="https://keepachangelog.com/en/1.1.0/">keep a changelog</a>.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_changes_in_the_product_images"><a class="anchor" href="#_changes_in_the_product_images"></a>Changes in the product images</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>The code for building the product images can be found in the <a href="https://github.com/stackabletech/docker-images">docker-images repository</a>. Please follow the steps in <a href="#_preparation">Preparation</a>.</p>
-</li>
-<li>
-<p>Make the desired changes.</p>
-</li>
-<li>
-<p>Add an entry to the product image changelog and use the pattern <code>&lt;product&gt;-stackable&lt;stackable-image-version&gt;</code> to reference the next image version. The <code>&lt;stackable-image-version&gt;</code> follows semantic versioning and is independent of the upstream version.</p>
-</li>
-<li>
-<p>If a new version of a product was added then the following tasks must be performed:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Add the new version to the supported ones in the documentation of the operators (see <code>docs/modules/ROOT/partials/supported-versions.adoc</code> in the operator repositories).</p>
+<p><a href="https://kubernetes.io/docs/contribute/style/style-guide/#use-upper-camel-case-for-api-objects">Use PascalCase for API objects</a> such as ConfigMap or KafkaCluster</p>
 </li>
 <li>
-<p>Update the operator to support the new version if necessary.</p>
+<p><a href="https://kubernetes.io/docs/contribute/style/style-guide/#use-italics-to-define-or-introduce-new-terms">Use <em>italics</em> to define or introduce new terms</a></p>
 </li>
 <li>
-<p>Update the examples in the operator to use the new version.</p>
+<p><a href="https://kubernetes.io/docs/contribute/style/style-guide/#use-code-style-for-filenames-directories-and-paths">Use <code>code style</code> for filenames, directories and paths</a></p>
 </li>
 <li>
-<p>Update the integration tests. The tests should cover the latest patch version of each supported versions.</p>
+<p><a href="https://kubernetes.io/docs/contribute/style/style-guide/#use-code-style-for-object-field-names-and-namespaces">Use <code>code style</code> for object field names and namespaces</a></p>
+</li>
+<li>
+<p><a href="https://kubernetes.io/docs/contribute/style/style-guide/#use-normal-style-for-string-and-integer-field-values">Use normal style for string and integer field values</a></p>
 </li>
 </ul>
 </div>
-</li>
-<li>
-<p>Run the integration tests with the new product image. The image can be built and uploaded to the kind cluster with the following commands:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./build_product_images.py --product &lt;product&gt; --image_version &lt;stackable-image-version&gt;
-kind load docker-image &lt;image-tagged-with-the-major-version&gt; --name=integration-tests</code></pre>
-</div>
-</div>
 <div class="paragraph">
-<p>See the output of <code>build_product_images.py</code> to retrieve the image tag for <code>&lt;image-tagged-with-the-major-version&gt;</code>.</p>
+<p>For writing style, language, grammar and tone guidelines we refer to the <a href="https://developers.google.com/style/">Google developer documentation style guide</a>. Some highlights:</p>
 </div>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_changes_in_the_integration_tests"><a class="anchor" href="#_changes_in_the_integration_tests"></a>Changes in the integration tests</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Most code changes should also be tested with integration tests. The tests for every operator can be found in the <a href="https://github.com/stackabletech/integration-tests">integration-tests repository</a>. Follow the steps in <a href="#_preparation">Preparation</a> for the integration tests as well.</p>
-</li>
-<li>
-<p>Create or adapt the tests. Try to mimic the style of the other tests. They are written with <a href="https://kuttl.dev/">KUTTL</a> and in Python.</p>
-</li>
-<li>
-<p>Start a test cluster with the <code>create_test_cluster.py</code> script. Its usage is described in the <a href="https://github.com/stackabletech/integration-tests/blob/main/README.md"><code>README.md</code></a> file.</p>
-</li>
-<li>
-<p>If changes in an operator are tested then the according version of the operator must be started. If already another version was started by the test cluster script then it must be terminated. The operator can be started outside the cluster with <code>cargo run&#8201;&#8212;&#8201;crd | kubectl apply -f - &amp;&amp; cargo run&#8201;&#8212;&#8201;run</code>. This approach allows a fast test develop cycle but has the downside that the RBAC rules are not tested. So a proper Helm installation should be tested before creating a pull request. First a Docker image of the operator must be built locally and uploaded to the kind cluster and then the Helm chart must be installed. This can be achieved in the operator directory with the following commands:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build --file docker/Dockerfile --tag docker.stackable.tech/stackable/&lt;operator&gt;:&lt;version&gt;-nightly .
-kind load docker-image docker.stackable.tech/stackable/&lt;operator&gt;:&lt;version&gt;-nightly --name=integration-tests
-helm install &lt;operator&gt; deploy/helm/&lt;operator&gt;/</code></pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_changes_in_the_documentation"><a class="anchor" href="#_changes_in_the_documentation"></a>Changes in the documentation</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>The Stackable Platform documentation can be found at <a href="https://docs.stackable.tech/" class="bare">https://docs.stackable.tech/</a>. The documentation is built with Antora from the sources in the  <a href="https://github.com/stackabletech/documentation">documentation repository</a> and the <code>docs</code> directories in the operator repositories. Follow the steps in <a href="#_preparation">Preparation</a> to be able to change the documentation.</p>
-</li>
-<li>
-<p>Make your changes.</p>
-</li>
-<li>
-<p>Build the documentation locally to ensure that the formatting is fine and all links are specified correctly. See the <a href="https://github.com/stackabletech/documentation/blob/main/README.adoc"><code>README.adoc</code></a> file for further details and the <a href="style_guide.html" class="xref page">Documentation style guide</a> for style and formatting guidelines.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_changes_in_the_operator_templating"><a class="anchor" href="#_changes_in_the_operator_templating"></a>Changes in the operator-templating</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Files which are common in all operators are handled and rolled out by the <a href="https://github.com/stackabletech/operator-templating">operator-templating</a>. Follow the steps in <a href="#_preparation">Preparation</a> to check out the repository.</p>
-</li>
-<li>
-<p>Make your changes.</p>
-</li>
-<li>
-<p>Test the changes locally. Create the directory <code>work</code>, clone all operators into this directory, and run the <code>test.sh</code> script. The changes can be examined with <code>git status</code>. When the pull request is later merged into the <code>main</code> branch then pull requests with these changes will be created automatically. Depending on the change, it makes sense to run the integration tests for all changed operators. If the tests are not run in this stage and if there is even just one integration test failing in the subsequentially generated pull requests then the operator-templating must be adapted which creates again pull requests for all operators. Changes in the GitHub workflow actions cannot be tested until finally merged.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_create_pull_requests"><a class="anchor" href="#_create_pull_requests"></a>Create pull requests</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Finally, pull requests must be created for all adapted repositories.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Have a look at the review checklist and ensure that all applicable points are fulfilled.</p>
+<p><a href="https://developers.google.com/style/tone">Be conversational and friendly</a></p>
 </li>
 <li>
-<p>Create a comprehensive description of the changes.</p>
+<p><a href="https://developers.google.com/style/person">Use second person</a>: "You" rather than "we"</p>
 </li>
 <li>
-<p>Link the according issue to the pull request by using a keyword like "Closes".</p>
+<p><a href="https://developers.google.com/style/voice">Use active voice</a></p>
 </li>
 <li>
-<p>Add references to other pull requests, like the pull request in the integration-tests repository which contains test cases for the change in the operator pull request.</p>
-</li>
-<li>
-<p>Select a reviewer. Usually "stackabletech/developers" is a good choice.</p>
-</li>
-<li>
-<p>If you are an internal contributor then assign yourself to the issue.</p>
+<p><a href="https://developers.google.com/style/capitalization">Use sentence case for headings</a></p>
 </li>
 </ul>
 </div>
-</li>
-<li>
-<p>All pull requests must pass a quality gate before they can be merged. This gate consists of required and not strictly required checks which are performed by automated GitHub checks, as well as the mentioned checklist which is checked manually in the review. The number of checks seems to be overwhelming but in practice they can be quite easily fulfilled if following this guide. A properly set-up development environment (see <a href="index.html#_development_environment" class="xref page">Development Environment</a>) makes it even easier because the most critical steps are performed automatically like showing Clippy warnings while developing and formatting the code. Have a look at the status of the checks after they are processed and fix them. The <code>reviewdog</code> checks are not mandatory and can be ignored if the according change was intentionally. For instance, if a Kubernetes secret was added to the examples of an operator then the <code>detect-secrets</code> steps could fail which is okay in this case.</p>
-</li>
-<li>
-<p>After the pull request is approved, it can be merged. Internal contributors merge them on their own. Pull request from external contributors are merged by the approver.</p>
-</li>
-</ol>
+<div class="paragraph">
+<p>The Google guide also includes it&#8217;s own list of <a href="https://developers.google.com/style/highlights">highlights</a>.</p>
 </div>
-</div>
+<div class="paragraph">
+<p>Lastly, these are guidelines and not strict rules to follow. Use your own judgement to clearly communicate and explain - after all this is what documentation is about.</p>
 </div>
 </article>
   </div>

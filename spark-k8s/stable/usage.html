@@ -865,6 +865,14 @@ spec:
 <td class="tableblock halign-left valign-top"><p class="tableblock">Spark image which will be deployed to driver and executor pods, which must contain spark environment needed by the job e.g. <code>docker.stackable.tech/stackable/spark-k8s:3.2.1-hadoop3.2-stackable0.4.0</code></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spec.sparkImagePullPolicy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional Enum (one of <code>Always</code>, <code>IfNotPresent</code> or <code>Never</code>) that determines the pull policy of the spark job image</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spec.sparkImagePullSecrets</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An optional list of references to secrets in the same namespace to use for pulling any of the images used by a <code>SparkApplication</code> resource. Each reference has a single property (<code>name</code>) that must contain a reference to a valid secret</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spec.mainApplicationFile</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The actual application file that will be called by <code>spark-submit</code></p></td>
 </tr>

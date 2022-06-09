@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ADR014: User Authentication for Products :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR014-user_authentication_for_products.html">
+    <title>ADR021: Initial Version of Stackable Stacks Functionality :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/contributor/adr/ADR021-stackablectl_stacks_inital_version.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -225,7 +225,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR013-supported_kubernetes_versions.html">ADR013: Supported Kubernetes versions</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="4">
+  <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR014-user_authentication_for_products.html">ADR014: User Authentication for Products</a>
   </li>
   <li class="nav-item" data-depth="4">
@@ -246,7 +246,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR020-trino_catalog_usage.html">ADR020: Trino catalog usage</a>
   </li>
-  <li class="nav-item" data-depth="4">
+  <li class="nav-item is-current-page" data-depth="4">
     <a class="nav-link" href="ADR021-stackablectl_stacks_inital_version.html">ADR021: Initial Version of Stackable Stacks Functionality</a>
   </li>
 </ul>
@@ -433,17 +433,17 @@
     <li><a href="../index.html">Contributor&#8217;s Guide</a></li>
     <li><a href="index.html">Architectural Decision Records</a></li>
     <li>Current</li>
-    <li><a href="ADR014-user_authentication_for_products.html">ADR014: User Authentication for Products</a></li>
+    <li><a href="ADR021-stackablectl_stacks_inital_version.html">ADR021: Initial Version of Stackable Stacks Functionality</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR014-user_authentication_for_products.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR021-stackablectl_stacks_inital_version.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">ADR014: User Authentication for Products</h1>
+<h1 class="page">ADR021: Initial Version of Stackable Stacks Functionality</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="ulist">
@@ -456,27 +456,24 @@
 <div class="ulist">
 <ul>
 <li>
-<p>Teo Klestrup Röijezon</p>
+<p>Rob Siwicki</p>
+</li>
+<li>
+<p>Sebastian Bernauer</p>
 </li>
 <li>
 <p>Sönke Liebau</p>
 </li>
 <li>
-<p>Jim Halfpenny</p>
-</li>
-<li>
-<p>Sebastian Bernauer</p>
+<p>Teo Klestrup-Röijezon</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Date: 2022-03-03</p>
+<p>Date: 2022-06-07</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>Technical Story: <a href="https://github.com/stackabletech/issues/issues/170" class="bare">https://github.com/stackabletech/issues/issues/170</a></p>
 </div>
 </div>
 </div>
@@ -484,8 +481,20 @@
 <h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Customers will generally want to configure all user-facing products to authenticate the user against a common user directory.
-We&#8217;re aiming for a unified user experience when authenticating users in different products.</p>
+<p>During the preparations for the first real release we noticed that the <em>create_test_cluster.py</em> script is not really polished at all.
+We would very much like to include <em>stackablectl</em> as the CLI tool in the first release as well as demo it on the website in the configurator.</p>
+</div>
+<div class="paragraph">
+<p>In principle <em>stackablectl</em> is usable, but one main functionality is missing, which is the ability to apply the examples and stand up products.
+While just applying the examples is not a huge problem, some of our tool have external dependencies that we need to supply via helm charts at the moment (for example Trino needs a Postgres database).
+We need to have a way to install helm charts as part of the stacks functionality in <em>stackablectl</em> to make it viable for rolling out example setups.</p>
+</div>
+<div class="paragraph">
+<p>The scope of this ADR is to define a minimal solution that allows defining stacks and specifying Helm charts with properties as prerequisites before applying yaml files.
+This should be defined in a way that allows us as much flexibility as possible when further defining how <em>stackablectl stacks</em> should behave and how stacks are defined down the road, as this is an ongoing discussion.</p>
+</div>
+<div class="paragraph">
+<p>All subsequent decisions will be documented in a separate ADR.</p>
 </div>
 </div>
 </div>
@@ -495,10 +504,10 @@ We&#8217;re aiming for a unified user experience when authenticating users in di
 <div class="ulist">
 <ul>
 <li>
-<p>Multiple authentication systems and protocols exist, and not all products support all protocols</p>
+<p>Implementation effort should be small so this can be included in release 1</p>
 </li>
 <li>
-<p>The cluster administrator will typically want to use the same underlying authentication system for all services</p>
+<p>Chosen solution should give flexibility to extend it without breaking changes in the future</p>
 </li>
 </ul>
 </div>
@@ -507,18 +516,18 @@ We&#8217;re aiming for a unified user experience when authenticating users in di
 <div class="sect1">
 <h2 id="_considered_options"><a class="anchor" href="#_considered_options"></a>Considered Options</h2>
 <div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
+<div class="ulist">
+<ul>
 <li>
-<p>Manage authentication configuration inline in the <code>ProductCluster</code> CRD</p>
+<p>Do nothing</p>
 </li>
 <li>
-<p>Introduce a new <code>ProductAuthentication</code> CRD per product that the <code>ProductCluster</code> CRD refers to</p>
+<p>Implement basic definition of stacks</p>
 </li>
 <li>
-<p>Introduce a new <code>AuthenticationClass</code> CRD that the product CRDs reference</p>
+<p>Go all in on <a href="https://porter.sh/">Porter</a> / <a href="https://cnab.io/">CNAB</a> and use it to fully define our stacks</p>
 </li>
-</ol>
+</ul>
 </div>
 </div>
 </div>
@@ -526,182 +535,115 @@ We&#8217;re aiming for a unified user experience when authenticating users in di
 <h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><strong>Option 3: Introduce a new <code>AuthenticationClass</code> CRD that the product CRDs reference</strong></p>
+<p>Chosen option: "Implement basic definition of stacks", because it is a lightweight solution that can be implemented with limited effort and matches the expected overall direction of <em>stackablectl</em> well.
+There was agreement between all deciders that we do not want to marry our solution too tightly to the as yet unproven CNAB standard or Porter as a concrete implementation.
+By defining our own, thin, abstraction layer we can isolate our users from the chosen implementation technologies in the backend (Porter, CNAB, Helm, &#8230;&#8203;).</p>
+</div>
+<div class="sect2">
+<h3 id="_positive_consequences_optional"><a class="anchor" href="#_positive_consequences_optional"></a>Positive Consequences &lt;!-- optional -&#8594;</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>We can use <em>stackablectl</em> as CLI tool in the first official release</p>
+</li>
+<li>
+<p>This allows adding CNAB bundles as the preferred implementation in a non-breaking fashion later on</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_negative_consequences_optional"><a class="anchor" href="#_negative_consequences_optional"></a>Negative Consequences &lt;!-- optional -&#8594;</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Depending on the future direction we take with <em>stackablectl</em> we have a risk of needing to break the api surface that we create with this implementation</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
+<h2 id="_pros_and_cons_of_the_options_optional"><a class="anchor" href="#_pros_and_cons_of_the_options_optional"></a>Pros and Cons of the Options &lt;!-- optional -&#8594;</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_authentication_in_productcluster"><a class="anchor" href="#_authentication_in_productcluster"></a>Authentication in <code>ProductCluster</code></h3>
+<h3 id="_do_nothing"><a class="anchor" href="#_do_nothing"></a>Do nothing</h3>
 <div class="paragraph">
-<p>We embed a the authentication settings directly into the product&#8217;s primary CRD. This would look something like:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: nifi.stackable.tech/v1alpha1
-kind: NifiCluster
-metadata:
-  name: nifi
-spec:
-  authenticationConfig:
-    methods:
-    - ldap:
-        hostname: ldap.server
-        port: 389
-        domain: domain.local
-        bindCredentialsSecret: nifi-ldap-bind-credentials</code></pre>
-</div>
+<p>We could do nothing right now and instead use the <em>create_test_cluster.py</em> script as our entry point for the initial release.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because we can expose exactly the options that each product supports</p>
+<p>Good, this gives us time to design a fully thought out solution before implementing something</p>
 </li>
 <li>
-<p>Good, because it is (relatively) simple to implement and requires no new components</p>
-</li>
-<li>
-<p>Bad, because it will be difficult to keep the option schema consistent between Stackable operators</p>
-</li>
-<li>
-<p>Bad, because it will be difficult for customers to keep their configuration synchronized across their Stackable Data Platform installation</p>
-</li>
-<li>
-<p>Bad, because it forces application administrators to know about authentication directory details</p>
+<p>Bad, <em>create_test_cluster.py</em> doesn&#8217;t feel very polished and we do want to introducet <em>stackablectl</em> to the world as our tool of choice</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_productauthentication_crd_per_product"><a class="anchor" href="#_productauthentication_crd_per_product"></a><code>ProductAuthentication</code> CRD per product</h3>
+<h3 id="_implement_basic_definition_of_stacks"><a class="anchor" href="#_implement_basic_definition_of_stacks"></a>Implement basic definition of stacks</h3>
 <div class="paragraph">
-<p>Every product defines its own CRD that contains exactly the authentication options that that product supports. For example:</p>
+<p>In order to generate a minimally invasive way to enable deploying Helm charts as prerequisites for our stacks we will introduce the initial definition of a stack roughly as shown below.
+The implementation details may vary, this snippet is provided more to show the overall structure, most specifically the <em>manifests</em> attribute.</p>
+</div>
+<div class="paragraph">
+<p>Initial implementations here will be provided for applying a bunch of yaml files and installing Helm charts.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: nifi.stackable.tech/v1alpha1
-kind: NifiCluster
-metadata:
-  name: nifi
-spec:
-  authenticationConfig:
-    methods:
-    - nifi-ldap-authn
----
-apiVersion: nifi.stackable.tech/v1alpha1
-kind: NifiAuthenticationMethod
-metadata:
-  name: nifi-ldap-authn
-spec:
-  ldap:
-    hostname: ldap.server
-    port: 389
-    domain: domain.local
-    bindCredentials:
-      secretClass: nifi-ldap-bind-credentials
-      scope: Service</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  trino:
+    description: Simply stack only containing Trino
+    stackableRelease: 22.05-sbernauer
+    labels:
+      - trino
+    manifests:
+      - helmChart:
+          repository: https://charts.bitnami.com/bitnami
+          name: postgresql
+          properties:
+            - auth.username: superset
+            - auth.password: superset
+            - auth.database: superset
+      - plainYaml: stacks/trino.yaml</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>helm install --repo <a href="https://charts.bitnami.com/bitnami" class="bare">https://charts.bitnami.com/bitnami</a> --set auth.username=superset --set auth.password=superset --set auth.database=superset superset-postgresql postgresql</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because we can expose exactly the options that each product supports</p>
+<p>Good, because it allows us to use <em>stackablectl</em> in release 1 and the marketing campaign</p>
 </li>
 <li>
-<p>Good, because it allows separation of ownership between products and authentication system</p>
+<p>Good, because it provides isolation between <em>stackablectl</em> and bundle technologies</p>
 </li>
 <li>
-<p>Bad, because it will be difficult to keep the option schema consistent between Stackable operators</p>
-</li>
-<li>
-<p>Bad, because it will be difficult for customers to keep their configuration synchronized across their Stackable Data Platform products</p>
-</li>
-<li>
-<p>Bad, because it forces authentication administrators to know about each product</p>
+<p>Bad, because it may require breaking changes down the line to the interface users get now</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_global_authenticationclass"><a class="anchor" href="#_global_authenticationclass"></a>Global <code>AuthenticationClass</code></h3>
+<h3 id="_go_all_in_on_portercnab_and_use_it_to_fully_define_our_stacks"><a class="anchor" href="#_go_all_in_on_portercnab_and_use_it_to_fully_define_our_stacks"></a>Go all in on Porter/CNAB and use it to fully define our stacks</h3>
 <div class="paragraph">
-<p>We define a common <code>AuthenticationClass</code> CRD that we try to share between all operators.
-It&#8217;s cluster-scoped so that a LDAP bind can be shared between multiple namespaces.
-For example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: nifi.stackable.tech/v1alpha1
-kind: NifiCluster
-metadata:
-  name: nifi
-spec:
-  authenticationConfig:
-    methods:
-    - authenticationClass: ldap-1
-    - authenticationClass: ldap-2
-      ldapOverwrite: # optional
-        ignoreCase: true
-    - authenticationClass: kerberos # We check for the correct AuthenticationClass type =&gt; Otherwise we throw a warning
-      kerberosOverwrite: # optional. we have to check for the correct overwrite type =&gt; Warning otherwise. Is we try ldapOverwrite to kerberos AuthenticationClass they will be ignored
-        udp: true
----
-apiVersion: auth.stackable.tech/v1alpha1
-kind: AuthenticationClass
-metadata:
-  name: ldap-1
-spec:
-  ldap: # Enum(ldap, kerberos, etc.)
-    hostname: ldap.server
-    port: 389
-    domain: domain.local
-    bindCredentials:
-      secretClass: ldap-bind-credentials
-      scope: Service
----
-apiVersion: auth.stackable.tech/v1alpha1
-kind: AuthenticationClass
-metadata:
-  name: kerberos
-spec:
-  kerberos:
-    ticketServer: my.kerberos.server
-    realm: myrealm</code></pre>
-</div>
+<p>CNAB in theory provides everything we&#8217;d need to install a stack, instead of allowing to define yaml files, helm charts and other things, we could simply bundle an entire stack as a CNAB bundle using Porter and have <em>stackablectl</em> install this.</p>
 </div>
 <div class="paragraph">
-<p>Here, <code>bindCredentials</code> is specified as a reference to a <code>SecretClass</code>, which allows secret-operator to bind in separate
-credentials for each cluster (or even <code>Pod</code>, depending on how things are set up) that uses the <code>AuthenticationClass</code>,
-while letting a cluster administrator centralize the management of the <code>AuthenticationClass</code>.</p>
+<p>CNAB bundles can be pushed to OCI compliant registries, so we would not need to provide our own method of listing stacks for <em>stackablectl</em> either.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because it allows complete separation between product and authentication ownership</p>
+<p>Good, because instead of reinventing the wheel we would use an existing technology</p>
 </li>
 <li>
-<p>Good, because it allows a single interface for authentication owners to integrate with</p>
-</li>
-<li>
-<p>Good, because it enforces a consistent interface between Stackable operators</p>
-</li>
-<li>
-<p>Bad, because it requires us to set up a new commons operator with the <code>AuthenticationClass</code> CRD</p>
-</li>
-<li>
-<p>Bad, because it requires introducing a new dependency on the commons operator for all Stackable operators</p>
-</li>
-<li>
-<p>Bad, because not all options (either whole authentication providers or individual config fields) are supported by all products.
-Additional options can be specified in the <code>ProductCluster</code> <code>authenticationConfig</code> section.</p>
+<p>Bad, because we tightly couple <em>stackablectl</em> to this technology, the adoption of which is yet to be proven</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>Initially we will start to implement the <code>AuthenticationClass</code> in a concrete operator as a spike.
-Before releasing the new CRD it will be moved into a new separate operator that contains common CRDs that are shared between all operators (there will be some other shared CRDs in the future)</p>
 </div>
 </div>
 </div>

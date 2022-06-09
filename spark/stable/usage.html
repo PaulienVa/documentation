@@ -262,7 +262,7 @@
 </div>
 <div class="paragraph">
 <p>The example below creates an Apache Spark 3.0.1 cluster with one master (because of <code>replicas: 1</code>), one history server and as many workers as nodes available.
-Because of <code>enableMonitoring: true</code>, all pods will be annotated for metric scraping. Metrics are retrieved from Spark&#8217;s built in Prometheus Servlet.</p>
+Because of <code>enableMonitoring: true</code>, all pods will be annotated for metric scraping. Metrics are retrieved from Spark&#8217;s built-in Prometheus Servlet.</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -272,7 +272,7 @@ kind: SparkCluster
 metadata:
   name: simple-spark
 spec:
-  version: "3.0.1"
+  version: 3.1.1-stackable0
   masters:
     roleGroups:
       default:

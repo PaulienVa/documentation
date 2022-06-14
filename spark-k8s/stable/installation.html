@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Installation :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/spark-k8s/stable/installation.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -69,7 +68,7 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="spark-k8s" data-version="0.1">
+<div class="nav-container" data-component="spark-k8s" data-version="nightly">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -98,7 +97,7 @@
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
     <span class="title">Stackable Operator for Apache Spark on Kubernetes</span>
-    <span class="version">0.1</span>
+    <span class="version">nightly</span>
   </div>
   <ul class="components">
     <li class="component">
@@ -188,7 +187,7 @@
       <a class="title" href="index.html">Stackable Operator for Apache Spark on Kubernetes</a>
       <ul class="versions">
         <li class="version is-current is-latest">
-          <a href="index.html">0.1</a>
+          <a href="index.html">nightly</a>
         </li>
       </ul>
     </li>
@@ -305,20 +304,20 @@ service. You are now ready to deploy Apache Spark in Kubernetes.</p>
 <h2 id="_building_the_operator_from_source"><a class="anchor" href="#_building_the_operator_from_source"></a>Building the operator from source</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This operator is written in Rust and is developed against a recent stable Rust release.</p>
+<p>To run it from your local machine - usually for development purposes - you need to install the required manifest files.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cargo run -- crd | kubectl apply -f -
-cargo run -- run</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">make renenerate-charts
+kubectl create -f deploy/manifests</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To run it from your local machine - usually for development purposes - you need to create a <code>ClusterRoleBinding</code> :</p>
+<p>Then, start the operator:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl create clusterrolebinding spark-role --clusterrole=spark-driver-edit-role  --serviceaccount=default:default</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cargo run -- run</code></pre>
 </div>
 </div>
 </div>

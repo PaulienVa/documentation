@@ -546,34 +546,143 @@ It will also be used to convert the file content from CSV to JSON.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install --repo https://repo.stackable.tech/repository/helm-test nifi-operator nifi-operator --version=0.6.0-pr251</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install --repo https://repo.stackable.tech/repository/helm-dev nifi-operator nifi-operator --version=0.6.0-nightly</code></pre>
 </div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-You need the PR version which has increased PVC sizes and heap memory. This will be merged soon.
-Apply the Kafka custom resource (<a href="https://github.com/stackabletech/kafka-operator/blob/main/examples/simple-kafka-cluster.yaml" class="bare">https://github.com/stackabletech/kafka-operator/blob/main/examples/simple-kafka-cluster.yaml</a>)
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_deploying_kafka_and_nifi"><a class="anchor" href="#_deploying_kafka_and_nifi"></a>Deploying Kafka and NiFi</h3>
 <div class="paragraph">
-<p>For the purposes of this use case, no special config is required, so you can simply deploy the examples straight from the Operator repositories.
-These files are designed to be self-contained, so for example the NiFi example also contains the necessary ZooKeeper cluster definition.</p>
+<p>To deploy Kafka and NiFi you can now apply the cluster configuration. You&#8217;ll also need to deploy ZooKeeper, since both Kafka and NiFi depend on it. Run the following command in the console to deploy and configure all three services.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f https://raw.githubusercontent.com/stackabletech/kafka-operator/main/examples/simple-kafka-cluster.yaml
-kubectl apply -f https://raw.githubusercontent.com/stackabletech/nifi-operator/main/examples/simple-nifi-cluster.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f - &lt;&lt;EOF
+---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperCluster
+metadata:
+  name: simple-zk
+spec:
+  version: 3.8.0
+  servers:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: 1
+        config: {}
+---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperZnode
+metadata:
+  name: simple-kafka-znode
+spec:
+  clusterRef:
+    name: simple-zk
+---
+apiVersion: kafka.stackable.tech/v1alpha1
+kind: KafkaCluster
+metadata:
+  name: simple-kafka
+spec:
+  version: 3.1.0
+  zookeeperConfigMapName: simple-kafka-znode
+  brokers:
+    config:
+      resources:
+        storage:
+          logDirs:
+            capacity: '2Gi'
+        cpu:
+          max: '500m'
+          min: '250m'
+        memory:
+          limit: '1Gi'
+    roleGroups:
+      default:
+        replicas: 1
+---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperZnode
+metadata:
+  name: simple-nifi-znode
+spec:
+  clusterRef:
+    name: simple-zk
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nifi-admin-credentials-simple
+stringData:
+  username: admin
+  password: supersecretpassword
+---
+apiVersion: nifi.stackable.tech/v1alpha1
+kind: NifiCluster
+metadata:
+  name: simple-nifi
+spec:
+  version: "1.15.0-stackable0.4.0"
+  zookeeperConfigMapName: simple-nifi-znode
+  authenticationConfig:
+    method:
+      SingleUser:
+        adminCredentialsSecret:
+          name: nifi-admin-credentials-simple
+        autoGenerate: true
+  sensitivePropertiesConfig:
+    keySecret: nifi-sensitive-property-key
+    autoGenerate: true
+  nodes:
+    config:
+      resources:
+        memory:
+          limit: "1"  # Option
+        cpu:
+          min: "2"  # Option
+          max: "3" # Option
+        storage:
+          contentRepo:
+            capacity: "10Gi"  # Option
+          databaseRepo:
+            capacity: "20Gi" # Option
+          flowfileRepo:
+            capacity: "20Gi" # Option
+          provenanceRepo:
+            capacity: "20Gi" # Option
+          stateRepo:
+            capacity: "20Gi"
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        config:
+          log:
+            rootLogLevel: INFO
+          resources:
+            memory:
+              limit: "1Gi"  # Option
+            cpu:
+              min: "2"  # Option
+              max: "3" # Option
+            storage:
+              contentRepo:
+                capacity: "10Gi"  # Option
+              databaseRepo:
+                capacity: "20Gi" # Option
+              flowfileRepo:
+                capacity: "20Gi" # Option
+              provenanceRepo:
+                capacity: "20Gi" # Option
+              stateRepo:
+                capacity: "20Gi"
+        replicas: 1
+EOF</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -631,7 +740,7 @@ As this guide is not intended to be a NiFi guide most of NiFi&#8217;s features w
 </div>
 </div>
 <div class="paragraph">
-<p>To deploy the template as a flow you need to click on the <em>template</em> button in NiFi&#8217;s main menu.</p>
+<p>To deploy the template as a flow you need to click on the <em>template</em> button in NiFi&#8217;s main menu and drag it over the canvas.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -639,11 +748,11 @@ As this guide is not intended to be a NiFi guide most of NiFi&#8217;s features w
 </div>
 </div>
 <div class="paragraph">
-<p>After you have done this, you should be presented with a simple flow on your canvas that is almost ready to start processing data.
+<p>After you have done this, you should be presented with a process group named "S3 Kafka" on your canvas that is <strong>almost</strong> ready to start processing data.
 The only thing that still needs doing is to enable some <a href="https://nifi.apache.org/docs.html">ControllerServices</a> used by the processors.</p>
 </div>
 <div class="paragraph">
-<p>To get to these services you can right-click on the <a href="https://nifi.apache.org/docs.html">SplitRecord</a> processor, go to the <em>properties</em> tab and click on one of the small arrows next to the <em>Record Reader</em> and <em>Record Writer</em> options.</p>
+<p>To get to these services you can double-click on the process group and then right-click on the <a href="https://nifi.apache.org/docs.html">SplitRecord</a> processor, go to the <em>properties</em> tab and click on one of the small arrows next to the <em>Record Reader</em> and <em>Record Writer</em> options.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -683,7 +792,7 @@ If you have the capacity to process all data you can remove this restriction in 
 </div>
 </div>
 <div class="paragraph">
-<p>If you change the highlighted value to <code>trip data/yellow_tripdata_</code> all data for yellow cabs will be downloaded.</p>
+<p>If you change the highlighted value to <code>csv_backup/yellow_tripdata_</code> all data for yellow cabs will be downloaded.</p>
 </div>
 </div>
 </div>
@@ -739,7 +848,14 @@ If you have the capacity to process all data you can remove this restriction in 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install minio --set resources.requests.memory=8Gi --set mode=standalone --set replicas=1  --set persistence.enabled=false  --set "buckets[0].name=nytaxidata,buckets[0].policy=none" --set "users[0].accessKey=minioAccessKey,users[0].secretKey=minioSecretKey,users[0].policy=readwrite" --repo https://charts.min.io/ minio</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install minio \
+  --repo https://charts.min.io/ minio \
+  --set resources.requests.memory=8Gi \
+  --set mode=standalone \
+  --set replicas=1 \
+  --set persistence.enabled=false \
+  --set "buckets[0].name=nytaxidata,buckets[0].policy=none" \
+  --set "users[0].accessKey=minioAccessKey,users[0].secretKey=minioSecretKey,users[0].policy=readwrite"</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -771,7 +887,7 @@ If you have the capacity to process all data you can remove this restriction in 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">cat &lt;&lt;EOF | kubectl apply -f -
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f - &lt;&lt;EOF
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperZnode
 metadata:
@@ -791,7 +907,7 @@ EOF</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">cat &lt;&lt;EOF | kubectl apply -f -
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f - &lt;&lt;EOF
 apiVersion: v1
 kind: Secret
 metadata:
@@ -807,7 +923,7 @@ EOF</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">cat &lt;&lt;EOF | kubectl apply -f -
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f - &lt;&lt;EOF
 apiVersion: druid.stackable.tech/v1alpha1
 kind: DruidCluster
 metadata:
@@ -1104,7 +1220,7 @@ You have extracted the ingestion specification from the UI, where the data sourc
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">cat &lt;&lt;EOF | kubectl apply -f -
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f - &lt;&lt;EOF
 apiVersion: v1
 kind: Secret
 metadata:
@@ -1129,7 +1245,7 @@ EOF</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">cat &lt;&lt;EOF | kubectl apply -f -
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f - &lt;&lt;EOF
 apiVersion: superset.stackable.tech/v1alpha1
 kind: SupersetCluster
 metadata:
@@ -1202,7 +1318,7 @@ jsonpath='{.status.readyReplicas}'</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">cat &lt;&lt;EOF | kubectl apply -f -
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f - &lt;&lt;EOF
 apiVersion: superset.stackable.tech/v1alpha1
 kind: DruidConnection
 metadata:
@@ -1280,7 +1396,7 @@ If you do not see your Druid instance, check the status on the <code>DruidConnec
 </div>
 </div>
 <div class="paragraph">
-<p>Create a simple line chart. Applying these settings, you can see from the chart (and the average tip amount) that passengers are more generous towards the end of the month:</p>
+<p>Create a simple time-series line chart. Applying these settings, you can see from the chart (and the average tip amount) that passengers are more generous towards the end of the month:</p>
 </div>
 <div class="sect3">
 <h4 id="_settings"><a class="anchor" href="#_settings"></a>Settings</h4>

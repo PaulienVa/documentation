@@ -479,7 +479,7 @@
 <p>Make your desired changes in the according repository and test them manually. Ensure that the code compiles without warnings (<code>cargo clippy --all-targets</code>) and that the code is formatted with <code>cargo fmt</code>.</p>
 </li>
 <li>
-<p>If code was added or adapted then please create or adapt the unit tests in the same file. Ensure that all unit tests run successfully (<code>cargo test</code>).</p>
+<p>If code was added or adapted then please create or adapt the unit tests in the same file as well as the integration tests in the <code>tests</code> directory. Ensure that all unit tests run successfully (<code>cargo test</code>) and all integration tests run successfully (<code>./scripts/run_tests.sh</code>). See also <a href="#_changes_in_the_integration_tests">Changes in the integration tests</a>.</p>
 </li>
 <li>
 <p>Comment your code and check with <code>cargo doc --document-private-items</code> that there are no syntax errors.</p>
@@ -549,10 +549,10 @@ kind load docker-image &lt;image-tagged-with-the-major-version&gt; --name=integr
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Most code changes should also be tested with integration tests. The tests for every operator can be found in the <a href="https://github.com/stackabletech/integration-tests">integration-tests repository</a>. Follow the steps in <a href="#_preparation">Preparation</a> for the integration tests as well.</p>
+<p>Most code changes should also be tested with integration tests. The tests for every operator can be found in the operator repository in the <code>tests</code> directory. Follow the steps in <a href="#_preparation">Preparation</a> for the integration tests as well.</p>
 </li>
 <li>
-<p>Create or adapt the tests. Try to mimic the style of the other tests. They are written with <a href="https://kuttl.dev/">KUTTL</a> and in Python.</p>
+<p>Create or adapt the tests. Try to mimic the style of the other tests. They are written with <a href="https://kuttl.dev/">KUTTL</a> and using a jinja2 templating mechanism to test multiple product versions at once.</p>
 </li>
 <li>
 <p>Start a test cluster with the <code>create_test_cluster.py</code> script. Its usage is described in the <a href="https://github.com/stackabletech/integration-tests/blob/main/README.md"><code>README.md</code></a> file.</p>
@@ -566,6 +566,9 @@ kind load docker-image docker.stackable.tech/stackable/&lt;operator&gt;:&lt;vers
 helm install &lt;operator&gt; deploy/helm/&lt;operator&gt;/</code></pre>
 </div>
 </div>
+</li>
+<li>
+<p>Run the tests from the repository root with <code>./scripts/run_tests.sh</code>.</p>
 </li>
 </ol>
 </div>

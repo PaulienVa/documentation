@@ -40,6 +40,9 @@
 <loc>https://docs.stackable.tech/sitemap-spark-k8s.xml</loc>
 </sitemap>
 <sitemap>
+<loc>https://docs.stackable.tech/sitemap-stackablectl.xml</loc>
+</sitemap>
+<sitemap>
 <loc>https://docs.stackable.tech/sitemap-superset.xml</loc>
 </sitemap>
 <sitemap>

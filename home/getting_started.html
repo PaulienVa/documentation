@@ -591,31 +591,15 @@ Metrics-server is running at https://127.0.0.1:6443/api/v1/namespaces/kube-syste
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_installing_helm"><a class="anchor" href="#_installing_helm"></a>Installing Helm</h3>
-<div class="paragraph">
-<p>Stackable uses <a href="https://helm.sh/">Helm</a> as the package manager for its Kubernetes operators. This greatly simplifies the deployment and management of Kubernetes operators and CRDs. The quickest way to install Helm is to run the following command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -sfL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | /bin/bash -</code></pre>
-</div>
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_installing_stackable"><a class="anchor" href="#_installing_stackable"></a>Installing Stackable</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_install_stackable_helm_repositories"><a class="anchor" href="#_install_stackable_helm_repositories"></a>Install Stackable Helm Repositories</h3>
+<h3 id="_install_stackablectl"><a class="anchor" href="#_install_stackablectl"></a>Install stackablectl</h3>
 <div class="paragraph">
-<p>With Helm installed you can add the Stackable operator repo, where the helm charts to install Stackable operators can be found. There are development, test and a stable repositories available, we&#8217;ll be using the stable repo in this guide.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm repo add stackable-stable https://repo.stackable.tech/repository/helm-stable/</code></pre>
-</div>
+<p>Install the Stackable command line utility <a href="../stackablectl/stable/index.html" class="xref page">stackablectl</a> by following the installation steps for your platform on the <a href="../stackablectl/stable/installation.html" class="xref page">installation</a> page.</p>
 </div>
 </div>
 <div class="sect2">
@@ -624,10 +608,27 @@ Metrics-server is running at https://127.0.0.1:6443/api/v1/namespaces/kube-syste
 <p>The Stackable operators are components that translate the service definitions deployed via Kubernetes into deploy services on the worker nodes. These can be installed on any node that has access to the Kubernetes control plane. In this example we will install them on the controller node.</p>
 </div>
 <div class="paragraph">
-<p>Stackable operators are installed using Helm charts. Run the following commands to install the operators for ZooKeeper, Kafka and NiFi using the repo configured earlier. The --devel flag will choose the latest available version; alternatively the --version flag can be used to deploy a specific version.</p>
+<p>Stackable operators are installed using stackablectl. Run the following commands to install the latest operator versions of ZooKeeper, Kafka and NiFi.</p>
 </div>
-<div class="sect3">
-<h4 id="_install_operators_from_the_stackable_repository"><a class="anchor" href="#_install_operators_from_the_stackable_repository"></a>Install operators from the Stackable repository</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">stackablectl operator install zookeeper secret nifi kafka</code></pre>
+</div>
+</div>
+<details>
+<summary class="title">Using Helm instead</summary>
+<div class="content">
+<div class="paragraph">
+<p>Add the stackable-stable Helm Chart repository:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm repo add stackable-stable https://repo.stackable.tech/repository/helm-stable/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Install the operators:</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install zookeeper-operator stackable-stable/zookeeper-operator --version=0.9.0
@@ -636,17 +637,18 @@ helm install secret-operator stackable-stable/secret-operator --version=0.2.0
 helm install nifi-operator stackable-stable/nifi-operator --version=0.5.0</code></pre>
 </div>
 </div>
+</div>
+</details>
 <div class="paragraph">
-<p>You can check which operators are installed using <code>helm list</code>:</p>
+<p>You can check which operators are installed using <code>stackablectl operator installed</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>NAME              	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART                   	APP VERSION
-kafka-operator    	default  	1       	2022-02-15 08:17:26.84659409 +0000 UTC 	deployed	kafka-operator-0.5.0    	0.5.0
-nifi-operator     	default  	1       	2022-02-15 08:17:37.93720808 +0000 UTC 	deployed	nifi-operator-0.5.0     	0.5.0
-secret-operator   	default  	1       	2022-02-15 08:17:32.700301793 +0000 UTC	deployed	secret-operator-0.2.0   	0.2.0
-zookeeper-operator	default  	1       	2022-02-15 08:17:17.893844595 +0000 UTC	deployed	zookeeper-operator-0.9.0	0.9.0</pre>
-</div>
+<pre>OPERATOR              VERSION         NAMESPACE      STATUS           LAST UPDATED
+kafka                 0.6.0-nightly   default        deployed         2022-06-16 13:51:05.661282811 +0200 CEST
+nifi                  0.6.0-nightly   default        deployed         2022-06-20 16:22:45.985504689 +0200 CEST
+secret                0.5.0-nightly   default        deployed         2022-06-20 16:07:40.248027167 +0200 CEST
+zookeeper             0.10.0-nightly  default        deployed         2022-06-16 13:50:51.497813301 +0200 CEST</pre>
 </div>
 </div>
 </div>

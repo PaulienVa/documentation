@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Installation :: Stackable Documentation</title>
+    <title>Stackable Operator for Apache Spark on Kubernetes :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/spark-k8s/stable/index.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -50,8 +51,7 @@
     <a class="drop-down-item" href="../../hive/stable/index.html">Apache Hive</a>
     <a class="drop-down-item" href="../../kafka/stable/index.html">Apache Kafka</a>
     <a class="drop-down-item" href="../../nifi/stable/index.html">Apache NiFi</a>
-    <a class="drop-down-item" href="index.html">Apache Spark (standalone)</a>
-    <a class="drop-down-item" href="../../spark-k8s/stable/index.html">Apache Spark on K8S</a>
+    <a class="drop-down-item" href="../stable/index.html">Apache Spark on K8S</a>
     <a class="drop-down-item" href="../../superset/stable/index.html">Apache Superset</a>
     <a class="drop-down-item" href="../../trino/stable/index.html">Trino</a>
     <a class="drop-down-item" href="../../zookeeper/stable/index.html">Apache ZooKeeper</a>
@@ -70,23 +70,26 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="spark" data-version="nightly">
+<div class="nav-container" data-component="spark-k8s" data-version="nightly">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">Stackable Operator for Apache Spark</a></h3>
+    <h3 class="title"><a href="index.html">Stackable Operator for Apache Spark on Kubernetes</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="configuration.html">Configuration</a>
+    <a class="nav-link" href="usage.html">Usage</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="usage.html">Usage</a>
+    <a class="nav-link" href="job_dependencies.html">Job Dependencies</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="rbac.html">RBAC</a>
   </li>
 </ul>
   </li>
@@ -95,7 +98,7 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Stackable Operator for Apache Spark</span>
+    <span class="title">Stackable Operator for Apache Spark on Kubernetes</span>
     <span class="version">nightly</span>
   </div>
   <ul class="components">
@@ -175,18 +178,13 @@
       </ul>
     </li>
     <li class="component is-current">
-      <a class="title" href="index.html">Stackable Operator for Apache Spark</a>
+      <a class="title" href="../stable/index.html">Stackable Operator for Apache Spark on Kubernetes</a>
       <ul class="versions">
-        <li class="version is-current is-latest">
+        <li class="version is-current">
           <a href="index.html">nightly</a>
         </li>
-      </ul>
-    </li>
-    <li class="component">
-      <a class="title" href="../../spark-k8s/stable/index.html">Stackable Operator for Apache Spark on Kubernetes</a>
-      <ul class="versions">
         <li class="version is-latest">
-          <a href="../../spark-k8s/stable/index.html">nightly</a>
+          <a href="../stable/index.html">0.2</a>
         </li>
       </ul>
     </li>
@@ -252,112 +250,67 @@
   <a href="../../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Stackable Operator for Apache Spark</a></li>
-    <li><a href="installation.html">Installation</a></li>
+    <li><a href="index.html">Stackable Operator for Apache Spark on Kubernetes</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/spark-operator/edit/main/docs/modules/ROOT/pages/installation.adoc">Edit this Page</a></div>
+<div class="page-versions">
+  <button class="version-menu-toggle" title="Show other versions of page">nightly</button>
+  <div class="version-menu">
+    <a class="version is-current" href="index.html">nightly</a>
+    <a class="version" href="../stable/index.html">0.2</a>
+  </div>
+</div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/spark-k8s-operator/edit/main/docs/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Installation</h1>
+<h1 class="page">Stackable Operator for Apache Spark on Kubernetes</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are three ways to run the Spark Operator:</p>
+<p>This is an operator for Kubernetes that can manage <a href="https://spark.apache.org/">Apache Spark</a> kubernetes clusters.</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Helm managed Docker container deployment on Kubernetes</p>
-</li>
-<li>
-<p>As a Docker container</p>
-</li>
-<li>
-<p>Build from source.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_helm"><a class="anchor" href="#_helm"></a>Helm</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Helm allows you to download and deploy Stackable operators on Kubernetes and is by far the easiest
-installation method. First ensure that you have installed the Stackable Operators Helm repository:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ helm repo add stackable https://repo.stackable.tech/repository/helm-stable/</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then install the Stackable Operator for Apache Spark</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ helm install spark-operator stackable/spark-operator</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Helm will deploy the operator in a Kubernetes container and apply the CRDs for the Apache Spark
-service. You are now ready to deploy Apache Spark in Kubernetes.</p>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+This operator only works with images from the <a href="https://repo.stackable.tech/#browse/browse:docker:v2%2Fstackable%2Fspark">Stackable</a> repository
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_docker"><a class="anchor" href="#_docker"></a>Docker</h2>
+<h2 id="_supported_versions"><a class="anchor" href="#_supported_versions"></a>Supported Versions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This Operator is published as a Docker image:</p>
+<p>The Stackable Operator for Apache Spark on Kubernetes currently supports the following versions of Spark:</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">docker.stackable.tech/stackable/spark-operator</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>When installing manually with Docker you will need to install the Stackable CRDs for Apache Spark
-in your Kubernetes environment. These are available on the
-<a href="https://github.com/stackabletech/spark-operator/tree/main/deploy/crd">Stackable GitHub repository</a>
-for this operator.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">$ kubectl apply -f sparkcluster.crd.yaml</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To run it straight from Docker you can use this command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run \
-    --name spark-operator \
-    --network host \
-    --env KUBECONFIG=/home/stackable/.kube/config \
-    --mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
-    docker.stackable.tech/stackable/spark-operator:latest</code></pre>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p>3.2.1-hadoop3.2</p>
+</li>
+<li>
+<p>3.2.1-hadoop3.2-python39</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_building_the_operator_from_source"><a class="anchor" href="#_building_the_operator_from_source"></a>Building the operator from source</h2>
+<h2 id="_getting_the_docker_image"><a class="anchor" href="#_getting_the_docker_image"></a>Getting the Docker image</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>This operator is written in Rust and is developed against the latest stable Rust release (1.57 at
-the time of writing).</p>
-</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">stackable-spark-operator crd | kubectl apply -f -
-stackable-spark-operator run</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">docker pull docker.stackable.tech/stackable/spark-k8s:&lt;version&gt;</code></pre>
 </div>
 </div>
 </div>

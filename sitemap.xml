@@ -34,9 +34,6 @@
 <loc>https://docs.stackable.tech/sitemap-secret-operator.xml</loc>
 </sitemap>
 <sitemap>
-<loc>https://docs.stackable.tech/sitemap-spark.xml</loc>
-</sitemap>
-<sitemap>
 <loc>https://docs.stackable.tech/sitemap-spark-k8s.xml</loc>
 </sitemap>
 <sitemap>

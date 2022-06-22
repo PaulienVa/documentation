@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Usage :: Stackable Documentation</title>
+    <title>Untitled :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/spark-k8s/stable/commandline_args.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -50,8 +51,7 @@
     <a class="drop-down-item" href="../../hive/stable/index.html">Apache Hive</a>
     <a class="drop-down-item" href="../../kafka/stable/index.html">Apache Kafka</a>
     <a class="drop-down-item" href="../../nifi/stable/index.html">Apache NiFi</a>
-    <a class="drop-down-item" href="index.html">Apache Spark (standalone)</a>
-    <a class="drop-down-item" href="../../spark-k8s/stable/index.html">Apache Spark on K8S</a>
+    <a class="drop-down-item" href="../stable/index.html">Apache Spark on K8S</a>
     <a class="drop-down-item" href="../../superset/stable/index.html">Apache Superset</a>
     <a class="drop-down-item" href="../../trino/stable/index.html">Trino</a>
     <a class="drop-down-item" href="../../zookeeper/stable/index.html">Apache ZooKeeper</a>
@@ -70,12 +70,12 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="spark" data-version="nightly">
+<div class="nav-container" data-component="spark-k8s" data-version="nightly">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">Stackable Operator for Apache Spark</a></h3>
+    <h3 class="title"><a href="index.html">Stackable Operator for Apache Spark on Kubernetes</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
@@ -83,10 +83,13 @@
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="configuration.html">Configuration</a>
-  </li>
-  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="job_dependencies.html">Job Dependencies</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="rbac.html">RBAC</a>
   </li>
 </ul>
   </li>
@@ -95,7 +98,7 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Stackable Operator for Apache Spark</span>
+    <span class="title">Stackable Operator for Apache Spark on Kubernetes</span>
     <span class="version">nightly</span>
   </div>
   <ul class="components">
@@ -175,18 +178,13 @@
       </ul>
     </li>
     <li class="component is-current">
-      <a class="title" href="index.html">Stackable Operator for Apache Spark</a>
+      <a class="title" href="../stable/index.html">Stackable Operator for Apache Spark on Kubernetes</a>
       <ul class="versions">
-        <li class="version is-current is-latest">
+        <li class="version is-current">
           <a href="index.html">nightly</a>
         </li>
-      </ul>
-    </li>
-    <li class="component">
-      <a class="title" href="../../spark-k8s/stable/index.html">Stackable Operator for Apache Spark on Kubernetes</a>
-      <ul class="versions">
         <li class="version is-latest">
-          <a href="../../spark-k8s/stable/index.html">nightly</a>
+          <a href="../stable/index.html">0.2</a>
         </li>
       </ul>
     </li>
@@ -251,212 +249,38 @@
 <button class="nav-toggle"></button>
   <a href="../../home/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="index.html">Stackable Operator for Apache Spark</a></li>
-    <li><a href="usage.html">Usage</a></li>
-  </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/spark-operator/edit/main/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
+<div class="page-versions">
+  <button class="version-menu-toggle" title="Show other versions of page">nightly</button>
+  <div class="version-menu">
+    <a class="version is-current" href="commandline_args.html">nightly</a>
+    <a class="version" href="../stable/commandline_args.html">0.2</a>
+  </div>
+</div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/spark-k8s-operator/edit/main/docs/modules/ROOT/pages/commandline_args.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Usage</h1>
-<div class="sect1">
-<h2 id="_create_an_apache_spark_cluster"><a class="anchor" href="#_create_an_apache_spark_cluster"></a>Create an Apache Spark cluster</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>If you followed the installation instructions, you should now have a Stackable Operator for Apache Spark up and running and you are ready to create your first Apache Spark cluster.</p>
-</div>
-<div class="paragraph">
-<p>The example below creates an Apache Spark 3.0.1 cluster with one master (because of <code>replicas: 1</code>), one history server and as many workers as nodes available.
-Because of <code>enableMonitoring: true</code>, all pods will be annotated for metric scraping. Metrics are retrieved from Spark&#8217;s built-in Prometheus Servlet.</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: spark.stackable.tech/v1alpha1
-kind: SparkCluster
-metadata:
-  name: simple-spark
-spec:
-  version: 3.1.1-stackable0
-  masters:
-    roleGroups:
-      default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        replicas: 1
-        config: {}
-  workers:
-    roleGroups:
-      2core2g:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        config:
-          cores: 2
-          memory: "2g"
-  historyServers:
-    roleGroups:
-      default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        replicas: 1
-        config: {}
-EOF</pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_using_the_apache_spark_cluster"><a class="anchor" href="#_using_the_apache_spark_cluster"></a>Using the Apache Spark cluster</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The example above sets up a <a href="https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport">NodePort</a> service named <code>simple-spark-master</code> that clients can use to run Spark jobs.</p>
-</div>
-<div class="paragraph">
-<p>This is how the list of services might look like:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>kubectl get svc
-NAME                                  TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                         AGE
-kubernetes                            ClusterIP   10.96.0.1      &lt;none&gt;        443/TCP                         5h38m
-simple-spark-history-server-default   ClusterIP   None           &lt;none&gt;        18080/TCP                       2m54s
-simple-spark-master                   NodePort    10.96.63.134   &lt;none&gt;        8080:31296/TCP,7077:32274/TCP   2m54s
-simple-spark-master-default           ClusterIP   None           &lt;none&gt;        8080/TCP,7077/TCP               2m54s
-simple-spark-slave-2core2g            ClusterIP   None           &lt;none&gt;        8081/TCP                        2m54s</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To start a Spark shell from inside the cluster you would run:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>/stackable/spark/bin/spark-shell --master spark://simple-spark-master-default:7077</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>and from outside:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>spark-shell --master spark://&lt;node-ip&gt;&gt;:32274</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>where <code>&lt;node-ip&gt;</code> is the IP address of the node running your master.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_monitoring"><a class="anchor" href="#_monitoring"></a>Monitoring</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The managed Spark instances are automatically configured to export Prometheus metrics. See
-<a href="../../home/operators/monitoring.html" class="xref page">Monitoring</a> for more details.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_configuration_environment_overrides"><a class="anchor" href="#_configuration_environment_overrides"></a>Configuration &amp; Environment Overrides</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The cluster definition also supports overriding configuration properties and environment variables, either per role or per role group, where the more specific override (role group) has precedence over the less specific one (role).</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-Do not override port numbers. This will lead to faulty installations.
-</td>
-</tr>
-</table>
-</div>
 <div class="sect2">
-<h3 id="_configuration_properties"><a class="anchor" href="#_configuration_properties"></a>Configuration Properties</h3>
+<h3 id="_watch_namespace"><a class="anchor" href="#_watch_namespace"></a>watch-namespace</h3>
 <div class="paragraph">
-<p>For a role or role group, at the same level of <code>config</code>, you can specify: <code>configOverrides</code> for the <code>spark-env.sh</code> and <code>spark-defaults.conf</code> files. For a list of possible configuration properties see: <a href="https://spark.apache.org/docs/latest/configuration.html" class="bare">https://spark.apache.org/docs/latest/configuration.html</a></p>
+<p><strong>Default value</strong>: All namespaces</p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="paragraph">
+<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">masters:
-  roleGroups:
-    default:
-      config: [...]
-      configOverrides:
-        spark-env.sh:
-          JAVA_HOME=/some/other/java
-        spark-defaults.conf:
-          spark.driver.cores: "2"
-      replicas: 1</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Just as for the <code>config</code>, it is possible to specify this at role level as well:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">masters:
-  configOverrides:
-    spark-env.sh:
-      JAVA_HOME=/some/other/java
-    spark-defaults.conf:
-      spark.driver.cores: "2"
-  roleGroups:
-    default:
-      config: [...]
-      replicas: 1</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>All override property values must be strings. The properties will be passed on without any escaping or formatting.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment Variables</h3>
-<div class="paragraph">
-<p>Environment variables can be (over)written by adding them to <code>spark-env.sh</code> file as described above or by using the <code>envOverrides</code> property.</p>
-</div>
-<div class="paragraph">
-<p>For example per role group:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">routers:
-  roleGroups:
-    default:
-      config: {}
-      envOverrides:
-        MY_ENV_VAR: "MY_VALUE"
-      replicas: 1</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>or per role:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">routers:
-  envOverrides:
-    MY_ENV_VAR: "MY_VALUE"
-  roleGroups:
-    default:
-      config: {}
-      replicas: 1</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Here too, overriding properties such as <code>SPARK_MASTER_PORT</code> will lead to broken installations.</p>
-</div>
+<pre class="highlightjs highlight"><code class="language-none hljs">stackable-spark-k8s-operator run --watch-namespace test</code></pre>
 </div>
 </div>
 </div>

@@ -276,7 +276,7 @@
 <h2 id="_create_an_apache_spark_job"><a class="anchor" href="#_create_an_apache_spark_job"></a>Create an Apache Spark job</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you followed the installation instructions, you should now have a Stackable Operator for Apache Spark up and running and you are ready to create your first Apache Spark kubernetes cluster.</p>
+<p>If you followed the installation instructions, you should now have a Stackable Operator for Apache Spark up and running, and you are ready to create your first Apache Spark kubernetes cluster.</p>
 </div>
 <div class="paragraph">
 <p>The example below creates a job running on Apache Spark 3.2.1, using the spark-on-kubernetes paradigm described in the spark documentation. The application file is itself part of the spark distribution and <code>local</code> refers to the path on the driver/executors; there are no external dependencies.</p>
@@ -469,7 +469,7 @@ spec:
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Job image: this contains the job artifact that will retrieved from the volume mount backed by the PVC</td>
+<td>Job image: this contains the job artifact that will be retrieved from the volume mount backed by the PVC</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -485,7 +485,7 @@ spec:
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Spark dependencies: the credentials provider (the user knows what is relevant here) plus dependencies needed to access external resources (in this case, in s3)</td>
+<td>Spark dependencies: the credentials provider (the user knows what is relevant here) plus dependencies needed to access external resources (in this case, in an S3 store)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
@@ -552,7 +552,7 @@ spec:
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Spark dependencies: the credentials provider (the user knows what is relevant here) plus dependencies needed to access external resources (in this case, in s3, accessed without credentials)</td>
+<td>Spark dependencies: the credentials provider (the user knows what is relevant here) plus dependencies needed to access external resources (in this case, in an S3 store, accessed without credentials)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
@@ -587,10 +587,11 @@ spec:
         inline:
           host: test-minio
           port: 9000
-          secretClass: minio-credentials  <i class="conum" data-value="4"></i><b>(4)</b>
+          accessStyle: Path
+          credentials: <i class="conum" data-value="4"></i><b>(4)</b>
+            secretClass: s3-credentials-class
   sparkConf: <i class="conum" data-value="5"></i><b>(5)</b>
     spark.hadoop.fs.s3a.aws.credentials.provider: "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider" <i class="conum" data-value="6"></i><b>(6)</b>
-    spark.hadoop.fs.s3a.path.style.access: "true"
     spark.driver.extraClassPath: "/dependencies/jars/hadoop-aws-3.2.0.jar:/dependencies/jars/aws-java-sdk-bundle-1.11.375.jar"
     spark.executor.extraClassPath: "/dependencies/jars/hadoop-aws-3.2.0.jar:/dependencies/jars/aws-java-sdk-bundle-1.11.375.jar"
   volumes:
@@ -617,7 +618,7 @@ spec:
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Job python artifact (located in S3)</td>
+<td>Job python artifact (located in an S3 store)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -629,7 +630,7 @@ spec:
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Credentials secret</td>
+<td>Credentials referencing a secretClass (not shown in is example)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
@@ -637,7 +638,7 @@ spec:
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>&#8230;&#8203;in this case, in s3, accessed with the credentials defined in the secret</td>
+<td>&#8230;&#8203;in this case, in an S3 store, accessed with the credentials defined in the secret</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="7"></i><b>7</b></td>
@@ -750,7 +751,7 @@ spec:
 <h2 id="_s3_bucket_specification"><a class="anchor" href="#_s3_bucket_specification"></a>S3 bucket specification</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can specify S3 connection details directly inside the <code>SparkApplication</code> specification or by refering to an external <code>S3Bucket</code> custom resource.</p>
+<p>You can specify S3 connection details directly inside the <code>SparkApplication</code> specification or by referring to an external <code>S3Bucket</code> custom resource.</p>
 </div>
 <div class="paragraph">
 <p>To specify S3 connection details directly as part of the <code>SparkApplication</code> resource you add an inline bucket configuration as shown below.</p>
@@ -764,7 +765,9 @@ spec:
       inline:
         host: test-minio <i class="conum" data-value="3"></i><b>(3)</b>
         port: 9000 <i class="conum" data-value="4"></i><b>(4)</b>
-        secretClass: minio-credentials  <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+        accessStyle: Path
+        credentials:
+          secretClass: s3-credentials-class  <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -824,7 +827,9 @@ spec:
     inline:
       host: test-minio
       port: 9000
-      secretClass: minio-credentials</code></pre>
+      accessStyle: Path
+      credentials:
+        secretClass: minio-credentials-class</code></pre>
 </div>
 </div>
 <div class="paragraph">

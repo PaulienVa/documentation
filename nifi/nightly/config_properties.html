@@ -15,7 +15,7 @@
   <nav class="navbar">
     <div class="container">
     <div class="navbar-brand">
-      <a class="navbar-item" href="https://stackable.de"><img src="../../_/img/stackable-logo.png"></a>
+      <a class="navbar-item" href="https://stackable.tech"><img src="../../_/img/stackable-logo.png"></a>
       <a class="navbar-item documentation-link" href="https://docs.stackable.tech">Documentation</a>
       <div class="navbar-item search hide-for-print">
         <div id="search-field" class="field">
@@ -27,7 +27,7 @@
         <span></span>
         <span></span>
       </button>
-      <a href="https://www.stackable.de/en/contact/" class="button pull-right">Contact Us</a>
+      <a href="https://www.stackable.tech/contact/" class="button pull-right">Contact Us</a>
     </div>
       <div id="topbar-nav" class="navbar-menu">
       </div>
@@ -306,6 +306,9 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
+<div class="sect1">
+<h2 id="_kubernetes_custom_resource_options"><a class="anchor" href="#_kubernetes_custom_resource_options"></a>Kubernetes custom resource options</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>The cluster can be configured via a YAML file. This custom resource specifies the amount of replicas for each role group or role specific configuration like port definitions etc.
 The following listing shows a fairly complete example that sets most available options, for more detail about the individual elements please refer to the table further down on the page.</p>
@@ -464,6 +467,8 @@ Please be aware that by overriding config settings in this section you have a ve
           nifi.properties:
             aws.region: eu-west-1
         replicas: 2</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>

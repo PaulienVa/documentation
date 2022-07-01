@@ -15,7 +15,7 @@
   <nav class="navbar">
     <div class="container">
     <div class="navbar-brand">
-      <a class="navbar-item" href="https://stackable.de"><img src="../../_/img/stackable-logo.png"></a>
+      <a class="navbar-item" href="https://stackable.tech"><img src="../../_/img/stackable-logo.png"></a>
       <a class="navbar-item documentation-link" href="https://docs.stackable.tech">Documentation</a>
       <div class="navbar-item search hide-for-print">
         <div id="search-field" class="field">
@@ -27,7 +27,7 @@
         <span></span>
         <span></span>
       </button>
-      <a href="https://www.stackable.de/en/contact/" class="button pull-right">Contact Us</a>
+      <a href="https://www.stackable.tech/contact/" class="button pull-right">Contact Us</a>
     </div>
       <div id="topbar-nav" class="navbar-menu">
       </div>
@@ -306,6 +306,12 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
+<div class="sect1">
+<h2 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment variables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This operator accepts the following environment variables:</p>
+</div>
 <div class="sect2">
 <h3 id="_product_config"><a class="anchor" href="#_product_config"></a>PRODUCT_CONFIG</h3>
 <div class="paragraph">
@@ -370,6 +376,8 @@ stackable-nifi-operator run</code></pre>
 --env WATCH_NAMESPACE=test \
 --mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
 docker.stackable.tech/stackable/nifi-operator:latest</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>

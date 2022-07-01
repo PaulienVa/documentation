@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Untitled :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/release_guide.html">
+    <title>Release notes for the Stackable Data Platform :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/release_notes.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../_/css/site.css">
     <script>var uiRootPath = '../_'</script>
@@ -304,7 +304,7 @@
   </li>
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="release_notes.html">Release Notes</a>
   </li>
 </ul>
@@ -507,73 +507,232 @@
 <button class="nav-toggle"></button>
   <a href="index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Stackable Documentation</a></li>
+    <li><a href="release_notes.html">Release Notes</a></li>
+  </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/ROOT/pages/release_guide.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/ROOT/pages/release_notes.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
+<h1 class="page">Release notes for the Stackable Data Platform</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>(this is work in progress that is why it&#8217;s not explicitely linked in nav.doc)</p>
+<p>The Stackable platform consists of multiple operators that work together.
+Periodically a platform release is made, including all components of the platform at a specific version.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_release_22_06"><a class="anchor" href="#_release_22_06"></a>Release 22.06</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This is our first release of the Stackable Data Platform, bringing Kubernetes operators for 12 products as well as <a href="#stackablectl">stackablectl</a>, the commandline tool to easily install data products in Kubernetes.
+Operators spin up production ready product applications.
+Also, there are some common features across all operators, such as monitoring, service discovery and configuration overrides.
+Find the <a href="#_platform_features">Platform features</a>, <a href="#stackablectl">stackablectl features</a> and <a href="#operators">Operators</a> below.</p>
 </div>
 <div class="paragraph">
-<p>Prerequisites:</p>
+<p>Please report any issues you find in the specific operator repositories or in our dedicated github.com/stackabletech/issues/[issues] repository.
+You may also join us in our <a href="https://slack.stackable.tech">Slack</a> community or <a href="https://stackable.tech">contact us via our homepage</a>.</p>
 </div>
+<div class="paragraph">
+<p>While we are very proud of this release it is our first one and we&#8217;ll add new features and fix bugs all the time and will have regular releases from now on.</p>
+</div>
+<div class="sect2">
+<h3 id="_platform_features"><a class="anchor" href="#_platform_features"></a>Platform features</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Easily install production ready data applications</dt>
+<dd>
+<p>Using a familiar declarative approach, users can easily install data applications such as Apache Kafka or Trino across multiple cloud Kubernetes providers or on their own data centers.
+The installation process is fully automated while also providing the flexibility for the user to tune relevant aspects of each application.</p>
+</dd>
+<dt class="hdlist1">Monitoring</dt>
+<dd>
+<p>All products have monitoring with prometheus enabled.
+<a href="operators/monitoring.html" class="xref page">Learn more</a></p>
+</dd>
+<dt class="hdlist1">Service discovery</dt>
+<dd>
+<p>Products on the Stackable platform use service discovery to easily interconnect with each other.
+<a href="concepts/service_discovery.html" class="xref page">Learn more</a></p>
+</dd>
+<dt class="hdlist1">Configuration overrides</dt>
+<dd>
+<p>All operators support configuration overrides, these are documented in the specific operator documentation pages.</p>
+</dd>
+<dt class="hdlist1">Common S3 configuration</dt>
+<dd>
+<p>Many products support connecting to S3 to load and/or store data.
+There is a common resource for S3 connections and buckets across all operators that can be reused.
+<a href="concepts/s3.html" class="xref page">Learn more</a></p>
+</dd>
+<dt class="hdlist1">Roles and role groups</dt>
+<dd>
+<p>To support hybrid hardware clusters, the Stackable platform uses the concept of role groups.
+Services and applications can be configured to maximize hardware efficiency.</p>
+</dd>
+<dt class="hdlist1">Standardized</dt>
+<dd>
+<p>Learn once reuse everywhere.
+We use the same conventions in all our operators.
+Configure your LDAP or S3 connections once and reuse them everywhere.
+All our operators reuse the same CRD structure as well.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="stackablectl"><a class="anchor" href="#stackablectl"></a>stackablectl</h3>
+<div class="paragraph">
+<p><code>stackablectl</code> is used to install and interact with the operators, either individually or with multiple at once.
+<a href="../stackablectl/stable/index.html" class="xref page">Learn more</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="operators"><a class="anchor" href="#operators"></a>Operators</h3>
+<div class="paragraph">
+<p>This is the list of all operators in this current release, with their versions for this release.</p>
+</div>
+<div class="ulist">
+<div class="title"><strong>Products</strong></div>
+<ul>
+<li>
+<p><a href="../airflow/stable/index.html" class="xref page">Stackable Operator for Apache Airflow</a> (0.4.0)</p>
 <div class="ulist">
 <ul>
 <li>
-<p>no branch refs in Cargo.toml</p>
+<p>Load DAGs from ConfigMaps or PersistentVolumeClaims</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p>(integration) tests are successful</p>
+<p><a href="../druid/stable/index.html" class="xref page">Stackable Operator for Apache Druid</a> (0.6.0)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>S3 and HDFS as deep storage options</p>
 </li>
 <li>
-<p>the changelog has useful entries</p>
+<p>ingestion from S3 buckets</p>
+</li>
+<li>
+<p>authorization using OPA</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="../hbase/stable/index.html" class="xref page">Stackable Operator for Apache HBase</a> (0.3.0)</p>
+</li>
+<li>
+<p><a href="../hdfs/stable/index.html" class="xref page">Stackable Operator for Apache HDFS</a> (0.4.0)</p>
+</li>
+<li>
+<p><a href="../hive/stable/index.html" class="xref page">Stackable Operator for Apache Hive</a> (0.6.0)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Hive Metastore can index S3</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="../kafka/stable/index.html" class="xref page">Stackable Operator for Apache Kafka</a> (0.6.0)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Seamless integration with NiFi and Druid</p>
+</li>
+<li>
+<p>Supports OPA authorization</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="../nifi/stable/index.html" class="xref page">Stackable Operator for Apache NiFi</a> (0.6.0)</p>
+</li>
+<li>
+<p><a href="../spark-k8s/stable/index.html" class="xref page">Stackable Operator for Apache Spark on Kubernetes</a> (0.3.0)</p>
+</li>
+<li>
+<p><a href="../superset/stable/index.html" class="xref page">Stackable Operator for Apache Superset</a> (0.5.0)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>connects to Druid as a backend</p>
+</li>
+<li>
+<p>Supports LDAP authentication</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="../trino/stable/index.html" class="xref page">Stackable Operator for Trino</a> (0.4.0)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Supports OPA and file-based authorization</p>
+</li>
+<li>
+<p>Connects to the Hive Metastore</p>
+</li>
+<li>
+<p>Query data from S3</p>
+</li>
+<li>
+<p>TLS support</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="../zookeeper/stable/index.html" class="xref page">Stackable Operator for Apache ZooKeeper</a> (0.10.0)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Supports creating ZNodes with CRDs</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Release:</p>
+<p>Read up on the <a href="operators/supported_versions.html" class="xref page">supported versions</a> for each of these products.</p>
 </div>
-<div class="paragraph">
-<p>(from main)</p>
+<div class="ulist">
+<div class="title"><strong>Supporting operators</strong></div>
+<ul>
+<li>
+<p><a href="../opa/stable/index.html" class="xref page">Stackable Operator for OPA (OpenPolicyAgent)</a> (0.9.0)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Create RegoRules in ConfigMaps</p>
+</li>
+</ul>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>git sw -c release-0.6.0
-vi CHANGELOG.md
-cargo-version.py --release
-cargo update --workspace
-make regenerate-charts
-git commit -am "Release 0.6.0"
-git tag -a 0.6.0 -m "Release 0.6.0" HEAD</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>git push -u --all origin release-0.6.0</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Bump dev version:</p>
-</div>
-<div class="paragraph">
-<p>(from main immediately after a release)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>git sw -c bump-version
-cargo-version.py --next minor
-cargo update --workspace
-make regenerate-charts
-git commit -am 'Bump next development version'</pre>
+</li>
+<li>
+<p><a href="../commons-operator/stable/index.html" class="xref page">Stackable Commons Operator</a> (0.2.0)</p>
+</li>
+<li>
+<p><a href="../secret-operator/stable/index.html" class="xref page">Stackable Secret Operator</a> (0.5.0)</p>
+</li>
+</ul>
 </div>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>git push -u origin bump-version</pre>
 </div>
 </div>
 </article>

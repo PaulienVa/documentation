@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Tutorials :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/tutorials/index.html">
+    <title>Roles and role groups :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/concepts/roles-and-role-groups.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -37,8 +37,8 @@
       <div class="container">
         <a class="navbar-sub-item" href="../index.html">Home</a>
 <a class="navbar-sub-item" href="../getting_started.html">Getting Started</a>
-<a class="navbar-sub-item" href="../concepts/index.html">Concepts</a>
-<a class="navbar-sub-item" href="end-to-end_data_pipeline_example.html">Tutorials</a>
+<a class="navbar-sub-item" href="index.html">Concepts</a>
+<a class="navbar-sub-item" href="../tutorials/end-to-end_data_pipeline_example.html">Tutorials</a>
 <a class="navbar-sub-item" href="../../stackablectl/stable/index.html">stackablectl</a>
 <div class="navbar-sub-item drop-down">
     Operators
@@ -91,16 +91,16 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../concepts/index.html">Concepts</a>
+    <a class="nav-link" href="index.html">Concepts</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../concepts/service_discovery.html">Service discovery ConfigMap</a>
+    <a class="nav-link" href="service_discovery.html">Service discovery ConfigMap</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="roles-and-role-groups.html">Roles and role groups</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../concepts/roles-and-role-groups.html">Roles and role groups</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../concepts/s3.html">S3 resources</a>
+    <a class="nav-link" href="s3.html">S3 resources</a>
   </li>
 </ul>
   </li>
@@ -108,12 +108,12 @@
   </li>
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">Tutorials</a>
+    <a class="nav-link" href="../tutorials/index.html">Tutorials</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="end-to-end_data_pipeline_example.html">Setting up an end-to-end data pipeline</a>
+    <a class="nav-link" href="../tutorials/end-to-end_data_pipeline_example.html">Setting up an end-to-end data pipeline</a>
   </li>
 </ul>
   </li>
@@ -512,19 +512,131 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Stackable Documentation</a></li>
-    <li><a href="index.html">Tutorials</a></li>
+    <li><a href="index.html">Concepts</a></li>
+    <li><a href="roles-and-role-groups.html">Roles and role groups</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/tutorials/pages/index.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/concepts/pages/roles-and-role-groups.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Tutorials</h1>
+<h1 class="page">Roles and role groups</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>In this section you&#8217;ll find tutorials that take you through a series of steps to complete a concrete project.</p>
+<p>Software - especially the distributed kind - often consists of multiple different processes that work together to achieve their goal. Think of a client communicating with a server. Stackable calls these <em>roles</em>. The roles or processes are often replicated multiple times. These replicas can further be subdivided into <em>role groups</em>. Roles and role groups are defined in the resource manifest.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_motivation"><a class="anchor" href="#_motivation"></a>Motivation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The use of roles and role groups is required to control <strong>how</strong> processes are configured and <strong>where</strong> they run.</p>
+</div>
+<div class="sect2">
+<h3 id="_configuration"><a class="anchor" href="#_configuration"></a>Configuration</h3>
+<div class="paragraph">
+<p>Different processes have different tasks that they need to fulfill, which in turn have different configuration settings that only apply to that task. For example coordination, storage, logging and processing tasks require different amounts of threads, memory and storage capacity. These different settings can be put in the per role configuration spec.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_scheduling"><a class="anchor" href="#_scheduling"></a>Scheduling</h3>
+<div class="paragraph">
+<p>While configuration is concerned with modifying how the process works on the inside, scheduling is concerned with the context where it should run inside the cluster. A processing task should be scheduled on a node with faster CPUs or nodes with GPUs attached. A caching process is best scheduled on a node with SSD storage, for example.</p>
+</div>
+<div class="paragraph">
+<p>This is done by using <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">label selectors</a>. Nodes can be labeled and then processes can be assigned to nodes based on these labels.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_role_groups"><a class="anchor" href="#_role_groups"></a>Role groups</h3>
+<div class="paragraph">
+<p>Role groups are motivated by the need to subdivide the replicas of a process into groups as well, either to configure or to schedule multiple groups differently. For example in a cluster spanning multiple physical locations, you may want to make sure half of your processes run in one location and half in the other.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_it_works"><a class="anchor" href="#_how_it_works"></a>How it works</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A distributed software consists of one or more roles. Every role must be configured with at least one role group. Configuration can be specified at role level or at role group level, where the role group level overrides the role level. Label selectors for scheduling and the number of replicas are specified on the role group, not role. The role group is the lowest level, so it makes sense to have to specify this there.</p>
+</div>
+<div class="sect2">
+<h3 id="_example"><a class="anchor" href="#_example"></a>Example</h3>
+<div class="paragraph">
+<p>HDFS uses three distinct processes that work together to fulfill its duty: NameNodes, DataNodes and JournalNodes. With roles you can specify different configuration settings for each of these, as well as schedule them on specific machines.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: hdfs.stackable.tech/v1alpha1
+kind: HdfsCluster
+metadata:
+  name: simple-hdfs
+spec:
+  journalNodes:
+    roleGroups:
+      default:
+        replicas: 3  <i class="conum" data-value="1"></i><b>(1)</b>
+  nameNodes:
+    roleGroups:
+      default:
+        replicas: 3
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux  <i class="conum" data-value="2"></i><b>(2)</b>
+  dataNodes:
+    config:
+      resources:
+        storage:
+          data:
+            capacity: 1Gi  <i class="conum" data-value="3"></i><b>(3)</b>
+    roleGroups:
+      default:
+        replicas: 2
+      hiCapacity:  <i class="conum" data-value="4"></i><b>(4)</b>
+        config:
+          resources:
+            storage:
+              data: 2Gi
+        replicas: 1
+  ...</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The JournalNode role with only a single default role group. For the role group 3 replicas are specified, specifying a replica count is optional, the default is 1.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>For the NameNodes default role group, a label selector is given, the pods should only be specified on nodes where the <code>kubernetes.io/os</code> label has the value <code>linux</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A common config setting for the DataNodes role. This configuration setting applies only to pods for this role.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The DataNode role has two role groups, the default group and the hiCapacity group. In it the config setting for the group is overridden with a higher value of 2Gi. This role group has only one replica.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_further_reading"><a class="anchor" href="#_further_reading"></a>Further Reading</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Every operator uses roles. Have a look at the usage page of an operator for an example of roles.</p>
+</div>
+</div>
 </div>
 </article>
   </div>

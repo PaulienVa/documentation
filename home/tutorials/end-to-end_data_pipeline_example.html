@@ -554,7 +554,7 @@
 <p>A running Kubernetes cluster</p>
 </li>
 <li>
-<p><a href="https://kubernetes.io/docs/tasks/tools/#kubectl">Kubectl</a> to interact with the cluster</p>
+<p><a href="https://kubernetes.io/docs/tasks/tools/#kubectl">kubectl</a> to interact with the cluster</p>
 </li>
 <li>
 <p><a href="https://helm.sh/">Helm</a> to deploy third-party dependencies</p>
@@ -661,7 +661,7 @@ There is no need to install multiple ZooKeeper clusters, as NiFi, Kafka and Drui
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install zookeeper-operator stackable-stable/kafka-operator</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install kafka-operator stackable-stable/kafka-operator</code></pre>
 </div>
 </div>
 </div>
@@ -675,7 +675,7 @@ It will also be used to convert the file content from CSV to JSON.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">stackablectl operator install nifi=0.6.0-nightly</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">stackablectl operator install nifi</code></pre>
 </div>
 </div>
 <details>
@@ -683,7 +683,7 @@ It will also be used to convert the file content from CSV to JSON.</p>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install --repo https://repo.stackable.tech/repository/helm-dev nifi-operator nifi-operator --version=0.6.0-nightly</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install nifi-operator stackable-stable/nifi-operator</code></pre>
 </div>
 </div>
 </div>
@@ -691,9 +691,9 @@ It will also be used to convert the file content from CSV to JSON.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_deploying_kafka_and_nifi"><a class="anchor" href="#_deploying_kafka_and_nifi"></a>Deploying Kafka and NiFi</h3>
+<h3 id="_deploying_zookeeper"><a class="anchor" href="#_deploying_zookeeper"></a>Deploying ZooKeeper</h3>
 <div class="paragraph">
-<p>To deploy Kafka and NiFi you can now apply the cluster configuration. You&#8217;ll also need to deploy ZooKeeper, since both Kafka and NiFi depend on it. Run the following command in the console to deploy and configure all three services.</p>
+<p>Since both Kafka and NiFi depend on Apache ZooKeeper, we will create a ZooKeeper cluster first.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -704,7 +704,7 @@ kind: ZookeeperCluster
 metadata:
   name: simple-zk
 spec:
-  version: 3.8.0
+  version: 3.8.0-stackable0.7.1
   servers:
     roleGroups:
       default:
@@ -713,6 +713,18 @@ spec:
             kubernetes.io/os: linux
         replicas: 1
         config: {}
+EOF</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deploying_kafka_and_nifi"><a class="anchor" href="#_deploying_kafka_and_nifi"></a>Deploying Kafka and NiFi</h3>
+<div class="paragraph">
+<p>To deploy Kafka and NiFi you can now apply the cluster configuration. Run the following command in the console to deploy and configure all three services.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f - &lt;&lt;EOF
 ---
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperZnode
@@ -727,7 +739,7 @@ kind: KafkaCluster
 metadata:
   name: simple-kafka
 spec:
-  version: 3.1.0
+  version: 3.2.0-stackable0.1.0
   zookeeperConfigMapName: simple-kafka-znode
   brokers:
     config:
@@ -765,7 +777,7 @@ kind: NifiCluster
 metadata:
   name: simple-nifi
 spec:
-  version: "1.15.0-stackable0.4.0"
+  version: 1.16.3-stackable0.1.0
   zookeeperConfigMapName: simple-nifi-znode
   config:
     authentication:
@@ -1057,13 +1069,26 @@ EOF</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f - &lt;&lt;EOF
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: druid-s3-credentials
+spec:
+  backend:
+    k8sSearch:
+      searchNamespace:
+        pod: {}
+---
 apiVersion: v1
 kind: Secret
 metadata:
   name: druid-s3-credentials
+  labels:
+    secrets.stackable.tech/class: druid-s3-credentials
 stringData:
-  accessKeyId: minioAccessKey
-  secretAccessKey: minioSecretKey
+  accessKey: minioAccessKey
+  secretKey: minioSecretKey
 EOF</code></pre>
 </div>
 </div>
@@ -1078,7 +1103,7 @@ kind: DruidCluster
 metadata:
   name: druid-nytaxidata
 spec:
-  version: 0.22.1
+  version: 0.23.0-stackable0.1.0
   zookeeperConfigMapName: simple-druid-znode  <i class="conum" data-value="1"></i><b>(1)</b>
   metadataStorageDatabase:  <i class="conum" data-value="2"></i><b>(2)</b>
     dbType: postgresql
@@ -1087,13 +1112,26 @@ spec:
     port: 5432
     user: druid
     password: druid
-  s3:
-    endpoint: http://minio:9000
-    credentialsSecret: druid-s3-credentials  <i class="conum" data-value="3"></i><b>(3)</b>
+  ingestion:
+    s3connection:
+      inline:
+        host: http://minio
+        port: 9000
+        accessStyle: Path
+        credentials:
+          secretClass: druid-s3-credentials  <i class="conum" data-value="3"></i><b>(3)</b>
   deepStorage:
-    storageType: s3
-    bucket: nytaxidata
-    baseKey: storage
+    s3:
+      bucket:
+        inline:
+          bucketName: nytaxidata
+          connection:
+            inline:
+              host: http://minio
+              port: 9000
+              accessStyle: Path
+              credentials:
+                secretClass: druid-s3-credentials <i class="conum" data-value="3"></i><b>(3)</b>
   brokers:
     configOverrides:
       runtime.properties:
@@ -1191,7 +1229,7 @@ EOF</code></pre>
 <p>Keep this command running to continue accessing the Router port locally.</p>
 </div>
 <div class="paragraph">
-<p>The UI should now be reachable at <a href="http://localhost:8888" class="bare">http://localhost:8888</a> and should look like the screenshot below. Start with the “Load Data” option:</p>
+<p>The UI should now be reachable at <a href="http://localhost:8888" class="bare">http://localhost:8888</a> and should look like the screenshot below. Start with the "Load Data" and "New Spec" option:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1353,7 +1391,7 @@ You have extracted the ingestion specification from the UI, where the data sourc
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install druid-operator stackable-stable/superset-operator</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install superset-operator stackable-stable/superset-operator</code></pre>
 </div>
 </div>
 </div>
@@ -1410,7 +1448,7 @@ kind: SupersetCluster
 metadata:
   name: simple-superset
 spec:
-  version: 1.4.1  <i class="conum" data-value="1"></i><b>(1)</b>
+  version: 1.5.1-stackable0.1.0  <i class="conum" data-value="1"></i><b>(1)</b>
   statsdExporterVersion: v0.22.4
   credentialsSecret: simple-superset-credentials  <i class="conum" data-value="2"></i><b>(2)</b>
   nodes:

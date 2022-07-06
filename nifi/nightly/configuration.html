@@ -564,8 +564,8 @@ Anything that is not mentioned here can be configured via configOverrides. This 
 <div class="sect2">
 <h3 id="_configuration_overrides"><a class="anchor" href="#_configuration_overrides"></a>Configuration Overrides</h3>
 <div class="paragraph">
-<p>Apache NiFi runtime configuration is stored in a file named nifi.properties.
-The configOverrides block allows you to add custom parameters to this file.
+<p>Apache NiFi runtime configuration is stored in the files bootstrap.conf and nifi.properties.
+The configOverrides block allows you to add custom parameters to these files.
 A Full list of the available configuration options can be found in the official Apache NiFi documentation at <a href="https://nifi.apache.org/docs/nifi-docs/components/nifi-docs/html/administration-guide.html#system_properties" class="bare">https://nifi.apache.org/docs/nifi-docs/components/nifi-docs/html/administration-guide.html#system_properties</a>.</p>
 </div>
 <div class="paragraph">
@@ -592,7 +592,9 @@ Please be aware that by overriding config settings in this section you have a ve
           sensitivePropertyKeySecret: nifi-sensitive-property-
         configOverrides:
           nifi.properties:
-            aws.region: eu-west-1
+            nifi.config.property: eu-west-1
+          bootstrap.conf:
+            boostrap.config.property: some_string
         replicas: 2</code></pre>
 </div>
 </div>

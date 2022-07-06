@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>OPA Configuration :: Stackable Documentation</title>
+    <title>OPA connection implementation guidelines :: Stackable Documentation</title>
     <link rel="canonical" href="https://docs.stackable.tech/home/contributor/opa_configuration.html">
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
@@ -96,10 +96,13 @@
     <a class="nav-link" href="../concepts/index.html">Concepts</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../concepts/roles-and-role-groups.html">Roles and role groups</a>
+  </li>
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../concepts/service_discovery.html">Service discovery ConfigMap</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../concepts/roles-and-role-groups.html">Roles and role groups</a>
+    <a class="nav-link" href="../concepts/opa.html">OPA authorization</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../concepts/s3.html">S3 resources</a>
@@ -205,13 +208,19 @@
     <a class="nav-link" href="development_dashboard.html">Development Dashboard</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="service_discovery.html">Service discovery implementation guidelines</a>
-  </li>
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="opa_configuration.html">OPA Configuration</a>
+    <a class="nav-link" href="style_guide.html">Documentation style guide</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="style_guide.html">Documentation style guide</a>
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Implementation guidelines</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="service_discovery.html">Service discovery implementation guidelines</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="3">
+    <a class="nav-link" href="opa_configuration.html">OPA connection implementation guidelines</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
@@ -515,7 +524,8 @@
   <ul>
     <li><a href="../index.html">Stackable Documentation</a></li>
     <li><a href="index.html">Contributor&#8217;s Guide</a></li>
-    <li><a href="opa_configuration.html">OPA Configuration</a></li>
+    <li>Implementation guidelines</li>
+    <li><a href="opa_configuration.html">OPA connection implementation guidelines</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/opa_configuration.adoc">Edit this Page</a></div>
@@ -525,7 +535,7 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">OPA Configuration</h1>
+<h1 class="page">OPA connection implementation guidelines</h1>
 <div class="sect1">
 <h2 id="_introduction"><a class="anchor" href="#_introduction"></a>Introduction</h2>
 <div class="sectionbody">
@@ -564,15 +574,15 @@ You can define powerful policies for e.g. user access for database tables, schem
 <h2 id="_stackable_operator_for_opa"><a class="anchor" href="#_stackable_operator_for_opa"></a>Stackable Operator for OPA</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <a href="https://github.com/stackabletech/opa-operator">Stackable Operator for OPA</a> deploys OPA as a <code><a href="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/">DaemonSet</a></code> in Kubernetes. This ensures that every registered <code><a href="https://kubernetes.io/de/docs/concepts/architecture/nodes/">Node</a></code> runs exactly one OPA instance. In order to reduce traffic and latency, deployed products querying OPA must use the local OPA provided on their respective Node.</p>
+<p>The <a href="https://github.com/stackabletech/opa-operator">Stackable Operator for OPA</a> deploys OPA as a <a href="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/">DaemonSet</a> in Kubernetes. This ensures that every registered <a href="https://kubernetes.io/de/docs/concepts/architecture/nodes/">Node</a> runs exactly one OPA instance. In order to reduce traffic and latency, deployed products querying OPA must use the local OPA provided on their respective Node.</p>
 </div>
 <div class="sect2">
 <h3 id="_service_discovery"><a class="anchor" href="#_service_discovery"></a>Service Discovery</h3>
 <div class="paragraph">
-<p>Furthermore, the Stackable Operator for OPA deploys a <em>service discovery</em> <code>ConfigMap</code> (see <a href="service_discovery.html" class="xref page">Service discovery implementation guidelines</a>) to expose its service URL to other Stackable operators. These operators then are configured to use the service discovery ConfigMap to extract the required URL and configure their products and authorizers. Authorizers are plugins for products that allow authorization and access control.</p>
+<p>Furthermore, the Stackable Operator for OPA deploys a <em>service discovery</em> ConfigMap (see <a href="service_discovery.html" class="xref page">Service discovery implementation guidelines</a>) to expose its service URL to other Stackable operators. These operators then are configured to use the service discovery ConfigMap to extract the required URL and configure their products and authorizers. Authorizers are plugins for products that allow authorization and access control.</p>
 </div>
 <div class="paragraph">
-<p>The ConfigMap has one data entry that points to the OPA <code>ClusterIP</code> service:</p>
+<p>The ConfigMap has one data entry that points to the OPA ClusterIP service:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -607,7 +617,7 @@ data:
 </div>
 </div>
 <div class="paragraph">
-<p>The OPA bundle controller creates a <code>bundle.tar.gz</code> file locally, bundling the content of every <code>ConfigMap</code> labeled with <code>opa.stackable.tech/bundle</code> (the label value can be arbitrary). This bundle is read and activated by OPA.</p>
+<p>The OPA bundle controller creates a <code>bundle.tar.gz</code> file locally, bundling the content of every ConfigMap labeled with <code>opa.stackable.tech/bundle</code> (the label value can be arbitrary). This bundle is read and activated by OPA.</p>
 </div>
 <div class="paragraph">
 <p>You can query the <code>allow</code> rule provided in the example above via:</p>
@@ -637,7 +647,7 @@ data:
 <div class="sect2">
 <h3 id="_configure_opa_access_in_the_operator"><a class="anchor" href="#_configure_opa_access_in_the_operator"></a>Configure OPA access in the operator</h3>
 <div class="paragraph">
-<p>The <code><a href="https://github.com/stackabletech/operator-rs">operator-rs</a></code> framework has a module called <code>opa.rs</code> that offers a predefined struct <code>OpaConfig</code> and several helper methods to extract the OPA URL from the service discovery ConfigMap.</p>
+<p>The <code><a href="https://github.com/stackabletech/operator-rs">operator-rs</a></code> framework has a module called <code>opa.rs</code> that offers a predefined struct OpaConfig and several helper methods to extract the OPA URL from the service discovery ConfigMap.</p>
 </div>
 <div class="listingblock">
 <div class="content">

@@ -781,7 +781,7 @@ spec:
 </div>
 </div>
 <div class="sect2">
-<h3 id="_via_persistentvolumeclaim"><a class="anchor" href="#_via_persistentvolumeclaim"></a>via <code>PersistentVolumeclaim</code></h3>
+<h3 id="_via_persistentvolumeclaim"><a class="anchor" href="#_via_persistentvolumeclaim"></a>via PersistentVolumeclaim</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
@@ -941,6 +941,27 @@ spec:
 <td>If the mount path described above is anything other than the standard location (the default is <code>$AIRFLOW_HOME/dags</code>), then the location should be defined using the relevant environment variable.</td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_node_selection"><a class="anchor" href="#_node_selection"></a>Node selection</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Airflow expects that all its components (webserver, scheduler, workers etc.) have access to the DAG folder. If this is mounted via a PersistentVolumeClaim, then the permissible <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes">access modes</a> on that claim may require that a specific node is selected. This can be done by providing a label-match as shown below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  workers:
+    roleGroups:
+      default:
+        envOverrides:
+          AIRFLOW__CORE__DAGS_FOLDER: "/stackable/external-dags"
+        replicas: 1
+        selector:
+          matchLabels:
+            node: "2"</code></pre>
 </div>
 </div>
 </div>

@@ -400,8 +400,9 @@ spec:
     user: druid
     password: druid
   deepStorage:
-    storageType: hdfs
-    storageDirectory: hdfs://path/to/druidDeepStorage
+    hdfs:
+      configMapName: simple-hdfs
+      directory: /druid
   brokers:
     roleGroups:
       default:
@@ -636,6 +637,34 @@ credentials:
   secretClass: s3-credentials-class
 ...</code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hdfs_deep_storage"><a class="anchor" href="#_hdfs_deep_storage"></a>HDFS deep storage</h3>
+<div class="paragraph">
+<p>Druid can use HDFS as a backend for deep storage:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  deepStorage:
+    hdfs:
+      configMapName: simple-hdfs <i class="conum" data-value="1"></i><b>(1)</b>
+      directory: /druid <i class="conum" data-value="2"></i><b>(2)</b>
+...</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Name of the HDFS cluster discovery config map. Can be supplied manually for a cluster not provided by Stackable. Needs to contain the <code>core-site.xml</code> and <code>hdfs-site.xml</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The directory where to store the druid data.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

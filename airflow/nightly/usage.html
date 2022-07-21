@@ -618,6 +618,76 @@ will run and the job tree will update automatically:</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_authentication"><a class="anchor" href="#_authentication"></a>Authentication</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Every user has to authenticate themselves before using Airflow and there are several ways of doing this.</p>
+</div>
+<div class="sect2">
+<h3 id="_webinterface"><a class="anchor" href="#_webinterface"></a>Webinterface</h3>
+<div class="paragraph">
+<p>The default setting is to view and manually set up users via the Webserver UI. Note the blue "+" button where users can be added directly:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/airflow_security.png" alt="Airflow Security menu">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ldap"><a class="anchor" href="#_ldap"></a>LDAP</h3>
+<div class="paragraph">
+<p>Airflow supports authentication of users against an LDAP server.
+Have a look at <a href="https://github.com/stackabletech/airflow-operator/blob/main/examples/simple-airflow-cluster-ldap.yaml">the LDAP example</a> and the general <a href="../../commons-operator/stable/authenticationclass.html" class="xref page">Stackable Authentication</a> documentation on how to set it up.
+In general, it requires you to specify a <a href="../../commons-operator/stable/authenticationclass.html" class="xref page"><code>AuthenticationClass</code></a> which is used to authenticate the users. In the example below we assign all the users the <code>Admin</code> role once they log into Airflow:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: airflow.stackable.tech/v1alpha1
+kind: AirflowCluster
+metadata:
+  name: airflow-with-ldap
+spec:
+  version: 2.2.5-python39-stackable0.3.0
+  [...]
+  authenticationConfig:
+    authenticationClass: airflow-with-ldap-ldap
+    userRegistrationRole: Admin</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The users and roles can be viewed as before in the Webserver UI, but note that the blue "+" button is not available when authenticating against LDAP:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/airflow_security_ldap.png" alt="Airflow Security menu">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authorization"><a class="anchor" href="#_authorization"></a>Authorization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Airflow Webserver delegates the <a href="https://airflow.apache.org/docs/apache-airflow/stable/security/access-control.html">handling of user access control</a> to <a href="https://flask-appbuilder.readthedocs.io/en/latest/security.html">Flask AppBuilder</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="_webinterface_2"><a class="anchor" href="#_webinterface_2"></a>Webinterface</h3>
+<div class="paragraph">
+<p>You can view, add to, and assign the roles displayed in the Airflow Webserver UI to existing users.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ldap_2"><a class="anchor" href="#_ldap_2"></a>LDAP</h3>
+<div class="paragraph">
+<p>Airflow supports assigning roles to users based on their LDAP group membership
+, though this is not yet supported by the Stackable operator. Currently, all the users logging in via LDAP get assigned the same role which you can configure via the attribute <code>authenticationConfig.userRegistrationRole</code> on the <code>AirflowCluster</code> object.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_monitoring_2"><a class="anchor" href="#_monitoring_2"></a>Monitoring</h2>
 <div class="sectionbody">
 <div class="paragraph">

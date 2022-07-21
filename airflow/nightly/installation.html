@@ -341,6 +341,15 @@ installation method. First ensure that you have installed the Stackable Operator
 </div>
 </div>
 <div class="paragraph">
+<p>We also need some additional components of the Stackable Data Platform (if not installed already):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ helm install commons-operator stackable/commons-operator
+$ helm install secret-operator stackable/secret-operator</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Then install the Stackable Operator for Apache Airflow</p>
 </div>
 <div class="listingblock">
@@ -374,7 +383,7 @@ for this operator.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ kubectl apply -f airflowcluster.crd.yaml
-$ kubectl apply -f init.crd.yaml</code></pre>
+$ kubectl apply -f airflowdb.crd.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -396,13 +405,12 @@ $ kubectl apply -f init.crd.yaml</code></pre>
 <h2 id="_building_the_operator_from_source"><a class="anchor" href="#_building_the_operator_from_source"></a>Building the operator from source</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This operator is written in Rust and is developed against the latest stable Rust release (1.58 at
-the time of writing).</p>
+<p>This operator is written in Rust and is developed against the latest stable Rust release.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">stackable-airflow-operator crd | kubectl apply -f -
-stackable-airflow-operator run</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">cargo run -- crd | kubectl apply -f -
+cargo run -- run</code></pre>
 </div>
 </div>
 </div>

@@ -406,6 +406,109 @@ spec:
 </div>
 </div>
 <div class="sect1">
+<h2 id="_authentication"><a class="anchor" href="#_authentication"></a>Authentication</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Every user has to authenticate themselves before using NiFI.
+There are multiple options to set up the authentication of users.</p>
+</div>
+<div class="sect2">
+<h3 id="_single_user"><a class="anchor" href="#_single_user"></a>Single user</h3>
+<div class="paragraph">
+<p>The default setting is to only provision a single user with administrative privileges.
+You need to specify the username and password of the user.
+Further users can not be added.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ldap"><a class="anchor" href="#_ldap"></a>LDAP</h3>
+<div class="paragraph">
+<p>NiFI supports authentication of users against an LDAP server.
+Have a look at <a href="https://github.com/stackabletech/nifi-operator/tree/main/tests/templates/kuttl/ldap">the LDAP test</a> and the general <a href="../../commons-operator/stable/authenticationclass.html" class="xref page">Stackable Authentication</a> documentation on how to set it up.
+In general, it requires you to specify a <a href="../../commons-operator/stable/authenticationclass.html" class="xref page"><code>AuthenticationClass</code></a> which is used to authenticate the users.
+Here you have an example usage</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: nifi.stackable.tech/v1alpha1
+kind: NifiCluster
+metadata:
+  name: test-nifi
+spec:
+  config:
+    authentication:
+      method:
+        authenticationClass: ldap-without-tls
+---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: ldap-without-tls
+spec:
+  provider:
+    ldap:
+      hostname: openldap.default.svc.cluster.local
+      searchBase: ou=users,dc=example,dc=org
+      bindCredentials:
+        secretClass: nifi-with-ldap-bind
+      port: 1389
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: nifi-with-ldap-bind
+spec:
+  backend:
+    k8sSearch:
+      searchNamespace:
+        pod: {}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nifi-with-ldap-bind
+  labels:
+    secrets.stackable.tech/class: nifi-with-ldap-bind
+stringData:
+  user: cn=integrationtest,ou=users,dc=example,dc=org
+  password: integrationtest</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authorization"><a class="anchor" href="#_authorization"></a>Authorization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>NiFi supports multiple authorization methods documented <a href="https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#multi-tenant-authorization">here</a>.
+The available authorization methods depend on the chosen authentication method.</p>
+</div>
+<div class="paragraph">
+<p>Authorization is not fully implemented by the stackable nifi-operator.
+Because of this the operator currently infers the authorization method to use from the configured authentication method.</p>
+</div>
+<div class="sect2">
+<h3 id="_single_user_2"><a class="anchor" href="#_single_user_2"></a>Single user</h3>
+<div class="paragraph">
+<p>For this authentication method the Single user authorization will be used.
+Basically the single user is allowed to do everything.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ldap_2"><a class="anchor" href="#_ldap_2"></a>LDAP</h3>
+<div class="paragraph">
+<p>In the future retrieving groups from LDAP and providing policies via OPA is planned.
+Currently we will use the <code>org.apache.nifi.authorization.FileUserGroupProvider</code> and <code>org.apache.nifi.authorization.FileAccessPolicyProvider</code>.
+The user specified in the LDAP bind will be the admin user which can log into the NiFi instance and create and modify other users.
+He is also able to create and modify groups and polices in the Webinterface.
+The changes made will be written to local files which are <strong>not</strong> persistent.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_monitoring"><a class="anchor" href="#_monitoring"></a>Monitoring</h2>
 <div class="sectionbody">
 <div class="paragraph">

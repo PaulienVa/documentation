@@ -80,17 +80,38 @@
     <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">stackablectl</a>
-<ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="quickstart.html">Quickstart</a>
   </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Commands</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="commands/demo.html">Demo</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="commands/operator.html">Operator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="commands/release.html">Release</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="commands/services.html">Services</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="commands/stack.html">Stack</a>
+  </li>
 </ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="customization.html">Customization</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
   </li>
 </ul>
   </li>
@@ -308,22 +329,24 @@
 </aside>
 <article class="doc">
 <h1 class="page">Installation</h1>
-<div id="preamble">
+<div class="sect1">
+<h2 id="_pre_compiled_binary"><a class="anchor" href="#_pre_compiled_binary"></a>Pre-compiled binary</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <code>stackablectl</code> commandline tool does not require a runtime; it is a binary that can be executed on it&#8217;s own. Below are the installation instructions for <a href="#_linux">Linux</a>, <a href="#_macos">MacOS</a> and <a href="#_windows">Windows</a>.</p>
+<p>Stackable ships pre-compiled binaries of <code>stackablectl</code> which should work on most environments such as Windows, macOS, and Linux distros like Ubuntu and Arch.</p>
 </div>
+<div class="paragraph">
+<p>Below are the installation instructions for <a href="#_linux">Linux</a>, <a href="#_macos">macOS</a> and <a href="#_windows">Windows</a>.
+If the binary does not work for you, you can always <a href="#_build_stackablectl_from_source">Build stackablectl from source</a></p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_linux"><a class="anchor" href="#_linux"></a>Linux</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_linux"><a class="anchor" href="#_linux"></a>Linux</h3>
 <div class="paragraph">
 <p>Download the <code>stackablectl-x86_64-unknown-linux-gnu</code> binary file from the <a href="https://github.com/stackabletech/stackablectl/releases/latest">latest release</a>, then rename the file to <code>stackabelctl</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mv stackablectl-x86_64-unknown-linux-gnu stackablectl</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ mv stackablectl-x86_64-unknown-linux-gnu stackablectl</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -331,7 +354,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">chmod +x stackablectl</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ chmod +x stackablectl</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -339,22 +362,37 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./stackablectl</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ ./stackablectl</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_macos"><a class="anchor" href="#_macos"></a>MacOS</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>Download the <code>stackablectl-x86_64-apple-darwin</code> binary file for Intel based Macs or  <code>stackablectl-aarch64-apple-darwin</code> binary file for M1 based Macs  from the <a href="https://github.com/stackabletech/stackablectl/releases/latest">latest release</a>. Then rename the file to <code>stackablectl</code>:</p>
+<p>If you want to be able to call it from everywhere (not only the directory you downloaded it to) you can add it to your system with the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mv stackablectl-x86_64-apple-darwin stackablectl
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ sudo mv stackablectl /usr/bin/stackablectl</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_windows"><a class="anchor" href="#_windows"></a>Windows</h3>
+<div class="paragraph">
+<p>Download <code>stackablectl-x86_64-pc-windows-gnu.exe</code> from the <a href="https://github.com/stackabletech/stackablectl/releases/latest">latest release</a>.
+You can simply execute it.
+If you want to execute it from anywhere in your system, you need to add it to the system <code>PATH</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_macos"><a class="anchor" href="#_macos"></a>macOS</h3>
+<div class="paragraph">
+<p>Download the <code>stackablectl-x86_64-apple-darwin</code> binary file for Intel based Macs or  <code>stackablectl-aarch64-apple-darwin</code> binary file for ARM based Macs from the <a href="https://github.com/stackabletech/stackablectl/releases/latest">latest release</a>.
+Then rename the file to <code>stackablectl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ mv stackablectl-x86_64-apple-darwin stackablectl
 # or
-mv stackablectl-aarch64-apple-darwin stackablectl</code></pre>
+$ mv stackablectl-aarch64-apple-darwin stackablectl</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -362,7 +400,7 @@ mv stackablectl-aarch64-apple-darwin stackablectl</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">chmod +x stackablectl</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ chmod +x stackablectl</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -370,21 +408,182 @@ mv stackablectl-aarch64-apple-darwin stackablectl</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./stackablectl</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ ./stackablectl</code></pre>
 </div>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>If MacOs denies the execution of stackablectl go to Settings --&gt; Security &amp; Privacy --&gt; General. Here you will see a pop up asking if you want to allow access for ‘stackablectl’. Now allow access.</pre>
+<div class="paragraph">
+<p>If macOS denies the execution of stackablectl go to <code>Settings</code> &#8594; <code>Security &amp; Privacy</code> &#8594; <code>General</code>. Here you will see a pop up asking if you want to allow access for <code>stackablectl</code>. You must allow access.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_windows"><a class="anchor" href="#_windows"></a>Windows</h2>
+<h2 id="_build_stackablectl_from_source"><a class="anchor" href="#_build_stackablectl_from_source"></a>Build stackablectl from source</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Download <code>stackablectl-x86_64-pc-windows-gnu.exe</code> from the <a href="https://github.com/stackabletech/stackablectl/releases/latest">latest release</a>. You can simply execute it.</p>
+<p>To build <code>stackablectl</code> from source you need to have the following tools installed:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Rust compiler</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Needed for compiling source code of <code>stackablectl</code> itself</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Go compiler</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Needed for compiling a wrapper around the Go lib <code>go-helm-client</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>C compiler</p>
+<div class="ulist">
+<ul>
+<li>
+<p>As we use the vendored feature of the <a href="https://crates.io/crates/openssl">openssl crate</a> a C compiler is needed to compile openssl from source</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Perl</p>
+<div class="ulist">
+<ul>
+<li>
+<p>As we use the vendored feature of the <a href="https://crates.io/crates/openssl">openssl crate</a> perl is needed to compile openssl from source</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Make</p>
+<div class="ulist">
+<ul>
+<li>
+<p>As we use the vendored feature of the <a href="https://crates.io/crates/openssl">openssl crate</a> Make is needed to compile openssl from source</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If you have the required tools available, you need to clone the <code>stackablectl</code> repo <a href="https://github.com/stackabletech/stackablectl" class="bare">https://github.com/stackabletech/stackablectl</a> and invoke the build with</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ cargo build --release</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After a successful build the binary will be placed in <code>target/release/stackablectl</code>.
+Copy it to your systems path to access it from anywhere if you like.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ sudo cp target/release/stackablectl /usr/bin/stackablectl</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configure_auto_completion"><a class="anchor" href="#_configure_auto_completion"></a>Configure auto-completion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>stackablectl</code> provides completion scripts for the major shells out there.
+It uses the same mechanism as <code>kubectl</code> does, so if you have any problems following this steps, looking at <a href="https://kubernetes.io/docs/tasks/tools/included/">their installation documentation</a> may help you out.</p>
+</div>
+<div class="paragraph">
+<p>All of the <a href="https://docs.rs/clap_complete/3.2.3/clap_complete/shells/enum.Shell.html">supported shells of</a> <a href="https://crates.io/crates/clap_complete"><code>clap_complete</code></a> are supported.
+As of <code>07/2022</code> this includes the following shells:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#_bash">Bash</a></p>
+</li>
+<li>
+<p>Elvish</p>
+</li>
+<li>
+<p><a href="#_fish">Fish</a></p>
+</li>
+<li>
+<p><a href="#_powershell">PowerShell</a></p>
+</li>
+<li>
+<p><a href="#_zsh">Zsh</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_bash"><a class="anchor" href="#_bash"></a>Bash</h3>
+<div class="paragraph">
+<p>The stackablectl completion script for Bash can be generated with the command <code>stackablectl completion bash</code>. Sourcing the completion script in your shell enables stackablectl autocompletion.</p>
+</div>
+<div class="paragraph">
+<p>Install the package <code>bash-completion</code> e.g. via <code>apt install bash-completion</code>.</p>
+</div>
+<div class="paragraph">
+<p>After that run the following command to source the completion script and tell bash to source it every time you start a new shell.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ source &lt;(stackablectl completion bash)
+$ echo 'source &lt;(stackablectl completion bash)' &gt;&gt; ~/.bashrc</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fish"><a class="anchor" href="#_fish"></a>Fish</h3>
+<div class="paragraph">
+<p>The stackablectl completion script for Fish can be generated with the command <code>stackablectl completion fish</code>. Sourcing the completion script in your shell enables stackablectl autocompletion.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl completion fish | source
+$ echo 'stackablectl completion fish | source' &gt;&gt; ~/.config/fish/config.fish</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_powershell"><a class="anchor" href="#_powershell"></a>PowerShell</h3>
+<div class="paragraph">
+<p>The stackablectl completion script for PowerShell can be generated with the command <code>stackablectl completion powershell</code>.</p>
+</div>
+<div class="paragraph">
+<p>To do so in all your shell sessions, add the following line to your <code>$PROFILE</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">kubectl completion powershell | Out-String | Invoke-Expression</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command will regenerate the auto-completion script on every PowerShell start up.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_zsh"><a class="anchor" href="#_zsh"></a>Zsh</h3>
+<div class="paragraph">
+<p>The stackablectl completion script for Zsh can be generated with the command <code>stackablectl completion zsh</code>. Sourcing the completion script in your shell enables stackablectl autocompletion.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ source &lt;(stackablectl completion zsh)
+$ echo 'source &lt;(stackablectl completion zsh)' &gt;&gt; ~/.zshrc</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>

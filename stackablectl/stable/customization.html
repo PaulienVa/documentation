@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Quickstart :: Stackable Documentation</title>
+    <title>Customization :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -83,7 +83,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="quickstart.html">Quickstart</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -107,7 +107,7 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="customization.html">Customization</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -318,22 +318,103 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">stackablectl</a></li>
-    <li><a href="quickstart.html">Quickstart</a></li>
+    <li><a href="customization.html">Customization</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/quickstart.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/customization.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Quickstart</h1>
+<h1 class="page">Customization</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>This pages wait&#8217;s until the <a href="commands/demo.html" class="xref page">Demo</a> is ready.</p>
+<p><code>stackablectl</code> is build in a way customers or even single developers can define their own release, stack and even demo!
+This way it is possible to cover the following use-cases.</p>
 </div>
 <div class="paragraph">
-<p>When the demo command is available we will browse the demos and install a demo together.</p>
+<p>Any additional demos/stacks/releases you specify, will be added to the already existing ones provided by Stackable.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_a_new_demo"><a class="anchor" href="#_add_a_new_demo"></a>Add a new demo</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_benefits"><a class="anchor" href="#_benefits"></a>Benefits</h3>
+<div class="paragraph">
+<p>When you have developed a new data pipeline or data product you often want to show it in action to other colleagues or potential clients.
+To easily achieve this you can create your own demo so that it can easily be reproduced and/or shared with other people.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_adding_a_new_demo"><a class="anchor" href="#_adding_a_new_demo"></a>Adding a new demo</h3>
+<div class="paragraph">
+<p>First you must create a <code>mycorp-demos.yaml</code> containing demos according to the format defined by <a href="https://github.com/stackabletech/stackablectl/blob/main/demos.yaml">the Stackable provided demos</a>.</p>
+</div>
+<div class="paragraph">
+<p>After creating the <code>mycorp-demos.yaml</code> file it can be added to the available demos in <code>stackablectl</code> via the CLI argument <code>--additional-demos-file mycorp-demos.yaml</code>.
+The argument to <code>--additional-demos-file</code> can be either a path to a file on the local filesystem or an URL.
+By using an URL the demos file can be put into a central Git repository and referenced by all teams or clients.
+Multiple <code>--additional-demos-file</code> flags can be specified to include multiple demo files.
+Every additional demo will we added to the already existing demos in <code>stackablectl</code>, so all the available demo files will be merged.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_a_new_stack"><a class="anchor" href="#_add_a_new_stack"></a>Add a new stack</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_benefits_2"><a class="anchor" href="#_benefits_2"></a>Benefits</h3>
+<div class="paragraph">
+<p>If your company or clients have multiple similar setups or reference architectures, it could make sense to make them easily available to all employees or clients.
+In the custom defined stack all product versions are pinned as well, so you can easily spin up a stack containing the exact same versions as your production setup.
+You can use your defined stack to give it to colleagues or potential customers to show the overall architecture of the Data Platform you&#8217;re going to build.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_adding_a_new_stack"><a class="anchor" href="#_adding_a_new_stack"></a>Adding a new stack</h3>
+<div class="paragraph">
+<p>For the overall procedure have a look at <a href="#_adding_a_new_demo">Adding a new demo</a> on how to add a new stack.
+For a custom stack you need to create a <code>mycorp-stacks.yaml</code> containing stacks according to the format defined by <a href="https://github.com/stackabletech/stackablectl/blob/main/stacks/stacks-v1.yaml">the Stackable provided stacks</a>.
+You can then add it to <code>stackablectl</code> with the flag <code>--additional-stacks-file</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_a_new_release"><a class="anchor" href="#_add_a_new_release"></a>Add a new release</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_benefits_3"><a class="anchor" href="#_benefits_3"></a>Benefits</h3>
+<div class="paragraph">
+<p>If advanced users of the Stackable Platform want to define their own internal release within their company, they can easily add their own release.
+This has the following benefits:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Same operator versions across the whole company. This produces more uniform environments and makes debugging and helping other teams easier.</p>
+</li>
+<li>
+<p>If the company is only interested in a subset of the available operators you can only add your relevant operators into your release and not install all the other operators.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_adding_a_new_release"><a class="anchor" href="#_adding_a_new_release"></a>Adding a new release</h3>
+<div class="paragraph">
+<p>For the overall procedure have a look at <a href="#_adding_a_new_demo">Adding a new demo</a> on how to add a new release.
+For a custom release you need to create a <code>mycorp-releases.yaml</code> containing releases according to the format defined by <a href="https://github.com/stackabletech/release/blob/main/releases.yaml">the Stackable provided releases</a>.
+You can then add it to <code>stackablectl</code> with the flag <code>--additional-releases-file</code>.</p>
+</div>
+</div>
+</div>
 </div>
 </article>
   </div>

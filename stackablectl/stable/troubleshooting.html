@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Quickstart :: Stackable Documentation</title>
+    <title>Troubleshooting :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -83,7 +83,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="quickstart.html">Quickstart</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -110,7 +110,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="customization.html">Customization</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
   </li>
 </ul>
@@ -318,22 +318,98 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">stackablectl</a></li>
-    <li><a href="quickstart.html">Quickstart</a></li>
+    <li><a href="troubleshooting.html">Troubleshooting</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/quickstart.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/troubleshooting.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Quickstart</h1>
+<h1 class="page">Troubleshooting</h1>
+<div class="sect1">
+<h2 id="_no_internet_connectivity"><a class="anchor" href="#_no_internet_connectivity"></a>No internet connectivity</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>This pages wait&#8217;s until the <a href="commands/demo.html" class="xref page">Demo</a> is ready.</p>
+<p><code>stackablectl</code> uses an Internet connection to always know of all the available versions, releases, stacks and demos.
+To achieve this the following online services will be contacted:</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content stretch">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">URL</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://repo.stackable.tech/repository/helm-stable/index.yaml" class="bare">https://repo.stackable.tech/repository/helm-stable/index.yaml</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retrieve the list of current operator stable versions</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://repo.stackable.tech/repository/helm-dev/index.yaml" class="bare">https://repo.stackable.tech/repository/helm-dev/index.yaml</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retrieve the list of current operator development versions</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://repo.stackable.tech/repository/helm-test/index.yaml" class="bare">https://repo.stackable.tech/repository/helm-test/index.yaml</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retrieve the list of current operator test versions</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://raw.githubusercontent.com/stackabletech/release/main/releases.yaml" class="bare">https://raw.githubusercontent.com/stackabletech/release/main/releases.yaml</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of releases provided by Stackable</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://raw.githubusercontent.com/stackabletech/stackablectl/main/stacks/stacks-v1.yaml" class="bare">https://raw.githubusercontent.com/stackabletech/stackablectl/main/stacks/stacks-v1.yaml</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of stacks provided by Stackable</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://raw.githubusercontent.com/stackabletech/stackablectl/main/demos/demos-v1.yaml" class="bare">https://raw.githubusercontent.com/stackabletech/stackablectl/main/demos/demos-v1.yaml</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of demos provided by Stackable</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect2">
+<h3 id="_mirror_helm_charts"><a class="anchor" href="#_mirror_helm_charts"></a>Mirror helm-charts</h3>
+<div class="paragraph">
+<p>To allow stackablectl to retrieve the current list of operators you must mirror the <code><a href="https://repo.stackable.tech/repository/helm-.*/index.yaml" class="bare">https://repo.stackable.tech/repository/helm-.*/index.yaml</a></code> files to some local URL.
+If the file is mirrored e.g. to <code><a href="https://my.corp/stackable/repository/helm-stable/index.yaml" class="bare">https://my.corp/stackable/repository/helm-stable/index.yaml</a></code>, you need to specify the following arguments to <code>stackablectl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl --helm-repo-stackable-stable https://my.corp/stackable/repository/helm-stable operator list</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mirror_releasesstacksdemos_files"><a class="anchor" href="#_mirror_releasesstacksdemos_files"></a>Mirror releases/stacks/demos files</h3>
+<div class="paragraph">
+<p>You need to mirror the URL to either a URL or a file on disk.
+You can then specify the mirrored file to be included via <code>--additional-releases-file</code>, <code>--additional-stacks-file</code>, or <code>--additional-demos-file</code>, e.g.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl --additional-releases-file=/home/sbernauer/Downloads/releases.yaml release list</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_panic_open_tmp_helmcachestackable_stable_index_yaml_permission_denied"><a class="anchor" href="#_panic_open_tmp_helmcachestackable_stable_index_yaml_permission_denied"></a><code>panic: open /tmp/.helmcache/stackable-stable-index.yaml: permission denied</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>or <code>panic: open /tmp/.helmrepo: permission denied</code>.</p>
 </div>
 <div class="paragraph">
-<p>When the demo command is available we will browse the demos and install a demo together.</p>
+<p>See <a href="https://github.com/stackabletech/stackablectl/issues/39" class="bare">https://github.com/stackabletech/stackablectl/issues/39</a></p>
+</div>
+</div>
 </div>
 </article>
   </div>

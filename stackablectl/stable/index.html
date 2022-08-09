@@ -80,17 +80,38 @@
     <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">stackablectl</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="quickstart.html">Quickstart</a>
   </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Commands</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="commands/demo.html">Demo</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="commands/operator.html">Operator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="commands/release.html">Release</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="commands/services.html">Services</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="commands/stack.html">Stack</a>
+  </li>
 </ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="customization.html">Customization</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
   </li>
 </ul>
   </li>
@@ -307,11 +328,102 @@
 </aside>
 <article class="doc">
 <h1 class="page">stackablectl</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>The <code>stackablectl</code> command line tool is used to interact with Stackable operators. Either individually or whole data pipelines consisting of multiple operators and multiple deployments of tools.</p>
+<p>The <code>stackablectl</code> command line tool is used to interact with the Stackable Data Platform.
+It can install individual operators as well as Platform releases.
+It also ships with a set of pre-built demos that utilize different data products of the Platform to get e.g. an end-to-end data pipeline.</p>
 </div>
 <div class="paragraph">
-<p>Go to <a href="installation.html" class="xref page">Installation</a> to install the tool and then consult the <a href="quickstart.html" class="xref page">Quickstart</a> page to get started.</p>
+<p>The installation of <code>stackablectl</code> is described in <a href="installation.html" class="xref page">Installation</a>.</p>
+</div>
+<div class="paragraph">
+<p>To just get a Quickstart please follow <a href="quickstart.html" class="xref page">Quickstart</a>.</p>
+</div>
+<div class="paragraph">
+<p>In general, use <code>stackablectl --help</code> to find out more about how to use the tool or how to use specific options.
+This also works with subcommands, i.e. <code>stackablectl release install --help</code> will show the help for installing a release.
+Often you can also use an abbreviation instead of typing out all of the commands.
+E.g. <code>stackablectl operator list</code> can also be written as <code>stackablectl op ls</code></p>
+</div>
+<div class="paragraph">
+<p>A Kubernetes cluster is required in order to use the Stackable Data Platform as all products and operators run on Kubernetes.
+If you don&#8217;t have a Kubernetes cluster, <code>stackablectl</code> can spin up a <a href="https://kind.sigs.k8s.io/">kind</a> Kubernetes Cluster for you.</p>
+</div>
+<div class="paragraph">
+<p>The deployed services are separated into three different layers as illustrated below:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/layers.png" alt="Layers of the deployed services">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_operators"><a class="anchor" href="#_operators"></a>Operators</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This layer consists of Stackable operators managing the individual data products.
+They can either be installed one by one with the command <code>stackablectl operator</code> or from a release with <code>stackablectl release</code> which is preferred.
+A release is a well-playing bundle of operators that get released approximately every 2 months.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_stacks"><a class="anchor" href="#_stacks"></a>Stacks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A stack is a collection of ready-to-use Stackable data products as well as needed third-party services like Postgresql or MinIO.</p>
+</div>
+<div class="paragraph">
+<p>Stacks are installed with the command <code>stackablectl stack</code>.
+A stack needs a release (of Stackable operators) to run on.
+To achieve this a stacks has a dependency on a release which gets automatically installed when a stack is installed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_demos"><a class="anchor" href="#_demos"></a>Demos</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A demo is an end-to-end demonstration of the usage of the Stackable Data Platform.
+It contains</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Installing a Stackable release</p>
+</li>
+<li>
+<p>Spinning up a stack</p>
+</li>
+<li>
+<p>Performing the actual demo</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Prepare some test data</p>
+</li>
+<li>
+<p>Process test data</p>
+</li>
+<li>
+<p>Visualize results (optional)</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Demos are installed with the command <code>stackablectl demo</code>.
+A demo needs a stack to run on.
+To achieve this a demo has a dependency on a stack which gets automatically installed when a demo is installed.
+The stack in turn will install the needed Stackable release.</p>
+</div>
+</div>
 </div>
 </article>
   </div>

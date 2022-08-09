@@ -328,7 +328,7 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>After installation, the CRD for this operator must be created:</p>
+<p>If you are not installing the operator using Helm then after installation the CRD for this operator must be created:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -338,9 +338,9 @@
 <div class="paragraph">
 <p>To create an Apache Kafka (v3.2.0) cluster named <code>simple-kafka</code> assuming that you already have a Zookeeper cluster named <code>simple-zk</code>:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperZnode
 metadata:
@@ -360,16 +360,15 @@ spec:
   brokers:
     roleGroups:
       default:
-        replicas: 1
-EOF</pre>
+        replicas: 1</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you wish to include integration with <a href="https://docs.stackable.tech/opa/index.html">Open Policy Agent</a> and already have an OPA cluster, then you can include an <code>opa</code> field pointing to the OPA cluster discovery <code>ConfigMap</code> and the required package. The package is optional and will default to the <code>metadata.name</code> field:</p>
+<p>If you wish to include integration with <a href="#opa-operator::index.adoc" class="xref unresolved">Open Policy Agent</a> and already have an OPA cluster, then you can include an <code>opa</code> field pointing to the OPA cluster discovery <code>ConfigMap</code> and the required package. The package is optional and will default to the <code>metadata.name</code> field:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
 apiVersion: kafka.stackable.tech/v1alpha1
 kind: KafkaCluster
 metadata:
@@ -379,20 +378,19 @@ spec:
   zookeeperConfigMapName: simple-kafka-znode
   opa:
     configMapName: simple-opa
-    package: kafka/authz
+    package: kafka
   brokers:
     roleGroups:
       default:
-        replicas: 1
-EOF</pre>
+        replicas: 1</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>You can change some opa cache properties by overriding:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
 apiVersion: kafka.stackable.tech/v1alpha1
 kind: KafkaCluster
 metadata:
@@ -402,7 +400,7 @@ spec:
   zookeeperConfigMapName: simple-kafka-znode
   opa:
     configMapName: simple-opa
-    package: kafka/authz
+    package: kafka
   brokers:
     configOverrides:
       server.properties:
@@ -411,8 +409,7 @@ spec:
         opa.authorizer.cache.expire.after.seconds: "10"
     roleGroups:
       default:
-        replicas: 1
-EOF</pre>
+        replicas: 1</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -462,6 +459,141 @@ spec:
       default:
         replicas: 3</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_encryption"><a class="anchor" href="#_encryption"></a>Encryption</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The internal and client communication can be encrypted TLS. This requires the <a href="../../secret-operator/stable/index.html" class="xref page">Secret Operator</a> to be present in order to provide certificates. The utilized certificates can be changed in a top-level config.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: kafka.stackable.tech/v1alpha1
+kind: KafkaCluster
+metadata:
+  name: simple-kafka
+spec:
+  version: 3.2.0-stackable0.1.0
+  zookeeperConfigMapName: simple-kafka-znode
+  config:
+    tls:
+      secretClass: tls <i class="conum" data-value="1"></i><b>(1)</b>
+    internalTls:
+      secretClass: kafka-internal-tls <i class="conum" data-value="2"></i><b>(2)</b>
+  brokers:
+    roleGroups:
+      default:
+        replicas: 3</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>tls.secretClass</code> refers to the client-to-server encryption. Defaults to the <code>tls</code> secret. It can be deactivated by setting <code>config.tls</code> to <code>null</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>internalTls.secretClass</code> refers to the broker-to-broker internal encryption. This must be explicitly set or defaults to <code>tls</code>. Can be disabled by setting <code>config.internalTls</code> to <code>null</code>.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>tls</code> secret is deployed from the <a href="../../secret-operator/stable/index.html" class="xref page">Secret Operator</a> and looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: tls
+spec:
+  backend:
+    autoTls:
+      ca:
+        secret:
+          name: secret-provisioner-tls-ca
+          namespace: default
+        autoGenerate: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can create your own secrets and reference them e.g. in the <code>tls.secretClass</code> or <code>internalTls.secretClass</code> to use different certificates.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authentication"><a class="anchor" href="#_authentication"></a>Authentication</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The internal or broker-to-broker communication is authenticated via TLS. In order to enforce TLS authentication for client-to-server communication, you can set an <code>AuthenticationClass</code> reference in the custom resource provided by the <a href="../../commons-operator/stable/index.html" class="xref page">Commons Operator</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: kafka-client-tls <i class="conum" data-value="2"></i><b>(2)</b>
+spec:
+  provider:
+    tls:
+      clientCertSecretClass: kafka-client-auth-secret <i class="conum" data-value="3"></i><b>(3)</b>
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: kafka-client-auth-secret <i class="conum" data-value="4"></i><b>(4)</b>
+spec:
+  backend:
+    autoTls:
+      ca:
+        secret:
+          name: secret-provisioner-tls-kafka-client-ca
+          namespace: default
+        autoGenerate: true
+---
+apiVersion: kafka.stackable.tech/v1alpha1
+kind: KafkaCluster
+metadata:
+  name: simple-kafka
+spec:
+  version: 3.2.0-stackable0.1.0
+  zookeeperConfigMapName: simple-kafka-znode
+  config:
+    tls:
+      secretClass: tls
+    clientAuthentication:
+      authenticationClass: kafka-client-tls <i class="conum" data-value="1"></i><b>(1)</b>
+  brokers:
+    roleGroups:
+      default:
+        replicas: 3</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>config.clientAuthentication.authenticationClass</code> can be set to use TLS for authentication. This is optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The referenced <code>AuthenticationClass</code> that references a <code>SecretClass</code> to provide certificates.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The reference to a <code>SecretClass</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The <code>SecretClass</code> that is referenced by the <code>AuthenticationClass</code> in order to provide certificates.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

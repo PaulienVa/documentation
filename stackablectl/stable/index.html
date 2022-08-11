@@ -340,9 +340,9 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <code>stackablectl</code> command line tool is used to interact with the Stackable Data Platform.
-It can install individual operators as well as Platform releases.
-It also ships with a set of pre-built demos that utilize different data products of the Platform to get e.g. an end-to-end data pipeline.</p>
+<p>The <code>stackablectl</code> command line tool is used to interact with the Stackable data platform.
+It can install individual operators as well as platform releases.
+It also ships with a set of pre-built <a href="commands/demo.html" class="xref page">Demo</a> that utilize different data products of the Platform to get e.g. an end-to-end data pipeline.</p>
 </div>
 <div class="paragraph">
 <p>The installation of <code>stackablectl</code> is described in <a href="installation.html" class="xref page">Installation</a>.</p>
@@ -375,8 +375,8 @@ If you don&#8217;t have a Kubernetes cluster, <code>stackablectl</code> can spin
 <div class="sectionbody">
 <div class="paragraph">
 <p>This layer consists of Stackable operators managing the individual data products.
-They can either be installed one by one with the command <code>stackablectl operator</code> or from a release with <code>stackablectl release</code> which is recommended.
-A release is a well-playing bundle of operators that get released approximately every 2 months.</p>
+They can either be installed one by one with the <a href="commands/operator.html" class="xref page">Operator</a> command or from a release with the <a href="commands/release.html" class="xref page">Release</a> command which is recommended way.
+A release is a well-playing bundle of operators that has been extensively tested by Stackable.</p>
 </div>
 </div>
 </div>
@@ -387,7 +387,7 @@ A release is a well-playing bundle of operators that get released approximately 
 <p>A stack is a collection of ready-to-use Stackable data products as well as needed third-party services like Postgresql or MinIO.</p>
 </div>
 <div class="paragraph">
-<p>Stacks are installed with the command <code>stackablectl stack</code>.
+<p>Stacks are installed with the <a href="commands/stack.html" class="xref page">Stack</a> command.
 A stack needs a release (of Stackable operators) to run on.
 To achieve this a stacks has a dependency on a release which gets automatically installed when a stack is installed.</p>
 </div>
@@ -427,7 +427,7 @@ It contains</p>
 </ol>
 </div>
 <div class="paragraph">
-<p>Demos are installed with the command <code>stackablectl demo</code>.
+<p>Demos are installed with the <a href="commands/demo.html" class="xref page">Demo</a> command.
 A demo needs a stack to run on.
 To achieve this a demo has a dependency on a stack which gets automatically installed when a demo is installed.
 The stack in turn will install the needed Stackable release.</p>

@@ -525,14 +525,15 @@ It should generally be safe to simply use the latest image version that is avail
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
   deepStorage:
     s3:
-      inline:
-        bucketName: my-bucket  <i class="conum" data-value="1"></i><b>(1)</b>
-        connection:
-          inline:
-            host: test-minio  <i class="conum" data-value="2"></i><b>(2)</b>
-            port: 9000  <i class="conum" data-value="3"></i><b>(3)</b>
-            credentials:  <i class="conum" data-value="4"></i><b>(4)</b>
-              ...</code></pre>
+      bucket:
+        inline:
+          bucketName: my-bucket  <i class="conum" data-value="1"></i><b>(1)</b>
+          connection:
+            inline:
+              host: test-minio  <i class="conum" data-value="2"></i><b>(2)</b>
+              port: 9000  <i class="conum" data-value="3"></i><b>(3)</b>
+              credentials:  <i class="conum" data-value="4"></i><b>(4)</b>
+                ...</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -563,7 +564,8 @@ It should generally be safe to simply use the latest image version that is avail
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
   deepStorage:
     s3:
-      reference: my-bucket-resource <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+      bucket:
+        reference: my-bucket-resource <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">

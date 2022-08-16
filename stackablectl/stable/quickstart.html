@@ -114,6 +114,9 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="demos/trino-taxi-data.html">trino-taxi-data</a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="demos/kafka-druid-earthquake-data.html">kafka-druid-earthquake-data</a>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
@@ -359,15 +362,16 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>Stackable provides a set of ready-to-use demos.
-As of writing (2022/09/10) only a single demo is available, but further demos will be added in the future.
+As of writing (2022/08/15) only two demos are available, but further demos will be added in the future.
 They will automatically show up, as <code>stackablectl</code> fetches the available list of demos via the internet.
 To list the available demos run the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl demos list
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl demo list
 DEMO                                STACKABLE STACK           DESCRIPTION
-trino-taxi-data                     trino-superset-s3         Demo loading 2.5 years of New York taxi data into S3 bucket, creating a Trino table and a Superset dashboard</code></pre>
+trino-taxi-data                     trino-superset-s3         Demo loading 2.5 years of New York taxi data into S3 bucket, creating a Trino table and a Superset dashboard
+kafka-druid-earthquake-data         kafka-druid-superset-s3   Demo ingesting earthquake data into Kafka, streaming it into Druid and creating a Superset dashboard</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -378,7 +382,7 @@ trino-taxi-data                     trino-superset-s3         Demo loading 2.5 y
 </td>
 <td class="content">
 <div class="paragraph">
-<p>When you are on a Windows system you have to replace the <code>stackablectl</code> command with <code>stackablectl.exe</code>, e.g. <code>stackablectl.exe demos list</code>.
+<p>When you are on a Windows system you have to replace the <code>stackablectl</code> command with <code>stackablectl.exe</code>, e.g. <code>stackablectl.exe demo list</code>.
 This applies to all commands below.</p>
 </div>
 </td>
@@ -477,6 +481,12 @@ Have a nice day! 👋
 [INFO ] Installing components of demo trino-taxi-data
 [INFO ] Installed demo trino-taxi-data. Use "stackablectl services list" to list the installed services</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The demos create Kubernetes jobs, that will populate test data and talk to the installed products to process the data.
+Until the products are ready, it is completely normal that the pods of these jobs will fail with an error.
+They will get retried with an exponentially growing backoff time.
+After the products are ready they should turn green and everything should settle down.</p>
 </div>
 </div>
 </div>

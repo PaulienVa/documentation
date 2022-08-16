@@ -114,6 +114,9 @@
   <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="trino-taxi-data.html">trino-taxi-data</a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kafka-druid-earthquake-data.html">kafka-druid-earthquake-data</a>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
@@ -370,7 +373,7 @@ To put it simply you have to run <code>stackablectl demo install trino-taxi-data
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Superset</strong>: A modern data exploration and visualization platform. This demo uses it to execute SQL queries and build dashboards</p>
+<p><strong>Superset</strong>: A modern data exploration and visualization platform. This demo utilizes Superset to retrieve data from Trino via SQL queries and build dashboards on top of that data</p>
 </li>
 <li>
 <p><strong>Trino</strong>: A fast distributed SQL query engine for big data analytics that helps you explore your data universe. This demo uses it to enable SQL access to the data</p>
@@ -380,6 +383,9 @@ To put it simply you have to run <code>stackablectl demo install trino-taxi-data
 </li>
 <li>
 <p><strong>Hive metastore</strong>: A service that stores metadata related to Apache Hive and other services. This demo uses it as metadata storage for Trino</p>
+</li>
+<li>
+<p><strong>Open policy agent</strong> (OPA): A open source, general-purpose policy engine that unifies policy enforcement across the stack. This demo uses it as the authorizer for Trino, which decides which user is able to query which data.</p>
 </li>
 </ul>
 </div>
@@ -391,7 +397,7 @@ To put it simply you have to run <code>stackablectl demo install trino-taxi-data
 <p>Make data accessible via SQL in Trino</p>
 </li>
 <li>
-<p>Create Superset dashboards for visualization</p>
+<p>Create Superset dashboards for visualization of the data</p>
 </li>
 </ul>
 </div>
@@ -409,7 +415,7 @@ To put it simply you have to run <code>stackablectl demo install trino-taxi-data
 <h2 id="_list_deployed_stackable_services"><a class="anchor" href="#_list_deployed_stackable_services"></a>List deployed Stackable services</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To list the installed installed Stackable service run the following command:</p>
+<p>To list the installed installed Stackable services run the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -453,8 +459,8 @@ In case the product is not ready yet a warning might be shown.</p>
 <h2 id="_inspect_data_in_s3"><a class="anchor" href="#_inspect_data_in_s3"></a>Inspect data in S3</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The S3 provided by MinIO is used as a persistent storage to store all the data used
-You can have a look at the testdata within the MinIO Webinterface by opening the given <code>minio</code> endpoint <code>console-http</code> from the <code>stackablectl services list</code> command.
+<p>The S3 provided by MinIO is used as a persistent storage to store all the data used.
+You can have a look at the testdata within the MinIO web interface by opening the given <code>minio</code> endpoint <code>console-http</code> from your <code>stackablectl services list</code> command output.
 You have to use the endpoint from your command output, in this case it is <a href="http://172.18.0.3:30503" class="bare">http://172.18.0.3:30503</a>.
 Open it with your favorite browser.</p>
 </div>
@@ -534,7 +540,7 @@ Open the <code>superset</code> endpoint <code>external-superset</code> in your b
 </div>
 </div>
 <div class="sect2">
-<h3 id="_inspect_dashboard"><a class="anchor" href="#_inspect_dashboard"></a>Inspect dashboard</h3>
+<h3 id="_view_the_dashboard"><a class="anchor" href="#_view_the_dashboard"></a>View the dashboard</h3>
 <div class="paragraph">
 <p>On the top click on the tab <code>Dashboards</code>.</p>
 </div>

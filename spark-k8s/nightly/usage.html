@@ -91,7 +91,23 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="installation.html">Installation</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="getting_started/index.html">Getting started</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="getting_started/installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="getting_started/first_steps.html">First steps</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
@@ -318,41 +334,6 @@
 </aside>
 <article class="doc">
 <h1 class="page">Usage</h1>
-<div class="sect1">
-<h2 id="_create_an_apache_spark_job"><a class="anchor" href="#_create_an_apache_spark_job"></a>Create an Apache Spark job</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>If you followed the installation instructions, you should now have a Stackable Operator for Apache Spark up and running, and you are ready to create your first Apache Spark kubernetes cluster.</p>
-</div>
-<div class="paragraph">
-<p>The example below creates a job running on Apache Spark 3.3.0, using the spark-on-kubernetes paradigm described in the spark documentation. The application file is itself part of the spark distribution and <code>local</code> refers to the path on the driver/executors; there are no external dependencies.</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: spark.stackable.tech/v1alpha1
-kind: SparkApplication
-metadata:
-  name: spark-clustermode-001
-spec:
-  version: 1.0
-  mode: cluster
-  mainClass: org.apache.spark.examples.SparkPi
-  mainApplicationFile: local:///stackable/spark/examples/jars/spark-examples_2.12-3.3.0.jar
-  image: 3.3.0-stackable0.1.0
-  driver:
-    cores: 1
-    coreLimit: "1200m"
-    memory: "512m"
-  executor:
-    cores: 1
-    instances: 3
-    memory: "512m"
-EOF</pre>
-</div>
-</div>
-</div>
-</div>
 <div class="sect1">
 <h2 id="_examples"><a class="anchor" href="#_examples"></a>Examples</h2>
 <div class="sectionbody">

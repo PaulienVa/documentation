@@ -109,7 +109,7 @@
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Demos</span>
+    <a class="nav-link" href="index.html">Demos</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="trino-taxi-data.html">trino-taxi-data</a>
@@ -330,7 +330,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">stackablectl</a></li>
-    <li>Demos</li>
+    <li><a href="index.html">Demos</a></li>
     <li><a href="kafka-druid-earthquake-data.html">kafka-druid-earthquake-data</a></li>
   </ul>
 </nav>
@@ -388,7 +388,7 @@ To put it simply you have to run <code>stackablectl demo install kafka-druid-ear
 </div>
 </li>
 <li>
-<p>Continuously emit approximately 1000 records/s of earthquake data into Kafka</p>
+<p>Continuously emit approximately 1000 records/s of <a href="https://earthquake.usgs.gov/">earthquake data</a> into Kafka</p>
 </li>
 <li>
 <p>Start a Druid ingestion job that ingests the data into the Druid instance</p>
@@ -399,7 +399,7 @@ To put it simply you have to run <code>stackablectl demo install kafka-druid-ear
 </ul>
 </div>
 <div class="paragraph">
-<p>The whole pipeline will have a very low latency from putting a record into kafka to it showing up in the Dashboard charts.</p>
+<p>The whole data pipeline will have a very low latency from putting a record into Kafka to it showing up in the dashboard charts.</p>
 </div>
 <div class="paragraph">
 <p>You can see the deployed products as well as their relationship in the following diagram:</p>
@@ -487,7 +487,7 @@ Metadata for all topics (from broker -1: 172.18.0.4:30968/bootstrap):
 </div>
 <div class="paragraph">
 <p>You can see that Kafka consists of one broker and the topic <code>earthquakes</code> has been created.
-To see some records that have been send to kafka run the following command.
+To see some records that have been send to Kafka run the following command.
 You can change the number of records to print via the <code>-c</code> parameter.</p>
 </div>
 <div class="listingblock">
@@ -512,7 +512,7 @@ Topic earthquakes / Partition 0 / Offset: 2670281 / Timestamp: 1660571644060</co
 </div>
 <div class="paragraph">
 <p>From the output you can see, that the last record was produced at the timestamp <code>1660571644060</code> which translates to <code>Mo 15. Aug 15:54:04 CEST 2022</code> (using the command <code>date -d @1660571644</code>).
-You can also see that it was the record number <code>2670281</code> send to this topic, so ~2.6 million million records have been produced so far.</p>
+You can also see that it was the record number <code>2670281</code> send to this topic, so ~2.6 million records have been produced so far.</p>
 </div>
 </div>
 </div>
@@ -545,8 +545,8 @@ The Druid deep storage is based on the S3 store provided by MinIO.</p>
 <div class="paragraph">
 <p>After clicking on the magnification glass to the right side of the <code>RUNNING</code> supervisor you can see additional information.
 On the tab <code>Statistics</code> on the left you can see the number of processed records as well as the number of errors.
-The statistics show that Druid is currently ingesting 1251 records/s and has ingested 2,1 million records so far.
-All records have been ingested successfully, which is indicated by having no <code>processWithError</code>, <code>thrownAway</code> or <code>unparseable</code>.</p>
+The statistics show that Druid is currently ingesting 1251 records/s and has ingested 2.1 million records so far.
+All records have been ingested successfully, which is indicated by having no <code>processWithError</code>, <code>thrownAway</code> or <code>unparseable</code> records.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -705,7 +705,7 @@ You can e.g. have a detailed look at the detected earthquakes in Germany.</p>
 </div>
 <div class="paragraph">
 <p>You can also click on the magnitudes in the legend on the top right side to enable/disable printing the earthquakes of that magnitude.
-By only enabling magnitudes greater or equal to 8 you can only plot the most severe earthquakes.</p>
+By only enabling magnitudes greater or equal to 8 you can plot only the most severe earthquakes.</p>
 </div>
 <div class="imageblock">
 <div class="content">

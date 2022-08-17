@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Services :: Stackable Documentation</title>
+    <title>Demos :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.0.1">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -91,31 +91,31 @@
     <span class="nav-text">Commands</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="demo.html">Demo</a>
+    <a class="nav-link" href="../commands/demo.html">Demo</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="operator.html">Operator</a>
+    <a class="nav-link" href="../commands/operator.html">Operator</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="release.html">Release</a>
-  </li>
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="services.html">Services</a>
+    <a class="nav-link" href="../commands/release.html">Release</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="stack.html">Stack</a>
+    <a class="nav-link" href="../commands/services.html">Services</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../commands/stack.html">Stack</a>
   </li>
 </ul>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../demos/index.html">Demos</a>
+    <a class="nav-link" href="index.html">Demos</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../demos/trino-taxi-data.html">trino-taxi-data</a>
+    <a class="nav-link" href="trino-taxi-data.html">trino-taxi-data</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../demos/kafka-druid-earthquake-data.html">kafka-druid-earthquake-data</a>
+    <a class="nav-link" href="kafka-druid-earthquake-data.html">kafka-druid-earthquake-data</a>
   </li>
 </ul>
   </li>
@@ -330,112 +330,22 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">stackablectl</a></li>
-    <li>Commands</li>
-    <li><a href="services.html">Services</a></li>
+    <li><a href="index.html">Demos</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/commands/services.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/demos/index.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Services</h1>
-<div id="preamble">
-<div class="sectionbody">
+<h1 class="page">Demos</h1>
 <div class="paragraph">
-<p>In this context a (Stackable) service is a running instance of a data product. This is different from the meaning of a Kubernetes service which is an abstract way to expose an application running on a set of pods as a network service.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_list_running_services"><a class="anchor" href="#_list_running_services"></a>List running services</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The <code>stackablectl services</code> command allows to inspect the running services of the Stackable data platform.
-Currently you can only get a read-only view of the running services, future versions may allow to e.g. uninstall running services.</p>
+<p>The pages below this section guide you on how to use the demos provided by Stackable.</p>
 </div>
 <div class="paragraph">
-<p>An example invocation looks as follows:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl services list --all-namespaces
- PRODUCT   NAME         NAMESPACE  ENDPOINTS                                     EXTRA INFOS
-
- hive      hive         default    hive                172.18.0.4:32658
-                                   metrics             172.18.0.4:30745
-
- opa       opa          default    http                http://172.18.0.2:31324
-
- superset  superset     default    external-superset   http://172.18.0.2:32716   Admin user: admin, password: admin
-
- trino     trino        default    coordinator-http    http://172.18.0.5:32128
-                                   coordinator-metrics 172.18.0.5:31199
-                                   coordinator-https   https://172.18.0.5:32721
-
- minio     minio-trino  default    http                http://172.18.0.4:31026   Third party service
-                                   console-http        http://172.18.0.4:30354   Admin user: root, password: rootroot</code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>When a product instance has not finished starting yet, the service will have no endpoint.
-Starting all of the product instances might take an considerable amount of time depending on your internet connectivity.
-In case the product is not ready yet a warning might be shown.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>You can also</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Show services in all namespaces</p>
-</li>
-<li>
-<p>Redact the passwords from the output in case you want to share the list of services without giving out the admin credentials</p>
-</li>
-<li>
-<p>Print the installed product versions</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>To achieve this you can use the following command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl services list --all-namespaces --redact-credentials --show-versions
- PRODUCT   NAME         NAMESPACE  ENDPOINTS                                     EXTRA INFOS
-
- hive      hive         default    hive                172.18.0.5:30298          version 2.3.9-stackable0.4.0
-                                   metrics             172.18.0.5:31633
-
- opa       opa          default    http                http://172.18.0.5:30316   version 0.41.0-stackable0.1.0
-
- superset  superset     default    external-superset   http://172.18.0.4:32295   Admin user: admin, password: &lt;redacted&gt;
-                                                                                 version 1.5.1-stackable0.2.0
-
- trino     trino        default    coordinator-http    http://172.18.0.3:30167   version 387-stackable0.1.0
-                                   coordinator-metrics 172.18.0.3:31818
-                                   coordinator-https   https://172.18.0.3:30141
-
- minio     minio-trino  default    http                http://172.18.0.3:31062   Third party service
-                                   console-http        http://172.18.0.3:30503   Admin user: root, password: &lt;redacted&gt;</code></pre>
-</div>
-</div>
-</div>
+<p>To install a demo please follow the <a href="../quickstart.html" class="xref page">quickstart guide</a> or have a look at the <a href="../commands/demo.html" class="xref page">demo command</a>.</p>
 </div>
 </article>
   </div>

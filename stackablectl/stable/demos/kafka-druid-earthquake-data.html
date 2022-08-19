@@ -117,6 +117,9 @@
   <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="kafka-druid-earthquake-data.html">kafka-druid-earthquake-data</a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kafka-druid-water-level-data.html">kafka-druid-water-level-data</a>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
@@ -471,7 +474,6 @@ In order to connect to Kafka, use the <code>kafka</code> endpoint from the <code
 </div>
 <div class="paragraph">
 <p>If you have <code>kafkacat</code> installed, you can see the available brokers and topics with the following command.
-If not, that&#8217;s no big deal as you would see nearly the exact same output.
 You need to replace the <code>-b</code> parameter to match your Kafka endpoint.</p>
 </div>
 <div class="listingblock">
@@ -544,14 +546,16 @@ The Druid deep storage is based on the S3 store provided by MinIO.</p>
 </div>
 <div class="paragraph">
 <p>After clicking on the magnification glass to the right side of the <code>RUNNING</code> supervisor you can see additional information.
-On the tab <code>Statistics</code> on the left you can see the number of processed records as well as the number of errors.
-The statistics show that Druid is currently ingesting 1251 records/s and has ingested 2.1 million records so far.
-All records have been ingested successfully, which is indicated by having no <code>processWithError</code>, <code>thrownAway</code> or <code>unparseable</code> records.</p>
+On the tab <code>Statistics</code> on the left you can see the number of processed records as well as the number of errors.</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../_images/demo-kafka-druid-earthquake-data/druid_3.png" alt="druid 3">
 </div>
+</div>
+<div class="paragraph">
+<p>The statistics show that Druid is currently ingesting <code>1251</code> records/s and has ingested 2.1 million records so far.
+All records have been ingested successfully, which is indicated by having no <code>processWithError</code>, <code>thrownAway</code> or <code>unparseable</code> records.</p>
 </div>
 </div>
 <div class="sect2">
@@ -566,8 +570,8 @@ You can see the available data sources by clicking on <code>Datasources</code> a
 </div>
 </div>
 <div class="paragraph">
-<p>By clicking on the <code>earthquakes</code> datasource you can see the segments the datasource consists of.
-In this case the <code>earthquakes</code> datasource is partitioned by the year of the earthquake, resulting in 73 segments.</p>
+<p>By clicking on the <code>earthquakes</code> data source you can see the segments the data source consists of.
+In this case the <code>earthquakes</code> data source is partitioned by the year of the earthquake, resulting in 73 segments.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -575,7 +579,7 @@ In this case the <code>earthquakes</code> datasource is partitioned by the year 
 </div>
 </div>
 <div class="paragraph">
-<p>Druid offers a web-based way of querying the datasources via SQL.
+<p>Druid offers a web-based way of querying the data sources via SQL.
 To achieve this you first have to click on <code>Query</code> at the top.</p>
 </div>
 <div class="imageblock">
@@ -630,7 +634,7 @@ Open the <code>superset</code> endpoint <code>external-superset</code> in your b
 </div>
 </div>
 <div class="paragraph">
-<p>Log in with the credentials username <code>admin</code>, password <code>admin</code>.</p>
+<p>Log in with the username <code>admin</code> and password <code>admin</code>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -680,7 +684,7 @@ On the left side you can modify the chart and click on <code>Run</code> to see t
 </div>
 </div>
 <div class="sect2">
-<h3 id="_view_distribution_on_world_map"><a class="anchor" href="#_view_distribution_on_world_map"></a>View distribution on world map</h3>
+<h3 id="_view_the_earthquake_distribution_on_the_world_map"><a class="anchor" href="#_view_the_earthquake_distribution_on_the_world_map"></a>View the earthquake distribution on the world map</h3>
 <div class="paragraph">
 <p>To look at the geographical distribution of the earthquakes you have to click on the tab <code>Charts</code> at the top again.
 Afterwards click on the chart <code>Earthquake distribution</code>.</p>
@@ -758,7 +762,7 @@ order by 1 desc</code></pre>
 <h2 id="_minio"><a class="anchor" href="#_minio"></a>MinIO</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The S3 provided by MinIO is used as a persistent storage for Druid to store all the data used.
+<p>The S3 provided by MinIO is used as a persistent deep storage for Druid to store all the data used.
 Open the <code>minio</code> endpoint <code>console-http</code> in your browser (<a href="http://172.18.0.4:31664" class="bare">http://172.18.0.4:31664</a> in this case).</p>
 </div>
 <div class="imageblock">
@@ -767,7 +771,7 @@ Open the <code>minio</code> endpoint <code>console-http</code> in your browser (
 </div>
 </div>
 <div class="paragraph">
-<p>Log in with the credentials username <code>root</code>, password <code>rootroot</code>.</p>
+<p>Log in with the username <code>root</code> and password <code>rootroot</code>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -785,16 +789,16 @@ Open the <code>minio</code> endpoint <code>console-http</code> in your browser (
 <div class="paragraph">
 <p>As you can see druid saved 199MB of data within 73 prefixes (folders).
 One prefix corresponds to on segment which in turn contains all the data of a year.
-If you don&#8217;t see any years or files, the reason is that Druid has not saved it&#8217;s data from memory to the deep storage (in this case S3).
-After waiting a bit the data should have been flushed to S3 and should show up.</p>
+If you don&#8217;t see any folders or files, the reason is that Druid has not saved its data from memory to the deep storage yet.
+After waiting a few minutes, the data should have been flushed to S3 and show up.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/minio_3.png" alt="minio 3">
+<img src="../_images/demo-kafka-druid-earthquake-data/minio_4.png" alt="minio 4">
 </div>
 </div>
 <div class="paragraph">
-<p>If you open up a prefix for a specific year you can see that Druid has placed a file containing the data of this year there.</p>
+<p>If you open up a prefix for a specific year you can see that Druid has placed a file containing the data of that year there.</p>
 </div>
 </div>
 </div>

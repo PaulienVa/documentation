@@ -485,6 +485,64 @@ Overriding certain properties which are set by operator can interfere with the o
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_phoenix"><a class="anchor" href="#_phoenix"></a>Phoenix</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Apache Phoenix project provides the ability to interact with HBase with JBDC using familiar SQL-syntax. The Phoenix dependencies are bundled with the Stackable HBase image and do not need to be installed separately (client components will need to ensure that they have the correct client-side libraries available). Information about client-side installation can be found <a href="https://phoenix.apache.org/installation.html">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Phoenix comes bundled with a few simple scripts to verify a correct server-side installation. For example, assuming that phoenix dependencies have been installed to their default location of <code>/stackable/phoenix/bin</code>, we can issue the following using the supplied <code>psql.py</code> script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">/stackable/phoenix/bin/psql.py  &amp;&amp; \
+   /stackable/phoenix/examples/WEB_STAT.sql &amp;&amp; \
+   /stackable/phoenix/examples/WEB_STAT.csv  &amp;&amp; \
+   /stackable/phoenix/examples/WEB_STAT_QUERIES.sql</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This script creates a java command that creates, populates and queries a Phoenix table called <code>WEB_STAT</code>. Alternatively, one can use the <code>sqlline.py</code> script (which wraps the <a href="https://github.com/julianhyde/sqlline">sqlline</a> utility):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">/stackable/phoenix/bin/sqlline.py [zookeeper] [sql file]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The script opens an SQL prompt from where one can list, query, create and generally interact with Phoenix tables. So, to query the table that was created in the previous step, start the script and enter some SQL at the prompt:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/phoenix_sqlline.png" alt="Phoenix Sqlline">
+</div>
+</div>
+<div class="paragraph">
+<p>The Phoenix table <code>WEB_STAT</code> is created as an HBase table, and can be viewed normally from within the HBase UI:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/phoenix_tables.png" alt="Phoenix Tables">
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>SYSTEM</code>* tables are those required by Phoenix and are created the first time that Phoenix is invoked.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Both <code>psql.py</code> and <code>sqlline.py</code> generate a java command that calls classes from the Phoenix client library <code>.jar</code>. The Zookeeper quorum does not need to be supplied as part of the URL used by the JDBC connection string, as long as the environment variable <code>HBASE_CONF_DIR</code> is set and supplied as an element for the <code>-cp</code> classpath search: the cluster information is then extracted from <code>$HBASE_CONF_DIR/hbase-site.xml</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
 </article>
   </div>
 </main>

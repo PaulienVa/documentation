@@ -89,10 +89,23 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="dependencies.html">Dependencies</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="getting_started/index.html">Getting started</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="getting_started/installation.html">Installation</a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="getting_started/first_steps.html">First steps</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="installation.html">Installation</a>
+    <a class="nav-link" href="dependencies.html">Dependencies</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="configuration.html">Configuration</a>
@@ -562,44 +575,6 @@ Configuration happens via a ConfigMap, which needs to contain two keys called <c
 <p>This is the actual NiFi configuration element.
 At the moment only a very limited set of options is supported, but you can expect these to grow quickly over time.
 Anything that is not mentioned here can be configured via configOverrides. This does not include properties for XML files like <code>state-management.xml</code>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_configuration_overrides"><a class="anchor" href="#_configuration_overrides"></a>Configuration Overrides</h3>
-<div class="paragraph">
-<p>Apache NiFi runtime configuration is stored in the files bootstrap.conf and nifi.properties.
-The configOverrides block allows you to add custom parameters to these files.
-A Full list of the available configuration options can be found in the official Apache NiFi documentation at <a href="https://nifi.apache.org/docs/nifi-docs/components/nifi-docs/html/administration-guide.html#system_properties" class="bare">https://nifi.apache.org/docs/nifi-docs/components/nifi-docs/html/administration-guide.html#system_properties</a>.</p>
-</div>
-<div class="paragraph">
-<p>Overrides consist of a key, which must match the property name in the configuration file and a value. This allows arbitrary configuration properties to be added to Spark. In the example above a property aws.region is being explicitly set to 'eu-west-1', overriding the default value.</p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Please be aware that by overriding config settings in this section you have a very high risk of breaking things, because the product does not behave the way the Stackable Operator for Apache NiFi expects it to behave any more.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>The following snippet shows an example of how this would look in the NifiCluster definition:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">        config:
-          sensitivePropertyKeySecret: nifi-sensitive-property-
-        configOverrides:
-          nifi.properties:
-            nifi.config.property: eu-west-1
-          bootstrap.conf:
-            boostrap.config.property: some_string
-        replicas: 2</code></pre>
-</div>
 </div>
 </div>
 </div>

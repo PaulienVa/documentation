@@ -496,29 +496,35 @@ metadata:
 spec:
   version: 387-stackable0.1.0
   hiveConfigMapName: simple-hive-derby
-  s3:
-    inline:
-      host: test-minio
-      port: 9000
-      accessStyle: Path
-      credentials:
-        secretClass: minio-credentials
+  catalogLabelSelector:
+    trino: simple-trino
   coordinators:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
         replicas: 1
-        config: {}
   workers:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
         replicas: 1
-        config: {}</code></pre>
+---
+apiVersion: trino.stackable.tech/v1alpha1
+kind: TrinoCatalog
+metadata:
+  name: hive
+  labels:
+    trino: simple-trino
+spec:
+  connector:
+    hive:
+      metastore:
+        configMap: simple-hive-derby
+      s3:
+        inline:
+          host: test-minio
+          port: 9000
+          accessStyle: Path
+          credentials:
+            secretClass: minio-credentials</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -652,11 +658,11 @@ spec:
 <div class="sect3">
 <h4 id="_s3_connection_specification"><a class="anchor" href="#_s3_connection_specification"></a>S3 connection specification</h4>
 <div class="paragraph">
-<p>You can specify S3 connection details directly inside the Trino specification
+<p>You can specify S3 connection details directly inside the <code>TrinoCatalog</code> specification
 or by referring to an external <code>S3Connection</code> custom resource.</p>
 </div>
 <div class="paragraph">
-<p>To specify S3 connection details directly as part of the Trino resource, you
+<p>To specify S3 connection details directly as part of the <code>TrinoCatalog</code> resource, you
 add an inline connection configuration as shown below:</p>
 </div>
 <div class="listingblock">
@@ -733,7 +739,7 @@ data:
 </div>
 <div class="paragraph">
 <p>It is also possible to configure the bucket connection details as a separate
-Kubernetes resource and only refer to that object from the Trino specification
+Kubernetes resource and only refer to that object from the <code>TrinoCatalog</code> specification
 like this:</p>
 </div>
 <div class="listingblock">
@@ -911,9 +917,6 @@ Do not override port numbers. This will lead to faulty installations.
 </li>
 <li>
 <p><code>password-authenticator.properties</code></p>
-</li>
-<li>
-<p><code>hive.properties</code></p>
 </li>
 </ul>
 </div>

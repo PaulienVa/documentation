@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ADR018: Product Image Versioning :: Stackable Documentation</title>
+    <title>ADR022: Spark history server :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../../_/css/site.css">
     <script>var uiRootPath = '../../../../_'</script>
@@ -280,7 +280,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR017-tls_authentication.html">ADR017: TLS authentication</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="4">
+  <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR018-product_image_versioning.html">ADR018: Product Image Versioning</a>
   </li>
   <li class="nav-item" data-depth="4">
@@ -292,7 +292,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR021-stackablectl_stacks_inital_version.html">ADR021: Initial Version of Stackable Stacks Functionality</a>
   </li>
-  <li class="nav-item" data-depth="4">
+  <li class="nav-item is-current-page" data-depth="4">
     <a class="nav-link" href="ADR022-spark-history-server.html">ADR022: Spark history server</a>
   </li>
 </ul>
@@ -534,140 +534,67 @@
     <li><a href="../index.html">Contributor&#8217;s Guide</a></li>
     <li><a href="index.html">Architectural Decision Records</a></li>
     <li>Current</li>
-    <li><a href="ADR018-product_image_versioning.html">ADR018: Product Image Versioning</a></li>
+    <li><a href="ADR022-spark-history-server.html">ADR022: Spark history server</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR018-product_image_versioning.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR022-spark-history-server.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">ADR018: Product Image Versioning</h1>
+<h1 class="page">ADR022: Spark history server</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Status: approved</p>
+<p>Status: accepted</p>
 </li>
 <li>
 <p>Deciders:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Lars Francke</p>
+<p>Andrew Kenworthy</p>
 </li>
 <li>
-<p>Malte Sander</p>
-</li>
-<li>
-<p>Nikolaus Winter</p>
+<p>Sebastian Bernauer</p>
 </li>
 <li>
 <p>Razvan Mihai</p>
 </li>
-<li>
-<p>Siegfried Weber</p>
-</li>
-<li>
-<p>Sönke Liebau</p>
-</li>
-<li>
-<p>Teo Klestrup-Röjiezon</p>
-</li>
 </ul>
 </div>
 </li>
 <li>
-<p>Date: 04.05.2022</p>
+<p>Date: 2022-08-23</p>
 </li>
 </ul>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_glossary"><a class="anchor" href="#_glossary"></a>Glossary</h2>
-<div class="sectionbody">
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 80%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Term</th>
-<th class="tableblock halign-left valign-top">Definition</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Product Version</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The version of the product contained in the docker image (like for example Apache Kafka or Trino) - the thing we operate</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Operator Version</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The version of the Stackable Operator</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Stackable Image Version</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The version of the docker image which contains the product</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_context"><a class="anchor" href="#_context"></a>Context</h3>
 <div class="paragraph">
-<p>Currently, we publish all products as Docker images following the template
-<code>docker.stackable.tech/stackable/$PRODUCT:$PRODUCT_VERSION-stackable$IMAGE_VERSION</code>, as well as
-<code>docker.stackable.tech/stackable/$PRODUCT:$PRODUCT_VERSION-stackable$IMAGE_SEMVER_MAJOR</code>.</p>
+<p>Monitoring Spark applications usually involves two types of components: a history server and a metrics collection server.
+<em>In this document we will concern ourselves with the history server</em>. Using metrics for application monitoring requires
+a completely different set of protocols and technologies and is outside the scope of this document.</p>
 </div>
 <div class="paragraph">
-<p>In theory, a given Operator version depends on some SemVer range of <code>image_version</code> (for example <code>^1.3.0</code>, which
-expands to <code>&gt;=1.3.0 &lt;2.0.0</code>).</p>
+<p>The Spark history server is part of the Apache Spark distribution and it provides a web interface where application
+developers can visualize events that took place during the lifetime of a job as well as the outcome of various job phases.</p>
 </div>
 <div class="paragraph">
-<p>In practice however, Docker tags are opaque, which prevents us from actually specifying this anywhere. Instead, we can only
-express the range <code>^N.0.0</code> (<code>&gt;=N.0.0 &lt;N+1.0.0</code>), depending on the <code>-stackable$IMAGE_SEMVER_MAJOR</code> tag. This works
-OK for spinning up new clusters, but means that existing clusters may keep running old image versions even after upgrading to new
-(incompatible) Operator versions. The cluster may also end up in a mixed environment if a replica gets deployed to a new node after
-a new image version has been released.</p>
+<p>In this document, we propose a way to add the Spark history server to the Kubernetes resources that are managed by the
+Spark-on-Kubernetes operator. We also describe how Spark application definitions can leverage the history server and
+how the resource definitions make use of standard Stackable descriptors for S3 storage.</p>
 </div>
 <div class="paragraph">
-<p>One case where this matters is when adding new features (such as preinstalling new libraries) to a product image that the operator then depends on.
-This isn&#8217;t a breaking change for the product image, since it still works for old operator versions, which can simply ignore the new feature.
-There is an argument that It could be considered a breaking change for the operator (though internal dependency upgrades are typically not
-considered breaking), but this would not help selecting the correct product image anyway.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_decisions"><a class="anchor" href="#_decisions"></a>Decisions</h3>
-<div class="paragraph">
-<p>Based on the above, there are actually two decisions to take around this problem:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>How are stackable image versions created?</p>
-</li>
-<li>
-<p>How does the operator decide which image to use?</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>While these two questions are related to each other they can be decided fairly independently of each other.
-The decision process for <em>2.</em> will be influenced by the decision that is taken on <em>1.</em>, so we will get this done first.</p>
-</div>
-<div class="paragraph">
-<p>This ADR will be limited to the question of how stackable image versions are created, with the question of how the operator derives the correct image to use deferred to a subsequent ADR.</p>
-</div>
+<p>Even though using a history server is optional when running Spark applications on the Stackable platform, it is highly
+recommended to make use of it in production environments.</p>
 </div>
 </div>
 </div>
@@ -677,317 +604,143 @@ The decision process for <em>2.</em> will be influenced by the decision that is 
 <div class="ulist">
 <ul>
 <li>
-<p>Old versions of operators must keep working and deploying images that they are compatible with</p>
+<p>Ease of use / intuitive / checked</p>
 </li>
 <li>
-<p>We should try to limit the number of maintained image version "tracks" for each product</p>
+<p>Support multiple history servers per operator installation</p>
 </li>
 <li>
-<p>It should not be necessary to update the used operator version in order to be able to deploy a new product version</p>
-</li>
-<li>
-<p>The chosen option should make life as easy as possible for the end-user, it doesn&#8217;t need to be the simplest one to implement</p>
+<p>Integrate with the Stackable platform resource handling for S3 storage</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_considered_options"><a class="anchor" href="#_considered_options"></a>Considered Options</h2>
+<h2 id="_history_server_definition"><a class="anchor" href="#_history_server_definition"></a>History Server Definition</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are two main options that were considered, both of which can be implemented in two variants:</p>
-</div>
-<div class="sect2">
-<h3 id="_option_variants"><a class="anchor" href="#_option_variants"></a>Option Variants</h3>
-<div class="sect3">
-<h4 id="_variant_1_git_tags_contain_only_the_stackable_image_version"><a class="anchor" href="#_variant_1_git_tags_contain_only_the_stackable_image_version"></a>Variant 1 - Git tags contain only the Stackable image version</h4>
-<div class="paragraph">
-<p>For these variants it is assumed that tags which mark a release in the docker images repository (regardless of whether this is a shared repo or a dedicated repo) will contain only the stackable image version.</p>
+<p>A history server is a separate entity, completely decoupled from any `SparkApplication`s. The Spark-on-k8s operator makes use of
+it only if available and if the Spark application developer has requested it. See the chapter below, on how `SparkApplication`s
+can request logging events to an existing history server.</p>
 </div>
 <div class="paragraph">
-<p>This means that the definitions of packaged product versions are included in this tag.</p>
+<p>The most important part of the history server definition is the location of the event files. This is specified in the
+<code>logFileDirectory</code> entry of the resource specification as shown below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  ...
+  logFileDirectory:
+    s3:
+      prefix: eventlogs/
+      bucket: # S3BucketDef
+        bucketName: spark-eventlogs
+        connection:
+          reference: eventlogs-s3-connection
+  ...</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>For example, if a stackable image version 0.1.0 is released at a time when the latest product version is 3.1.0 then there will never be an image version 0.1.0 for product version 3.1.1.
-The tag <em>0.1.0</em> will point at a specific commit in the repository and this commit will also include all Dockerfiles used to build the product images, so up to product version 3.1.0.
-If a Dockerfile for product version 3.1.1 is later created it would not be included in this tag, and could only be released by creating a tag <em>0.1.1</em>.</p>
+<p>Here the event files are stored in the S3 bucket <code>spark-eventlogs</code> with the <code>eventlogs/</code> prefix. The complete definition
+of the specified S3 connection is resolved by the operator from the <code>eventlogs-s3-connection</code> resource (not shown here).</p>
 </div>
 <div class="paragraph">
-<p>The tags for this variant would look like this:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>0.1.0</p>
-</li>
-<li>
-<p>0.1.1</p>
-</li>
-<li>
-<p>0.2.0</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_variant_2_git_tags_contain_product_version_and_stackable_image_version"><a class="anchor" href="#_variant_2_git_tags_contain_product_version_and_stackable_image_version"></a>Variant 2 - Git tags contain product version and stackable image version</h4>
-<div class="paragraph">
-<p>For these variants the release tag will also contain the product version in addition to the image version, so for the combination mentioned above (stackable image version 0.1.0 and product version 3.1.0) the following tag would be created: <em>3.1.0-stackable0.1.0</em></p>
+<p>All Spark history properties can be defined in the <code>properties</code> section. The operator will make them available to the
+server at runtime. The operator makes no effort to validate these properties so extreme care must be taken making use
+of this section. In particular, properties concerning the event file storage can conflict with the definition provided
+in the <code>logFileDirectory</code> section and it&#8217;s not recommended to set them here at all.</p>
 </div>
 <div class="paragraph">
-<p>This would allow us to release later versions of the product without having to change to stackable image version - i.e. without needlessly releasing practically unchanged images.</p>
+<p>Here is a complete example of a history server definition:</p>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_options"><a class="anchor" href="#_options"></a>Options</h3>
-<div class="paragraph">
-<p>The main options that are to be considered in this ADR are:</p>
-</div>
-<div class="sect3">
-<h4 id="_synchronize_image_versions_in_lockstep_with_operator_versions"><a class="anchor" href="#_synchronize_image_versions_in_lockstep_with_operator_versions"></a>Synchronize image versions in lockstep with operator versions</h4>
-<div class="paragraph">
-<p>Each operator version hard-codes exactly one image version that it supports, and we release new product images for each operator images.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_use_semver_for_docker_images_independently_of_operator_version"><a class="anchor" href="#_use_semver_for_docker_images_independently_of_operator_version"></a>Use SemVer for docker images, independently of operator version</h4>
-<div class="paragraph">
-<p>The operator version will be kept separate from the stackable image version, for the image version we use semver.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_final_list_of_options_to_be_considered"><a class="anchor" href="#_final_list_of_options_to_be_considered"></a>Final List of Options to be Considered</h4>
-<div class="paragraph">
-<p>With these two dimensions described, we end up with the following list of options to be considered for this ADR:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Synchronize image versions in lockstep with operator versions - Variant 1</p>
-</li>
-<li>
-<p>Synchronize image versions in lockstep with operator versions - Variant 2</p>
-</li>
-<li>
-<p>Use SemVer for docker images, independently of operator version - Variant 1</p>
-</li>
-<li>
-<p>Use SemVer for docker images, independently of operator version - Variant 2</p>
-</li>
-</ol>
-</div>
-<div class="sect4">
-<h5 id="_scenarios"><a class="anchor" href="#_scenarios"></a>Scenarios</h5>
-<div class="paragraph">
-<p>The following table shows the image versions resulting for all four options based on the following scenario:</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Product Versions Available</th>
-<th class="tableblock halign-left valign-top">Operator Versions Available</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>2.8.0</p>
-</li>
-<li>
-<p>2.9.0</p>
-</li>
-</ul>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>0.1.0</p>
-</li>
-<li>
-<p>0.1.1</p>
-</li>
-<li>
-<p>0.2.0</p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>Please note, that this refers to the operator versions that were needed based on semver rules.
-Some of the options in the table below may contain operator versions not listed here, because it was necessary to release the operator itself in a new version in order to make a new product version available.</p>
-</div>
-<div class="paragraph">
-<p>For this scenario, no change to the image itself was assumed to be needed.</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Option</th>
-<th class="tableblock halign-left valign-top">Image Version</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1</strong> - Synchronize image versions in lockstep with operator versions - Variant 1</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>2.8.0-stackable0.1.0</p>
-</li>
-<li>
-<p>2.8.0-stackable0.2.0</p>
-</li>
-<li>
-<p>2.8.0-stackable0.1.1</p>
-</li>
-<li>
-<p>2.8.0-stackable0.1.2</p>
-</li>
-<li>
-<p>2.9.0-stackable0.1.2</p>
-</li>
-<li>
-<p>2.8.0-stackable0.2.1</p>
-</li>
-<li>
-<p>2.9.0-stackable0.2.1</p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>2</strong> - Synchronize image versions in lockstep with operator versions - Variant 2</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>2.8.0-stackable0.1.0</p>
-</li>
-<li>
-<p>2.8.0-stackable0.2.0</p>
-</li>
-<li>
-<p>2.8.0-stackable0.1.1</p>
-</li>
-<li>
-<p>2.9.0-stackable0.1.0</p>
-</li>
-<li>
-<p>2.9.0-stackable0.2.0</p>
-</li>
-<li>
-<p>2.9.0-stackable0.1.1</p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>3</strong> - Use SemVer for docker images, independently of operator version - Variant 1</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>2.8.0-stackable0.1.0</p>
-</li>
-<li>
-<p>2.8.0-stackable0.1.1</p>
-</li>
-<li>
-<p>2.9.0-stackable0.1.1</p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>4</strong> - Use SemVer for docker images, independently of operator version - Variant 2</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>2.8.0-stackable0.1.0</p>
-</li>
-<li>
-<p>2.9.0-stackable0.1.0</p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># Namespaced
+apiVersion: spark.stackable.tech/v1alpha1
+kind: SparkHistoryServer
+metadata:
+  name: history
+  namespace: default
+spec:
+  version: 3.3.0-stackable0.1.0
+  sparkConf:
+    - # compaction
+    - # retention/ttl
+    - # update interval
+    - ...
+  cleaner: true # option of bool; default=false: sets spark.history.fs.cleaner.enabled=true
+  # complex enum with variant s3 (hdfs later on)
+  logFileDirectory:
+    s3:
+      prefix: eventlogs/
+      bucket: # S3BucketDef
+        inline:
+          bucketName: spark-eventlogs
+          connection:
+            inline:
+              host: minio
+              port: 9000
+              accessStyle: Path
+              credentials:
+                secretClass: history-server-s3-credentials</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
+<h2 id="_history_server_usage"><a class="anchor" href="#_history_server_usage"></a>History Server Usage</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We chose option 4 (Use SemVer for docker images, independently of operator version - Variant 2), so the resulting tags will look like shown in the table below.
-The difference is due to the fact that docker images already contain the product name and we do not need to repeat this in the tag, whereas the docker images repository contains multiple products.</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Git Tag</th>
-<th class="tableblock halign-left valign-top">Docker Registry Tag</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">kafka2.8.0_stackable0.1.0</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2.8.0_stackable0.1.0</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">kafka2.9.0_stackable0.1.0</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2.9.0_stackable0.1.0</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">kafka2.9.0_stackable0.1.1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2.9.0_stackable0.1.1</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>A subsequent ADR will contain follow up decisions on how much of the selection process for the correct image we want to automate in the operators.
-Initially no automation will be implemented, users need to select a working product version and image version combination and refer to the fully qualified version from the CRD (i.e. docker registry tag from the table above).</p>
+<p>Spark applications don&#8217;t have to use a history server but it&#8217;s highly recommended to do so in production environments.
+The section <code>eventLogs</code> of a <code>SparkApplication</code> instructs the operator to configure the application such that it can be
+monitored using the provided (and existing) history server.</p>
 </div>
 <div class="paragraph">
-<p>There must be a compatibility matrix for the operator and product versions.
-This matrix should probably contain at least the following states: "compatible" (which means tested and supported by Stackable), "unsupported" (which means there is no known technical restriction which prevents you from using it but it is either not tested or contains vulnerabilities), and "incompatible" (which means there were breaking changes and this combination will not work).
-This compatibility matrix should not be hard-coded into the operators because then a new release of an operator is required every time a new product version should be supported by this operator.
-Instead it should be read from a config map.</p>
+<p>The example below shows the relevant configuration snippet of an application definition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: spark.stackable.tech/v1alpha1
+kind: SparkApplication
+metadata:
+  name: spark
+  namespace: default
+spec:
+  version: "1.0"
+  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.1.0
+  logFileDirectory:
+    s3:
+      prefix: eventlogs/
+      bucket: # S3BucketDef
+        inline:
+          bucketName: spark-eventlogs
+          connection:
+            inline:
+              host: minio
+              port: 9000
+              accessStyle: Path
+              credentials:
+                secretClass: eventlogs-s3-credentials
+  s3Connection: # Optional. Used for normal data operations.
+    inline:
+      host: minio
+      port: 9000
+      accessStyle: Path
+      credentials:
+        secretClass: application-s3-credentials
+...</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>The main reasons for picking this option were:</p>
+<p>In the example above, the application will log its events to the bucket specifed in <code>logFileDirectory</code>.
+In addition, the application processes data from a S3 bucket configured within the <code>s3connection</code> section of the specification.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>it allows us to decouple operator version and image version to a high degree</p>
-</li>
-<li>
-<p>there is no need to build <em>unneeded</em> images just to accommodate changes in other components (operator change vs image change)</p>
-</li>
-<li>
-<p>it keeps the option to provide automation around selecting the correct image version later on without the need for breaking changes</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>The operator will read the <code>s3Connection</code> and set up the <code>fs.s3a.aws.credentials.provider</code> and co (endpoint, accesskey, secretkey, tls, path-style access - basically all attributes of S3Connection) settings.
+Afterwards if <code>logFileDirectory</code> attribute is set: Set <code>fs.s3a.bucket.&lt;logFileDirectory-bucket-name(here spark-eventlogs)&gt;.aws.credentials.provider</code> and co to overwrite endpoint and credentials for the logging bucket. Set <code>spark.eventLog.enabled</code> property to <code>true</code> and will
+construct the <code>spark.eventLog.dir</code> from <code>s3a://&lt;logFileDirectory-bucket-name(here spark-eventlogs)&gt;/&lt;logFileDirectory-prefix(here eventlogs/)&gt;</code>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -996,135 +749,23 @@ Instead it should be read from a config map.</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Image versions are only comparable when combined with the product version.
-Image version <em>0.1.0</em> in kafka2.8.0_stackable0.1.0 and kafka2.9.0_stackable0.1.0 are two completely different versions <em>0.1.0</em>
+the credentials used by the <code>HistoryServer</code> <strong>do not</strong> have to be shared with `SparkApplication`s.
 </td>
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>This decision triggers a few needed changes to our CI processes:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Trigger will be changed to react to tags being pushed instead of manually like at the moment</p>
-</li>
-<li>
-<p>Only the exact version specified in the tag will be built, not <em>all</em> product versions (at the moment building Kafka builds all supported Kafka versions, in the future pushing <em>kafka2.8.0_stackable0.1.0</em> will build only kafka 2.8.0)</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><strong>Special Case: Multiple Dockerfiles</strong></p>
-</div>
-<div class="paragraph">
-<p>For example Superset changed the Dockerfile between Superset version and we need to reflect these changes in our Dockerfile, which means that we effectively have to have different Dockerfiles for different Superset versions.</p>
-</div>
-<div class="paragraph">
-<p>For these scenarios we will have multiple Dockerfiles and specify the one to use in <em>conf.py</em></p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_synchronize_image_versions_in_lockstep_with_operator_versions_variant_1"><a class="anchor" href="#_synchronize_image_versions_in_lockstep_with_operator_versions_variant_1"></a>Synchronize image versions in lockstep with operator versions - Variant 1</h3>
+<h3 id="_advantages"><a class="anchor" href="#_advantages"></a>Advantages</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because it centralizes the information about which versions are supported into each operator&#8217;s repository</p>
+<p>Fully flexible solution, which allows the logDir to be on a different S3 ednpoint than the data.</p>
 </li>
 <li>
-<p>Good, because upgrades are predictable for the user, "upgrading the operator upgrades the cluster" is easy to explain and teach</p>
+<p>If they are on the same endpojnt, a single S3BucketDef can be shared between HistoryServer and SparkApplication for ease of use.</p>
 </li>
 <li>
-<p>Good, because image tags are stable and immutable once released</p>
-</li>
-<li>
-<p>Bad, because we end up storing a lot of duplicate Docker images</p>
-</li>
-<li>
-<p>We could share the Docker layers to lessen this impact dramatically, but that would require rearchitecting our CI</p>
-</li>
-<li>
-<p>Bad, because it increases the overhead of doing operator or image releases</p>
-</li>
-<li>
-<p>Bad, because old operator versions will keep deploying older image versions than they may technically be compatible with</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_synchronize_image_versions_in_lockstep_with_operator_versions_variant_2"><a class="anchor" href="#_synchronize_image_versions_in_lockstep_with_operator_versions_variant_2"></a>Synchronize image versions in lockstep with operator versions - Variant 2</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Good, because it centralizes the information about which versions are supported into each operator&#8217;s repository</p>
-</li>
-<li>
-<p>Good, because upgrades are predictable for the user, "upgrading the operator upgrades the cluster" is easy to explain and teach</p>
-</li>
-<li>
-<p>Good, because image tags are stable and immutable once released</p>
-</li>
-<li>
-<p>Bad, because we end up storing a lot of duplicate Docker images</p>
-</li>
-<li>
-<p>We could share the Docker layers to lessen this impact dramatically, but that would require rearchitecting our CI</p>
-</li>
-<li>
-<p>Bad, because it increases the overhead of doing operator or image releases</p>
-</li>
-<li>
-<p>Bad, because old operator versions will keep deploying older image versions than they may technically be compatible with</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_use_semver_for_docker_images_independently_of_operator_version_variant_1"><a class="anchor" href="#_use_semver_for_docker_images_independently_of_operator_version_variant_1"></a>Use SemVer for docker images, independently of operator version - Variant 1</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Good, because we preserve SemVer for image versions</p>
-</li>
-<li>
-<p>Good, because existing operators will upgrade as far as they are compatible</p>
-</li>
-<li>
-<p>Bad, because existing operators may switch which (minor-level) image version they deploy without user action (this can be mitigated in the follow up ADR on version selection though)</p>
-</li>
-<li>
-<p>Bad, because we don&#8217;t have a good trigger for when new image versions are released</p>
-</li>
-<li>
-<p>Bad, because on-prem registry mirrors may be outdated and serve incompatible versions</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_use_semver_for_docker_images_independently_of_operator_version_variant_2"><a class="anchor" href="#_use_semver_for_docker_images_independently_of_operator_version_variant_2"></a>Use SemVer for docker images, independently of operator version - Variant 2</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Good, because we preserve SemVer for image versions</p>
-</li>
-<li>
-<p>Good, because existing operators will upgrade as far as they are compatible</p>
-</li>
-<li>
-<p>Bad, because existing operators may switch which (minor-level) image version they deploy without user action (this can be mitigated in the follow up ADR on version selection though)</p>
-</li>
-<li>
-<p>Bad, because we don&#8217;t have a good trigger for when new image versions are released</p>
-</li>
-<li>
-<p>Bad, because on-prem registry mirrors may be outdated and serve incompatible versions</p>
+<p>HDFS and/or other distributed filesystems can be added non-breaking later on</p>
 </li>
 </ul>
 </div>

@@ -343,9 +343,9 @@
 <div class="paragraph">
 <p>If you are not installing the operator using Helm then after installation the CRD for this operator must be created:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>kubectl apply -f /etc/stackable/zookeeper-operator/crd/zookeepercluster.crd.yaml</pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f /etc/stackable/zookeeper-operator/crd/zookeepercluster.crd.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -404,7 +404,7 @@ $ $ZOOKEEPER_HOME/bin/zkCli.sh -server $(kubectl get configmap simple-znode-node
 <h2 id="_encryption"><a class="anchor" href="#_encryption"></a>Encryption</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The quorum and client communication are encrypted by default via TLS. This requires the <a href="https://github.com/stackabletech/secret-operator">Secret Operator</a> to be present in order to provide certificates. The utilized certificates can be changed in a top-level config.</p>
+<p>The quorum and client communication are encrypted by default via TLS. This requires the <a href="../../secret-operator/stable/index.html" class="xref page">Secret Operator</a> to be present in order to provide certificates. The utilized certificates can be changed in a top-level config.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -438,7 +438,7 @@ spec:
 </table>
 </div>
 <div class="paragraph">
-<p>The <code>tls</code> secret is deployed from the <a href="https://github.com/stackabletech/secret-operator">Secret Operator</a> and looks like this:</p>
+<p>The <code>tls</code> secret is deployed from the <a href="../../secret-operator/stable/index.html" class="xref page">Secret Operator</a> and looks like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -466,7 +466,7 @@ spec:
 <h2 id="_authentication"><a class="anchor" href="#_authentication"></a>Authentication</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The quorum or server-to-server communication is authenticated via TLS per default. In order to enforce TLS authentication for client-to-server communication, you can set an <code>AuthenticationClass</code> reference in the custom resource provided by the <a href="https://github.com/stackabletech/commons-operator">Commons Operator</a>.</p>
+<p>The quorum or server-to-server communication is authenticated via TLS per default. In order to enforce TLS authentication for client-to-server communication, you can set an <code>AuthenticationClass</code> reference in the custom resource provided by the <a href="../../commons-operator/stable/index.html" class="xref page">Commons Operator</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -478,8 +478,6 @@ metadata:
 spec:
   version: 3.8.0-stackable0.7.0
   config:
-    tls:
-      secretClass: tls
     clientAuthentication:
       authenticationClass: zk-client-tls <i class="conum" data-value="1"></i><b>(1)</b>
     quorumTlsSecretClass: tls
@@ -530,6 +528,9 @@ spec:
 <td>The <code>SecretClass</code> that is referenced by the <code>AuthenticationClass</code> in order to provide certificates.</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>If both <code>spec.config.tls.secretClass</code> and <code>spec.config.clientAuthentication.authenticationClass</code> are set, the authentication class will take precedence over the secret class. The cluster will be encrypted and authenticate only against the authentication class.</p>
 </div>
 <div class="admonitionblock warning">
 <table>

@@ -70,7 +70,7 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="superset" data-version="0.5">
+<div class="nav-container" data-component="superset" data-version="0.6">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -78,10 +78,11 @@
     <div class="title-wrapper">
       <h3 class="title"><a href="index.html">Stackable Operator for Apache Superset</a></h3>
       <div class="page-versions">
-        <button class="version-menu-toggle" title="Show other versions of page">0.5</button>
+        <button class="version-menu-toggle" title="Show other versions of page">0.6</button>
         <div class="version-menu">
           <a class="version" href="../nightly/usage.html">nightly</a>
-          <a class="version is-current" href="usage.html">0.5</a>
+          <a class="version is-current" href="usage.html">0.6</a>
+          <a class="version" href="../0.5/usage.html">0.5</a>
         </div>
       </div>
     </div>
@@ -89,8 +90,21 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="installation.html">Installation</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="getting_started/index.html">Getting started</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="getting_started/installation.html">Installation</a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="getting_started/first_steps.html">First steps</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
@@ -105,7 +119,7 @@
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
     <span class="title">Stackable Operator for Apache Superset</span>
-    <span class="version">0.5</span>
+    <span class="version">0.6</span>
   </div>
   <ul class="components">
     <li class="component">
@@ -134,7 +148,10 @@
           <a href="../../airflow/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../airflow/stable/index.html">0.4</a>
+          <a href="../../airflow/stable/index.html">0.5</a>
+        </li>
+        <li class="version">
+          <a href="../../airflow/0.4/index.html">0.4</a>
         </li>
         <li class="version">
           <a href="../../airflow/0.3/index.html">0.3</a>
@@ -238,7 +255,10 @@
           <a href="../../spark-k8s/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../spark-k8s/stable/index.html">0.4</a>
+          <a href="../../spark-k8s/stable/index.html">0.5</a>
+        </li>
+        <li class="version">
+          <a href="../../spark-k8s/0.4/index.html">0.4</a>
         </li>
         <li class="version">
           <a href="../../spark-k8s/0.3/index.html">0.3</a>
@@ -255,7 +275,10 @@
           <a href="../nightly/index.html">nightly</a>
         </li>
         <li class="version is-current is-latest">
-          <a href="index.html">0.5</a>
+          <a href="index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../0.5/index.html">0.5</a>
         </li>
       </ul>
     </li>
@@ -294,7 +317,10 @@
           <a href="../../trino/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../trino/stable/index.html">0.4</a>
+          <a href="../../trino/stable/index.html">0.5</a>
+        </li>
+        <li class="version">
+          <a href="../../trino/0.4/index.html">0.4</a>
         </li>
         <li class="version">
           <a href="../../trino/0.3/index.html">0.3</a>
@@ -335,7 +361,7 @@
     <li><a href="usage.html">Usage</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/superset-operator/blob/docs/0.5/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/superset-operator/blob/docs/0.6/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
@@ -343,162 +369,6 @@
 </aside>
 <article class="doc">
 <h1 class="page">Usage</h1>
-<div class="sect1">
-<h2 id="_database_for_the_superset_metadata"><a class="anchor" href="#_database_for_the_superset_metadata"></a>Database for the Superset metadata</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The metadata of Superset (slices, connections, tables, dashboards, &#8230;&#8203;) is stored in an SQL
-database.</p>
-</div>
-<div class="paragraph">
-<p>For testing purposes, you can spin up a PostgreSQL database with the following command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm repo add bitnami https://charts.bitnami.com/bitnami
-
-helm install superset bitnami/postgresql \
-    --set auth.username=superset \
-    --set auth.password=superset \
-    --set auth.database=superset</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_secret_with_superset_credentials"><a class="anchor" href="#_secret_with_superset_credentials"></a>Secret with Superset credentials</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>A secret with the necessary credentials must be created, this entails database connection credentials as well as an admin account for Superset itself:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
-kind: Secret
-metadata:
-  name: simple-superset-credentials
-type: Opaque
-stringData:
-  adminUser.username: admin
-  adminUser.firstname: Superset
-  adminUser.lastname: Admin
-  adminUser.email: admin@superset.com
-  adminUser.password: admin
-  connections.secretKey: thisISaSECRET_1234
-  connections.sqlalchemyDatabaseUri: postgresql://superset:superset@superset-postgresql.default.svc.cluster.local/superset</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code>connections.secretKey</code> will be used for securely signing the session cookies and can be used
-for any other security related needs by extensions. It should be a long random string of bytes.</p>
-</div>
-<div class="paragraph">
-<p><code>connections.sqlalchemyDatabaseUri</code> must contain the connection string to the SQL database storing
-the Superset metadata.</p>
-</div>
-<div class="paragraph">
-<p>The <code>adminUser</code> fields are used to create an admin user.
-Please note that the admin user will be disabled if you use a non-default authentication mechanism like LDAP.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_creation_of_a_superset_node"><a class="anchor" href="#_creation_of_a_superset_node"></a>Creation of a Superset node</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>A Superset node must be created as a custom resource:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: superset.stackable.tech/v1alpha1
-kind: SupersetCluster
-metadata:
-  name: superset
-spec:
-  version: 1.5.1-stackable0.1.0
-  statsdExporterVersion: v0.22.4
-  credentialsSecret: simple-superset-credentials
-  loadExamplesOnInit: true
-  nodes:
-    roleGroups:
-      default:
-        config:
-          rowLimit: 10000</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>metadata.name</code> contains the name of the Superset cluster.</p>
-</div>
-<div class="paragraph">
-<p>The label of the Docker image provided by Stackable must be set in <code>spec.version</code>.</p>
-</div>
-<div class="paragraph">
-<p>Please note that the version you need to specify is not only the version of Apache Superset which
-you want to roll out, but has to be amended with a Stackable version as shown. This Stackable
-version is the version of the underlying container image which is used to execute the processes. For
-a list of available versions please check our
-<a href="https://repo.stackable.tech/#browse/browse:docker:v2%2Fstackable%2Fsuperset%2Ftags">image registry</a>.
-It should generally be safe to simply use the latest image version that is available.</p>
-</div>
-<div class="paragraph">
-<p><code>spec.statsdExporterVersion</code> must contain the tag of a statsd-exporter Docker image in the Stackable repository.</p>
-</div>
-<div class="paragraph">
-<p>The previously created secret must be referenced in <code>spec.credentialsSecret</code>.</p>
-</div>
-<div class="paragraph">
-<p>The <code>spec.loadExamplesOnInit</code> key is optional and defaults to <code>false</code>, it can be set to <code>true</code> to load example data into Superset when the database is initialized.</p>
-</div>
-<div class="paragraph">
-<p>The <code>rowLimit</code> configuration option defines the row limit when requesting chart data.</p>
-</div>
-<div class="sect2">
-<h3 id="_initialization_of_the_superset_database"><a class="anchor" href="#_initialization_of_the_superset_database"></a>Initialization of the Superset database</h3>
-<div class="paragraph">
-<p>The first time the cluster is created, the operator creates a <code>SupersetDB</code> resource with the same name as the cluster.  It ensures that the database is initialized (schema created, admin user created).</p>
-</div>
-<div class="paragraph">
-<p>A Kubernetes job is created which starts a pod to initialize the database. This can take a while.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_using_superset"><a class="anchor" href="#_using_superset"></a>Using Superset</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>When the Superset node is created and the database is initialized, Superset can be opened in the
-browser.</p>
-</div>
-<div class="paragraph">
-<p>The Superset port which defaults to <code>8088</code> can be forwarded to the local host:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl port-forward service/simple-superset-external 8088</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then it can be opened in the browser with <code><a href="http://localhost:8088" class="bare">http://localhost:8088</a></code>.</p>
-</div>
-<div class="paragraph">
-<p>Enter the admin credentials from the Kubernetes secret:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/superset-login.png" alt="Login screen of Superset">
-</div>
-</div>
-<div class="paragraph">
-<p>If the examples were loaded then some dashboards are already available:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/superset-dashboard.png" alt="Superset dashboard showing birth names">
-</div>
-</div>
-</div>
-</div>
 <div class="sect1">
 <h2 id="_authentication"><a class="anchor" href="#_authentication"></a>Authentication</h2>
 <div class="sectionbody">

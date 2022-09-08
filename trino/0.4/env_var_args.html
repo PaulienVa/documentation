@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Installation :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/airflow/stable/installation.html">
+    <title>Untitled :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/trino/stable/env_var_args.html">
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -44,7 +44,7 @@
     Operators
     <div class="drop-down-content">
     <a class="drop-down-item" href="../../home/stable/operators/index.html">Overview</a>
-    <a class="drop-down-item" href="index.html">Apache Airflow</a>
+    <a class="drop-down-item" href="../../airflow/stable/index.html">Apache Airflow</a>
     <a class="drop-down-item" href="../../druid/stable/index.html">Apache Druid</a>
     <a class="drop-down-item" href="../../hbase/stable/index.html">Apache HBase</a>
     <a class="drop-down-item" href="../../hdfs/stable/index.html">Apache Hadoop HDFS</a>
@@ -53,7 +53,7 @@
     <a class="drop-down-item" href="../../nifi/stable/index.html">Apache NiFi</a>
     <a class="drop-down-item" href="../../spark-k8s/stable/index.html">Apache Spark on K8S</a>
     <a class="drop-down-item" href="../../superset/stable/index.html">Apache Superset</a>
-    <a class="drop-down-item" href="../../trino/stable/index.html">Trino</a>
+    <a class="drop-down-item" href="../stable/index.html">Trino</a>
     <a class="drop-down-item" href="../../zookeeper/stable/index.html">Apache ZooKeeper</a>
     <a class="drop-down-item" href="../../opa/stable/index.html">OpenPolicyAgent</a>
     <a class="drop-down-item" href="../../commons-operator/stable/index.html">Commons</a>
@@ -70,27 +70,31 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="airflow" data-version="0.4">
+<div class="nav-container" data-component="trino" data-version="0.4">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
     <div class="title-wrapper">
-      <h3 class="title"><a href="index.html">Stackable Operator for Apache Airflow</a></h3>
+      <h3 class="title"><a href="index.html">Stackable Operator for Trino</a></h3>
       <div class="page-versions">
         <button class="version-menu-toggle" title="Show other versions of page">0.4</button>
         <div class="version-menu">
-          <a class="version is-missing" href="../nightly/index.html">nightly</a>
-          <a class="version is-current" href="installation.html">0.4</a>
-          <a class="version" href="../0.3/installation.html">0.3</a>
+          <a class="version" href="../nightly/env_var_args.html">nightly</a>
+          <a class="version" href="../stable/env_var_args.html">0.5</a>
+          <a class="version is-current" href="env_var_args.html">0.4</a>
+          <a class="version" href="../0.3/env_var_args.html">0.3</a>
         </div>
       </div>
     </div>
     <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
@@ -102,7 +106,7 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Stackable Operator for Apache Airflow</span>
+    <span class="title">Stackable Operator for Trino</span>
     <span class="version">0.4</span>
   </div>
   <ul class="components">
@@ -125,17 +129,20 @@
         </li>
       </ul>
     </li>
-    <li class="component is-current">
-      <a class="title" href="index.html">Stackable Operator for Apache Airflow</a>
+    <li class="component">
+      <a class="title" href="../../airflow/stable/index.html">Stackable Operator for Apache Airflow</a>
       <ul class="versions">
         <li class="version">
-          <a href="../nightly/index.html">nightly</a>
+          <a href="../../airflow/nightly/index.html">nightly</a>
         </li>
-        <li class="version is-current is-latest">
-          <a href="index.html">0.4</a>
+        <li class="version is-latest">
+          <a href="../../airflow/stable/index.html">0.5</a>
         </li>
         <li class="version">
-          <a href="../0.3/index.html">0.3</a>
+          <a href="../../airflow/0.4/index.html">0.4</a>
+        </li>
+        <li class="version">
+          <a href="../../airflow/0.3/index.html">0.3</a>
         </li>
       </ul>
     </li>
@@ -236,7 +243,10 @@
           <a href="../../spark-k8s/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../spark-k8s/stable/index.html">0.4</a>
+          <a href="../../spark-k8s/stable/index.html">0.5</a>
+        </li>
+        <li class="version">
+          <a href="../../spark-k8s/0.4/index.html">0.4</a>
         </li>
         <li class="version">
           <a href="../../spark-k8s/0.3/index.html">0.3</a>
@@ -253,7 +263,10 @@
           <a href="../../superset/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../superset/stable/index.html">0.5</a>
+          <a href="../../superset/stable/index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../../superset/0.5/index.html">0.5</a>
         </li>
       </ul>
     </li>
@@ -285,17 +298,20 @@
         </li>
       </ul>
     </li>
-    <li class="component">
-      <a class="title" href="../../trino/stable/index.html">Stackable Operator for Trino</a>
+    <li class="component is-current">
+      <a class="title" href="../stable/index.html">Stackable Operator for Trino</a>
       <ul class="versions">
         <li class="version">
-          <a href="../../trino/nightly/index.html">nightly</a>
+          <a href="../nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../trino/stable/index.html">0.4</a>
+          <a href="../stable/index.html">0.5</a>
+        </li>
+        <li class="version is-current">
+          <a href="index.html">0.4</a>
         </li>
         <li class="version">
-          <a href="../../trino/0.3/index.html">0.3</a>
+          <a href="../0.3/index.html">0.3</a>
         </li>
       </ul>
     </li>
@@ -328,115 +344,78 @@
 <button class="nav-toggle"></button>
   <a href="../../home/stable/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="index.html">Stackable Operator for Apache Airflow</a></li>
-    <li><a href="installation.html">Installation</a></li>
-  </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/airflow-operator/blob/docs/0.4/docs/modules/ROOT/pages/installation.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/trino-operator/blob/docs/0.4/docs/modules/ROOT/pages/env_var_args.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Installation</h1>
-<div id="preamble">
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_product_config"><a class="anchor" href="#_product_config"></a>PRODUCT_CONFIG</h3>
 <div class="paragraph">
-<p>There are three ways to run the Airflow Operator:</p>
+<p><strong>Default value</strong>: <code>/etc/stackable/trino-operator/config-spec/properties.yaml</code></p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Helm managed Docker container deployment on Kubernetes</p>
-</li>
-<li>
-<p>As a Docker container</p>
-</li>
-<li>
-<p>Build from source.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_helm"><a class="anchor" href="#_helm"></a>Helm</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>Helm allows you to download and deploy Stackable operators on Kubernetes and is by far the easiest
-installation method. First ensure that you have installed the Stackable Operators Helm repository:</p>
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ helm repo add stackable https://repo.stackable.tech/repository/helm-stable/</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">export PRODUCT_CONFIG=/foo/bar/properties.yaml
+cargo run -- run</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Then install the Stackable Operator for Apache Airflow</p>
+<p>or via docker:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ helm install airflow-operator stackable/airflow-operator</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Helm will deploy the operator in a Kubernetes container and apply the CRDs for the Apache Airflow
-service. You are now ready to deploy Apache Airflow in Kubernetes.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_docker"><a class="anchor" href="#_docker"></a>Docker</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>This Operator is published as a Docker image:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">docker.stackable.tech/stackable/airflow-operator</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>When installing manually with Docker you will need to install the Stackable CRDs for Apache Airflow
-in your Kubernetes environment. These are available on the
-<a href="https://github.com/stackabletech/airflow-operator/tree/main/deploy/crd">Stackable GitHub repository</a>
-for this operator.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">$ kubectl apply -f airflowcluster.crd.yaml
-$ kubectl apply -f init.crd.yaml</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To run it straight from Docker you can use this command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run \
-    --name airflow-operator \
+<pre>docker run \
+    --name trino-operator \
     --network host \
     --env KUBECONFIG=/home/stackable/.kube/config \
+    --env PRODUCT_CONFIG=/my/product/config.yaml \
     --mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
-    docker.stackable.tech/stackable/airflow-operator:latest</code></pre>
+    docker.stackable.tech/stackable/trino-operator:latest</pre>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_building_the_operator_from_source"><a class="anchor" href="#_building_the_operator_from_source"></a>Building the operator from source</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_watch_namespace"><a class="anchor" href="#_watch_namespace"></a>WATCH_NAMESPACE</h3>
 <div class="paragraph">
-<p>This operator is written in Rust and is developed against the latest stable Rust release (1.58 at
-the time of writing).</p>
+<p><strong>Default value</strong>: All namespaces</p>
+</div>
+<div class="paragraph">
+<p><strong>Required</strong>: false</p>
+</div>
+<div class="paragraph">
+<p><strong>Multiple values:</strong> false</p>
+</div>
+<div class="paragraph">
+<p>The operator will <strong>only</strong> watch for resources in the provided namespace <code>test</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">stackable-airflow-operator crd | kubectl apply -f -
-stackable-airflow-operator run</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">export WATCH_NAMESPACE=test
+cargo run -- run</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>or via docker:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">docker run \
+--name trino-operator \
+--network host \
+--env KUBECONFIG=/home/stackable/.kube/config \
+--env WATCH_NAMESPACE=test \
+--mount type=bind,source="$HOME/.kube/config",target="/home/stackable/.kube/config" \
+docker.stackable.tech/stackable/trino-operator:latest</code></pre>
 </div>
 </div>
 </div>

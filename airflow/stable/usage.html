@@ -70,7 +70,7 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="airflow" data-version="0.4">
+<div class="nav-container" data-component="airflow" data-version="0.5">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -78,10 +78,11 @@
     <div class="title-wrapper">
       <h3 class="title"><a href="index.html">Stackable Operator for Apache Airflow</a></h3>
       <div class="page-versions">
-        <button class="version-menu-toggle" title="Show other versions of page">0.4</button>
+        <button class="version-menu-toggle" title="Show other versions of page">0.5</button>
         <div class="version-menu">
           <a class="version" href="../nightly/usage.html">nightly</a>
-          <a class="version is-current" href="usage.html">0.4</a>
+          <a class="version is-current" href="usage.html">0.5</a>
+          <a class="version" href="../0.4/usage.html">0.4</a>
           <a class="version" href="../0.3/usage.html">0.3</a>
         </div>
       </div>
@@ -90,7 +91,23 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="installation.html">Installation</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="getting_started/index.html">Getting started</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="getting_started/installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="getting_started/first_steps.html">First steps</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="usage.html">Usage</a>
@@ -103,7 +120,7 @@
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
     <span class="title">Stackable Operator for Apache Airflow</span>
-    <span class="version">0.4</span>
+    <span class="version">0.5</span>
   </div>
   <ul class="components">
     <li class="component">
@@ -132,7 +149,10 @@
           <a href="../nightly/index.html">nightly</a>
         </li>
         <li class="version is-current is-latest">
-          <a href="index.html">0.4</a>
+          <a href="index.html">0.5</a>
+        </li>
+        <li class="version">
+          <a href="../0.4/index.html">0.4</a>
         </li>
         <li class="version">
           <a href="../0.3/index.html">0.3</a>
@@ -236,7 +256,10 @@
           <a href="../../spark-k8s/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../spark-k8s/stable/index.html">0.4</a>
+          <a href="../../spark-k8s/stable/index.html">0.5</a>
+        </li>
+        <li class="version">
+          <a href="../../spark-k8s/0.4/index.html">0.4</a>
         </li>
         <li class="version">
           <a href="../../spark-k8s/0.3/index.html">0.3</a>
@@ -253,7 +276,10 @@
           <a href="../../superset/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../superset/stable/index.html">0.5</a>
+          <a href="../../superset/stable/index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../../superset/0.5/index.html">0.5</a>
         </li>
       </ul>
     </li>
@@ -292,7 +318,10 @@
           <a href="../../trino/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../trino/stable/index.html">0.4</a>
+          <a href="../../trino/stable/index.html">0.5</a>
+        </li>
+        <li class="version">
+          <a href="../../trino/0.4/index.html">0.4</a>
         </li>
         <li class="version">
           <a href="../../trino/0.3/index.html">0.3</a>
@@ -333,7 +362,7 @@
     <li><a href="usage.html">Usage</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/airflow-operator/blob/docs/0.4/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/airflow-operator/blob/docs/0.5/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
@@ -341,190 +370,6 @@
 </aside>
 <article class="doc">
 <h1 class="page">Usage</h1>
-<div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p>Airflow can run in standalone mode (see <a href="https://airflow.apache.org/docs/apache-airflow/stable/start/local.html" class="bare">https://airflow.apache.org/docs/apache-airflow/stable/start/local.html</a>) but requires 2 external dependencies if we want to run jobs across more than one worker: these
-dependencies are</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>an external database (e.g. postgresql) for user/job data, and</p>
-</li>
-<li>
-<p>a queuing component such as Redis.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_external_dependencies_for_the_airflow_usersjob_data_and_job_queues"><a class="anchor" href="#_external_dependencies_for_the_airflow_usersjob_data_and_job_queues"></a>External dependencies for the Airflow users/job data and job queues</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>For testing purposes, first add the bitnami repository to helm:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm repo add bitnami https://charts.bitnami.com/bitnami</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can spin up a PostgreSQL database with the following command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install airflow-postgresql bitnami/postgresql --version 11.0.0 \
-    --set auth.username=airflow \
-    --set auth.password=airflow \
-    --set auth.database=airflow</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>A Redis instance can be setup in a similar way:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install redis bitnami/redis \
-    --set auth.password=redis</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_secret_with_airflow_credentials"><a class="anchor" href="#_secret_with_airflow_credentials"></a>Secret with Airflow credentials</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>A secret with the necessary credentials must be created:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
-kind: Secret
-metadata:
-  name: simple-airflow-credentials
-type: Opaque
-stringData:
-  adminUser.username: airflow
-  adminUser.firstname: Airflow
-  adminUser.lastname: Admin
-  adminUser.email: airflow@airflow.com
-  adminUser.password: airflow
-  connections.secretKey: thisISaSECRET_1234
-  connections.sqlalchemyDatabaseUri: postgresql+psycopg2://airflow:airflow@airflow-postgresql.default.svc.cluster.local/airflow
-  connections.celeryResultBackend: db+postgresql://airflow:airflow@airflow-postgresql.default.svc.cluster.local/airflow
-  connections.celeryBrokerUrl: redis://:redis@redis-master:6379/0</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code>connections.secretKey</code> will be used for securely signing the session cookies and can be used
-for any other security related needs by extensions. It should be a long random string of bytes.</p>
-</div>
-<div class="paragraph">
-<p><code>connections.sqlalchemyDatabaseUri</code> must contain the connection string to the SQL database storing
-the Airflow metadata.</p>
-</div>
-<div class="paragraph">
-<p><code>connections.celeryResultBackend</code> must contain the connection string to the SQL database storing
-the job metadata (in the example above we are using the same postgresql database for both).</p>
-</div>
-<div class="paragraph">
-<p><code>connections.celeryBrokerUrl</code> must contain the connection string to the Redis instance used for queuing
-the jobs submitted to the airflow worker(s).</p>
-</div>
-<div class="paragraph">
-<p>The <code>adminUser</code> fields are used by the <code>init</code> command to create an admin user.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_creation_of_an_airflow_cluster"><a class="anchor" href="#_creation_of_an_airflow_cluster"></a>Creation of an Airflow Cluster</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>An Airflow cluster must be created as a custom resource:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: airflow.stackable.tech/v1alpha1
-kind: AirflowCluster
-metadata:
-  name: airflow
-spec:
-  version: 2.2.4-python3.9-stackable0.3.0
-  statsdExporterVersion: v0.22.4
-  executor: CeleryExecutor
-  loadExamples: true
-  exposeConfig: false
-  credentialsSecret: simple-airflow-credentials
-  webservers:
-    roleGroups:
-      default:
-        replicas: 1
-  workers:
-    roleGroups:
-      default:
-        replicas: 2
-  schedulers:
-    roleGroups:
-      default:
-        replicas: 1</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Please note that the version you need to specify is not only the version of Airflow which you want to roll out, but has to be amended with a Stackable version as shown.
-This Stackable version is the version of the underlying container image which is used to execute the processes.
-For a list of available versions please check our <a href="https://repo.stackable.tech/#browse/browse:docker:v2%2Fstackable%2Fairflow%2Ftags">image registry</a>.
-It should generally be safe to simply use the latest image version that is available.</p>
-</div>
-<div class="paragraph">
-<p>Where:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>metadata.name</code> contains the name of the Airflow cluster</p>
-</li>
-<li>
-<p>the label of the Docker image provided by Stackable must be set in <code>spec.version</code></p>
-</li>
-<li>
-<p><code>spec.statsdExporterVersion</code> must contain the tag of a statsd-exporter Docker image in the Stackable repository.</p>
-</li>
-<li>
-<p><code>spec.executor</code>: this setting determines how the cluster will run (for more information see <a href="https://airflow.apache.org/docs/apache-airflow/stable/executor/index.html#executor-types" class="bare">https://airflow.apache.org/docs/apache-airflow/stable/executor/index.html#executor-types</a>): the <code>CeleryExecutor</code>
-is the recommended setting although <code>SequentialExecutor</code> (all jobs run in one process in series) and <code>LocalExecutor</code>
-(whereby all jobs are run on one node, using whatever parallelism is possible) are also supported</p>
-</li>
-<li>
-<p>importing the sample workflows is determined by <code>loadExamples</code></p>
-</li>
-<li>
-<p><code>exposeConfig</code> allows the contents of the configuration file <code>airflow.cfg</code> to be exposed via the webserver UI. This is only for debugging purposes and should be set to <code>false</code> otherwise as it presents a security risk.</p>
-</li>
-<li>
-<p>the previously created secret must be referenced in <code>credentialsSecret</code></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Each cluster requires 3 components:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>webservers</code>: this provides the main UI for user-interaction</p>
-</li>
-<li>
-<p><code>workers</code>: the nodes over which the job workload will be distributed by the scheduler</p>
-</li>
-<li>
-<p><code>schedulers</code>: responsible for triggering jobs and persisting their metadata to the backend database</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
 <div class="sect1">
 <h2 id="_monitoring"><a class="anchor" href="#_monitoring"></a>Monitoring</h2>
 <div class="sectionbody">
@@ -646,6 +491,76 @@ will run and the job tree will update automatically:</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/airflow_running.png" alt="Airflow UI showing a running DAG">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authentication"><a class="anchor" href="#_authentication"></a>Authentication</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Every user has to authenticate themselves before using Airflow and there are several ways of doing this.</p>
+</div>
+<div class="sect2">
+<h3 id="_webinterface"><a class="anchor" href="#_webinterface"></a>Webinterface</h3>
+<div class="paragraph">
+<p>The default setting is to view and manually set up users via the Webserver UI. Note the blue "+" button where users can be added directly:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/airflow_security.png" alt="Airflow Security menu">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ldap"><a class="anchor" href="#_ldap"></a>LDAP</h3>
+<div class="paragraph">
+<p>Airflow supports authentication of users against an LDAP server.
+Have a look at <a href="https://github.com/stackabletech/airflow-operator/blob/main/examples/simple-airflow-cluster-ldap.yaml">the LDAP example</a> and the general <a href="../../commons-operator/stable/authenticationclass.html" class="xref page">Stackable Authentication</a> documentation on how to set it up.
+In general, it requires you to specify a <a href="../../commons-operator/stable/authenticationclass.html" class="xref page"><code>AuthenticationClass</code></a> which is used to authenticate the users. In the example below we assign all the users the <code>Admin</code> role once they log into Airflow:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: airflow.stackable.tech/v1alpha1
+kind: AirflowCluster
+metadata:
+  name: airflow-with-ldap
+spec:
+  version: 2.2.5-python39-stackable0.3.0
+  [...]
+  authenticationConfig:
+    authenticationClass: airflow-with-ldap-ldap
+    userRegistrationRole: Admin</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The users and roles can be viewed as before in the Webserver UI, but note that the blue "+" button is not available when authenticating against LDAP:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/airflow_security_ldap.png" alt="Airflow Security menu">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authorization"><a class="anchor" href="#_authorization"></a>Authorization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Airflow Webserver delegates the <a href="https://airflow.apache.org/docs/apache-airflow/stable/security/access-control.html">handling of user access control</a> to <a href="https://flask-appbuilder.readthedocs.io/en/latest/security.html">Flask AppBuilder</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="_webinterface_2"><a class="anchor" href="#_webinterface_2"></a>Webinterface</h3>
+<div class="paragraph">
+<p>You can view, add to, and assign the roles displayed in the Airflow Webserver UI to existing users.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ldap_2"><a class="anchor" href="#_ldap_2"></a>LDAP</h3>
+<div class="paragraph">
+<p>Airflow supports assigning roles to users based on their LDAP group membership
+, though this is not yet supported by the Stackable operator. Currently, all the users logging in via LDAP get assigned the same role which you can configure via the attribute <code>authenticationConfig.userRegistrationRole</code> on the <code>AirflowCluster</code> object.</p>
 </div>
 </div>
 </div>
@@ -814,7 +729,7 @@ spec:
 </div>
 </div>
 <div class="sect2">
-<h3 id="_via_persistentvolumeclaim"><a class="anchor" href="#_via_persistentvolumeclaim"></a>via <code>PersistentVolumeclaim</code></h3>
+<h3 id="_via_persistentvolumeclaim"><a class="anchor" href="#_via_persistentvolumeclaim"></a>via PersistentVolumeclaim</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
@@ -974,6 +889,428 @@ spec:
 <td>If the mount path described above is anything other than the standard location (the default is <code>$AIRFLOW_HOME/dags</code>), then the location should be defined using the relevant environment variable.</td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_node_selection"><a class="anchor" href="#_node_selection"></a>Node selection</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Airflow expects that all its components (webserver, scheduler, workers etc.) have access to the DAG folder. If this is mounted via a PersistentVolumeClaim, then the permissible <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes">access modes</a> on that claim may require that a specific node is selected. This can be done by providing a label-match as shown below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  workers:
+    roleGroups:
+      default:
+        envOverrides:
+          AIRFLOW__CORE__DAGS_FOLDER: "/stackable/external-dags"
+        replicas: 1
+        selector:
+          matchLabels:
+            node: "2"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_applying_custom_resources"><a class="anchor" href="#_applying_custom_resources"></a>Applying Custom Resources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Airflow can be used to apply custom resources from within a cluster. An example of this could be a SparkApplication job that is to be triggered by Airflow. The steps below describe how this can be done.</p>
+</div>
+<div class="sect2">
+<h3 id="_define_an_in_cluster_kubernetes_connection"><a class="anchor" href="#_define_an_in_cluster_kubernetes_connection"></a>Define an in-cluster Kubernetes connection</h3>
+<div class="paragraph">
+<p>An in-cluster connection can either be created from within the Webserver UI (note that the "in cluster configuration" box is ticked):</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/airflow_connection_ui.png" alt="Airflow Connections">
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, the connection can be <a href="https://airflow.apache.org/docs/apache-airflow/stable/howto/connection.html">defined</a> by an environment variable in URI format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">AIRFLOW_CONN_KUBERNETES_IN_CLUSTER: "kubernetes://?__extra__=%7B%22extra__kubernetes__in_cluster%22%3A+true%2C+%22extra__kubernetes__kube_config%22%3A+%22%22%2C+%22extra__kubernetes__kube_config_path%22%3A+%22%22%2C+%22extra__kubernetes__namespace%22%3A+%22%22%7D"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This can be supplied directly in the custom resource for all roles (Airflow expects configuration to be common across components):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: airflow.stackable.tech/v1alpha1
+kind: AirflowCluster
+metadata:
+  name: airflow
+spec:
+  version: 2.2.3-python38-stackable0.3.0
+  statsdExporterVersion: v0.22.4
+  executor: CeleryExecutor
+  loadExamples: false
+  exposeConfig: false
+  credentialsSecret: simple-airflow-credentials
+  webservers:
+    roleGroups:
+      default:
+        envOverrides:
+          AIRFLOW_CONN_KUBERNETES_IN_CLUSTER: "kubernetes://?__extra__=%7B%22extra__kubernetes__in_cluster%22%3A+true%2C+%22extra__kubernetes__kube_config%22%3A+%22%22%2C+%22extra__kubernetes__kube_config_path%22%3A+%22%22%2C+%22extra__kubernetes__namespace%22%3A+%22%22%7D"
+        replicas: 1
+  workers:
+    roleGroups:
+      default:
+        envOverrides:
+          AIRFLOW_CONN_KUBERNETES_IN_CLUSTER: "kubernetes://?__extra__=%7B%22extra__kubernetes__in_cluster%22%3A+true%2C+%22extra__kubernetes__kube_config%22%3A+%22%22%2C+%22extra__kubernetes__kube_config_path%22%3A+%22%22%2C+%22extra__kubernetes__namespace%22%3A+%22%22%7D"
+        replicas: 1
+  schedulers:
+    roleGroups:
+      default:
+        envOverrides:
+          AIRFLOW_CONN_KUBERNETES_IN_CLUSTER: "kubernetes://?__extra__=%7B%22extra__kubernetes__in_cluster%22%3A+true%2C+%22extra__kubernetes__kube_config%22%3A+%22%22%2C+%22extra__kubernetes__kube_config_path%22%3A+%22%22%2C+%22extra__kubernetes__namespace%22%3A+%22%22%7D"
+        replicas: 1</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_define_a_cluster_role_for_airflow_to_create_sparkapplication_resources"><a class="anchor" href="#_define_a_cluster_role_for_airflow_to_create_sparkapplication_resources"></a>Define a cluster role for Airflow to create SparkApplication resources</h3>
+<div class="paragraph">
+<p>Airflow cannot create or access SparkApplication resources by default - a cluster role is required for this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: airflow-spark-clusterrole
+rules:
+- apiGroups:
+  - spark.stackable.tech
+  resources:
+  - sparkapplications
+  verbs:
+  - create
+  - get</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and a corresponding cluster role binding:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: airflow-spark-clusterrole-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: airflow-spark-clusterrole
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: system:serviceaccounts</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dag_code"><a class="anchor" href="#_dag_code"></a>DAG code</h3>
+<div class="paragraph">
+<p>Now for the DAG itself. The job to be started is a simple Spark job that calculates the value of pi:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: spark.stackable.tech/v1alpha1
+kind: SparkApplication
+metadata:
+  name: pyspark-pi
+  namespace: default
+spec:
+  version: "1.0"
+  sparkImage: docker.stackable.tech/stackable/pyspark-k8s:3.3.0-stackable0.1.0
+  mode: cluster
+  mainApplicationFile: local:///stackable/spark/examples/src/main/python/pi.py
+  driver:
+    cores: 1
+    coreLimit: "1200m"
+    memory: "512m"
+  executor:
+    cores: 1
+    instances: 3
+    memory: "512m"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will called from within a DAG by using the connection that was defined earlier. It will be wrapped by the <code>KubernetesHook</code> that the Airflow Kubernetes provider makes available. There are two classes that are used to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>start the job</p>
+</li>
+<li>
+<p>monitor the status of the job</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These are written in-line in the python code below, though this is just to make it clear how the code is used (the classes <code>SparkKubernetesOperator</code> and <code>SparkKubernetesSensor</code> will be used for all custom resources and thus are best defined as separate python files that the DAG would reference).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+"""Example DAG demonstrating how to apply a Kubernetes Resource from Airflow running in-cluster"""
+
+from datetime import datetime, timedelta
+from airflow import DAG
+from typing import TYPE_CHECKING, Optional, Sequence, Dict
+from kubernetes import client
+from airflow.exceptions import AirflowException
+from airflow.sensors.base import BaseSensorOperator
+from airflow.models import BaseOperator
+from airflow.providers.cncf.kubernetes.hooks.kubernetes import KubernetesHook
+
+if TYPE_CHECKING:
+    from airflow.utils.context import Context
+
+
+class SparkKubernetesOperator(BaseOperator):  <i class="conum" data-value="1"></i><b>(1)</b>
+    """
+    Creates a SparkApplication resource in kubernetes:
+    :param application_file: Defines a 'SparkApplication' custom resource as either a
+        path to a '.yaml' file, '.json' file, YAML string or JSON string.
+    :param namespace: kubernetes namespace for the SparkApplication
+    :param kubernetes_conn_id: The :ref:`kubernetes connection id &lt;howto/connection:kubernetes&gt;`
+        for the Kubernetes cluster.
+    :param api_group: SparkApplication API group
+    :param api_version: SparkApplication API version
+    """
+
+    template_fields: Sequence[str] = ('application_file', 'namespace')
+    template_ext: Sequence[str] = ('.yaml', '.yml', '.json')
+    ui_color = '#f4a460'
+
+    def __init__(
+        self,
+        *,
+        application_file: str,
+        namespace: Optional[str] = None,
+        kubernetes_conn_id: str = 'kubernetes_in_cluster',  <i class="conum" data-value="2"></i><b>(2)</b>
+        api_group: str = 'spark.stackable.tech',
+        api_version: str = 'v1alpha1',
+        **kwargs,
+    ) -&gt; None:
+        super().__init__(**kwargs)
+        self.application_file = application_file
+        self.namespace = namespace
+        self.kubernetes_conn_id = kubernetes_conn_id
+        self.api_group = api_group
+        self.api_version = api_version
+        self.plural = "sparkapplications"
+
+    def execute(self, context: 'Context'):
+        hook = KubernetesHook(conn_id=self.kubernetes_conn_id)
+        self.log.info("Creating SparkApplication...")
+        response = hook.create_custom_object(
+            group=self.api_group,
+            version=self.api_version,
+            plural=self.plural,
+            body=self.application_file,
+            namespace=self.namespace,
+        )
+        return response
+
+
+class SparkKubernetesSensor(BaseSensorOperator):  <i class="conum" data-value="3"></i><b>(3)</b>
+    """
+    Monitors a SparkApplication resource in kubernetes:
+    :param application_name: SparkApplication resource name
+    :param namespace: the kubernetes namespace where the SparkApplication reside in
+    :param kubernetes_conn_id: The :ref:`kubernetes connection&lt;howto/connection:kubernetes&gt;`
+        to Kubernetes cluster.
+    :param attach_log: determines whether logs for driver pod should be appended to the sensor log
+    :param api_group: SparkApplication API group
+    :param api_version: SparkApplication API version
+    """
+
+    template_fields = ("application_name", "namespace")
+    FAILURE_STATES = ("Failed", "Unknown")
+    SUCCESS_STATES = ("Succeeded")
+
+    def __init__(
+            self,
+            *,
+            application_name: str,
+            attach_log: bool = False,
+            namespace: Optional[str] = None,
+            kubernetes_conn_id: str = 'kubernetes_in_cluster',  <i class="conum" data-value="2"></i><b>(2)</b>
+            api_group: str = 'spark.stackable.tech',
+            api_version: str = 'v1alpha1',
+            poke_interval: float = 60,
+            **kwargs,
+    ) -&gt; None:
+        super().__init__(**kwargs)
+        self.application_name = application_name
+        self.attach_log = attach_log
+        self.namespace = namespace
+        self.kubernetes_conn_id = kubernetes_conn_id
+        self.hook = KubernetesHook(conn_id=self.kubernetes_conn_id)
+        self.api_group = api_group
+        self.api_version = api_version
+        self.poke_interval = poke_interval
+
+    def _log_driver(self, application_state: str, response: dict) -&gt; None:
+        if not self.attach_log:
+            return
+        status_info = response["status"]
+        if "driverInfo" not in status_info:
+            return
+        driver_info = status_info["driverInfo"]
+        if "podName" not in driver_info:
+            return
+        driver_pod_name = driver_info["podName"]
+        namespace = response["metadata"]["namespace"]
+        log_method = self.log.error if application_state in self.FAILURE_STATES else self.log.info
+        try:
+            log = ""
+            for line in self.hook.get_pod_logs(driver_pod_name, namespace=namespace):
+                log += line.decode()
+            log_method(log)
+        except client.rest.ApiException as e:
+            self.log.warning(
+                "Could not read logs for pod %s. It may have been disposed.\n"
+                "Make sure timeToLiveSeconds is set on your SparkApplication spec.\n"
+                "underlying exception: %s",
+                driver_pod_name,
+                e,
+            )
+
+    def poke(self, context: Dict) -&gt; bool:
+        self.log.info("Poking: %s", self.application_name)
+        response = self.hook.get_custom_object(
+            group=self.api_group,
+            version=self.api_version,
+            plural="sparkapplications",
+            name=self.application_name,
+            namespace=self.namespace,
+        )
+        try:
+            application_state = response["status"]["phase"]
+        except KeyError:
+            self.log.debug(f"SparkApplication status could not be established: {response}")
+            return False
+        if self.attach_log and application_state in self.FAILURE_STATES + self.SUCCESS_STATES:
+            self._log_driver(application_state, response)
+        if application_state in self.FAILURE_STATES:
+            raise AirflowException(f"SparkApplication failed with state: {application_state}")
+        elif application_state in self.SUCCESS_STATES:
+            self.log.info("SparkApplication ended successfully")
+            return True
+        else:
+            self.log.info("SparkApplication is still in state: %s", application_state)
+            return False
+
+
+with DAG(  <i class="conum" data-value="4"></i><b>(4)</b>
+    dag_id='sparkapp_dag',
+    schedule_interval='0 0 * * *',
+    start_date=datetime(2021, 1, 1),
+    catchup=False,
+    dagrun_timeout=timedelta(minutes=60),
+    tags=['example'],
+    params={"example_key": "example_value"},
+) as dag:
+
+    t1 = SparkKubernetesOperator(  <i class="conum" data-value="5"></i><b>(5)</b>
+        task_id='spark_pi_submit',
+        namespace="default",
+        application_file="pyspark-pi.yaml",
+        do_xcom_push=True,
+        dag=dag,
+    )
+
+    t2 = SparkKubernetesSensor(  <i class="conum" data-value="6"></i><b>(6)</b>
+        task_id='spark_pi_monitor',
+        namespace="default",
+        application_name="{{ task_instance.xcom_pull(task_ids='spark_pi_submit')['metadata']['name'] }}",
+        poke_interval=5,
+        dag=dag,
+    )
+
+    t1 &gt;&gt; t2  <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the wrapper class used for calling the job via <code>KubernetesHook</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the connection that created for in-cluster usage</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the wrapper class used for monitoring the job via <code>KubernetesHook</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>the start of the DAG code</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>the initial task to invoke the job</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>the subsequent task to monitor the job</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>the jobs are chained together in the correct order</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Once this DAG is <a href="#_mounting_dags">mounted</a> in the DAG folder it can be called and its progress viewed from within the Webserver UI:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/airflow_dag_graph.png" alt="Airflow Connections">
+</div>
+</div>
+<div class="paragraph">
+<p>Clicking on the "spark_pi_monitor" task and selecting the logs shows that the status of the job has been tracked by Airflow:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/airflow_dag_log.png" alt="Airflow Connections">
+</div>
 </div>
 </div>
 </div>

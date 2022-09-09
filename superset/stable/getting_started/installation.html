@@ -317,7 +317,10 @@
           <a href="../../../trino/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../../trino/stable/index.html">0.5</a>
+          <a href="../../../trino/stable/index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../../../trino/0.5/index.html">0.5</a>
         </li>
         <li class="version">
           <a href="../../../trino/0.4/index.html">0.4</a>
@@ -405,9 +408,9 @@ Follow the <a href="../../../stackablectl/stable/installation.html" class="xref 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">stackablectl operator install \
-  commons=0.3.0-nightly \
-  secret=0.6.0-nightly \
-  superset=0.6.0-nightly</code></pre>
+  commons=0.3.0 \
+  secret=0.5.0 \
+  superset=0.6.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -440,7 +443,7 @@ Consult the <a href="../../../stackablectl/stable/quickstart.html" class="xref p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm repo add stackable-dev https://repo.stackable.tech/repository/helm-dev/</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm repo add stackable-stable https://repo.stackable.tech/repository/helm-stable/</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -448,9 +451,9 @@ Consult the <a href="../../../stackablectl/stable/quickstart.html" class="xref p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install --wait commons-operator stackable-dev/commons-operator --version 0.3.0-nightly
-helm install --wait secret-operator stackable-dev/secret-operator --version 0.6.0-nightly
-helm install --wait superset-operator stackable-dev/superset-operator --version 0.6.0-nightly</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install --wait commons-operator stackable-stable/commons-operator --version 0.3.0
+helm install --wait secret-operator stackable-stable/secret-operator --version 0.5.0
+helm install --wait superset-operator stackable-stable/superset-operator --version 0.6.0</code></pre>
 </div>
 </div>
 <div class="paragraph">

@@ -328,7 +328,10 @@
           <a href="../../../trino/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../../trino/stable/index.html">0.5</a>
+          <a href="../../../trino/stable/index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../../../trino/0.5/index.html">0.5</a>
         </li>
         <li class="version">
           <a href="../../../trino/0.4/index.html">0.4</a>
@@ -416,11 +419,11 @@ Follow the <a href="../../../stackablectl/stable/installation.html" class="xref 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">stackablectl operator install \
-  commons=0.3.0-nightly \
-  secret=0.6.0-nightly \
-  zookeeper=0.11.0-nightly \
-  hdfs=0.5.0-nightly \
-  druid=0.7.0-nightly</code></pre>
+  commons=0.3.0 \
+  secret=0.5.0 \
+  zookeeper=0.11.0 \
+  hdfs=0.5.0 \
+  druid=0.7.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -463,11 +466,11 @@ Consult the <a href="../../../stackablectl/stable/quickstart.html" class="xref p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install --wait commons-operator stackable-dev/commons-operator --version 0.3.0-nightly
-helm install --wait secret-operator stackable-dev/secret-operator --version 0.6.0-nightly
-helm install --wait zookeeper-operator stackable-dev/zookeeper-operator --version 0.11.0-nightly
-helm install --wait hdfs-operator stackable-dev/hdfs-operator --version 0.5.0-nightly
-helm install --wait druid-operator stackable-dev/druid-operator --version 0.7.0-nightly</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install --wait commons-operator stackable-dev/commons-operator --version 0.3.0
+helm install --wait secret-operator stackable-dev/secret-operator --version 0.5.0
+helm install --wait zookeeper-operator stackable-dev/zookeeper-operator --version 0.11.0
+helm install --wait hdfs-operator stackable-dev/hdfs-operator --version 0.5.0
+helm install --wait druid-operator stackable-dev/druid-operator --version 0.7.0</code></pre>
 </div>
 </div>
 <div class="paragraph">

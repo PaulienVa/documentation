@@ -320,7 +320,10 @@
           <a href="../../../trino/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../../trino/stable/index.html">0.5</a>
+          <a href="../../../trino/stable/index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../../../trino/0.5/index.html">0.5</a>
         </li>
         <li class="version">
           <a href="../../../trino/0.4/index.html">0.4</a>
@@ -400,13 +403,14 @@
 <p>We will create them in this order, each one is created by applying a manifest file. The operators you just installed will then create the resources according to the manifest.</p>
 </div>
 <div class="sect2">
-<h3 id="_zookeeper"><a class="anchor" href="#_zookeeper"></a>ZooKeeper</h3>
+<h3 id="_apache_zookeeper"><a class="anchor" href="#_apache_zookeeper"></a>Apache ZooKeeper</h3>
 <div class="paragraph">
-<p>Create a file named <code>zookeeper.yaml</code> with the following content:</p>
+<p>To create a ZooKeeper instace run the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f - &lt;&lt;EOF
+---
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperCluster
 metadata:
@@ -416,38 +420,25 @@ spec:
   servers:
     roleGroups:
       default:
-        replicas: 3</code></pre>
+        replicas: 3
+EOF</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>and apply it:</p>
+<p>Create a Znode object:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f zookeeper.yaml</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Create a file <code>nifi-znode.yaml</code> with the following content:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f - &lt;&lt;EOF
+---
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperZnode
 metadata:
   name: simple-nifi-znode
 spec:
   clusterRef:
-    name: simple-zk</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>and apply it:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f nifi-znode.yaml</code></pre>
+    name: simple-zk
+EOF</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -455,36 +446,31 @@ spec:
 </div>
 </div>
 <div class="sect2">
-<h3 id="_nifi"><a class="anchor" href="#_nifi"></a>NiFi</h3>
+<h3 id="_apache_nifi"><a class="anchor" href="#_apache_nifi"></a>Apache NiFi</h3>
 <div class="paragraph">
-<p>The NiFi cluster requires authentication. In order to provide credentials, create a file named <code>nifi-admin-credentials.yaml</code> with the following content:</p>
+<p>The NiFi cluster requires authentication. Create a set of credentials for this purpose:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f - &lt;&lt;EOF
+---
 apiVersion: v1
 kind: Secret
 metadata:
   name: nifi-admin-credentials-simple
 stringData:
   username: admin
-  password: admin</code></pre>
+  password: admin
+EOF</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>and apply it:</p>
+<p>Finally create a Nifi instance:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>kubectl apply -f nifi-admin-credentials.yaml</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Create a file named <code>nifi.yaml</code> with the following content:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f - &lt;&lt;EOF
+---
 apiVersion: nifi.stackable.tech/v1alpha1
 kind: NifiCluster
 metadata:
@@ -504,19 +490,9 @@ spec:
   nodes:
     roleGroups:
       default:
-        replicas: 2</code></pre>
+        replicas: 2
+EOF</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>and apply it:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>kubectl apply -f nifi.yaml</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This will create the actual NiFi cluster.</p>
 </div>
 </div>
 </div>
@@ -554,7 +530,7 @@ simple-zk-server-default             3/3     7m</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Congratulations, you successfully created your first NiFi cluster.</p>
+<p>Congratulations! You successfully created your first NiFi cluster!</p>
 </div>
 <div class="sect2">
 <h3 id="_access_the_nifi_web_interface"><a class="anchor" href="#_access_the_nifi_web_interface"></a>Access the NiFi web interface</h3>

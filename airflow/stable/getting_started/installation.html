@@ -130,7 +130,10 @@
           <a href="../../../commons-operator/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../../commons-operator/stable/index.html">0.2</a>
+          <a href="../../../commons-operator/stable/index.html">0.3</a>
+        </li>
+        <li class="version">
+          <a href="../../../commons-operator/0.2/index.html">0.2</a>
         </li>
       </ul>
     </li>
@@ -438,9 +441,9 @@ Follow the <a href="../../../stackablectl/stable/installation.html" class="xref 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">stackablectl operator install \
-  commons=0.3.0-nightly \
-  secret=0.6.0-nightly \
-  airflow=0.5.0-nightly</code></pre>
+  commons=0.3.0 \
+  secret=0.5.0 \
+  airflow=0.5.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -481,9 +484,9 @@ Consult the <a href="../../../stackablectl/stable/quickstart.html" class="xref p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install --wait commons-operator stackable-dev/commons-operator --version 0.3.0-nightly
-helm install --wait secret-operator stackable-dev/secret-operator --version 0.6.0-nightly
-helm install --wait airflow-operator stackable-dev/airflow-operator --version 0.5.0-nightly</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install --wait commons-operator stackable-dev/commons-operator --version 0.3.0
+helm install --wait secret-operator stackable-dev/secret-operator --version 0.5.0
+helm install --wait airflow-operator stackable-dev/airflow-operator --version 0.5.0</code></pre>
 </div>
 </div>
 <div class="paragraph">

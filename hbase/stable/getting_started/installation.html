@@ -132,7 +132,10 @@
           <a href="../../../commons-operator/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../../commons-operator/stable/index.html">0.2</a>
+          <a href="../../../commons-operator/stable/index.html">0.3</a>
+        </li>
+        <li class="version">
+          <a href="../../../commons-operator/0.2/index.html">0.2</a>
         </li>
       </ul>
     </li>
@@ -411,11 +414,11 @@ Follow the <a href="../../../stackablectl/stable/installation.html" class="xref 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">stackablectl operator install \
-  commons=0.3.0-nightly \
-  secret=0.6.0-nightly \
-  zookeeper=0.11.0-nightly \
-  hdfs=0.5.0-nightly \
-  hbase=0.4.0-nightly</code></pre>
+  commons=0.3.0 \
+  secret=0.5.0 \
+  zookeeper=0.11.0 \
+  hdfs=0.5.0 \
+  hbase=0.4.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -423,11 +426,11 @@ Follow the <a href="../../../stackablectl/stable/installation.html" class="xref 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">[INFO ] Installing commons operator in version 0.3.0-nightly
-[INFO ] Installing secret operator in version 0.6.0-nightly
-[INFO ] Installing zookeeper operator in version 0.11.0-nightly
-[INFO ] Installing hdfs operator 0.5.0-nightly
-[INFO ] Installing hbase operator 0.4.0-nightly</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">[INFO ] Installing commons operator in version 0.3.0
+[INFO ] Installing secret operator in version 0.5.0
+[INFO ] Installing zookeeper operator in version 0.11.0
+[INFO ] Installing hdfs operator 0.5.0
+[INFO ] Installing hbase operator 0.4.0</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -458,11 +461,11 @@ Consult the <a href="../../../stackablectl/stable/quickstart.html" class="xref p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install --wait zookeeper-operator stackable-dev/zookeeper-operator --version 0.11.0-nightly
-helm install --wait hdfs-operator stackable-dev/hdfs-operator --version 0.5.0-nightly
-helm install --wait commons-operator stackable-dev/commons-operator --version 0.3.0-nightly
-helm install --wait secret-operator stackable-dev/secret-operator --version 0.6.0-nightly
-helm install --wait hbase-operator stackable-dev/hbase-operator --version 0.4.0-nightly</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm install --wait zookeeper-operator stackable-dev/zookeeper-operator --version 0.11.0
+helm install --wait hdfs-operator stackable-dev/hdfs-operator --version 0.5.0
+helm install --wait commons-operator stackable-dev/commons-operator --version 0.3.0
+helm install --wait secret-operator stackable-dev/secret-operator --version 0.5.0
+helm install --wait hbase-operator stackable-dev/hbase-operator --version 0.4.0</code></pre>
 </div>
 </div>
 <div class="paragraph">

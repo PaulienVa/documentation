@@ -132,7 +132,10 @@
           <a href="../../commons-operator/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../commons-operator/stable/index.html">0.2</a>
+          <a href="../../commons-operator/stable/index.html">0.3</a>
+        </li>
+        <li class="version">
+          <a href="../../commons-operator/0.2/index.html">0.2</a>
         </li>
       </ul>
     </li>
@@ -555,10 +558,10 @@ Overriding certain properties which are set by operator can interfere with the o
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">/stackable/phoenix/bin/psql.py  &amp;&amp; \
-   /stackable/phoenix/examples/WEB_STAT.sql &amp;&amp; \
-   /stackable/phoenix/examples/WEB_STAT.csv  &amp;&amp; \
-   /stackable/phoenix/examples/WEB_STAT_QUERIES.sql</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">/stackable/phoenix/bin/psql.py \
+/stackable/phoenix/examples/WEB_STAT.sql \
+/stackable/phoenix/examples/WEB_STAT.csv \
+/stackable/phoenix/examples/WEB_STAT_QUERIES.sql</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -570,7 +573,10 @@ Overriding certain properties which are set by operator can interfere with the o
 </div>
 </div>
 <div class="paragraph">
-<p>The script opens an SQL prompt from where one can list, query, create and generally interact with Phoenix tables. So, to query the table that was created in the previous step, start the script and enter some SQL at the prompt:</p>
+<p>The script opens an SQL prompt from where one can list, query, create and generally interact with Phoenix tables. If the script is run from a pod running a Stackable Hase image then the ZooKeeper quorum can be resolved automatically as Phoenix has access to the local HBase configuration details.</p>
+</div>
+<div class="paragraph">
+<p>To query the table that was created in the previous step, start the script and enter some SQL at the prompt:</p>
 </div>
 <div class="imageblock">
 <div class="content">

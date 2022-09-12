@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ADR023: Product image selection :: Stackable Documentation</title>
+    <title>ADR012: Authentication token management :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/stable/contributor/adr/ADR012-authn_token_management.html">
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../../_/css/site.css">
     <script>var uiRootPath = '../../../../_'</script>
@@ -34,15 +35,15 @@
     </nav>
     <nav id="navbar-sub" class="navbar-sub">
       <div class="container">
-        <a class="navbar-sub-item" href="../../index.html">Home</a>
-<a class="navbar-sub-item" href="../../getting_started.html">Getting Started</a>
-<a class="navbar-sub-item" href="../../concepts/index.html">Concepts</a>
-<a class="navbar-sub-item" href="../../tutorials/end-to-end_data_pipeline_example.html">Tutorials</a>
+        <a class="navbar-sub-item" href="../../../stable/index.html">Home</a>
+<a class="navbar-sub-item" href="../../../stable/getting_started.html">Getting Started</a>
+<a class="navbar-sub-item" href="../../../stable/concepts/index.html">Concepts</a>
+<a class="navbar-sub-item" href="../../../stable/tutorials/end-to-end_data_pipeline_example.html">Tutorials</a>
 <a class="navbar-sub-item" href="../../../../stackablectl/stable/index.html">stackablectl</a>
 <div class="navbar-sub-item drop-down">
     Operators
     <div class="drop-down-content">
-    <a class="drop-down-item" href="../../operators/index.html">Overview</a>
+    <a class="drop-down-item" href="../../../stable/operators/index.html">Overview</a>
     <a class="drop-down-item" href="../../../../airflow/stable/index.html">Apache Airflow</a>
     <a class="drop-down-item" href="../../../../druid/stable/index.html">Apache Druid</a>
     <a class="drop-down-item" href="../../../../hbase/stable/index.html">Apache HBase</a>
@@ -59,7 +60,7 @@
     <a class="drop-down-item" href="../../../../secret-operator/stable/index.html">Secret</a>
     </div>
 </div>
-<a class="navbar-sub-item" href="../index.html">Contribute</a>
+<a class="navbar-sub-item" href="../../../stable/contributor/index.html">Contribute</a>
 
         <a class="arrow" href="javascript:document.querySelector('.navbar-sub').classList.toggle('open')">
           <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>
@@ -76,6 +77,13 @@
   <nav class="nav-menu">
     <div class="title-wrapper">
       <h3 class="title"><a href="../../index.html">Stackable Documentation</a></h3>
+      <div class="page-versions">
+        <button class="version-menu-toggle" title="Show other versions of page">nightly</button>
+        <div class="version-menu">
+          <a class="version is-current" href="ADR012-authn_token_management.html">nightly</a>
+          <a class="version" href="../../../stable/contributor/adr/ADR012-authn_token_management.html">22.06</a>
+        </div>
+      </div>
     </div>
     <ul class="nav-list">
   <li class="nav-item" data-depth="0">
@@ -262,7 +270,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR011-directory_structure.html">ADR011: Directory Structure Used by Stackable Components on Managed Hosts</a>
   </li>
-  <li class="nav-item" data-depth="4">
+  <li class="nav-item is-current-page" data-depth="4">
     <a class="nav-link" href="ADR012-authn_token_management.html">ADR012: Authentication token management</a>
   </li>
   <li class="nav-item" data-depth="4">
@@ -295,7 +303,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR022-spark-history-server.html">ADR022: Spark history server</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="4">
+  <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR023-product-image-selection.html">ADR023: Product image selection</a>
   </li>
   <li class="nav-item" data-depth="4">
@@ -358,10 +366,13 @@
       </ul>
     </li>
     <li class="component is-current">
-      <a class="title" href="../../index.html">Stackable Documentation</a>
+      <a class="title" href="../../../stable/index.html">Stackable Documentation</a>
       <ul class="versions">
-        <li class="version is-current is-latest">
+        <li class="version is-current">
           <a href="../../index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../stable/index.html">22.06</a>
         </li>
       </ul>
     </li>
@@ -581,54 +592,54 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="../../index.html" class="home-link"></a>
+  <a href="../../../stable/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../../index.html">Stackable Documentation</a></li>
     <li><a href="../index.html">Contributor&#8217;s Guide</a></li>
     <li><a href="index.html">Architectural Decision Records</a></li>
     <li>Current</li>
-    <li><a href="ADR023-product-image-selection.html">ADR023: Product image selection</a></li>
+    <li><a href="ADR012-authn_token_management.html">ADR012: Authentication token management</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR023-product-image-selection.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR012-authn_token_management.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">ADR023: Product image selection</h1>
+<h1 class="page">ADR012: Authentication token management</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
+<p>Status: accepted</p>
+</li>
+<li>
 <p>Deciders:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Malte Sander</p>
-</li>
-<li>
-<p>Sebastian Bernauer</p>
-</li>
-<li>
-<p>Felix Henning</p>
-</li>
-<li>
-<p>Maximilian Wittich</p>
+<p>Teo Klestrup Röijezon</p>
 </li>
 <li>
 <p>Lars Francke</p>
+</li>
+<li>
+<p>Sönke Liebau</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Date: 2022-08-31</p>
+<p>Date: 2021-11-23</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>Technical Story: <a href="https://github.com/stackabletech/issues/issues/4" class="bare">https://github.com/stackabletech/issues/issues/4</a></p>
 </div>
 </div>
 </div>
@@ -636,16 +647,10 @@
 <h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Currently users have to specify the full image tag in the Products CRD, as described in <a href="ADR018-product_image_versioning.html" class="xref page">ADR018: Product Image Versioning</a>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
-  version: 1.4.1-stackable2.1.0</code></pre>
-</div>
+<p>Services need a way to authenticate each other when communicating. This is typically done by issuing each service some form of secret token that the counterparty can validate. Depending on the service in question, this may be a token unique to the counterparty (such as a password or API key) or a token accepted by a whole trust domain (such as a Kerberos keytab or a TLS certificate). This ADR primarily concerns itself with the latter case.</p>
 </div>
 <div class="paragraph">
-<p>This must be a tag belonging to an image from the stackable repository. In order to give the user the opportunity to provide a own repository, mirror our repository or provide a complete own image, we&#8217;d like to propose a solution for it.</p>
+<p>Depending on the specifics of the service being communicated with, this token may need to identify the replica (Pod in Kubernetes terms), the set of replicas (RoleGroup, StatefulSet, or Pod), or the server that the replica is running on (Node).</p>
 </div>
 </div>
 </div>
@@ -655,66 +660,36 @@
 <div class="ulist">
 <ul>
 <li>
-<p>Flexible and extendable solution for possible use cases</p>
+<p>Depending on the specific service being communicated with, the token may need to identify the the replica (Pod in Kubernetes terms), the set of replicas (RoleGroup, StatefulSet, or Pod), or the server that the replica is running on (Node)</p>
 </li>
 <li>
-<p>Preserve the possibility of magic version completion of operators for images (e.g. <code>superset:1.4.1</code> &#8658; <code>superset:1.4.1-stackable2.1.0</code>)</p>
+<p>Some customers have an existing trust domain where they provision us static tokens that we must use</p>
 </li>
 <li>
-<p>Allow the user to easily paste in a complete image name</p>
+<p>Many customers do not have an existing trust domain, nor do they want to take on the operational burden of managing it manually</p>
 </li>
 <li>
-<p>Allow users to use some defaults, allow them to only override certain things</p>
+<p>Ideally, automatically provisioned tokens should be as short-lived as is practical</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>In detail we used the following use-cases to drive the decision:</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>use Stackable repo</p>
-<div class="ulist">
-<ul>
-<li>
-<p>users specified version 1.4.1-stackable2.1.0
-&#8658; operator should use image docker.stackable.tech/stackable/superset:1.4.1-stackable2.1.0</p>
-</li>
-<li>
-<p>users specified version 1.4.1
-&#8658; operator should use image docker.stackable.tech/stackable/superset:1.4.1-stackable2.1.0 based on compatibility knowledge (which operator works with which image)</p>
-</li>
-<li>
-<p>users specifies no version
-&#8658; operator should use image docker.stackable.tech/stackable/superset:1.4.1-stackable2.1.0 based on recommended product version of the release/operator and knowledge (which operator works with which image)</p>
-</li>
-</ul>
 </div>
+<div class="sect1">
+<h2 id="_considered_options"><a class="anchor" href="#_considered_options"></a>Considered Options</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Kubernetes secrets (+ Cert Manager etc)</p>
 </li>
 <li>
-<p>use self-hosted (mirrored) repo</p>
-<div class="ulist">
-<ul>
-<li>
-<p>users specified version 1.4.1-stackable2.1.0 and imageRepository my.corp/superset
-&#8658; operator should use image my.corp/superset:1.4.1-stackable2.1.0 based on imageRepository
-&#8658; Equivalent to user saying use the image "my.corp/superset:1.4.1-stackable2.1.0"</p>
+<p>Hashicorp Vault</p>
 </li>
 <li>
-<p>users specified version 1.4.1 and imageRepository my.corp/superset
-&#8658; operator should use image my.corp/superset:1.4.1-stackable2.1.0 based on imageRepository and compatibility knowledge (which operator works with which image)
-&#8658; Equivalent to user saying use the image "my.corp/superset:1.4.1-stackable2.1.0"
-&#8658; NOT equivalent to user saying use the image "my.corp/superset:1.4.1"
-&#8658; When specifying the image directly users loose the ability to let the operator determine its compatible stackable image version</p>
+<p>Custom secret service</p>
 </li>
-<li>
-<p>user just specifies a repo: my.corp/superset with no versions &#8594; operator should use image my.corp/superset:1.4.1-stackable2.1.0 based on recommended product version of the release/operator and knowledge (which operator works with which image)</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
+</ol>
 </div>
 </div>
 </div>
@@ -722,7 +697,7 @@
 <h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Chosen option: "<a href="#option6">Option 6</a>" because it is the only option to cover all use cases.</p>
+<p><strong>Option 3: Custom Secret Service</strong></p>
 </div>
 </div>
 </div>
@@ -730,192 +705,103 @@
 <h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_option_1"><a class="anchor" href="#_option_1"></a>Option 1</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">version: 1.4.1-stackable2.1.0 # optional (currently operator will error out but in the future according to ADR 18 operator should pick a good version automatically)
-imageRepository: docker.stackable.tech/stackable/superset # Option&lt;String&gt;</code></pre>
+<h3 id="_kubernetes_secrets"><a class="anchor" href="#_kubernetes_secrets"></a>Kubernetes secrets</h3>
+<div class="paragraph">
+<p>Secrets are managed in Kubernetes Secret objects, which are mounted into the Pods.</p>
 </div>
+<div class="paragraph">
+<p>Depending on the customer&#8217;s configuration, these secrets may be provisioned by operators such as Cert-Manager, or managed manually by an administrator.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because it&#8217;s non-breaking</p>
+<p>Good, because it exists already</p>
 </li>
 <li>
-<p>Good, because users can specify <code>version: 1.4.1</code> and the operator will resolve it to <code>1.4.1-stackable2.1.0</code> (or whatever stackable versions works for <strong>him</strong>). This mechanism continues working. For this to work the customers needs to mirror the exact same tags as we at Stackable have (he can&#8217;t rename the tags).</p>
+<p>Good, because people are already used to them</p>
+</li>
+<li>
+<p>Bad, because secret mounting is static for the whole StatefulSet or Deployment (and so cannot depend on the replica or node identity)</p>
+</li>
+<li>
+<p>Bad, because secrets must be provisioned in advance and stored in K8s</p>
+</li>
+<li>
+<p>Bad, because Kubernetes Secrets are typically not encrypted at rest</p>
+</li>
+<li>
+<p>Bad, because cluster and app administrators often have overly broad access to Secrets</p>
+</li>
+<li>
+<p>Bad, because Cert-Manager does not perform any policy check on certificates being issued</p>
+</li>
+<li>
+<p>Bad, because there is no Krb-Keytab-Manager (yet)</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_option_2"><a class="anchor" href="#_option_2"></a>Option 2</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">version: 1.4.1-stackable2.1.0 # optional (currently operator will error out but in the future according to ADR 18 operator should pick a good version automatically)
-image: docker.stackable.tech/stackable/superset:1.4.1-stackable2.1.0 # Option&lt;String&gt;. Will overwrite version (if specified)</code></pre>
-</div>
+<h3 id="_hashicorp_vault"><a class="anchor" href="#_hashicorp_vault"></a>Hashicorp Vault</h3>
+<div class="paragraph">
+<p>Secrets are stored or provisioned on demand by Hashicorp Vault, and injected into the pods using Vault-CSI.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Good, because it&#8217;s non-breaking because mechanism from Option 1 is not implemented yet</p>
+<p>Good, because it exists already</p>
 </li>
 <li>
-<p>Bad, because mechanism explain in Option 1 breaks.</p>
+<p>Good, because it can issue TLS certificates on demand</p>
+</li>
+<li>
+<p>Good, because secrets are encrypted at rest</p>
+</li>
+<li>
+<p>Bad, because it cannot issue Kerberos keytabs</p>
+</li>
+<li>
+<p>Bad, because the APIs for issuing dynamic secrets and retrieving existing secrets are incompatible</p>
+</li>
+<li>
+<p>Bad, because policy controls are limited enough to be nearly useless for managing identities</p>
+</li>
+<li>
+<p>Bad, because it is a heavy operational burden for customers that do not already use it</p>
+</li>
+<li>
+<p>Bad, because Vault Enterprise pricing is unclear (but has a reputation for being very expensive)</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_option_3"><a class="anchor" href="#_option_3"></a>Option 3</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">image:
-  version: 1.4.1-stackable2.1.0 # optional (currently operator will error out but in the future according to ADR 18 operator should pick a good version automatically)
-  imageRepository: docker.stackable.tech/stackable/superset # Option&lt;String&gt;</code></pre>
-</div>
+<h3 id="_custom_secret_service"><a class="anchor" href="#_custom_secret_service"></a>Custom secret service</h3>
+<div class="paragraph">
+<p>Secrets are stored or provisioned by a custom service (which may delegate to Vault, Kubernetes, etc as needed). Secrets
+are injected into pods using a custom CSI provider or init container.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Bad, because it&#8217;s breaking</p>
+<p>Good, because it can enforce policy for generated identities (for example: tying TLS certificate to Pod or Node identity)</p>
 </li>
 <li>
-<p>Bad, because versions can only contain the product version (e.g. <code>1.4.1</code>). Having this "hidden" under image may seem like an implementation detail to the user. It can be argued that version is important enough to be a top-level field.</p>
+<p>Good, because it can pick pregenerated tokens based on Pod/Node identity</p>
+</li>
+<li>
+<p>Good, because it can have a cluster-global policy for picking between backends</p>
+</li>
+<li>
+<p>Good, because it can accomodate to whatever authn methods we end up supporting</p>
+</li>
+<li>
+<p>Bad, because it&#8217;s another bespoke thing to maintain and develop</p>
+</li>
+<li>
+<p>Bad, because none of us are experienced with writing CSI providers</p>
 </li>
 </ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_option_4"><a class="anchor" href="#_option_4"></a>Option 4</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">version: 1.4.1-stackable2.1.0 # optional (currently operator will error out but in the future according to ADR 18 operator should pick a good version automatically)
-imageOverwrite: # Option&lt;struct&gt;
-  repository: docker.stackable.tech/stackable/superset # String
-  tag: 1.4.1-stackable2.1.0 # Option&lt;String&gt;. Will overwrite tag (the specified version is ignored/overwritten)</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Good, because it&#8217;s non-breaking</p>
-</li>
-<li>
-<p>Good, because when only <code>imageOverwrite.repository</code> is specified, it&#8217;s the same as option 1 with all the benefits</p>
-</li>
-<li>
-<p>Good, because when <code>imageOverwrite.repository</code> and <code>imageOverwrite.tag</code> is specified, it&#8217;s the same as option 2 with all the benefits</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="option5"><a class="anchor" href="#option5"></a>Option 5</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">image: # mandatory complex enum
-  stackableImageTag: 1.4.1-stackable2.1.0 # String
-  # OR
-  custom: docker.stackable.tech/stackable/superset:1.4.1-stackable2.1.0 # String
-  # OR (later on)
-  stackableVersion: 1.4.1 # String
-  # OR (later on)
-  recommendedVersion: true # needs to be set to true. if set to false operator will error out</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>We want to start with the first two variants <code>stackableImageTag</code> and <code>custom</code>. The <code>magicVersionResolving</code> and <code>recommendedVersion</code> variants <em>might</em> be added later on.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Bad, because it&#8217;s breaking</p>
-</li>
-<li>
-<p>Good, because it gives all flexibility of all previous options</p>
-</li>
-<li>
-<p>Good, because we can non-breaking introduce new "magic" in the future by adding new image enum variants</p>
-</li>
-<li>
-<p>Good, because we can implement it as enum called e.g. <code>ImageSpec</code> in operator-rs which will offer a function like <code>resolve_image</code> that will make it easy for operators to use</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="option6"><a class="anchor" href="#option6"></a>Option 6</h3>
-<div class="paragraph">
-<p>This option is <strong>breaking</strong>. It uses a complex enum, similar to Option 5. Option 5 does not account for the need to specify the product version with a custom image. It is also not possible to just use a custom docker repository and still use the operator recommended version (i.e. just mirroring the stackable repository). This option makes that possible. We first start with implementing <code>stackableVersion</code> and <code>custom</code>. The <code>stackable</code> enum variant will be implemented as soon as we have the magic stackableVersion resolution.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">image: # complex enum
-  stackableVersion: # (1)
-    repo: docker.stackable.tech # String. Defaults to docker.stackable.tech (kind of optional).
-    productVersion: 1.4.1 # mandatory
-    stackableVersion: stackable2.1.0 # mandatory
-  # OR
-  stackable: # (2)
-    repo: docker.stackable.tech # String. Defaults to docker.stackable.tech (kind of optional).
-    productVersion: 1.4.1 # Option&lt;String&gt;. If not specified use recommended product version ("magic").
-  # OR
-  custom: # (3)
-    productVersion: 1.4.1
-    custom: docker.stackable.tech/stackable/superset:1.4.1-stackable2.1
-
-  pullPolicy: IfNotPresent
-  pullSecrets: # Option&lt;Vec&lt;LocalObjectReference&gt;&gt;
-    name: regcred # reference to secret in same namespace</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>Known issues</strong>: We will start to implement our own schema since kube-rs is not supporting flatten yet.</p>
-</div>
-<div class="paragraph">
-<p><strong>Use-case</strong>: I don&#8217;t want to specify anything, just give me defaults!</p>
-</div>
-<div class="paragraph">
-<p>&#8594; Don&#8217;t specify anything.</p>
-</div>
-<div class="paragraph">
-<p><strong>Use-case</strong>: I want a specific version of the product:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">image:
-  productVersion: 1.5.1</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This resolves to the enum variant 2, with just the product version specified</p>
-</div>
-<div class="paragraph">
-<p><strong>Use-case</strong>: I&#8217;ve mirrored the stackable repo locally, but want to use automatic image resolution:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">image:
-  repo: my.repo.company.org/stackable</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This resolves to variant 2.</p>
-</div>
-<div class="paragraph">
-<p><strong>Use-case</strong>: I have built my own custom image with i.e. additional dependencies for the product, which has a different tag than the original stackable image. I&#8217;ve uploaded it to my custom repo:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">image:
-  custom: my.repo.company.org/stackable/superset:my-custom-tag
-  productVersion: 1.4.1</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This resolves to enum variant 3. The product version is mandatory so the operator knows what to do.</p>
 </div>
 </div>
 </div>

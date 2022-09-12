@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ADR024: How to provide stable out-of-cluster access to products :: Stackable Documentation</title>
+    <title>ADR018: Product Image Versioning :: Stackable Documentation</title>
+    <link rel="canonical" href="https://docs.stackable.tech/home/stable/contributor/adr/ADR018-product_image_versioning.html">
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../../_/css/site.css">
     <script>var uiRootPath = '../../../../_'</script>
@@ -34,15 +35,15 @@
     </nav>
     <nav id="navbar-sub" class="navbar-sub">
       <div class="container">
-        <a class="navbar-sub-item" href="../../index.html">Home</a>
-<a class="navbar-sub-item" href="../../getting_started.html">Getting Started</a>
-<a class="navbar-sub-item" href="../../concepts/index.html">Concepts</a>
-<a class="navbar-sub-item" href="../../tutorials/end-to-end_data_pipeline_example.html">Tutorials</a>
+        <a class="navbar-sub-item" href="../../../stable/index.html">Home</a>
+<a class="navbar-sub-item" href="../../../stable/getting_started.html">Getting Started</a>
+<a class="navbar-sub-item" href="../../../stable/concepts/index.html">Concepts</a>
+<a class="navbar-sub-item" href="../../../stable/tutorials/end-to-end_data_pipeline_example.html">Tutorials</a>
 <a class="navbar-sub-item" href="../../../../stackablectl/stable/index.html">stackablectl</a>
 <div class="navbar-sub-item drop-down">
     Operators
     <div class="drop-down-content">
-    <a class="drop-down-item" href="../../operators/index.html">Overview</a>
+    <a class="drop-down-item" href="../../../stable/operators/index.html">Overview</a>
     <a class="drop-down-item" href="../../../../airflow/stable/index.html">Apache Airflow</a>
     <a class="drop-down-item" href="../../../../druid/stable/index.html">Apache Druid</a>
     <a class="drop-down-item" href="../../../../hbase/stable/index.html">Apache HBase</a>
@@ -59,7 +60,7 @@
     <a class="drop-down-item" href="../../../../secret-operator/stable/index.html">Secret</a>
     </div>
 </div>
-<a class="navbar-sub-item" href="../index.html">Contribute</a>
+<a class="navbar-sub-item" href="../../../stable/contributor/index.html">Contribute</a>
 
         <a class="arrow" href="javascript:document.querySelector('.navbar-sub').classList.toggle('open')">
           <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>
@@ -76,6 +77,13 @@
   <nav class="nav-menu">
     <div class="title-wrapper">
       <h3 class="title"><a href="../../index.html">Stackable Documentation</a></h3>
+      <div class="page-versions">
+        <button class="version-menu-toggle" title="Show other versions of page">nightly</button>
+        <div class="version-menu">
+          <a class="version is-current" href="ADR018-product_image_versioning.html">nightly</a>
+          <a class="version" href="../../../stable/contributor/adr/ADR018-product_image_versioning.html">22.06</a>
+        </div>
+      </div>
     </div>
     <ul class="nav-list">
   <li class="nav-item" data-depth="0">
@@ -280,7 +288,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR017-tls_authentication.html">ADR017: TLS authentication</a>
   </li>
-  <li class="nav-item" data-depth="4">
+  <li class="nav-item is-current-page" data-depth="4">
     <a class="nav-link" href="ADR018-product_image_versioning.html">ADR018: Product Image Versioning</a>
   </li>
   <li class="nav-item" data-depth="4">
@@ -298,7 +306,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR023-product-image-selection.html">ADR023: Product image selection</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="4">
+  <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR024-out-of-cluster_access.html">ADR024: How to provide stable out-of-cluster access to products</a>
   </li>
 </ul>
@@ -358,10 +366,13 @@
       </ul>
     </li>
     <li class="component is-current">
-      <a class="title" href="../../index.html">Stackable Documentation</a>
+      <a class="title" href="../../../stable/index.html">Stackable Documentation</a>
       <ul class="versions">
-        <li class="version is-current is-latest">
+        <li class="version is-current">
           <a href="../../index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../stable/index.html">22.06</a>
         </li>
       </ul>
     </li>
@@ -581,86 +592,147 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="../../index.html" class="home-link"></a>
+  <a href="../../../stable/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../../index.html">Stackable Documentation</a></li>
     <li><a href="../index.html">Contributor&#8217;s Guide</a></li>
     <li><a href="index.html">Architectural Decision Records</a></li>
     <li>Current</li>
-    <li><a href="ADR024-out-of-cluster_access.html">ADR024: How to provide stable out-of-cluster access to products</a></li>
+    <li><a href="ADR018-product_image_versioning.html">ADR018: Product Image Versioning</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR024-out-of-cluster_access.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR018-product_image_versioning.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">ADR024: How to provide stable out-of-cluster access to products</h1>
+<h1 class="page">ADR018: Product Image Versioning</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Status: accepted</p>
+<p>Status: approved</p>
 </li>
 <li>
 <p>Deciders:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Teo Klestrup Röijezon</p>
+<p>Lars Francke</p>
 </li>
 <li>
-<p>Felix Hennig</p>
+<p>Malte Sander</p>
 </li>
 <li>
-<p>Vladislav Supalov</p>
+<p>Nikolaus Winter</p>
+</li>
+<li>
+<p>Razvan Mihai</p>
+</li>
+<li>
+<p>Siegfried Weber</p>
+</li>
+<li>
+<p>Sönke Liebau</p>
+</li>
+<li>
+<p>Teo Klestrup-Röjiezon</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Date: 2022-09-06</p>
+<p>Date: 04.05.2022</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>Technical Story: <a href="https://github.com/stackabletech/listener-operator/pull/1" class="bare">https://github.com/stackabletech/listener-operator/pull/1</a></p>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_glossary"><a class="anchor" href="#_glossary"></a>Glossary</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Term</th>
+<th class="tableblock halign-left valign-top">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Product Version</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The version of the product contained in the docker image (like for example Apache Kafka or Trino) - the thing we operate</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Operator Version</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The version of the Stackable Operator</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Stackable Image Version</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The version of the docker image which contains the product</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_context"><a class="anchor" href="#_context"></a>Context</h3>
 <div class="paragraph">
-<p>Eventually, the products we host in Kubernetes will need to be accessed from outside of the cluster, as this is where the client is. Our current solution for this is NodePort services. They are a simple and common solution for on-premise clusters, where nodes are reachable hosts in the local network. To get traffic into a Kubernetes cluster that runs in a public cloud, NodePorts do not work; instead LoadBalancers are the preferred solution.</p>
+<p>Currently, we publish all products as Docker images following the template
+<code>docker.stackable.tech/stackable/$PRODUCT:$PRODUCT_VERSION-stackable$IMAGE_VERSION</code>, as well as
+<code>docker.stackable.tech/stackable/$PRODUCT:$PRODUCT_VERSION-stackable$IMAGE_SEMVER_MAJOR</code>.</p>
 </div>
 <div class="paragraph">
-<p>While a Pods name is stable across restarts and rescheduling, the IP of the NodePort can change if a Pod is rescheduled to a different node. This means that external addresses from simple NodePorts are not stable. LoadBalancers are not tied to nodes, but they are often not available in on-prem clusters.
-At the moment we deploy NodePort Services per RoleGroup; clients cannot connect to an individual Pod in a RoleGroup.
-Some products need to be able to link to <em>specific</em> replicas in a StatefulSet, as they shard data across process instances, across nodes. Therefore the nodes need to also be individually reachable from outside of the cluster.</p>
+<p>In theory, a given Operator version depends on some SemVer range of <code>image_version</code> (for example <code>^1.3.0</code>, which
+expands to <code>&gt;=1.3.0 &lt;2.0.0</code>).</p>
 </div>
 <div class="paragraph">
-<p>Additionally, Pods currently do not know the address under which they are reachable from outside of the cluster, no matter if NodePorts or LoadBalancers are used. While this is not a problem for simple web UIs, it is a problem for products that do their own "routing", like HDFS or Kafka. These products will link to other nodes to point clients to specific data that only exists in specific nodes. These links cannot be constructed if the addresses under which nodes are reachable are not known to the product.</p>
+<p>In practice however, Docker tags are opaque, which prevents us from actually specifying this anywhere. Instead, we can only
+express the range <code>^N.0.0</code> (<code>&gt;=N.0.0 &lt;N+1.0.0</code>), depending on the <code>-stackable$IMAGE_SEMVER_MAJOR</code> tag. This works
+OK for spinning up new clusters, but means that existing clusters may keep running old image versions even after upgrading to new
+(incompatible) Operator versions. The cluster may also end up in a mixed environment if a replica gets deployed to a new node after
+a new image version has been released.</p>
 </div>
 <div class="paragraph">
-<p>Problems:</p>
+<p>One case where this matters is when adding new features (such as preinstalling new libraries) to a product image that the operator then depends on.
+This isn&#8217;t a breaking change for the product image, since it still works for old operator versions, which can simply ignore the new feature.
+There is an argument that It could be considered a breaking change for the operator (though internal dependency upgrades are typically not
+considered breaking), but this would not help selecting the correct product image anyway.</p>
 </div>
-<div class="ulist">
-<ul>
+</div>
+<div class="sect2">
+<h3 id="_decisions"><a class="anchor" href="#_decisions"></a>Decisions</h3>
+<div class="paragraph">
+<p>Based on the above, there are actually two decisions to take around this problem:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
-<p><strong>Unstable addresses</strong> - Clients need stable addresses to connect to, but Kubernetes can move pods around. While the discovery ConfigMap is updated, it&#8217;s not feasible to ask the client to pull the new info from there every time, clients will want to use static config files with static addresses to connect to.</p>
+<p>How are stackable image versions created?</p>
 </li>
 <li>
-<p><strong>Replicas not addressable</strong> - In our current setup, there&#8217;s no way to connect to a specific replica in a StatefulSet or Deployement - which is necessary for cases like the data nodes of HDFS.</p>
+<p>How does the operator decide which image to use?</p>
 </li>
-<li>
-<p><strong>Pods don&#8217;t know their outside address</strong> - The hostname and IP that the pods know about themselves is from <em>inside</em> the cluster. The IP only works inside the overlay network. This means ProductCluster processes cannot link to other nodes of the cluster.</p>
-</li>
-</ul>
+</ol>
+</div>
+<div class="paragraph">
+<p>While these two questions are related to each other they can be decided fairly independently of each other.
+The decision process for <em>2.</em> will be influenced by the decision that is taken on <em>1.</em>, so we will get this done first.</p>
+</div>
+<div class="paragraph">
+<p>This ADR will be limited to the question of how stackable image versions are created, with the question of how the operator derives the correct image to use deferred to a subsequent ADR (see <a href="ADR023-product-image-selection.html" class="xref page">ADR023: Product image selection</a>).</p>
+</div>
 </div>
 </div>
 </div>
@@ -670,16 +742,16 @@ Some products need to be able to link to <em>specific</em> replicas in a Statefu
 <div class="ulist">
 <ul>
 <li>
-<p>At least for HDFS, connections to individual pods will be used to transmit data, this means that performance is relevant.</p>
+<p>Old versions of operators must keep working and deploying images that they are compatible with</p>
 </li>
 <li>
-<p>On-prem customers will often not have any kind of network-level load balancing (at least not one that is configurable by K8s).</p>
+<p>We should try to limit the number of maintained image version "tracks" for each product</p>
 </li>
 <li>
-<p>Cloud customers will often have relatively short-lived K8s nodes.</p>
+<p>It should not be necessary to update the used operator version in order to be able to deploy a new product version</p>
 </li>
 <li>
-<p>The solution should be minimally invasive - no large setups required outside of the cluster.</p>
+<p>The chosen option should make life as easy as possible for the end-user, it doesn&#8217;t need to be the simplest one to implement</p>
 </li>
 </ul>
 </div>
@@ -689,181 +761,236 @@ Some products need to be able to link to <em>specific</em> replicas in a Statefu
 <h2 id="_considered_options"><a class="anchor" href="#_considered_options"></a>Considered Options</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Off-the-shelf solutions were briefly spiked, but discarded due to requiring complex setup and/or heavy out-of-cluster dependencies which were deemed unacceptable to require from customers. Brief notes on this can be found in <a href="#_spiked_alternatives">Spiked Alternatives</a> below.</p>
+<p>There are two main options that were considered, both of which can be implemented in two variants:</p>
+</div>
+<div class="sect2">
+<h3 id="_option_variants"><a class="anchor" href="#_option_variants"></a>Option Variants</h3>
+<div class="sect3">
+<h4 id="_variant_1_git_tags_contain_only_the_stackable_image_version"><a class="anchor" href="#_variant_1_git_tags_contain_only_the_stackable_image_version"></a>Variant 1 - Git tags contain only the Stackable image version</h4>
+<div class="paragraph">
+<p>For these variants it is assumed that tags which mark a release in the docker images repository (regardless of whether this is a shared repo or a dedicated repo) will contain only the stackable image version.</p>
 </div>
 <div class="paragraph">
-<p>The other alternative is a custom solution to be implemented by us. It is outlined below.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_implemented_solution"><a class="anchor" href="#_implemented_solution"></a>Implemented Solution</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>A new resource is proposed: Listener. It is handled similarly to storage. There is are ListenerClasses for different types of Listeners - analogous to StorageClass. There are Listener objects - similar to PersistentVolumes. And claims to listeners are made in ProductCluster objects.</p>
+<p>This means that the definitions of packaged product versions are included in this tag.</p>
 </div>
 <div class="paragraph">
-<p>This is an example of a NodePort ListenerClass useful for an on-prem cluster:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: listener.stackable.tech/v1alpha1
-kind: ListenerClass
-metadata:
-  name: public
-spec:
-  serviceType: NodePort</code></pre>
-</div>
+<p>For example, if a stackable image version 0.1.0 is released at a time when the latest product version is 3.1.0 then there will never be an image version 0.1.0 for product version 3.1.1.
+The tag <em>0.1.0</em> will point at a specific commit in the repository and this commit will also include all Dockerfiles used to build the product images, so up to product version 3.1.0.
+If a Dockerfile for product version 3.1.1 is later created it would not be included in this tag, and could only be released by creating a tag <em>0.1.1</em>.</p>
 </div>
 <div class="paragraph">
-<p>This is what an internal Listener in a GKE cluster could look like:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: listener.stackable.tech/v1alpha1
-kind: ListenerClass
-metadata:
-  name: internal
-spec:
-  serviceType: LoadBalancer
-  serviceAnnotations:
-    networking.gke.io/load-balancer-type: Internal</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>ListenerClasses allow for various different ways of getting outside traffic into the cluster. A dedicated operator seperates the deployment of this out - the product operators need to only request the listeners.</p>
-</div>
-<div class="paragraph">
-<p>Requests for Listeners are made through annotated volume claim templates:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: v1
-kind: Pod
-metadata:
-  name: example-public-pod
-spec:
-  volumes:
-    - name: listener
-      ephemeral: <i class="conum" data-value="1"></i><b>(1)</b>
-        volumeClaimTemplate:
-          metadata:
-            annotations:
-              listener.stackable.tech/listener-class: public <i class="conum" data-value="2"></i><b>(2)</b>
-          spec:
-            storageClassName: listener.stackable.tech
-            accessModes:
-              - ReadWriteMany
-            resources:
-              requests:
-                storage: "1"
-  containers:
-    - name: nginx
-      image: nginx
-      volumeMounts:
-        - name: listener
-          mountPath: /listener <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Under the hood a listener-operator runs as a CSI driver with a new <code>listener.stackable.tech</code> type. It provides a volume with files that provide information to the pod about the listener 3. When requesting the volume, whether the volume is <code>ephemeral</code> or <code>persistent</code> 1 defines whether the listener should be sticky or not. Through annotations 2 it is defined whether the listener is public or not.</p>
-</div>
-<div class="paragraph">
-<p>Inside a ProductCluster CRD there will be a new setting inside RoleGroups:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">...
-  spec:
-    myRole:
-      default:
-        listenerClassName: public</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The product operator will use this as well as its own knowledge whether the role of this product requires sticky addresses to configure the PVC accordingly as seen above.</p>
-</div>
-<div class="paragraph">
-<p>Communication flow example using the HDFS Operator, assuming we&#8217;re operating in an on-prem cluster:</p>
+<p>The tags for this variant would look like this:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>A HDFS cluster resource is created by the user, with a <code>public</code> listenerClassName for all roles.</p>
+<p>0.1.0</p>
 </li>
 <li>
-<p>The HDFS Operator requests a PVC of the listener.stackable.tech type and an annotation to create a <code>public</code> listener. For Namenodes it requests sticky addresses, and for data nodes ephemeral addresses.</p>
+<p>0.1.1</p>
 </li>
 <li>
-<p>The listener-operator provisions a NodePort Service for every volume request. This means a NodePort service per Pod. It reads the NodePort IP and port.</p>
-</li>
-<li>
-<p>The listener-operator provisions the volumes with files inside containing information about the pods outside address and port - The IP and port of the NodePort Service. Because of the PVC it knows which pod the volume will be mounted into, and can find out the NodePort that belongs to the pod.</p>
-</li>
-<li>
-<p>the HDFS operator already provisioned the pod with a script that read the files from the mounted volume into environment variables which are then read by HDFS. This part is product specific.</p>
+<p>0.2.0</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>How are the problems in the <a href="#_context_and_problem_statement">Problem Statement</a> addressed?</p>
 </div>
-<div class="ulist">
+<div class="sect3">
+<h4 id="_variant_2_git_tags_contain_product_version_and_stackable_image_version"><a class="anchor" href="#_variant_2_git_tags_contain_product_version_and_stackable_image_version"></a>Variant 2 - Git tags contain product version and stackable image version</h4>
+<div class="paragraph">
+<p>For these variants the release tag will also contain the product version in addition to the image version, so for the combination mentioned above (stackable image version 0.1.0 and product version 3.1.0) the following tag would be created: <em>3.1.0-stackable0.1.0</em></p>
+</div>
+<div class="paragraph">
+<p>This would allow us to release later versions of the product without having to change to stackable image version - i.e. without needlessly releasing practically unchanged images.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_options"><a class="anchor" href="#_options"></a>Options</h3>
+<div class="paragraph">
+<p>The main options that are to be considered in this ADR are:</p>
+</div>
+<div class="sect3">
+<h4 id="_synchronize_image_versions_in_lockstep_with_operator_versions"><a class="anchor" href="#_synchronize_image_versions_in_lockstep_with_operator_versions"></a>Synchronize image versions in lockstep with operator versions</h4>
+<div class="paragraph">
+<p>Each operator version hard-codes exactly one image version that it supports, and we release new product images for each operator images.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_use_semver_for_docker_images_independently_of_operator_version"><a class="anchor" href="#_use_semver_for_docker_images_independently_of_operator_version"></a>Use SemVer for docker images, independently of operator version</h4>
+<div class="paragraph">
+<p>The operator version will be kept separate from the stackable image version, for the image version we use semver.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_final_list_of_options_to_be_considered"><a class="anchor" href="#_final_list_of_options_to_be_considered"></a>Final List of Options to be Considered</h4>
+<div class="paragraph">
+<p>With these two dimensions described, we end up with the following list of options to be considered for this ADR:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Synchronize image versions in lockstep with operator versions - Variant 1</p>
+</li>
+<li>
+<p>Synchronize image versions in lockstep with operator versions - Variant 2</p>
+</li>
+<li>
+<p>Use SemVer for docker images, independently of operator version - Variant 1</p>
+</li>
+<li>
+<p>Use SemVer for docker images, independently of operator version - Variant 2</p>
+</li>
+</ol>
+</div>
+<div class="sect4">
+<h5 id="_scenarios"><a class="anchor" href="#_scenarios"></a>Scenarios</h5>
+<div class="paragraph">
+<p>The following table shows the image versions resulting for all four options based on the following scenario:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Product Versions Available</th>
+<th class="tableblock halign-left valign-top">Operator Versions Available</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
 <ul>
 <li>
-<p><strong>Unstable Addresses</strong> - Using a CSI driver and mounting in storage lets us manage stickiness. Any new pods after a pod is deleted will be created on the same node as the old pod - and thus also reuse the NodePort and the address it has, should the volume be configured to be sticky to the node.</p>
+<p>2.8.0</p>
 </li>
 <li>
-<p><strong>Replicas not addressable</strong> - Since every replica in a StatefulSet will have its own Listener, they are also individually addressable.</p>
-</li>
-<li>
-<p><strong>Pods don&#8217;t know their outside address</strong> - The outside address of a pod gets passed into the pod through the mounted volume. The pod then knows its outside address.</p>
+<p>2.9.0</p>
 </li>
 </ul>
-</div>
-<div class="sect2">
-<h3 id="_how_are_external_ips_retrieved_by_the_listener_operator"><a class="anchor" href="#_how_are_external_ips_retrieved_by_the_listener_operator"></a>How are external IPs retrieved by the listener operator?</h3>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>0.1.0</p>
+</li>
+<li>
+<p>0.1.1</p>
+</li>
+<li>
+<p>0.2.0</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
-<p>For LoadBalancers, the IPs are written back into the Service object (by the third-party load balancer controller), which are then taken from there.</p>
-</div>
-<div class="paragraph">
-<p>For NodePorts, for each Pod the IP of the Node the Pod is running on is taken.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_how_does_a_client_connect"><a class="anchor" href="#_how_does_a_client_connect"></a>How does a client connect?</h3>
-<div class="paragraph">
-<p>This depends on the location of the cluster and which type of listener was deployed. In the example above NodePorts were used. In that case an initial connection to HDFS is made through a NodePort, the address and port are found in the HDFS <a href="../../concepts/service_discovery.html" class="xref page">Service discovery ConfigMap</a>. Through the mechanism described above, any addresses of other nodes that HDFS gives to the client will be NodePort addresses, so subsequent connections will go through the NodePorts too.</p>
-</div>
-<div class="paragraph">
-<p>In a GCP Kubernetes cluster, one might instead use a listener of type LoadBalancer. This will then deploy a LoadBalancer with a Google Backend, and traffic can enter the cluster through there. Again, the initial connection information needs to be taken from the discovery ConfigMap.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_what_about_node_failure"><a class="anchor" href="#_what_about_node_failure"></a>What about node failure?</h3>
-<div class="paragraph">
-<p>It depends on the type of listener that is used. If a LoadBalancer is used, the pods that were on the now failed node will just be started again on a different node, and Kubernetes will wire everything up again.</p>
+<p>Please note, that this refers to the operator versions that were needed based on semver rules.
+Some of the options in the table below may contain operator versions not listed here, because it was necessary to release the operator itself in a new version in order to make a new product version available.</p>
 </div>
 <div class="paragraph">
-<p>If NodePorts are used, it depends on whether the Listeners are sticky or not (implemented with ephemeral or persistent mounted volumes). If the Listener is not sticky, the Pod can be moved to a different Node. If the Listener is sticky, the Pod will not be able to start until the Node recovers.</p>
+<p>For this scenario, no change to the image itself was assumed to be needed.</p>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Option</th>
+<th class="tableblock halign-left valign-top">Image Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1</strong> - Synchronize image versions in lockstep with operator versions - Variant 1</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>2.8.0-stackable0.1.0</p>
+</li>
+<li>
+<p>2.8.0-stackable0.2.0</p>
+</li>
+<li>
+<p>2.8.0-stackable0.1.1</p>
+</li>
+<li>
+<p>2.8.0-stackable0.1.2</p>
+</li>
+<li>
+<p>2.9.0-stackable0.1.2</p>
+</li>
+<li>
+<p>2.8.0-stackable0.2.1</p>
+</li>
+<li>
+<p>2.9.0-stackable0.2.1</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>2</strong> - Synchronize image versions in lockstep with operator versions - Variant 2</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>2.8.0-stackable0.1.0</p>
+</li>
+<li>
+<p>2.8.0-stackable0.2.0</p>
+</li>
+<li>
+<p>2.8.0-stackable0.1.1</p>
+</li>
+<li>
+<p>2.9.0-stackable0.1.0</p>
+</li>
+<li>
+<p>2.9.0-stackable0.2.0</p>
+</li>
+<li>
+<p>2.9.0-stackable0.1.1</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>3</strong> - Use SemVer for docker images, independently of operator version - Variant 1</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>2.8.0-stackable0.1.0</p>
+</li>
+<li>
+<p>2.8.0-stackable0.1.1</p>
+</li>
+<li>
+<p>2.9.0-stackable0.1.1</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>4</strong> - Use SemVer for docker images, independently of operator version - Variant 2</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>2.8.0-stackable0.1.0</p>
+</li>
+<li>
+<p>2.9.0-stackable0.1.0</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 </div>
-<div class="sect2">
-<h3 id="_will_it_still_be_possible_to_use_a_loadbalancer_per_role_if_individual_replica_access_is_not_required"><a class="anchor" href="#_will_it_still_be_possible_to_use_a_loadbalancer_per_role_if_individual_replica_access_is_not_required"></a>Will it still be possible to use a LoadBalancer per role, if individual replica access is not required?</h3>
-<div class="paragraph">
-<p>Yes. There is a 1:1 mapping of listener PVCs to deployed listeners. It is possible to pre-provision a listener PVCs for a role and then mount it into each role replica.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_how_the_name_came_to_be"><a class="anchor" href="#_how_the_name_came_to_be"></a>How the name came to be</h3>
-<div class="paragraph">
-<p>The new operator handles resources related to bringing outside traffic into the cluster. Some words that come to mind were Ingress and Gateway, but they are already used by Kubernetes native objects. Initially LoadBalancer-operator was considered, but since it doesn&#8217;t exclusively deploy LoadBalancer objects (also NodePorts), the name is not good.</p>
-</div>
-<div class="paragraph">
-<p>Listener describes well its functionality: It is listening for outside traffic. Also, the name is not taken in Kubernetes yet.</p>
 </div>
 </div>
 </div>
@@ -872,61 +999,199 @@ spec:
 <h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There is only one design, which is already in its implementation.</p>
+<p>We chose option 4 (Use SemVer for docker images, independently of operator version - Variant 2), so the resulting tags will look like shown in the table below.
+The difference is due to the fact that docker images already contain the product name and we do not need to repeat this in the tag, whereas the docker images repository contains multiple products.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Git Tag</th>
+<th class="tableblock halign-left valign-top">Docker Registry Tag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">kafka2.8.0_stackable0.1.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.8.0_stackable0.1.0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">kafka2.9.0_stackable0.1.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.9.0_stackable0.1.0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">kafka2.9.0_stackable0.1.1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.9.0_stackable0.1.1</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>A subsequent ADR will contain follow up decisions on how much of the selection process for the correct image we want to automate in the operators.
+Initially no automation will be implemented, users need to select a working product version and image version combination and refer to the fully qualified version from the CRD (i.e. docker registry tag from the table above).</p>
 </div>
 <div class="paragraph">
-<p>Pros:</p>
+<p>There must be a compatibility matrix for the operator and product versions.
+This matrix should probably contain at least the following states: "compatible" (which means tested and supported by Stackable), "unsupported" (which means there is no known technical restriction which prevents you from using it but it is either not tested or contains vulnerabilities), and "incompatible" (which means there were breaking changes and this combination will not work).
+This compatibility matrix should not be hard-coded into the operators because then a new release of an operator is required every time a new product version should be supported by this operator.
+Instead it should be read from a config map.</p>
+</div>
+<div class="paragraph">
+<p>The main reasons for picking this option were:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>There is little routing overhead (compared to proxying or similar).</p>
+<p>it allows us to decouple operator version and image version to a high degree</p>
 </li>
 <li>
-<p>The listener-operator can be extended to support more types of ListenerClasses.</p>
+<p>there is no need to build <em>unneeded</em> images just to accommodate changes in other components (operator change vs image change)</p>
 </li>
 <li>
-<p>It is a very low-friction solution that doesn&#8217;t require a lot of permissions to set up.</p>
+<p>it keeps the option to provide automation around selecting the correct image version later on without the need for breaking changes</p>
 </li>
 </ul>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Image versions are only comparable when combined with the product version.
+Image version <em>0.1.0</em> in kafka2.8.0_stackable0.1.0 and kafka2.9.0_stackable0.1.0 are two completely different versions <em>0.1.0</em>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>Cons:</p>
+<p>This decision triggers a few needed changes to our CI processes:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>The processes of some products like HDFS and Kafka assume that they are only reachable under one specific address. They cannot, for example, use one network for internal communication and a different network for external communication. This means that if outside access with the listener operator is configured, all traffic will be routed that way, also internal traffic that would not need to be routed out of the cluster.</p>
+<p>Trigger will be changed to react to tags being pushed instead of manually like at the moment</p>
 </li>
 <li>
-<p>This operator is deployed as a <code>DaemonSet</code> , which means it adds a small amount of overhead on all nodes inside the cluster and to the control plane&#8217;s api server.</p>
-</li>
-<li>
-<p>Such an operator cannot be deployed using OpenShift&#8217;s Operator Lifecycle Manager and consequently cannot be certified on that platform.</p>
+<p>Only the exact version specified in the tag will be built, not <em>all</em> product versions (at the moment building Kafka builds all supported Kafka versions, in the future pushing <em>kafka2.8.0_stackable0.1.0</em> will build only kafka 2.8.0)</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p><strong>Special Case: Multiple Dockerfiles</strong></p>
+</div>
+<div class="paragraph">
+<p>For example Superset changed the Dockerfile between Superset version and we need to reflect these changes in our Dockerfile, which means that we effectively have to have different Dockerfiles for different Superset versions.</p>
+</div>
+<div class="paragraph">
+<p>For these scenarios we will have multiple Dockerfiles and specify the one to use in <em>conf.py</em></p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_spiked_alternatives"><a class="anchor" href="#_spiked_alternatives"></a>Spiked Alternatives</h2>
+<h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Some notes about the briefly tested off-the-shelf solutions.</p>
+<div class="sect2">
+<h3 id="_synchronize_image_versions_in_lockstep_with_operator_versions_variant_1"><a class="anchor" href="#_synchronize_image_versions_in_lockstep_with_operator_versions_variant_1"></a>Synchronize image versions in lockstep with operator versions - Variant 1</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because it centralizes the information about which versions are supported into each operator&#8217;s repository</p>
+</li>
+<li>
+<p>Good, because upgrades are predictable for the user, "upgrading the operator upgrades the cluster" is easy to explain and teach</p>
+</li>
+<li>
+<p>Good, because image tags are stable and immutable once released</p>
+</li>
+<li>
+<p>Bad, because we end up storing a lot of duplicate Docker images</p>
+</li>
+<li>
+<p>We could share the Docker layers to lessen this impact dramatically, but that would require rearchitecting our CI</p>
+</li>
+<li>
+<p>Bad, because it increases the overhead of doing operator or image releases</p>
+</li>
+<li>
+<p>Bad, because old operator versions will keep deploying older image versions than they may technically be compatible with</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_metallb"><a class="anchor" href="#_metallb"></a>MetalLB</h3>
-<div class="paragraph">
-<p><a href="https://metallb.universe.tf/">MetalLB</a> is a bare metal load balancer that was spiked briefly. However it requires BGP/ARP integration, which is not feasible as a requirement for customer installations.</p>
-</div>
-<div class="paragraph">
-<p>With ARP, the LoadBalancers appear as "real" IP addresses in the same subnet as the nodes (with no need to configure custom routing roules). However, this scales poorly (it assumes that all nodes are in the same L2 broadcast domain) and is relatively likely to be blocked by firewalls or network policy.</p>
+<h3 id="_synchronize_image_versions_in_lockstep_with_operator_versions_variant_2"><a class="anchor" href="#_synchronize_image_versions_in_lockstep_with_operator_versions_variant_2"></a>Synchronize image versions in lockstep with operator versions - Variant 2</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because it centralizes the information about which versions are supported into each operator&#8217;s repository</p>
+</li>
+<li>
+<p>Good, because upgrades are predictable for the user, "upgrading the operator upgrades the cluster" is easy to explain and teach</p>
+</li>
+<li>
+<p>Good, because image tags are stable and immutable once released</p>
+</li>
+<li>
+<p>Bad, because we end up storing a lot of duplicate Docker images</p>
+</li>
+<li>
+<p>We could share the Docker layers to lessen this impact dramatically, but that would require rearchitecting our CI</p>
+</li>
+<li>
+<p>Bad, because it increases the overhead of doing operator or image releases</p>
+</li>
+<li>
+<p>Bad, because old operator versions will keep deploying older image versions than they may technically be compatible with</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_calico"><a class="anchor" href="#_calico"></a>Calico</h3>
-<div class="paragraph">
-<p><a href="https://www.tigera.io/project-calico/">Calico</a> requires BGP, another component that we cannot make required for customer setups.</p>
+<h3 id="_use_semver_for_docker_images_independently_of_operator_version_variant_1"><a class="anchor" href="#_use_semver_for_docker_images_independently_of_operator_version_variant_1"></a>Use SemVer for docker images, independently of operator version - Variant 1</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because we preserve SemVer for image versions</p>
+</li>
+<li>
+<p>Good, because existing operators will upgrade as far as they are compatible</p>
+</li>
+<li>
+<p>Bad, because existing operators may switch which (minor-level) image version they deploy without user action (this can be mitigated in the follow up ADR on version selection though)</p>
+</li>
+<li>
+<p>Bad, because we don&#8217;t have a good trigger for when new image versions are released</p>
+</li>
+<li>
+<p>Bad, because on-prem registry mirrors may be outdated and serve incompatible versions</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_use_semver_for_docker_images_independently_of_operator_version_variant_2"><a class="anchor" href="#_use_semver_for_docker_images_independently_of_operator_version_variant_2"></a>Use SemVer for docker images, independently of operator version - Variant 2</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Good, because we preserve SemVer for image versions</p>
+</li>
+<li>
+<p>Good, because existing operators will upgrade as far as they are compatible</p>
+</li>
+<li>
+<p>Bad, because existing operators may switch which (minor-level) image version they deploy without user action (this can be mitigated in the follow up ADR on version selection though)</p>
+</li>
+<li>
+<p>Bad, because we don&#8217;t have a good trigger for when new image versions are released</p>
+</li>
+<li>
+<p>Bad, because on-prem registry mirrors may be outdated and serve incompatible versions</p>
+</li>
+</ul>
 </div>
 </div>
 </div>

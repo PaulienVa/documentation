@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ADR005: Decide on handling and location of systemd unit files :: Stackable Documentation</title>
+    <title>ADR024: How to provide stable out-of-cluster access to products :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../../_/css/site.css">
     <script>var uiRootPath = '../../../../_'</script>
@@ -244,7 +244,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR004-choose_agent_programming_language.html">ADR004: Use Rust as programming language for the agent</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="4">
+  <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR005-systemd_unit_file_location.html">ADR005: Decide on handling and location of systemd unit files</a>
   </li>
   <li class="nav-item" data-depth="4">
@@ -298,7 +298,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="ADR023-product-image-selection.html">ADR023: Product image selection</a>
   </li>
-  <li class="nav-item" data-depth="4">
+  <li class="nav-item is-current-page" data-depth="4">
     <a class="nav-link" href="ADR024-out-of-cluster_access.html">ADR024: How to provide stable out-of-cluster access to products</a>
   </li>
 </ul>
@@ -588,17 +588,17 @@
     <li><a href="../index.html">Contributor&#8217;s Guide</a></li>
     <li><a href="index.html">Architectural Decision Records</a></li>
     <li>Current</li>
-    <li><a href="ADR005-systemd_unit_file_location.html">ADR005: Decide on handling and location of systemd unit files</a></li>
+    <li><a href="ADR024-out-of-cluster_access.html">ADR024: How to provide stable out-of-cluster access to products</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR005-systemd_unit_file_location.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/contributor/pages/adr/ADR024-out-of-cluster_access.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">ADR005: Decide on handling and location of systemd unit files</h1>
+<h1 class="page">ADR024: How to provide stable out-of-cluster access to products</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="ulist">
@@ -611,21 +611,24 @@
 <div class="ulist">
 <ul>
 <li>
-<p>Lars Francke</p>
+<p>Teo Klestrup Röijezon</p>
 </li>
 <li>
-<p>Sönke Liebau</p>
+<p>Felix Hennig</p>
 </li>
 <li>
-<p>Oliver Hessel</p>
+<p>Vladislav Supalov</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Date: 07.01.2021</p>
+<p>Date: 2022-09-06</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>Technical Story: <a href="https://github.com/stackabletech/listener-operator/pull/1" class="bare">https://github.com/stackabletech/listener-operator/pull/1</a></p>
 </div>
 </div>
 </div>
@@ -633,9 +636,31 @@
 <h2 id="_context_and_problem_statement"><a class="anchor" href="#_context_and_problem_statement"></a>Context and Problem Statement</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The agent will need to create systemd unit files for every service that it wants to be run.
-Systemd has a couple of directories where these files can be placed and offers ways of adding non-standard directories to that list.
-We need to decide where to put these files.</p>
+<p>Eventually, the products we host in Kubernetes will need to be accessed from outside of the cluster, as this is where the client is. Our current solution for this is NodePort services. They are a simple and common solution for on-premise clusters, where nodes are reachable hosts in the local network. To get traffic into a Kubernetes cluster that runs in a public cloud, NodePorts do not work; instead LoadBalancers are the preferred solution.</p>
+</div>
+<div class="paragraph">
+<p>While a Pods name is stable across restarts and rescheduling, the IP of the NodePort can change if a Pod is rescheduled to a different node. This means that external addresses from simple NodePorts are not stable. LoadBalancers are not tied to nodes, but they are often not available in on-prem clusters.
+At the moment we deploy NodePort Services per RoleGroup; clients cannot connect to an individual Pod in a RoleGroup.
+Some products need to be able to link to <em>specific</em> replicas in a StatefulSet, as they shard data across process instances, across nodes. Therefore the nodes need to also be individually reachable from outside of the cluster.</p>
+</div>
+<div class="paragraph">
+<p>Additionally, Pods currently do not know the address under which they are reachable from outside of the cluster, no matter if NodePorts or LoadBalancers are used. While this is not a problem for simple web UIs, it is a problem for products that do their own "routing", like HDFS or Kafka. These products will link to other nodes to point clients to specific data that only exists in specific nodes. These links cannot be constructed if the addresses under which nodes are reachable are not known to the product.</p>
+</div>
+<div class="paragraph">
+<p>Problems:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Unstable addresses</strong> - Clients need stable addresses to connect to, but Kubernetes can move pods around. While the discovery ConfigMap is updated, it&#8217;s not feasible to ask the client to pull the new info from there every time, clients will want to use static config files with static addresses to connect to.</p>
+</li>
+<li>
+<p><strong>Replicas not addressable</strong> - In our current setup, there&#8217;s no way to connect to a specific replica in a StatefulSet or Deployement - which is necessary for cases like the data nodes of HDFS.</p>
+</li>
+<li>
+<p><strong>Pods don&#8217;t know their outside address</strong> - The hostname and IP that the pods know about themselves is from <em>inside</em> the cluster. The IP only works inside the overlay network. This means ProductCluster processes cannot link to other nodes of the cluster.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -645,16 +670,16 @@ We need to decide where to put these files.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Familiarity of admins with solution</p>
+<p>At least for HDFS, connections to individual pods will be used to transmit data, this means that performance is relevant.</p>
 </li>
 <li>
-<p>Added complexity</p>
+<p>On-prem customers will often not have any kind of network-level load balancing (at least not one that is configurable by K8s).</p>
 </li>
 <li>
-<p>Implementation effort</p>
+<p>Cloud customers will often have relatively short-lived K8s nodes.</p>
 </li>
 <li>
-<p>Making cleanup of a server as easy as possible if Stackable stack is removed</p>
+<p>The solution should be minimally invasive - no large setups required outside of the cluster.</p>
 </li>
 </ul>
 </div>
@@ -663,18 +688,183 @@ We need to decide where to put these files.</p>
 <div class="sect1">
 <h2 id="_considered_options"><a class="anchor" href="#_considered_options"></a>Considered Options</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Off-the-shelf solutions were briefly spiked, but discarded due to requiring complex setup and/or heavy out-of-cluster dependencies which were deemed unacceptable to require from customers. Brief notes on this can be found in <a href="#_spiked_alternatives">Spiked Alternatives</a> below.</p>
+</div>
+<div class="paragraph">
+<p>The other alternative is a custom solution to be implemented by us. It is outlined below.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implemented_solution"><a class="anchor" href="#_implemented_solution"></a>Implemented Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A new resource is proposed: Listener. It is handled similarly to storage. There is are ListenerClasses for different types of Listeners - analogous to StorageClass. There are Listener objects - similar to PersistentVolumes. And claims to listeners are made in ProductCluster objects.</p>
+</div>
+<div class="paragraph">
+<p>This is an example of a NodePort ListenerClass useful for an on-prem cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: listener.stackable.tech/v1alpha1
+kind: ListenerClass
+metadata:
+  name: public
+spec:
+  serviceType: NodePort</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is what an internal Listener in a GKE cluster could look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: listener.stackable.tech/v1alpha1
+kind: ListenerClass
+metadata:
+  name: internal
+spec:
+  serviceType: LoadBalancer
+  serviceAnnotations:
+    networking.gke.io/load-balancer-type: Internal</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ListenerClasses allow for various different ways of getting outside traffic into the cluster. A dedicated operator seperates the deployment of this out - the product operators need to only request the listeners.</p>
+</div>
+<div class="paragraph">
+<p>Requests for Listeners are made through annotated volume claim templates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example-public-pod
+spec:
+  volumes:
+    - name: listener
+      ephemeral: <i class="conum" data-value="1"></i><b>(1)</b>
+        volumeClaimTemplate:
+          metadata:
+            annotations:
+              listener.stackable.tech/listener-class: public <i class="conum" data-value="2"></i><b>(2)</b>
+          spec:
+            storageClassName: listener.stackable.tech
+            accessModes:
+              - ReadWriteMany
+            resources:
+              requests:
+                storage: "1"
+  containers:
+    - name: nginx
+      image: nginx
+      volumeMounts:
+        - name: listener
+          mountPath: /listener <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Under the hood a listener-operator runs as a CSI driver with a new <code>listener.stackable.tech</code> type. It provides a volume with files that provide information to the pod about the listener 3. When requesting the volume, whether the volume is <code>ephemeral</code> or <code>persistent</code> 1 defines whether the listener should be sticky or not. Through annotations 2 it is defined whether the listener is public or not.</p>
+</div>
+<div class="paragraph">
+<p>Inside a ProductCluster CRD there will be a new setting inside RoleGroups:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">...
+  spec:
+    myRole:
+      default:
+        listenerClassName: public</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The product operator will use this as well as its own knowledge whether the role of this product requires sticky addresses to configure the PVC accordingly as seen above.</p>
+</div>
+<div class="paragraph">
+<p>Communication flow example using the HDFS Operator, assuming we&#8217;re operating in an on-prem cluster:</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p>Use $SYSTEMD_UNIT_PATH to globally add a new directory</p>
+<p>A HDFS cluster resource is created by the user, with a <code>public</code> listenerClassName for all roles.</p>
 </li>
 <li>
-<p>Symlink unit files to default location</p>
+<p>The HDFS Operator requests a PVC of the listener.stackable.tech type and an annotation to create a <code>public</code> listener. For Namenodes it requests sticky addresses, and for data nodes ephemeral addresses.</p>
 </li>
 <li>
-<p>Create unit files in default location</p>
+<p>The listener-operator provisions a NodePort Service for every volume request. This means a NodePort service per Pod. It reads the NodePort IP and port.</p>
+</li>
+<li>
+<p>The listener-operator provisions the volumes with files inside containing information about the pods outside address and port - The IP and port of the NodePort Service. Because of the PVC it knows which pod the volume will be mounted into, and can find out the NodePort that belongs to the pod.</p>
+</li>
+<li>
+<p>the HDFS operator already provisioned the pod with a script that read the files from the mounted volume into environment variables which are then read by HDFS. This part is product specific.</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>How are the problems in the <a href="#_context_and_problem_statement">Problem Statement</a> addressed?</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Unstable Addresses</strong> - Using a CSI driver and mounting in storage lets us manage stickiness. Any new pods after a pod is deleted will be created on the same node as the old pod - and thus also reuse the NodePort and the address it has, should the volume be configured to be sticky to the node.</p>
+</li>
+<li>
+<p><strong>Replicas not addressable</strong> - Since every replica in a StatefulSet will have its own Listener, they are also individually addressable.</p>
+</li>
+<li>
+<p><strong>Pods don&#8217;t know their outside address</strong> - The outside address of a pod gets passed into the pod through the mounted volume. The pod then knows its outside address.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_how_are_external_ips_retrieved_by_the_listener_operator"><a class="anchor" href="#_how_are_external_ips_retrieved_by_the_listener_operator"></a>How are external IPs retrieved by the listener operator?</h3>
+<div class="paragraph">
+<p>For LoadBalancers, the IPs are written back into the Service object (by the third-party load balancer controller), which are then taken from there.</p>
+</div>
+<div class="paragraph">
+<p>For NodePorts, for each Pod the IP of the Node the Pod is running on is taken.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_how_does_a_client_connect"><a class="anchor" href="#_how_does_a_client_connect"></a>How does a client connect?</h3>
+<div class="paragraph">
+<p>This depends on the location of the cluster and which type of listener was deployed. In the example above NodePorts were used. In that case an initial connection to HDFS is made through a NodePort, the address and port are found in the HDFS <a href="../../concepts/service_discovery.html" class="xref page">Service discovery ConfigMap</a>. Through the mechanism described above, any addresses of other nodes that HDFS gives to the client will be NodePort addresses, so subsequent connections will go through the NodePorts too.</p>
+</div>
+<div class="paragraph">
+<p>In a GCP Kubernetes cluster, one might instead use a listener of type LoadBalancer. This will then deploy a LoadBalancer with a Google Backend, and traffic can enter the cluster through there. Again, the initial connection information needs to be taken from the discovery ConfigMap.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_about_node_failure"><a class="anchor" href="#_what_about_node_failure"></a>What about node failure?</h3>
+<div class="paragraph">
+<p>It depends on the type of listener that is used. If a LoadBalancer is used, the pods that were on the now failed node will just be started again on a different node, and Kubernetes will wire everything up again.</p>
+</div>
+<div class="paragraph">
+<p>If NodePorts are used, it depends on whether the Listeners are sticky or not (implemented with ephemeral or persistent mounted volumes). If the Listener is not sticky, the Pod can be moved to a different Node. If the Listener is sticky, the Pod will not be able to start until the Node recovers.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_will_it_still_be_possible_to_use_a_loadbalancer_per_role_if_individual_replica_access_is_not_required"><a class="anchor" href="#_will_it_still_be_possible_to_use_a_loadbalancer_per_role_if_individual_replica_access_is_not_required"></a>Will it still be possible to use a LoadBalancer per role, if individual replica access is not required?</h3>
+<div class="paragraph">
+<p>Yes. There is a 1:1 mapping of listener PVCs to deployed listeners. It is possible to pre-provision a listener PVCs for a role and then mount it into each role replica.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_how_the_name_came_to_be"><a class="anchor" href="#_how_the_name_came_to_be"></a>How the name came to be</h3>
+<div class="paragraph">
+<p>The new operator handles resources related to bringing outside traffic into the cluster. Some words that come to mind were Ingress and Gateway, but they are already used by Kubernetes native objects. Initially LoadBalancer-operator was considered, but since it doesn&#8217;t exclusively deploy LoadBalancer objects (also NodePorts), the name is not good.</p>
+</div>
+<div class="paragraph">
+<p>Listener describes well its functionality: It is listening for outside traffic. Also, the name is not taken in Kubernetes yet.</p>
+</div>
 </div>
 </div>
 </div>
@@ -682,95 +872,61 @@ We need to decide where to put these files.</p>
 <h2 id="_decision_outcome"><a class="anchor" href="#_decision_outcome"></a>Decision Outcome</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Chosen option: "Create unit files in default location"</p>
+<p>There is only one design, which is already in its implementation.</p>
 </div>
 <div class="paragraph">
-<p>We loose no functionality over any of the other options, but it is far easier to implement and has less added complexity for the sysadmins.</p>
+<p>Pros:</p>
 </div>
-<div class="paragraph">
-<p>We will put unit files in <em>/lib/systemd/system</em> which is the proper directory for unit files provided by installed packages.
-<em>/etc/systemd/system</em> is a directory with higher priority for user created units, not using this directory gives admins the option of creating a temporary override unit file here for testing/debugging/&#8230;&#8203; purposes.</p>
-</div>
-<div class="sect2">
-<h3 id="_positive_consequences"><a class="anchor" href="#_positive_consequences"></a>Positive Consequences</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Admins will find the unit files where they are used to finding them</p>
+<p>There is little routing overhead (compared to proxying or similar).</p>
 </li>
 <li>
-<p>Implementation effort is low</p>
+<p>The listener-operator can be extended to support more types of ListenerClasses.</p>
 </li>
 <li>
-<p>Least invasive and no risk of outdated files still being linked as current</p>
+<p>It is a very low-friction solution that doesn&#8217;t require a lot of permissions to set up.</p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>Cons:</p>
 </div>
-<div class="sect2">
-<h3 id="_negative_consequences"><a class="anchor" href="#_negative_consequences"></a>Negative Consequences</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>No versioning of unit files, as the current one will always be overwritten (this can be mitigated by keeping a copy of all unit files in our config dir)</p>
+<p>The processes of some products like HDFS and Kafka assume that they are only reachable under one specific address. They cannot, for example, use one network for internal communication and a different network for external communication. This means that if outside access with the listener operator is configured, all traffic will be routed that way, also internal traffic that would not need to be routed out of the cluster.</p>
+</li>
+<li>
+<p>This operator is deployed as a <code>DaemonSet</code> , which means it adds a small amount of overhead on all nodes inside the cluster and to the control plane&#8217;s api server.</p>
+</li>
+<li>
+<p>Such an operator cannot be deployed using OpenShift&#8217;s Operator Lifecycle Manager and consequently cannot be certified on that platform.</p>
 </li>
 </ul>
-</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_pros_and_cons_of_the_options"><a class="anchor" href="#_pros_and_cons_of_the_options"></a>Pros and Cons of the Options</h2>
+<h2 id="_spiked_alternatives"><a class="anchor" href="#_spiked_alternatives"></a>Spiked Alternatives</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Some notes about the briefly tested off-the-shelf solutions.</p>
+</div>
 <div class="sect2">
-<h3 id="_use_systemd_unit_path_to_globally_add_a_new_directory"><a class="anchor" href="#_use_systemd_unit_path_to_globally_add_a_new_directory"></a>Use $SYSTEMD_UNIT_PATH to globally add a new directory</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Good, because this would completely isolate our unit files from the rest of the system</p>
-</li>
-<li>
-<p>Bad, because this appears to be functionality used only for testing</p>
-</li>
-<li>
-<p>Bad, because setting this environment variable would need to be done very early during system startup, necessitating potentially dangerous changes to the server</p>
-</li>
-<li>
-<p>Bad, because this would create an unusual place to look for unit files that sysadmins are not aware of</p>
-</li>
-</ul>
+<h3 id="_metallb"><a class="anchor" href="#_metallb"></a>MetalLB</h3>
+<div class="paragraph">
+<p><a href="https://metallb.universe.tf/">MetalLB</a> is a bare metal load balancer that was spiked briefly. However it requires BGP/ARP integration, which is not feasible as a requirement for customer installations.</p>
+</div>
+<div class="paragraph">
+<p>With ARP, the LoadBalancers appear as "real" IP addresses in the same subnet as the nodes (with no need to configure custom routing roules). However, this scales poorly (it assumes that all nodes are in the same L2 broadcast domain) and is relatively likely to be blocked by firewalls or network policy.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_symlink_unit_files_to_default_location"><a class="anchor" href="#_symlink_unit_files_to_default_location"></a>Symlink unit files to default location</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Good, because it would allow us to keep unit files in a central location</p>
-</li>
-<li>
-<p>Bad, because it adds a level of indirection that sysadmins are probably not used to</p>
-</li>
-<li>
-<p>Bad, because it creates the possibility of symlinks pointing at wrong unit files (if we version unit files)</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_create_unit_files_in_default_location"><a class="anchor" href="#_create_unit_files_in_default_location"></a>Create unit files in default location</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Good, because it is known and expected behavior</p>
-</li>
-<li>
-<p>Good, because it is the quickest solution to implement</p>
-</li>
-<li>
-<p>Bad, because it is a little bit more invasive than alternatives</p>
-</li>
-</ul>
+<h3 id="_calico"><a class="anchor" href="#_calico"></a>Calico</h3>
+<div class="paragraph">
+<p><a href="https://www.tigera.io/project-calico/">Calico</a> requires BGP, another component that we cannot make required for customer setups.</p>
 </div>
 </div>
 </div>

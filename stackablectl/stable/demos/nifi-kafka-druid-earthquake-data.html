@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>kafka-druid-earthquake-data :: Stackable Documentation</title>
+    <title>nifi-kafka-druid-earthquake-data :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -115,7 +115,7 @@
     <a class="nav-link" href="trino-taxi-data.html">trino-taxi-data</a>
   </li>
   <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="kafka-druid-earthquake-data.html">kafka-druid-earthquake-data</a>
+    <a class="nav-link" href="nifi-kafka-druid-earthquake-data.html">nifi-kafka-druid-earthquake-data</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="kafka-druid-water-level-data.html">kafka-druid-water-level-data</a>
@@ -385,17 +385,17 @@
   <ul>
     <li><a href="../index.html">stackablectl</a></li>
     <li><a href="index.html">Demos</a></li>
-    <li><a href="kafka-druid-earthquake-data.html">kafka-druid-earthquake-data</a></li>
+    <li><a href="nifi-kafka-druid-earthquake-data.html">nifi-kafka-druid-earthquake-data</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/demos/kafka-druid-earthquake-data.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/demos/nifi-kafka-druid-earthquake-data.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">kafka-druid-earthquake-data</h1>
+<h1 class="page">nifi-kafka-druid-earthquake-data</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="admonitionblock note">
@@ -406,9 +406,9 @@
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This guide assumes you already have the demo <code>kafka-druid-earthquake-data</code> installed.
+<p>This guide assumes you already have the demo <code>nifi-kafka-druid-earthquake-data</code> installed.
 If you don&#8217;t have it installed please follow the <a href="../commands/demo.html#_install_demo" class="xref page">documentation on how to install a demo</a>.
-To put it simply you have to run <code>stackablectl demo install kafka-druid-earthquake-data</code>.</p>
+To put it simply you have to run <code>stackablectl demo install nifi-kafka-druid-earthquake-data</code>.</p>
 </div>
 </td>
 </tr>
@@ -430,7 +430,10 @@ To put it simply you have to run <code>stackablectl demo install kafka-druid-ear
 <p><strong>Superset</strong>: A modern data exploration and visualization platform. This demo utilizes Superset to retrieve data from Druid via SQL queries and build dashboards on top of that data</p>
 </li>
 <li>
-<p><strong>Kafka</strong>:  A distributed event streaming platform for high-performance data pipelines, streaming analytics and data integration. This demos uses it as a event streaming platform to stream the data in near real-time</p>
+<p><strong>Kafka</strong>:  A distributed event streaming platform for high-performance data pipelines, streaming analytics and data integration. This demos uses it as an event streaming platform to stream the data in near real-time</p>
+</li>
+<li>
+<p><strong>NiFi</strong>:  An easy-to-use, powerful system to process and distribute data. This demos uses it to fetch earthquake-data from the internet and ingest it into Kafka</p>
 </li>
 <li>
 <p><strong>Druid</strong>: A real-time database to power modern analytics applications. This demo uses it to ingest the near real-time data from Kafka, store it and enable to access the data via SQL</p>
@@ -442,13 +445,13 @@ To put it simply you have to run <code>stackablectl demo install kafka-druid-ear
 </div>
 </li>
 <li>
-<p>Continuously emit approximately 1000 records/s of <a href="https://earthquake.usgs.gov/">earthquake data</a> into Kafka</p>
+<p>Continuously emit approximately 10.000 records/s of <a href="https://earthquake.usgs.gov/">earthquake data</a> into Kafka</p>
 </li>
 <li>
 <p>Start a Druid ingestion job that ingests the data into the Druid instance</p>
 </li>
 <li>
-<p>Create Superset dashboards for visualization of the data.</p>
+<p>Create Superset dashboards for visualization of the data</p>
 </li>
 </ul>
 </div>
@@ -460,7 +463,7 @@ To put it simply you have to run <code>stackablectl demo install kafka-druid-ear
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/overview.png" alt="overview">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/overview.png" alt="overview">
 </div>
 </div>
 </div>
@@ -469,12 +472,12 @@ To put it simply you have to run <code>stackablectl demo install kafka-druid-ear
 <h2 id="_list_deployed_stackable_services"><a class="anchor" href="#_list_deployed_stackable_services"></a>List deployed Stackable services</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To list the installed installed Stackable services run the following command:</p>
+<p>To list the installed Stackable services run the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl services list --all-namespaces
- PRODUCT    NAME         NAMESPACE  ENDPOINTS                                   EXTRA INFOS
+ PRODUCT    NAME         NAMESPACE  ENDPOINTS                                    EXTRA INFOS
 
  druid      druid        default    broker-http        http://172.18.0.3:32670
                                     coordinator-http   http://172.18.0.3:30392
@@ -484,12 +487,14 @@ To put it simply you have to run <code>stackablectl demo install kafka-druid-ear
 
  kafka      kafka        default    kafka              172.18.0.4:30968
 
- superset   superset     default    external-superset  http://172.18.0.3:32108  Admin user: admin, password: admin
+ nifi       nifi         default    https              https://172.18.0.3:32558  Admin user: admin, password: adminadmin
+
+ superset   superset     default    external-superset  http://172.18.0.3:32108   Admin user: admin, password: admin
 
  zookeeper  zookeeper    default    zk                 172.18.0.2:32309
 
- minio      minio-druid  default    http               http://172.18.0.4:32306  Third party service
-                                    console-http       http://172.18.0.4:31664  Admin user: root, password: rootroot</code></pre>
+ minio      minio-druid  default    http               http://172.18.0.4:32306   Third party service
+                                    console-http       http://172.18.0.4:31664   Admin user: root, password: rootroot</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -520,7 +525,7 @@ The test data will be put in a topic called <code>earthquakes</code>.
 The records get produced (put in) by the test data generator and are consumed (read) by Druid afterwards in the same order they where produced.</p>
 </div>
 <div class="paragraph">
-<p>As Kafka itself has no webinterface you have to use a Kafka client like <a href="https://docs.confluent.io/platform/current/app-development/kafkacat-usage.html">kafkacat</a>.
+<p>As Kafka itself has no webinterface you have to use a Kafka client like <a href="https://github.com/edenhill/kcat">kafkacat</a>.
 In order to connect to Kafka, use the <code>kafka</code> endpoint from the <code>kafka</code> service in your <code>stackablectl services list</code> command output (<code>172.18.0.4:30968</code> in this case).</p>
 </div>
 <div class="paragraph">
@@ -570,6 +575,73 @@ You can also see that it was the record number <code>2670281</code> send to this
 </div>
 </div>
 <div class="sect1">
+<h2 id="_nifi"><a class="anchor" href="#_nifi"></a>NiFi</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>NiFi is used to fetch earthquake-data from the internet and ingest it into Kafka.
+This demo includes a workflow ("process group") that downloads a large CSV file, converts it to individual JSON records and produces the records into Kafka.</p>
+</div>
+<div class="sect2">
+<h3 id="_view_testdata_generation_job"><a class="anchor" href="#_view_testdata_generation_job"></a>View testdata-generation job</h3>
+<div class="paragraph">
+<p>You can have a look at the ingestion job running in NiFi by opening the given <code>nifi</code> endpoint <code>https</code> from your <code>stackablectl services list</code> command output.
+You have to use the endpoint from your command output, in this case it is <a href="https://172.18.0.3:32558" class="bare">https://172.18.0.3:32558</a>. Open it with your favorite browser.
+If you get a warning regarding the self-signed certificate generated by the <a href="../../../secret-operator/stable/index.html" class="xref page">Secret Operator</a> (e.g. <code>Warning: Potential Security Risk Ahead</code>), you have to tell your browser to trust the website and continue.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/nifi_1.png" alt="nifi 1">
+</div>
+</div>
+<div class="paragraph">
+<p>Log in with the username <code>admin</code> and password <code>adminadmin</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/nifi_2.png" alt="nifi 2">
+</div>
+</div>
+<div class="paragraph">
+<p>You can see the started ProcessGroup consisting of two processors.
+The first one - <code>InvokeHTTP</code> fetches the CSV file from the Internet and put&#8217;s it into the queue to the next processor.
+The second processor - <code>PublishKafkaRecord_2_6</code> parses the CSV file, converts it to JSON records and writes them out into Kafka.</p>
+</div>
+<div class="paragraph">
+<p>Double-click on the <code>InvokeHTTP</code> processor to show the processor details.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/nifi_3.png" alt="nifi 3">
+</div>
+</div>
+<div class="paragraph">
+<p>Head over to the Tab <code>PROPERTIES</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/nifi_4.png" alt="nifi 4">
+</div>
+</div>
+<div class="paragraph">
+<p>Here you can see the setting <code>Remote URl</code> which specifies the download URL from where the CSV file is retrieved.</p>
+</div>
+<div class="paragraph">
+<p>Close the processor details popup by clicking <code>OK</code>.
+Afterwards double-click on the processor <code>PublishKafkaRecord_2_6</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/nifi_5.png" alt="nifi 5">
+</div>
+</div>
+<div class="paragraph">
+<p>Within this processor the Kafka connection details - like broker addresses and topic name - are specified.
+It uses the <code>CSVReader</code> to parse the downloaded CSV and the <code>JsonRecordSetWriter</code> to split it into individual JSON records before writing it out.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_druid"><a class="anchor" href="#_druid"></a>Druid</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -580,11 +652,11 @@ The Druid deep storage is based on the S3 store provided by MinIO.</p>
 <div class="sect2">
 <h3 id="_view_ingestion_job"><a class="anchor" href="#_view_ingestion_job"></a>View ingestion job</h3>
 <div class="paragraph">
-<p>You can have a look at the ingestion job running in Druid by opening the given <code>druid</code> endpoint <code>router-http</code> from your <code>stackablectl services list</code> command output. You have to use the endpoint from your command output, in this case it is <a href="http://172.18.0.4:30109" class="bare">http://172.18.0.4:30109</a>. Open it with your favorite browser.</p>
+<p>You can have a look at the ingestion job running in Druid by opening the given <code>druid</code> endpoint <code>router-http</code> from your <code>stackablectl services list</code> command output (<a href="http://172.18.0.4:30109" class="bare">http://172.18.0.4:30109</a> in this case).</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/druid_1.png" alt="druid 1">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/druid_1.png" alt="druid 1">
 </div>
 </div>
 <div class="paragraph">
@@ -592,7 +664,7 @@ The Druid deep storage is based on the S3 store provided by MinIO.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/druid_2.png" alt="druid 2">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/druid_2.png" alt="druid 2">
 </div>
 </div>
 <div class="paragraph">
@@ -601,7 +673,7 @@ On the tab <code>Statistics</code> on the left you can see the number of process
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/druid_3.png" alt="druid 3">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/druid_3.png" alt="druid 3">
 </div>
 </div>
 <div class="paragraph">
@@ -617,7 +689,7 @@ You can see the available data sources by clicking on <code>Datasources</code> a
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/druid_4.png" alt="druid 4">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/druid_4.png" alt="druid 4">
 </div>
 </div>
 <div class="paragraph">
@@ -626,7 +698,7 @@ In this case the <code>earthquakes</code> data source is partitioned by the year
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/druid_5.png" alt="druid 5">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/druid_5.png" alt="druid 5">
 </div>
 </div>
 <div class="paragraph">
@@ -635,7 +707,7 @@ To achieve this you first have to click on <code>Query</code> at the top.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/druid_6.png" alt="druid 6">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/druid_6.png" alt="druid 6">
 </div>
 </div>
 <div class="paragraph">
@@ -648,7 +720,7 @@ To achieve this you first have to click on <code>Query</code> at the top.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/druid_7.png" alt="druid 7">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/druid_7.png" alt="druid 7">
 </div>
 </div>
 <div class="paragraph">
@@ -666,7 +738,7 @@ order by 1 desc</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/druid_8.png" alt="druid 8">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/druid_8.png" alt="druid 8">
 </div>
 </div>
 </div>
@@ -681,7 +753,7 @@ Open the <code>superset</code> endpoint <code>external-superset</code> in your b
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/superset_1.png" alt="superset 1">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/superset_1.png" alt="superset 1">
 </div>
 </div>
 <div class="paragraph">
@@ -689,7 +761,7 @@ Open the <code>superset</code> endpoint <code>external-superset</code> in your b
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/superset_2.png" alt="superset 2">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/superset_2.png" alt="superset 2">
 </div>
 </div>
 <div class="sect2">
@@ -700,7 +772,7 @@ To open it click on the tab <code>Dashboards</code> at the top.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/superset_3.png" alt="superset 3">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/superset_3.png" alt="superset 3">
 </div>
 </div>
 <div class="paragraph">
@@ -709,7 +781,7 @@ It might take some time until the dashboards renders all the included charts.</p
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/superset_4.png" alt="superset 4">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/superset_4.png" alt="superset 4">
 </div>
 </div>
 </div>
@@ -721,7 +793,7 @@ To list the charts click on the tab <code>Charts</code> at the top.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/superset_5.png" alt="superset 5">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/superset_5.png" alt="superset 5">
 </div>
 </div>
 <div class="paragraph">
@@ -730,7 +802,7 @@ On the left side you can modify the chart and click on <code>Run</code> to see t
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/superset_6.png" alt="superset 6">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/superset_6.png" alt="superset 6">
 </div>
 </div>
 </div>
@@ -742,7 +814,7 @@ Afterwards click on the chart <code>Earthquake distribution</code>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/superset_7.png" alt="superset 7">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/superset_7.png" alt="superset 7">
 </div>
 </div>
 <div class="paragraph">
@@ -755,7 +827,7 @@ You can e.g. have a detailed look at the detected earthquakes in Germany.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/superset_8.png" alt="superset 8">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/superset_8.png" alt="superset 8">
 </div>
 </div>
 <div class="paragraph">
@@ -764,7 +836,7 @@ By only enabling magnitudes greater or equal to 8 you can plot only the most sev
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/superset_9.png" alt="superset 9">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/superset_9.png" alt="superset 9">
 </div>
 </div>
 </div>
@@ -776,7 +848,7 @@ On the top click on the tab <code>SQL Lab</code> &#8594; <code>SQL Editor</code>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/superset_10.png" alt="superset 10">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/superset_10.png" alt="superset 10">
 </div>
 </div>
 <div class="paragraph">
@@ -784,7 +856,7 @@ On the top click on the tab <code>SQL Lab</code> &#8594; <code>SQL Editor</code>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/superset_11.png" alt="superset 11">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/superset_11.png" alt="superset 11">
 </div>
 </div>
 <div class="paragraph">
@@ -803,7 +875,7 @@ order by 1 desc</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/superset_12.png" alt="superset 12">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/superset_12.png" alt="superset 12">
 </div>
 </div>
 </div>
@@ -818,7 +890,7 @@ Open the <code>minio</code> endpoint <code>console-http</code> in your browser (
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/minio_1.png" alt="minio 1">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/minio_1.png" alt="minio 1">
 </div>
 </div>
 <div class="paragraph">
@@ -826,7 +898,7 @@ Open the <code>minio</code> endpoint <code>console-http</code> in your browser (
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/minio_2.png" alt="minio 2">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/minio_2.png" alt="minio 2">
 </div>
 </div>
 <div class="paragraph">
@@ -834,7 +906,7 @@ Open the <code>minio</code> endpoint <code>console-http</code> in your browser (
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/minio_3.png" alt="minio 3">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/minio_3.png" alt="minio 3">
 </div>
 </div>
 <div class="paragraph">
@@ -845,7 +917,7 @@ After waiting a few minutes, the data should have been flushed to S3 and show up
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-earthquake-data/minio_4.png" alt="minio 4">
+<img src="../_images/demo-nifi-kafka-druid-earthquake-data/minio_4.png" alt="minio 4">
 </div>
 </div>
 <div class="paragraph">
@@ -857,7 +929,7 @@ After waiting a few minutes, the data should have been flushed to S3 and show up
 <h2 id="_summary"><a class="anchor" href="#_summary"></a>Summary</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The demo streamed 1000 earthquake records/s for a total of ~3 million earthquakes into a Kafka steaming pipeline.
+<p>The demo streamed 10.000 earthquake records/s for a total of ~3 million earthquakes into a Kafka steaming pipeline.
 Druid ingested the data near real-time into its data source and enabled SQL access to it.
 Superset was used as a web-based frontend to execute SQL statements and build dashboards.</p>
 </div>
@@ -887,7 +959,8 @@ Have a look at <a href="https://superset.apache.org/docs/creating-charts-dashboa
 <div class="sect2">
 <h3 id="_load_additional_data"><a class="anchor" href="#_load_additional_data"></a>Load additional data</h3>
 <div class="paragraph">
-<p>You can use a Kafka client like <a href="https://docs.confluent.io/platform/current/app-development/kafkacat-usage.html">kafkacat</a> to create new topics and ingest data.
+<p>You can use the NiFi web interface to collect arbitrary data and write it to Kafka (it&#8217;s recommended to use new Kafka topics for that).
+As an alternative you can use a Kafka client like <a href="https://github.com/edenhill/kcat">kafkacat</a> to create new topics and ingest data.
 Using the Druid web interface, you can start an ingestion job that consumes the data and stores it in an internal data source.
 There is a great <a href="https://druid.apache.org/docs/latest/tutorials/tutorial-kafka.html#loading-data-with-the-data-loader">tutorial</a> from Druid on how to do this.
 Afterwards the data source is available to be analyzed within Druid and Superset the same way the earthquake data is.</p>

@@ -115,7 +115,7 @@
     <a class="nav-link" href="trino-taxi-data.html">trino-taxi-data</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-druid-earthquake-data.html">kafka-druid-earthquake-data</a>
+    <a class="nav-link" href="nifi-kafka-druid-earthquake-data.html">nifi-kafka-druid-earthquake-data</a>
   </li>
   <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="kafka-druid-water-level-data.html">kafka-druid-water-level-data</a>
@@ -532,7 +532,7 @@ The topic <code>measurements</code> contains a record for every measurement that
 The records are produced (written) by the data ingestion job and are consumed (read) by Druid afterwards in the same order they where produced.</p>
 </div>
 <div class="paragraph">
-<p>As Kafka itself has no webinterface you have to use a Kafka client like <a href="https://docs.confluent.io/platform/current/app-development/kafkacat-usage.html">kafkacat</a>.
+<p>As Kafka itself has no webinterface you have to use a Kafka client like <a href="https://github.com/edenhill/kcat">kafkacat</a>.
 In order to connect to Kafka, use the <code>kafka</code> endpoint from the <code>kafka</code> service in your <code>stackablectl services list</code> command output (<code>172.18.0.3:32536</code> in this case).</p>
 </div>
 <div class="sect2">
@@ -1058,7 +1058,7 @@ Have a look at <a href="https://superset.apache.org/docs/creating-charts-dashboa
 <div class="sect2">
 <h3 id="_load_additional_data"><a class="anchor" href="#_load_additional_data"></a>Load additional data</h3>
 <div class="paragraph">
-<p>You can use a Kafka client like <a href="https://docs.confluent.io/platform/current/app-development/kafkacat-usage.html">kafkacat</a> to create new topics and ingest data.
+<p>You can use a Kafka client like <a href="https://github.com/edenhill/kcat">kafkacat</a> to create new topics and ingest data.
 Using the Druid web interface, you can start an ingestion job that consumes the data and stores it in an internal data source.
 There is a great <a href="https://druid.apache.org/docs/latest/tutorials/tutorial-kafka.html#loading-data-with-the-data-loader">tutorial</a> from Druid on how to do this.
 Afterwards the data source is available to be analyzed within Druid and Superset the same way the water level data is.</p>

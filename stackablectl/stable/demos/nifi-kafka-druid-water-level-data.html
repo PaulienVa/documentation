@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>kafka-druid-water-level-data :: Stackable Documentation</title>
+    <title>nifi-kafka-druid-water-level-data :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script type="text/javascript"> var tCPrivacyTagManager = "gtm"; </script>
@@ -147,11 +147,11 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="airflow-scheduled-job.html">airflow-scheduled-job</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="kafka-druid-water-level-data.html">kafka-druid-water-level-data</a>
-  </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="nifi-kafka-druid-earthquake-data.html">nifi-kafka-druid-earthquake-data</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="nifi-kafka-druid-water-level-data.html">nifi-kafka-druid-water-level-data</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="trino-taxi-data.html">trino-taxi-data</a>
@@ -421,17 +421,17 @@
   <ul>
     <li><a href="../index.html">stackablectl</a></li>
     <li><a href="index.html">Demos</a></li>
-    <li><a href="kafka-druid-water-level-data.html">kafka-druid-water-level-data</a></li>
+    <li><a href="nifi-kafka-druid-water-level-data.html">nifi-kafka-druid-water-level-data</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/demos/kafka-druid-water-level-data.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/demos/nifi-kafka-druid-water-level-data.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">kafka-druid-water-level-data</h1>
+<h1 class="page">nifi-kafka-druid-water-level-data</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="admonitionblock note">
@@ -442,9 +442,9 @@
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This guide assumes you already have the demo <code>kafka-druid-water-level-data</code> installed.
+<p>This guide assumes you already have the demo <code>nifi-kafka-druid-water-level-data</code> installed.
 If you don&#8217;t have it installed please follow the <a href="../commands/demo.html#_install_demo" class="xref page">documentation on how to install a demo</a>.
-To put it simply you have to run <code>stackablectl demo install kafka-druid-water-level-data</code>.</p>
+To put it simply you have to run <code>stackablectl demo install nifi-kafka-druid-water-level-data</code>.</p>
 </div>
 </td>
 </tr>
@@ -466,7 +466,10 @@ To put it simply you have to run <code>stackablectl demo install kafka-druid-wat
 <p><strong>Superset</strong>: A modern data exploration and visualization platform. This demo utilizes Superset to retrieve data from Druid via SQL queries and build dashboards on top of that data</p>
 </li>
 <li>
-<p><strong>Kafka</strong>:  A distributed event streaming platform for high-performance data pipelines, streaming analytics and data integration. This demos uses it as a event streaming platform to stream the data in near real-time</p>
+<p><strong>Kafka</strong>:  A distributed event streaming platform for high-performance data pipelines, streaming analytics and data integration. This demos uses it as an event streaming platform to stream the data in near real-time</p>
+</li>
+<li>
+<p><strong>NiFi</strong>:  An easy-to-use, powerful system to process and distribute data. This demos uses it to fetch water-level-data from the internet and ingest it into Kafka</p>
 </li>
 <li>
 <p><strong>Druid</strong>: A real-time database to power modern analytics applications. This demo uses it to ingest the near real-time data from Kafka, store it and enable to access the data via SQL</p>
@@ -506,7 +509,7 @@ To put it simply you have to run <code>stackablectl demo install kafka-druid-wat
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/overview.png" alt="overview">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/overview.png" alt="overview">
 </div>
 </div>
 </div>
@@ -530,12 +533,14 @@ To put it simply you have to run <code>stackablectl demo install kafka-druid-wat
 
  kafka      kafka        default    kafka              172.18.0.3:32536
 
- superset   superset     default    external-superset  http://172.18.0.4:32251  Admin user: admin, password: admin
+ nifi       nifi         default    https              https://172.18.0.3:32440  Admin user: admin, password: adminadmin
+
+ superset   superset     default    external-superset  http://172.18.0.4:32251   Admin user: admin, password: admin
 
  zookeeper  zookeeper    default    zk                 172.18.0.3:31615
 
- minio      minio-druid  default    http               http://172.18.0.5:30016  Third party service
-                                    console-http       http://172.18.0.5:32595  Admin user: root, password: rootroot</code></pre>
+ minio      minio-druid  default    http               http://172.18.0.5:30016   Third party service
+                                    console-http       http://172.18.0.5:32595   Admin user: root, password: rootroot</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -661,7 +666,7 @@ The relationship is illustrated below.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/topics.png" alt="topics">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/topics.png" alt="topics">
 </div>
 </div>
 <div class="paragraph">
@@ -731,6 +736,178 @@ You can also see that it was the record number <code>7586541</code> send to this
 </div>
 </div>
 <div class="sect1">
+<h2 id="_nifi"><a class="anchor" href="#_nifi"></a>NiFi</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>NiFi is used to fetch water-level-data from the internet and ingest it into Kafka near-realtime.
+This demo includes a workflow ("process group") that fetches the last 30 days of historical measurements and produces the records into Kafka.
+It also keeps streaming near-realtime updates for every available measuring station.</p>
+</div>
+<div class="sect2">
+<h3 id="_view_testdata_generation_job"><a class="anchor" href="#_view_testdata_generation_job"></a>View testdata-generation job</h3>
+<div class="paragraph">
+<p>You can have a look at the ingestion job running in NiFi by opening the given <code>nifi</code> endpoint <code>https</code> from your <code>stackablectl services list</code> command output.
+You have to use the endpoint from your command output, in this case it is <a href="https://172.18.0.3:32440" class="bare">https://172.18.0.3:32440</a>. Open it with your favorite browser.
+If you get a warning regarding the self-signed certificate generated by the <a href="../../../secret-operator/stable/index.html" class="xref page">Secret Operator</a> (e.g. <code>Warning: Potential Security Risk Ahead</code>), you have to tell your browser to trust the website and continue.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/nifi_1.png" alt="nifi 1">
+</div>
+</div>
+<div class="paragraph">
+<p>Log in with the username <code>admin</code> and password <code>adminadmin</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/nifi_2.png" alt="nifi 2">
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, the NiFi workflow consists of lot&#8217;s of components.
+It is split into two main components:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>On the left is the part bulk-loading all the known stations and the historical data of the last 30 days</p>
+</li>
+<li>
+<p>On the right it the other part iterating over all stations and emitting the current measurement in an endless loop</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>You can zoom in by using your mouse and mouse wheel.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/nifi_3.png" alt="nifi 3">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/nifi_4.png" alt="nifi 4">
+</div>
+</div>
+<div class="paragraph">
+<p>The left workflows works as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The <code>Get station list</code> processors fetches the current list of stations as JSON via HTTP from the <a href="https://www.pegelonline.wsv.de/webservice/ueberblick">PEGELONLINE webservice</a>.</p>
+</li>
+<li>
+<p><code>Produce stations records</code> takes the list and produces a Kafka record for every station into the topic <code>stations</code></p>
+</li>
+<li>
+<p><code>SplitRecords</code> simultaneously takes the single FlowFile (NiFI record) containing all the stations and crates a new FlowFile for every station</p>
+</li>
+<li>
+<p><code>Extract station_uuid</code> takes every FlowFile representing a station and extract the attribute <code>station_uuid</code> into the metadata of the FlowFile</p>
+</li>
+<li>
+<p><code>Get historic measurements</code> calls the <a href="https://www.pegelonline.wsv.de/webservice/ueberblick">PEGELONLINE webservice</a> for every station and fetches the measurements of the last 30 days. All failures are routed to the <code>LogAttribute</code> processor to inspect them in case any failure occur.</p>
+</li>
+<li>
+<p><code>Add station_uuid</code> will add the attribute <code>station_uuid</code> to the JSON list of measurements returned from the <a href="https://www.pegelonline.wsv.de/webservice/ueberblick">PEGELONLINE webservice</a>, which is missing this information.</p>
+</li>
+<li>
+<p><code>PublishKafkaRecord_2_6</code> finally emits every measurement as a Kafka records to the topic <code>measurements</code>. All failures are routed to the <code>LogAttribute</code> processor to inspect them in case any failures occur.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The right side works similar, but is executed in an endless loop to stream the data in near-realtime.</p>
+</div>
+<div class="paragraph">
+<p>Double-click on the <code>Get station list</code> processor to show the processor details.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/nifi_5.png" alt="nifi 5">
+</div>
+</div>
+<div class="paragraph">
+<p>Head over to the tab <code>PROPERTIES</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/nifi_6.png" alt="nifi 6">
+</div>
+</div>
+<div class="paragraph">
+<p>Here you can see the setting <code>Remote URl</code>, which specifies the download URL from where the JSON file containing the stations is retrieved.
+Close the processor details popup by clicking <code>OK</code>.
+You can also have a detailed view of the <code>Produce station records</code> processor by double-clicking it.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/nifi_7.png" alt="nifi 7">
+</div>
+</div>
+<div class="paragraph">
+<p>Within this processor the Kafka connection details - like broker addresses and topic name - are specified.
+It uses the <code>JsonTreeReader</code> to parse the downloaded JSON and the <code>JsonRecordSetWriter</code> to split it into individual JSON records before writing it out.</p>
+</div>
+<div class="paragraph">
+<p>Double-click the <code>Get historic measurements</code> processor.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/nifi_8.png" alt="nifi 8">
+</div>
+</div>
+<div class="paragraph">
+<p>This processor fetched the historical data for every station.
+Click on the <code>Remote URL</code> property.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/nifi_9.png" alt="nifi 9">
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>Remote URL</code> does contain the <code>${station_uuid}</code> placeholder, which get&#8217;s replaced for every station.</p>
+</div>
+<div class="paragraph">
+<p>Double-click the <code>PublishKafkaRecord_2_6</code> processor.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/nifi_10.png" alt="nifi 10">
+</div>
+</div>
+<div class="paragraph">
+<p>You can also see the number of produced records by right-clicking on <code>PublishKafkaRecord_2_6</code> and selecting <code>View status history</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/nifi_11.png" alt="nifi 11">
+</div>
+</div>
+<div class="paragraph">
+<p>You have to choose <code>Messages Send (5 mins)</code> in the top right corner.
+Afterwards you can see that ~10 million records got produced in ~5 minutes, which corresponds to ~30k measurements/s.
+Keep in mind that the demos uses a single-node NiFi setup, the performance can been increased by using multiple Nodes.</p>
+</div>
+<div class="paragraph">
+<p>Speaking of the NiFi resources, on the top right corner use the hamburger menu icon and select <code>Node Status History</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/nifi_12.png" alt="nifi 12">
+</div>
+</div>
+<div class="paragraph">
+<p>The diagram shows the used heap size of the NiFi node.
+You can also select other metrics to show in the top right corner.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_druid"><a class="anchor" href="#_druid"></a>Druid</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -741,11 +918,11 @@ The Druid deep storage is based on the S3 store provided by MinIO.</p>
 <div class="sect2">
 <h3 id="_view_ingestion_job"><a class="anchor" href="#_view_ingestion_job"></a>View ingestion job</h3>
 <div class="paragraph">
-<p>You can have a look at the ingestion jobs running in Druid by opening the given <code>druid</code> endpoint <code>router-http</code> from your <code>stackablectl services list</code> command output. You have to use the endpoint from your command output, in this case it is <a href="http://172.18.0.4:30899" class="bare">http://172.18.0.4:30899</a>. Open it with your favorite browser.</p>
+<p>You can have a look at the ingestion jobs running in Druid by opening the given <code>druid</code> endpoint <code>router-http</code> from your <code>stackablectl services list</code> command output (<a href="http://172.18.0.4:30899" class="bare">http://172.18.0.4:30899</a> in this case).</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/druid_1.png" alt="druid 1">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/druid_1.png" alt="druid 1">
 </div>
 </div>
 <div class="paragraph">
@@ -753,7 +930,7 @@ The Druid deep storage is based on the S3 store provided by MinIO.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/druid_2.png" alt="druid 2">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/druid_2.png" alt="druid 2">
 </div>
 </div>
 <div class="paragraph">
@@ -762,7 +939,7 @@ On the tab <code>Statistics</code> on the left you can see the number of process
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/druid_3.png" alt="druid 3">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/druid_3.png" alt="druid 3">
 </div>
 </div>
 <div class="paragraph">
@@ -778,7 +955,7 @@ You can see the available data sources by clicking on <code>Datasources</code> a
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/druid_4.png" alt="druid 4">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/druid_4.png" alt="druid 4">
 </div>
 </div>
 <div class="paragraph">
@@ -791,7 +968,7 @@ In this case the <code>measurements</code> data source is partitioned by the day
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/druid_5.png" alt="druid 5">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/druid_5.png" alt="druid 5">
 </div>
 </div>
 <div class="paragraph">
@@ -800,7 +977,7 @@ To achieve this you first have to click on <code>Query</code> at the top.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/druid_6.png" alt="druid 6">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/druid_6.png" alt="druid 6">
 </div>
 </div>
 <div class="paragraph">
@@ -813,7 +990,7 @@ To achieve this you first have to click on <code>Query</code> at the top.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/druid_7.png" alt="druid 7">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/druid_7.png" alt="druid 7">
 </div>
 </div>
 <div class="paragraph">
@@ -831,7 +1008,7 @@ order by 1 desc</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/druid_8.png" alt="druid 8">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/druid_8.png" alt="druid 8">
 </div>
 </div>
 </div>
@@ -846,7 +1023,7 @@ Open the <code>superset</code> endpoint <code>external-superset</code> in your b
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/superset_1.png" alt="superset 1">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/superset_1.png" alt="superset 1">
 </div>
 </div>
 <div class="paragraph">
@@ -854,7 +1031,7 @@ Open the <code>superset</code> endpoint <code>external-superset</code> in your b
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/superset_2.png" alt="superset 2">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/superset_2.png" alt="superset 2">
 </div>
 </div>
 <div class="sect2">
@@ -865,7 +1042,7 @@ To open it click on the tab <code>Dashboards</code> at the top.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/superset_3.png" alt="superset 3">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/superset_3.png" alt="superset 3">
 </div>
 </div>
 <div class="paragraph">
@@ -874,7 +1051,7 @@ It might take some time until the dashboards renders all the included charts.</p
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/superset_4.png" alt="superset 4">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/superset_4.png" alt="superset 4">
 </div>
 </div>
 </div>
@@ -886,7 +1063,7 @@ To list the charts click on the tab <code>Charts</code> at the top.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/superset_5.png" alt="superset 5">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/superset_5.png" alt="superset 5">
 </div>
 </div>
 <div class="paragraph">
@@ -895,7 +1072,7 @@ On the left side you can modify the chart and click on <code>Run</code> to see t
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/superset_6.png" alt="superset 6">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/superset_6.png" alt="superset 6">
 </div>
 </div>
 <div class="paragraph">
@@ -911,7 +1088,7 @@ Afterwards click on the chart <code>Stations distribution</code>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/superset_7.png" alt="superset 7">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/superset_7.png" alt="superset 7">
 </div>
 </div>
 <div class="paragraph">
@@ -922,7 +1099,7 @@ You can e.g. have a detailed look at the water <a href="https://en.wikipedia.org
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/superset_8.png" alt="superset 8">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/superset_8.png" alt="superset 8">
 </div>
 </div>
 </div>
@@ -934,7 +1111,7 @@ On the top click on the tab <code>SQL Lab</code> &#8594; <code>SQL Editor</code>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/superset_9.png" alt="superset 9">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/superset_9.png" alt="superset 9">
 </div>
 </div>
 <div class="paragraph">
@@ -942,7 +1119,7 @@ On the top click on the tab <code>SQL Lab</code> &#8594; <code>SQL Editor</code>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/superset_10.png" alt="superset 10">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/superset_10.png" alt="superset 10">
 </div>
 </div>
 <div class="paragraph">
@@ -962,7 +1139,7 @@ order by 2 desc</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/superset_11.png" alt="superset 11">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/superset_11.png" alt="superset 11">
 </div>
 </div>
 <div class="paragraph">
@@ -980,7 +1157,7 @@ order by 2 desc</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/superset_12.png" alt="superset 12">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/superset_12.png" alt="superset 12">
 </div>
 </div>
 <div class="paragraph">
@@ -1000,7 +1177,7 @@ order by 2 desc</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/superset_13.png" alt="superset 13">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/superset_13.png" alt="superset 13">
 </div>
 </div>
 </div>
@@ -1015,7 +1192,7 @@ Open the <code>minio</code> endpoint <code>console-http</code> retrieved by <cod
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/minio_1.png" alt="minio 1">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/minio_1.png" alt="minio 1">
 </div>
 </div>
 <div class="paragraph">
@@ -1023,7 +1200,7 @@ Open the <code>minio</code> endpoint <code>console-http</code> retrieved by <cod
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/minio_2.png" alt="minio 2">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/minio_2.png" alt="minio 2">
 </div>
 </div>
 <div class="paragraph">
@@ -1031,7 +1208,7 @@ Open the <code>minio</code> endpoint <code>console-http</code> retrieved by <cod
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/minio_3.png" alt="minio 3">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/minio_3.png" alt="minio 3">
 </div>
 </div>
 <div class="paragraph">
@@ -1040,7 +1217,7 @@ Go ahead and open the folder <code>measurements</code>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/minio_4.png" alt="minio 4">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/minio_4.png" alt="minio 4">
 </div>
 </div>
 <div class="paragraph">
@@ -1051,7 +1228,7 @@ After waiting for a few minutes the data should have been flushed to S3 and show
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-kafka-druid-water-level-data/minio_5.png" alt="minio 5">
+<img src="../_images/demo-nifi-kafka-druid-water-level-data/minio_5.png" alt="minio 5">
 </div>
 </div>
 <div class="paragraph">
@@ -1064,7 +1241,7 @@ After waiting for a few minutes the data should have been flushed to S3 and show
 <div class="sectionbody">
 <div class="paragraph">
 <p>The demo put station records into the Kafka stream pipeline topic <code>station</code>.
-It also streamed ~3500 measurements/s for a total of ~11 million measurements into the topic <code>measurements</code>.
+It also streamed ~30,000 measurements/s for a total of ~11 million measurements into the topic <code>measurements</code>.
 Druid ingested the data near real-time into its data source and enabled SQL access to it.
 Superset was used as a web-based frontend to execute SQL statements and build dashboards.</p>
 </div>
@@ -1094,7 +1271,8 @@ Have a look at <a href="https://superset.apache.org/docs/creating-charts-dashboa
 <div class="sect2">
 <h3 id="_load_additional_data"><a class="anchor" href="#_load_additional_data"></a>Load additional data</h3>
 <div class="paragraph">
-<p>You can use a Kafka client like <a href="https://github.com/edenhill/kcat">kafkacat</a> to create new topics and ingest data.
+<p>You can use the NiFi web interface to collect arbitrary data and write it to Kafka (it&#8217;s recommended to use new Kafka topics for that).
+You can use a Kafka client like <a href="https://github.com/edenhill/kcat">kafkacat</a> to create new topics and ingest data.
 Using the Druid web interface, you can start an ingestion job that consumes the data and stores it in an internal data source.
 There is a great <a href="https://druid.apache.org/docs/latest/tutorials/tutorial-kafka.html#loading-data-with-the-data-loader">tutorial</a> from Druid on how to do this.
 Afterwards the data source is available to be analyzed within Druid and Superset the same way the water level data is.</p>

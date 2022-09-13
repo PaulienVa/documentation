@@ -147,11 +147,11 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="airflow-scheduled-job.html">airflow-scheduled-job</a>
   </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-druid-water-level-data.html">kafka-druid-water-level-data</a>
-  </li>
   <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="nifi-kafka-druid-earthquake-data.html">nifi-kafka-druid-earthquake-data</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="nifi-kafka-druid-water-level-data.html">nifi-kafka-druid-water-level-data</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="trino-taxi-data.html">trino-taxi-data</a>
@@ -481,7 +481,7 @@ To put it simply you have to run <code>stackablectl demo install nifi-kafka-drui
 </div>
 </li>
 <li>
-<p>Continuously emit approximately 10.000 records/s of <a href="https://earthquake.usgs.gov/">earthquake data</a> into Kafka</p>
+<p>Continuously emit approximately 10,000 records/s of <a href="https://earthquake.usgs.gov/">earthquake data</a> into Kafka</p>
 </li>
 <li>
 <p>Start a Druid ingestion job that ingests the data into the Druid instance</p>
@@ -659,7 +659,7 @@ The second processor - <code>PublishKafkaRecord_2_6</code> parses the CSV file, 
 </div>
 </div>
 <div class="paragraph">
-<p>Here you can see the setting <code>Remote URl</code> which specifies the download URL from where the CSV file is retrieved.</p>
+<p>Here you can see the setting <code>Remote URl</code>, which specifies the download URL from where the CSV file is retrieved.</p>
 </div>
 <div class="paragraph">
 <p>Close the processor details popup by clicking <code>OK</code>.
@@ -965,7 +965,7 @@ After waiting a few minutes, the data should have been flushed to S3 and show up
 <h2 id="_summary"><a class="anchor" href="#_summary"></a>Summary</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The demo streamed 10.000 earthquake records/s for a total of ~3 million earthquakes into a Kafka steaming pipeline.
+<p>The demo streamed 10,000 earthquake records/s for a total of ~3 million earthquakes into a Kafka steaming pipeline.
 Druid ingested the data near real-time into its data source and enabled SQL access to it.
 Superset was used as a web-based frontend to execute SQL statements and build dashboards.</p>
 </div>

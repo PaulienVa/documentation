@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Stack :: Stackable Documentation</title>
+    <title>airflow-scheduled-job :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script type="text/javascript"> var tCPrivacyTagManager = "gtm"; </script>
@@ -124,37 +124,37 @@
     <span class="nav-text">Commands</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="demo.html">Demo</a>
+    <a class="nav-link" href="../commands/demo.html">Demo</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="operator.html">Operator</a>
+    <a class="nav-link" href="../commands/operator.html">Operator</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="release.html">Release</a>
+    <a class="nav-link" href="../commands/release.html">Release</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="services.html">Services</a>
+    <a class="nav-link" href="../commands/services.html">Services</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="stack.html">Stack</a>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../commands/stack.html">Stack</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../demos/index.html">Demos</a>
+    <a class="nav-link" href="index.html">Demos</a>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../demos/airflow-scheduled-job.html">airflow-scheduled-job</a>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="airflow-scheduled-job.html">airflow-scheduled-job</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../demos/kafka-druid-water-level-data.html">kafka-druid-water-level-data</a>
+    <a class="nav-link" href="kafka-druid-water-level-data.html">kafka-druid-water-level-data</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../demos/nifi-kafka-druid-earthquake-data.html">nifi-kafka-druid-earthquake-data</a>
+    <a class="nav-link" href="nifi-kafka-druid-earthquake-data.html">nifi-kafka-druid-earthquake-data</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../demos/trino-taxi-data.html">trino-taxi-data</a>
+    <a class="nav-link" href="trino-taxi-data.html">trino-taxi-data</a>
   </li>
 </ul>
   </li>
@@ -420,168 +420,210 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">stackablectl</a></li>
-    <li>Commands</li>
-    <li><a href="stack.html">Stack</a></li>
+    <li><a href="index.html">Demos</a></li>
+    <li><a href="airflow-scheduled-job.html">airflow-scheduled-job</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/commands/stack.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/demos/airflow-scheduled-job.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Stack</h1>
+<h1 class="page">airflow-scheduled-job</h1>
 <div id="preamble">
 <div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>A stack is a collection of ready-to-use Stackable data products as well as required third-party services like Postgresql or MinIO.
-It is tied to a specific release of the Stackable data platform, which will provide the required operators for the stack.</p>
+<p>This guide assumes you already have the demo <code>airflow-cron-dag</code> installed.
+If you don&#8217;t have it installed please follow the <a href="../commands/demo.html#_install_demo" class="xref page">documentation on how to install a demo</a>.
+To put it simply you have to run <code>stackablectl demo install airflow-cron-dag</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This demo will</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Install the required Stackable operators</p>
+</li>
+<li>
+<p>Spin up the follow data products</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Postgresql</strong>: An open-source database used for Airflow cluster- and job-metadata.</p>
+</li>
+<li>
+<p><strong>Redis</strong>: An in-memory data structure store used for queuing Airflow jobs</p>
+</li>
+<li>
+<p><strong>Airflow</strong>: An open-source workflow management platform for data engineering pipelines.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Mount an Airflow job (referred to as a Directed Acyclic Graph, or DAG) for the cluster to use</p>
+</li>
+<li>
+<p>Enable and schedule the job</p>
+</li>
+<li>
+<p>Verify the job status with the Airflow Webserver UI</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can see the deployed products as well as their relationship in the following diagram:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/overview.png" alt="overview">
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_browse_available_stacks"><a class="anchor" href="#_browse_available_stacks"></a>Browse available stacks</h2>
+<h2 id="_list_deployed_stackable_services"><a class="anchor" href="#_list_deployed_stackable_services"></a>List deployed Stackable services</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To list the available stacks, run the following command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl stack list
-STACK                               STACKABLE RELEASE  DESCRIPTION
-druid-superset-s3                   22.06              Stack containing MinIO, Druid and Superset for data visualization
-airflow                             22.06              Stack containing Airflow scheduling platform</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Detailed information of a stack can be queried with the <code>describe</code> command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl stack describe druid-superset-s3
-Stack:              druid-superset-s3
-Description:        Stack containing MinIO, Druid and Superset for data visualization
-Stackable release:  22.06
-Labels:             druid, superset, minio, s3</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Future versions of <code>stackablectl</code> will also allow to search for stacks based on the labels.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_install_stack"><a class="anchor" href="#_install_stack"></a>Install stack</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_using_existing_kubernetes_cluster"><a class="anchor" href="#_using_existing_kubernetes_cluster"></a>Using existing Kubernetes cluster</h3>
-<div class="paragraph">
-<p>If you want to access a Kubernetes cluster, make sure your <a href="https://kubernetes.io/docs/tasks/tools/#kubectl"><code>kubectl</code></a> Kubernetes client is configured to interact with the Kubernetes cluster.
-After that run the following command</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl stack install druid-superset-s3
-[INFO ] Installing stack druid-superset-s3
-[INFO ] Installing release 22.06
-[INFO ] Installing airflow operator in version 0.4.0
-[INFO ] Installing commons operator in version 0.2.0
-[INFO ] Installing druid operator in version 0.6.0
-[INFO ] Installing hbase operator in version 0.3.0
-[INFO ] Installing hdfs operator in version 0.4.0
-[INFO ] Installing hive operator in version 0.6.0
-[INFO ] Installing kafka operator in version 0.6.0
-[INFO ] Installing nifi operator in version 0.6.0
-[INFO ] Installing opa operator in version 0.9.0
-[INFO ] Installing secret operator in version 0.5.0
-[INFO ] Installing spark-k8s operator in version 0.3.0
-[INFO ] Installing superset operator in version 0.5.0
-[INFO ] Installing trino operator in version 0.4.0
-[INFO ] Installing zookeeper operator in version 0.10.0
-[INFO ] Installing components of stack druid-superset-s3
-[INFO ] Installed stack druid-superset-s3</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_using_local_kind_cluster"><a class="anchor" href="#_using_local_kind_cluster"></a>Using local kind cluster</h3>
-<div class="paragraph">
-<p>If you don&#8217;t have a Kubernetes cluster available, <code>stackablectl</code> can spin up a <a href="https://kind.sigs.k8s.io/">kind</a> Kubernetes cluster for you.
-Make sure you have <code>kind</code> installed and run the following command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl stack install druid-superset-s3 --kind-cluster
-[INFO ] Creating kind cluster stackable-data-platform
-Creating cluster "stackable-data-platform" ...
- ✓ Ensuring node image (kindest/node:v1.21.1) 🖼
- ✓ Preparing nodes 📦 📦 📦 📦
- ✓ Writing configuration 📜
- ✓ Starting control-plane 🕹️
- ✓ Installing CNI 🔌
- ✓ Installing StorageClass 💾
- ✓ Joining worker nodes 🚜
-Set kubectl context to "kind-stackable-data-platform"
-You can now use your cluster with:
-
-kubectl cluster-info --context kind-stackable-data-platform
-
-Have a nice day! 👋
-[INFO ] Installing stack druid-superset-s3
-[INFO ] Installing release 22.06
-[INFO ] Installing airflow operator in version 0.4.0
-[INFO ] Installing commons operator in version 0.2.0
-[INFO ] Installing druid operator in version 0.6.0
-[INFO ] Installing hbase operator in version 0.3.0
-[INFO ] Installing hdfs operator in version 0.4.0
-[INFO ] Installing hive operator in version 0.6.0
-[INFO ] Installing kafka operator in version 0.6.0
-[INFO ] Installing nifi operator in version 0.6.0
-[INFO ] Installing opa operator in version 0.9.0
-[INFO ] Installing secret operator in version 0.5.0
-[INFO ] Installing spark-k8s operator in version 0.3.0
-[INFO ] Installing superset operator in version 0.5.0
-[INFO ] Installing trino operator in version 0.4.0
-[INFO ] Installing zookeeper operator in version 0.10.0
-[INFO ] Installing components of stack druid-superset-s3
-[INFO ] Installed stack druid-superset-s3</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_list_deployed_services"><a class="anchor" href="#_list_deployed_services"></a>List deployed services</h3>
-<div class="paragraph">
-<p>After installing your stack you can use the <a href="services.html" class="xref page">Services</a> command to list the installed services as follows</p>
+<p>To list the installed Stackable services run the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl services list --all-namespaces
- PRODUCT   NAME         NAMESPACE  ENDPOINTS                                     EXTRA INFOS
+ PRODUCT  NAME     NAMESPACE  ENDPOINTS                                  EXTRA INFOS
 
- hive      hive         default    hive                172.18.0.4:32658
-                                   metrics             172.18.0.4:30745
-
- opa       opa          default    http                http://172.18.0.2:31324
-
- superset  superset     default    external-superset   http://172.18.0.2:32716   Admin user: admin, password: admin
-
- trino     trino        default    coordinator-http    http://172.18.0.5:32128
-                                   coordinator-metrics 172.18.0.5:31199
-                                   coordinator-https   https://172.18.0.5:32721
-
- minio     minio-trino  default    http                http://172.18.0.4:31026   Third party service
-                                   console-http        http://172.18.0.4:30354   Admin user: root, password: rootroot</code></pre>
+ airflow  airflow  default    webserver-airflow http://172.18.0.4:32754  Admin user: airflow, password: airflow</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When a product instance has not finished starting yet, the service will have no endpoint.
+Starting all the product instances might take a considerable amount of time depending on your internet connectivity.
+In case the product is not ready yet a warning might be shown.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_airflow_webserver_ui"><a class="anchor" href="#_airflow_webserver_ui"></a>Airflow Webserver UI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Superset gives the ability to execute SQL queries and build dashboards.
+Open the <code>airflow</code> endpoint <code>webserver-airflow</code> in your browser (<code><a href="http://172.18.0.4:32754" class="bare">http://172.18.0.4:32754</a></code> in this case).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_1.png" alt="airflow 1">
+</div>
+</div>
+<div class="paragraph">
+<p>Log in with the username <code>airflow</code> and password <code>airflow</code>. The overview screen shows the DAG that has been mounted during the demo set-up (<code>date_demo</code>).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_2.png" alt="airflow 2">
+</div>
+</div>
+<div class="paragraph">
+<p>There are two things to notice here. The DAG has been enabled, as shown by the slider to the left of the DAG name (DAGs are initially all <code>paused</code> and can be activated either manually in the UI or via a REST call, as done in the setup for this demo):</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_3.png" alt="airflow 3">
+</div>
+</div>
+<div class="paragraph">
+<p>Secondly, the job has been busy, with several runs already logged!</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_4.png" alt="airflow 4">
+</div>
+</div>
+<div class="paragraph">
+<p>Clicking on this number will display the individual job runs:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_5.png" alt="airflow 5">
+</div>
+</div>
+<div class="paragraph">
+<p>The job is running every minute. With Airflow, DAGs can be started manually or scheduled to run when certain conditions are fulfilled: in this case the DAG has been set up to run using a cron table, which is part of the DAG definition.</p>
+</div>
+<div class="sect2">
+<h3 id="_view_dag_details"><a class="anchor" href="#_view_dag_details"></a>View DAG details</h3>
+<div class="paragraph">
+<p>Let&#8217;s drill down a bit deeper into this DAG. Click on one of the individual job runs shown in the previous step to display the job details. The DAG is displayed in the form of a graph (this job is so simple that it only has one step, called <code>run_every_minute</code>).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_6.png" alt="airflow 6">
+</div>
+</div>
+<div class="paragraph">
+<p>In the top right-hand corner there is some scheduling information, which tells us that this job will run every minute continuously:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_7.png" alt="airflow 7">
+</div>
+</div>
+<div class="paragraph">
+<p>Click on the <code>run_every_minute</code> box in the centre of the page and then select <code>Log</code>:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_8.png" alt="airflow 8">
+</div>
+</div>
+<div class="paragraph">
+<p>This will navigate to the worker where this job was run (with multiple workers the jobs will be queued and distributed to the next free worker) and display the log. In this case the output is a simple printout of the timestamp:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_9.png" alt="airflow 9">
+</div>
+</div>
+<div class="paragraph">
+<p>To look at the actual DAG code click on <code>Code</code>. Here we can see the crontab information used to schedule the job as well the <code>bash</code> command that provides the output:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_10.png" alt="airflow 10">
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_uninstall_stack"><a class="anchor" href="#_uninstall_stack"></a>Uninstall stack</h2>
+<h2 id="_summary"><a class="anchor" href="#_summary"></a>Summary</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Currently there is no support for uninstalling a stack again.</p>
+<p>This demo showed how a DAG can be made available for Airflow, scheduled, run and then inspected with the Webserver UI.</p>
 </div>
 </div>
 </div>

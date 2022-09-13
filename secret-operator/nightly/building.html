@@ -442,8 +442,6 @@ using it. However, Nix has much faster incremental build and deploy times, makin
 <pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ echo Building with Docker
 # Ensure that all submodules are up-to-date
 $ git submodule update --recursive --init
-# Update the Chart metadata and CRD definitions
-$ make compile-chart
 # Create a unique image ID
 $ REPO=secret-operator
 $ TAG="$(uuidgen)"
@@ -451,6 +449,8 @@ $ TAG="$(uuidgen)"
 $ docker build . -f docker/Dockerfile -t "$REPO:$TAG"
 # Load the image onto the Kind nodes
 $ kind load docker-image "$REPO:$TAG"
+# Deploy latest CRD
+$ docker run --rm "$REPO:$TAG" crd | kubectl apply -f-
 # Deploy
 $ helm upgrade secret-operator deploy/helm/secret-operator \
        --install \
@@ -463,33 +463,37 @@ $ helm upgrade secret-operator deploy/helm/secret-operator \
 <h2 id="_nix"><a class="anchor" href="#_nix"></a>Nix</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To build and deploy to the active Kind cluster, run:</p>
+<p>To build and deploy to the active Kind cluster, run the following Bash commands:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ echo Building with Nix
 # Ensure that all submodules are up-to-date
 $ git submodule update --recursive --init
-# Ensure that the Cargo.lock is up-to-date
-# This is not required if you use a tool that invokes Cargo regularly anyway, such as Rust-Analyzer
-$ cargo generate-lockfile
 # Use crate2nix (https://github.com/kolloch/crate2nix) to convert Cargo.lock into a Nix derivation
 $ nix run -f . crate2nix generate
 # Build the Docker images
+# A custom Docker repository can be specified by appending `--argstr dockerName my-custom-registry/secret-operator`
 $ nix build -f . docker
 # Load the images onto the Kind nodes
-# Nix does not use the Docker daemon, instead it builds individual layers, as well as a script (`result/load-image`) that combines them into a Docker image archive
-$ kind load image-archive &lt;(./result/load-image)
+# Nix does not use the Docker daemon, instead it builds individual layers, as well as
+# a script (`result/load-image`) that combines them into a Docker image archive.
+# `load-image` can also be piped into `docker load` to prepare for pushing to a registry.
+$ ./result/load-image &gt; image.tar &amp;&amp; kind load image-archive image.tar
+# On single-node kind clusters it is slightly more efficient to run
+# `./result/load-image | kind load image-archive /dev/stdin` instead.
 # Deploy
-$ kubectl apply -f result/crds.yaml -f provisioner.yaml
-$ kubectl rollout restart ds/secret-provisioner</code></pre>
+$ kubectl apply -f result/crds.yaml
+$ helm upgrade secret-operator deploy/helm/secret-operator \
+  --install \
+  --set-string "image.repository=$(cat result/image-repo),image.tag=$(cat result/image-tag)"</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>You may need to add <code>extra-experimental-features = nix-command</code> to <code>/etc/nix/nix.conf</code>, or add <code>--experimental-features nix-command</code> to the Nix commands.</p>
 </div>
 <div class="paragraph">
-<p>You can also use <a href="https://tilt.dev/">Tilt</a> to automatically recompile and redeploy when files are changed:</p>
+<p>You can also use <a href="https://tilt.dev/">Tilt</a> to automatically rebuild and redeploy when files are changed:</p>
 </div>
 <div class="listingblock">
 <div class="content">

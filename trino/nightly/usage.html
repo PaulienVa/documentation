@@ -962,6 +962,112 @@ Peak Memory: 0B
 </div>
 </div>
 <div class="sect1">
+<h2 id="_catalogs"><a class="anchor" href="#_catalogs"></a>Catalogs</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_create_catalog"><a class="anchor" href="#_create_catalog"></a>Create catalog</h3>
+<div class="paragraph">
+<p>Trino connects to datasources via <a href="https://trino.io/docs/current/connector.html">connectors</a>.
+Each connector enables access to a specific underlying datasource like a Hive warehouse, PostgresSQL or Druid instance.</p>
+</div>
+<div class="paragraph">
+<p>Currently the following connectors are supported:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://trino.io/docs/current/connector/hive.html">Hive</a></p>
+</li>
+<li>
+<p><a href="https://trino.io/docs/current/connector/iceberg.html">Iceberg</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>An instance of a connector is called a catalog.
+Think of a setup containing a large Hive warehouses based on a HDFS.
+You then can have two catalogs called e.g. <code>warehouse_1</code> and <code>warehouse_2</code> that both use the <code>hive</code> connector.</p>
+</div>
+<div class="paragraph">
+<p>You can create a catalog using the <code>TrinoCatalog</code> object as follows.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: trino.stackable.tech/v1alpha1
+kind: TrinoCatalog
+metadata:
+  name: hive
+  labels:
+    trino: simple-trino
+spec:
+  connector:
+    hive:
+      metastore:
+        configMap: simple-hive-derby
+      s3:
+        inline:
+          host: test-minio
+          port: 9000
+          accessStyle: Path
+          credentials:
+            secretClass: minio-credentials
+---
+apiVersion: trino.stackable.tech/v1alpha1
+kind: TrinoCatalog
+metadata:
+  name: iceberg
+  labels:
+    trino: simple-trino
+spec:
+  connector:
+    iceberg:
+      metastore:
+        configMap: simple-hive-derby
+      s3:
+        inline:
+          host: test-minio
+          port: 9000
+          accessStyle: Path
+          credentials:
+            secretClass: minio-credentials</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>metadata.name</code> will be the name of the catalog that shows up in your Trino instance.
+The <code>metadata.labels</code> will be used to determine, which Trino instance imports which <code>TrinoCatalogs</code>.
+The <code>spec.connector.&lt;connector&gt;</code> determines which connector is used.
+Each connector supports a different set of attributes.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_add_catalog_to_trino_cluster"><a class="anchor" href="#_add_catalog_to_trino_cluster"></a>Add catalog to Trino cluster</h3>
+<div class="paragraph">
+<p>You have to specify within your <code>TrinoCluster</code> which catalogs it should use as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: trino.stackable.tech/v1alpha1
+kind: TrinoCluster
+metadata:
+  name: simple-trino
+spec:
+  version: 387-stackable0.1.0
+  catalogLabelSelector:
+    matchLabels:
+      trino: simple-trino
+# ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>spec.catalogLabelSelector</code> is used to fetch the list of <code>TrinoCatalogs</code> used for this Trino cluster.
+In this case the <code>hive</code> and <code>iceberg</code> catalogs will be used as they both match the <code>catalogLabelSelector</code>.
+This mechanism allows to create a <code>TrinoCluster</code> once and then add new catalogs dynamically by creating <code>TrinoCatalog</code> objects.
+It also allows to reuse a <code>TrinoCatalog</code> within multiple <code>TrinoClusters</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_monitoring"><a class="anchor" href="#_monitoring"></a>Monitoring</h2>
 <div class="sectionbody">
 <div class="paragraph">

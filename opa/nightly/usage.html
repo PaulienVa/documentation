@@ -539,6 +539,91 @@ Do not override port numbers. This will lead to faulty installations.
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_storage_for_data_volumes"><a class="anchor" href="#_storage_for_data_volumes"></a>Storage for data volumes</h3>
+<div class="paragraph">
+<p>The OPA Operator currently does not support using <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes">PersistentVolumeClaims</a> for internal storage.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_memory_requests"><a class="anchor" href="#_memory_requests"></a>Memory requests</h3>
+<div class="paragraph">
+<p>You can request a certain amount of memory for each individual role group as shown below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">servers:
+  roleGroups:
+    default:
+      config:
+        resources:
+          memory:
+            limit: '2Gi'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, each OPA container in the <code>default</code> role group will have a maximum of 2 gigabytes of memory. To be more precise, these memory limits apply to the container running OPA but not to any sidecar containers (e.g. the BundleBuilder) that are part of the pod.</p>
+</div>
+<div class="paragraph">
+<p>A general rule of thumb on how to size the memory for OPA is described <a href="https://www.openpolicyagent.org/docs/latest/policy-performance/#resource-utilization">in the OPA documentation</a>.</p>
+</div>
+<div class="paragraph">
+<p>For more details regarding Kubernetes memory requests and limits see: <a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/">Assign Memory Resources to Containers and Pods</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cpu_requests"><a class="anchor" href="#_cpu_requests"></a>CPU requests</h3>
+<div class="paragraph">
+<p>Similarly to memory resources, you can also configure CPU limits, as shown below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">servers:
+  roleGroups:
+    default:
+      config:
+        resources:
+          cpu:
+            max: '500m'
+            min: '250m'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_defaults"><a class="anchor" href="#_defaults"></a>Defaults</h3>
+<div class="paragraph">
+<p>If nothing is specified, the operator will automatically set the following default values for resources:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">servers:
+  roleGroups:
+    default:
+      config:
+        resources:
+          cpu:
+            min: '200m'
+            max: "2"
+          memory:
+            limit: '2Gi'</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The default values are <em>most likely</em> not sufficient to run a proper cluster in production. Please adapt according to your requirements.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For more details regarding Kubernetes CPU limits see: <a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/">Assign CPU Resources to Containers and Pods</a>.</p>
+</div>
+</div>
 </div>
 </div>
 </article>

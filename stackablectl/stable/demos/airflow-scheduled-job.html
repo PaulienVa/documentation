@@ -6,6 +6,18 @@
     <title>airflow-scheduled-job :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../_/css/site.css">
+    <script>
+        function setCookie(name,value,days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+        }
+        setCookie('__hs_do_not_track', 'yes', 365*50)
+    </script>
     <script type="text/javascript"> var tCPrivacyTagManager = "gtm"; </script>
     <script>
         var consent = document.createElement("script");
@@ -445,9 +457,9 @@
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This guide assumes you already have the demo <code>airflow-cron-dag</code> installed.
+<p>This guide assumes you already have the demo <code>airflow-scheduled-job</code> installed.
 If you don&#8217;t have it installed please follow the <a href="../commands/demo.html#_install_demo" class="xref page">documentation on how to install a demo</a>.
-To put it simply you have to run <code>stackablectl demo install airflow-cron-dag</code>.</p>
+To put it simply you have to run <code>stackablectl demo install airflow-scheduled-job</code>.</p>
 </div>
 </td>
 </tr>
@@ -478,10 +490,10 @@ To put it simply you have to run <code>stackablectl demo install airflow-cron-da
 </div>
 </li>
 <li>
-<p>Mount an Airflow job (referred to as a Directed Acyclic Graph, or DAG) for the cluster to use</p>
+<p>Mount two Airflow jobs (referred to as Directed Acyclic Graphs, or DAGs) for the cluster to use</p>
 </li>
 <li>
-<p>Enable and schedule the job</p>
+<p>Enable and schedule the jobs</p>
 </li>
 <li>
 <p>Verify the job status with the Airflow Webserver UI</p>
@@ -506,10 +518,10 @@ To put it simply you have to run <code>stackablectl demo install airflow-cron-da
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl services list --all-namespaces
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl services list
  PRODUCT  NAME     NAMESPACE  ENDPOINTS                                  EXTRA INFOS
 
- airflow  airflow  default    webserver-airflow http://172.18.0.4:32754  Admin user: airflow, password: airflow</code></pre>
+ airflow  airflow  default    webserver-airflow http://172.18.0.2:31979  Admin user: airflow, password: airflow</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -535,7 +547,7 @@ In case the product is not ready yet a warning might be shown.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Superset gives the ability to execute SQL queries and build dashboards.
-Open the <code>airflow</code> endpoint <code>webserver-airflow</code> in your browser (<code><a href="http://172.18.0.4:32754" class="bare">http://172.18.0.4:32754</a></code> in this case).</p>
+Open the <code>airflow</code> endpoint <code>webserver-airflow</code> in your browser (<code><a href="http://172.18.0.2:31979" class="bare">http://172.18.0.2:31979</a></code> in this case).</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -543,7 +555,7 @@ Open the <code>airflow</code> endpoint <code>webserver-airflow</code> in your br
 </div>
 </div>
 <div class="paragraph">
-<p>Log in with the username <code>airflow</code> and password <code>airflow</code>. The overview screen shows the DAG that has been mounted during the demo set-up (<code>date_demo</code>).</p>
+<p>Log in with the username <code>airflow</code> and password <code>airflow</code>. The overview screen shows the DAGs that have been mounted during the demo set-up (<code>date_demo</code>).</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -551,7 +563,7 @@ Open the <code>airflow</code> endpoint <code>webserver-airflow</code> in your br
 </div>
 </div>
 <div class="paragraph">
-<p>There are two things to notice here. The DAG has been enabled, as shown by the slider to the left of the DAG name (DAGs are initially all <code>paused</code> and can be activated either manually in the UI or via a REST call, as done in the setup for this demo):</p>
+<p>There are two things to notice here. Both DAGs have been enabled, as shown by the slider to the left of the DAG name (DAGs are initially all <code>paused</code> and can be activated either manually in the UI or via a REST call, as done in the setup for this demo):</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -559,7 +571,7 @@ Open the <code>airflow</code> endpoint <code>webserver-airflow</code> in your br
 </div>
 </div>
 <div class="paragraph">
-<p>Secondly, the job has been busy, with several runs already logged!</p>
+<p>Secondly, the <code>date_demo</code> job has been busy, with several runs already logged! The <code>sparkapp_dag</code> has only been run once. This is because they have been defined with different schedules.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -567,7 +579,7 @@ Open the <code>airflow</code> endpoint <code>webserver-airflow</code> in your br
 </div>
 </div>
 <div class="paragraph">
-<p>Clicking on this number will display the individual job runs:</p>
+<p>Clicking on the number under <code>Runs</code> will display the individual job runs:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -575,10 +587,10 @@ Open the <code>airflow</code> endpoint <code>webserver-airflow</code> in your br
 </div>
 </div>
 <div class="paragraph">
-<p>The job is running every minute. With Airflow, DAGs can be started manually or scheduled to run when certain conditions are fulfilled: in this case the DAG has been set up to run using a cron table, which is part of the DAG definition.</p>
+<p>The <code>demo_date</code> job is running every minute. With Airflow, DAGs can be started manually or scheduled to run when certain conditions are fulfilled: in this case the DAG has been set up to run using a cron table, which is part of the DAG definition.</p>
 </div>
 <div class="sect2">
-<h3 id="_view_dag_details"><a class="anchor" href="#_view_dag_details"></a>View DAG details</h3>
+<h3 id="_demo_date_dag"><a class="anchor" href="#_demo_date_dag"></a><code>demo_date</code> DAG</h3>
 <div class="paragraph">
 <p>Let&#8217;s drill down a bit deeper into this DAG. Click on one of the individual job runs shown in the previous step to display the job details. The DAG is displayed in the form of a graph (this job is so simple that it only has one step, called <code>run_every_minute</code>).</p>
 </div>
@@ -620,13 +632,48 @@ Open the <code>airflow</code> endpoint <code>webserver-airflow</code> in your br
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_sparkapp_dag_dag"><a class="anchor" href="#_sparkapp_dag_dag"></a><code>sparkapp_dag</code> DAG</h3>
+<div class="paragraph">
+<p>Go back to DAG overview screen. The <code>sparkapp_dag</code> job has a scheduled entry of <code>None</code> and a last-execution time (<code>2022-09-19, 07:36:55</code>). This allows a DAG to be executed exactly once, with neither schedule-based runs nor any <a href="https://airflow.apache.org/docs/apache-airflow/stable/dag-run.html?highlight=backfill#backfill">backfill</a>. The DAG can always be triggered manually again via REST or from within the Webserver UI.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_11.png" alt="airflow 11">
+</div>
+</div>
+<div class="paragraph">
+<p>By navigating to the graphical overview of the job we can see that DAG has two steps, one to start the job - which runs asynchronously - and another to poll the running job to report on its status.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_12.png" alt="airflow 12">
+</div>
+</div>
+<div class="paragraph">
+<p>The logs for the first task - <code>spark-pi-submit</code> - indicate that it has been started, at which point the task exits without any further information:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_13.png" alt="airflow 13">
+</div>
+</div>
+<div class="paragraph">
+<p>The second task - <code>spark-pi-monitor</code> - polls this job and waits for a final result (in this case: <code>Success</code>). In this case, the actual result of the job (a value of <code>pi</code>) is logged by Spark in its driver pod, but more sophisticated jobs would persist this in a sink (e.g. a Kafka topic or HBase row) or use the result to trigger subsequent actions.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-airflow-scheduled-job/airflow_14.png" alt="airflow 14">
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_summary"><a class="anchor" href="#_summary"></a>Summary</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This demo showed how a DAG can be made available for Airflow, scheduled, run and then inspected with the Webserver UI.</p>
+<p>This demo showed how DAGs can be made available for Airflow, scheduled, run and then inspected with the Webserver UI.</p>
 </div>
 </div>
 </div>

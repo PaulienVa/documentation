@@ -7,6 +7,18 @@
     <link rel="canonical" href="https://docs.stackable.tech/spark-k8s/stable/usage.html">
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../_/css/site.css">
+    <script>
+        function setCookie(name,value,days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+        }
+        setCookie('__hs_do_not_track', 'yes', 365*50)
+    </script>
     <script type="text/javascript"> var tCPrivacyTagManager = "gtm"; </script>
     <script>
         var consent = document.createElement("script");
@@ -474,7 +486,7 @@ metadata:
   namespace: default
 spec:
   version: "1.0"
-  sparkImage: docker.stackable.tech/stackable/pyspark-k8s:3.3.0-stackable0.1.0
+  sparkImage: docker.stackable.tech/stackable/pyspark-k8s:3.3.0-stackable0.2.0
   mode: cluster
   mainApplicationFile: s3a://stackable-spark-k8s-jars/jobs/ny_tlc_report.py <i class="conum" data-value="1"></i><b>(1)</b>
   args:
@@ -548,7 +560,7 @@ metadata:
 spec:
   version: "1.0"
   image: docker.stackable.tech/stackable/ny-tlc-report:0.1.0 <i class="conum" data-value="1"></i><b>(1)</b>
-  sparkImage: docker.stackable.tech/stackable/pyspark-k8s:3.3.0-stackable0.1.0
+  sparkImage: docker.stackable.tech/stackable/pyspark-k8s:3.3.0-stackable0.2.0
   mode: cluster
   mainApplicationFile: local:///stackable/spark/jobs/ny_tlc_report.py <i class="conum" data-value="2"></i><b>(2)</b>
   args:
@@ -558,26 +570,14 @@ spec:
       - tabulate==0.8.9 <i class="conum" data-value="4"></i><b>(4)</b>
   sparkConf: <i class="conum" data-value="5"></i><b>(5)</b>
     "spark.hadoop.fs.s3a.aws.credentials.provider": "org.apache.hadoop.fs.s3a.AnonymousAWSCredentialsProvider"
-    "spark.driver.extraClassPath": "/dependencies/jars/*"
-    "spark.executor.extraClassPath": "/dependencies/jars/*"
-  volumes:
-    - name: job-deps <i class="conum" data-value="6"></i><b>(6)</b>
-      persistentVolumeClaim:
-        claimName: pvc-ksv
   driver:
     cores: 1
     coreLimit: "1200m"
     memory: "512m"
-    volumeMounts:
-      - name: job-deps
-        mountPath: /dependencies <i class="conum" data-value="7"></i><b>(7)</b>
   executor:
     cores: 1
     instances: 3
-    memory: "512m"
-    volumeMounts:
-      - name: job-deps
-        mountPath: /dependencies <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+    memory: "512m"</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -602,14 +602,6 @@ spec:
 <td><i class="conum" data-value="5"></i><b>5</b></td>
 <td>Spark dependencies: the credentials provider (the user knows what is relevant here) plus dependencies needed to access external resources (in this case, in an S3 store)</td>
 </tr>
-<tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>the name of the volume mount backed by a <code>PersistentVolumeClaim</code> that must be pre-existing</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>the path on the volume mount: this is referenced in the <code>sparkConf</code> section where the extra class path is defined for the driver and executors</td>
-</tr>
 </table>
 </div>
 </div>
@@ -625,7 +617,7 @@ metadata:
   namespace: default
 spec:
   version: "1.0"
-  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.1.0
+  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.2.0
   mode: cluster
   mainApplicationFile: s3a://stackable-spark-k8s-jars/jobs/ny-tlc-report-1.0-SNAPSHOT.jar <i class="conum" data-value="1"></i><b>(1)</b>
   mainClass: org.example.App <i class="conum" data-value="2"></i><b>(2)</b>
@@ -691,7 +683,7 @@ metadata:
   name: example-sparkapp-s3-private
 spec:
   version: "1.0"
-  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.1.0
+  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.2.0
   mode: cluster
   mainApplicationFile: s3a://my-bucket/spark-examples_2.12-3.3.0.jar <i class="conum" data-value="1"></i><b>(1)</b>
   mainClass: org.apache.spark.examples.SparkPi <i class="conum" data-value="2"></i><b>(2)</b>
@@ -709,24 +701,14 @@ spec:
     spark.hadoop.fs.s3a.aws.credentials.provider: "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider" <i class="conum" data-value="6"></i><b>(6)</b>
     spark.driver.extraClassPath: "/dependencies/jars/hadoop-aws-3.2.0.jar:/dependencies/jars/aws-java-sdk-bundle-1.11.375.jar"
     spark.executor.extraClassPath: "/dependencies/jars/hadoop-aws-3.2.0.jar:/dependencies/jars/aws-java-sdk-bundle-1.11.375.jar"
-  volumes:
-    - name: spark-pi-deps <i class="conum" data-value="7"></i><b>(7)</b>
-      persistentVolumeClaim:
-        claimName: spark-pi-pvc
   driver:
     cores: 1
     coreLimit: "1200m"
     memory: "512m"
-    volumeMounts:
-      - name: spark-pi-deps
-        mountPath: /dependencies <i class="conum" data-value="8"></i><b>(8)</b>
   executor:
     cores: 1
     instances: 3
-    memory: "512m"
-    volumeMounts:
-      - name: spark-pi-deps
-        mountPath: /dependencies <i class="conum" data-value="8"></i><b>(8)</b></code></pre>
+    memory: "512m"</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -755,14 +737,6 @@ spec:
 <td><i class="conum" data-value="6"></i><b>6</b></td>
 <td>&#8230;&#8203;in this case, in an S3 store, accessed with the credentials defined in the secret</td>
 </tr>
-<tr>
-<td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>the name of the volume mount backed by a <code>PersistentVolumeClaim</code> that must be pre-existing</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="8"></i><b>8</b></td>
-<td>the path on the volume mount: this is referenced in the <code>sparkConf</code> section where the extra class path is defined for the driver and executors</td>
-</tr>
 </table>
 </div>
 </div>
@@ -790,14 +764,11 @@ metadata:
   namespace: default
 spec:
   version: "1.0"
-  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.1.0
+  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.2.0
   mode: cluster
   mainApplicationFile: s3a://stackable-spark-k8s-jars/jobs/ny-tlc-report-1.1.0.jar <i class="conum" data-value="3"></i><b>(3)</b>
   mainClass: tech.stackable.demo.spark.NYTLCReport
   volumes:
-    - name: job-deps
-      persistentVolumeClaim:
-        claimName: pvc-ksv
     - name: cm-job-arguments
       configMap:
         name: cm-job-arguments <i class="conum" data-value="4"></i><b>(4)</b>
@@ -805,15 +776,11 @@ spec:
     - "--input /arguments/job-args.txt" <i class="conum" data-value="5"></i><b>(5)</b>
   sparkConf:
     "spark.hadoop.fs.s3a.aws.credentials.provider": "org.apache.hadoop.fs.s3a.AnonymousAWSCredentialsProvider"
-    "spark.driver.extraClassPath": "/dependencies/jars/*"
-    "spark.executor.extraClassPath": "/dependencies/jars/*"
   driver:
     cores: 1
     coreLimit: "1200m"
     memory: "512m"
     volumeMounts:
-      - name: job-deps
-        mountPath: /dependencies
       - name: cm-job-arguments <i class="conum" data-value="6"></i><b>(6)</b>
         mountPath: /arguments  <i class="conum" data-value="7"></i><b>(7)</b>
   executor:
@@ -821,8 +788,6 @@ spec:
     instances: 3
     memory: "512m"
     volumeMounts:
-      - name: job-deps
-        mountPath: /dependencies
       - name: cm-job-arguments <i class="conum" data-value="6"></i><b>(6)</b>
         mountPath: /arguments <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
 </div>
@@ -996,7 +961,7 @@ spec:
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spec.sparkImage</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Spark image which will be deployed to driver and executor pods, which must contain spark environment needed by the job e.g. <code>docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.1.0</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spark image which will be deployed to driver and executor pods, which must contain spark environment needed by the job e.g. <code>docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.2.0</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spec.sparkImagePullPolicy</code></p></td>

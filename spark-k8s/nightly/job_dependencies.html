@@ -7,6 +7,18 @@
     <link rel="canonical" href="https://docs.stackable.tech/spark-k8s/stable/job_dependencies.html">
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../_/css/site.css">
+    <script>
+        function setCookie(name,value,days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+        }
+        setCookie('__hs_do_not_track', 'yes', 365*50)
+    </script>
     <script type="text/javascript"> var tCPrivacyTagManager = "gtm"; </script>
     <script>
         var consent = document.createElement("script");
@@ -522,7 +534,7 @@ metadata:
   name: spark-pi
 spec:
   version: "1.0"
-  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.1.0 <i class="conum" data-value="1"></i><b>(1)</b>
+  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.2.0 <i class="conum" data-value="1"></i><b>(1)</b>
   mode: cluster
   mainClass: org.apache.spark.examples.SparkPi
   mainApplicationFile: /stackable/spark/examples/jars/spark-examples_2.12-3.3.0.jar <i class="conum" data-value="2"></i><b>(2)</b>
@@ -564,7 +576,7 @@ metadata:
   namespace: default
 spec:
   version: "1.0"
-  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.1.0
+  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.2.0
   mode: cluster
   mainApplicationFile: s3a://stackable-spark-k8s-jars/jobs/ny-tlc-report-1.0-SNAPSHOT.jar <i class="conum" data-value="1"></i><b>(1)</b>
   mainClass: org.example.App <i class="conum" data-value="2"></i><b>(2)</b>
@@ -740,7 +752,7 @@ metadata:
   namespace: default
 spec:
   version: "1.0"
-  sparkImage: docker.stackable.tech/stackable/pyspark-k8s:3.3.0-stackable0.1.0
+  sparkImage: docker.stackable.tech/stackable/pyspark-k8s:3.3.0-stackable0.2.0
   mode: cluster
   mainApplicationFile: s3a://stackable-spark-k8s-jars/jobs/ny_tlc_report.py <i class="conum" data-value="1"></i><b>(1)</b>
   args:

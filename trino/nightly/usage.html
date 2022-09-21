@@ -574,7 +574,7 @@ data:
 <div class="sect3">
 <h4 id="_insecure_for_testing"><a class="anchor" href="#_insecure_for_testing"></a>Insecure for testing:</h4>
 <div class="paragraph">
-<p>Create an insecure single node Trino (v387) cluster for testing. You will access the UI/CLI via http and no user / password or authorization is required. Please adapt the <code>s3</code> settings with your credentials (check <code>examples/simple-trino-cluster.yaml</code> for an example setting up Hive and Trino):</p>
+<p>Create an insecure single node Trino cluster for testing. You will access the UI/CLI via http and no user / password or authorization is required. Please adapt the <code>s3</code> settings with your credentials (check <code>examples/simple-trino-cluster.yaml</code> for an example setting up Hive and Trino):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -583,7 +583,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 387-stackable0.1.0
+  version: 396-stackable0.1.0
   catalogLabelSelector:
     matchLabels:
       trino: simple-trino
@@ -621,7 +621,7 @@ spec:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-387-executable.jar --debug --server http://&lt;node&gt;:&lt;http-port&gt; --user=admin</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-396-executable.jar --debug --server http://&lt;node&gt;:&lt;http-port&gt; --user=admin</code></pre>
 </div>
 </div>
 </div>
@@ -661,7 +661,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 387-stackable0.1.0
+  version: 396-stackable0.1.0
   config:
     tls:
       secretClass: trino-tls
@@ -678,7 +678,7 @@ spec:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-387-executable.jar --debug --server https://&lt;host&gt;:&lt;https-port&gt; --user=admin  --keystore-path=keystore.p12 --keystore-password=changeit</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-396-executable.jar --debug --server https://&lt;host&gt;:&lt;https-port&gt; --user=admin  --keystore-path=keystore.p12 --keystore-password=changeit</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -686,7 +686,7 @@ spec:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-387-executable.jar --debug --server https://&lt;host&gt;:&lt;https-port&gt; --user=admin --insecure</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-396-executable.jar --debug --server https://&lt;host&gt;:&lt;https-port&gt; --user=admin --insecure</code></pre>
 </div>
 </div>
 </div>
@@ -702,7 +702,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 387-stackable0.1.0
+  version: 396-stackable0.1.0
   config:
     tls:
       secretClass: trino-tls
@@ -711,7 +711,7 @@ spec:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-387-executable.jar --debug --server https://&lt;host&gt;:&lt;https-port&gt; --user=admin --keystore-path=keystore.p12 --keystore-password=changeit</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-396-executable.jar --debug --server https://&lt;host&gt;:&lt;https-port&gt; --user=admin --keystore-path=keystore.p12 --keystore-password=changeit</code></pre>
 </div>
 </div>
 </div>
@@ -727,7 +727,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 387-stackable0.1.0
+  version: 396-stackable0.1.0
   config:
     internalTls:
       secretClass: trino-internal-tls
@@ -739,7 +739,7 @@ spec:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-387-executable.jar --debug --server http://&lt;host&gt;:&lt;http-port&gt; --user=admin</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./trino-cli-396-executable.jar --debug --server http://&lt;host&gt;:&lt;http-port&gt; --user=admin</code></pre>
 </div>
 </div>
 </div>
@@ -981,6 +981,12 @@ Each connector enables access to a specific underlying datasource like a Hive wa
 <li>
 <p><a href="https://trino.io/docs/current/connector/iceberg.html">Iceberg</a></p>
 </li>
+<li>
+<p><a href="https://trino.io/docs/current/connector/tpcds.html">TPCDS</a></p>
+</li>
+<li>
+<p><a href="https://trino.io/docs/current/connector/tpch.html">TPCH</a></p>
+</li>
 </ul>
 </div>
 <div class="paragraph">
@@ -1051,7 +1057,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 387-stackable0.1.0
+  version: 396-stackable0.1.0
   catalogLabelSelector:
     matchLabels:
       trino: simple-trino

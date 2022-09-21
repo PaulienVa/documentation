@@ -441,7 +441,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 387-stackable0.1.0
+  version: 396-stackable0.1.0
   catalogLabelSelector:
     matchLabels:
       trino: simple-trino
@@ -506,11 +506,11 @@ simple-trino-worker-default          1/1     5m</code></pre>
 <div class="sect2">
 <h3 id="_access_the_trino_cluster_via_cli_tool"><a class="anchor" href="#_access_the_trino_cluster_via_cli_tool"></a>Access the Trino cluster via CLI tool</h3>
 <div class="paragraph">
-<p>We use the <a href="https://trino.io/download.html">Trino CLI tool</a> to access the Trino cluster. This link points to the latest Trino version. In this guide we keep Trino cluster and client versions (v387) in sync and download the CLI tool from the <a href="https://repo.stackable.tech/">Stackable repository</a>:</p>
+<p>We use the <a href="https://trino.io/download.html">Trino CLI tool</a> to access the Trino cluster. This link points to the latest Trino version. In this guide we keep Trino cluster and client versions in sync and download the CLI tool from the <a href="https://repo.stackable.tech/">Stackable repository</a>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl --output trino.jar https://repo.stackable.tech/repository/packages/trino-cli/trino-cli-387-executable.jar</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl --output trino.jar https://repo.stackable.tech/repository/packages/trino-cli/trino-cli-396-executable.jar</code></pre>
 </div>
 </div>
 <div class="paragraph">

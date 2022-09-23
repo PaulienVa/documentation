@@ -126,7 +126,8 @@
         <button class="version-menu-toggle" title="Show other versions of page">nightly</button>
         <div class="version-menu">
           <a class="version is-current" href="first_steps.html">nightly</a>
-          <a class="version" href="../../stable/getting_started/first_steps.html">0.6</a>
+          <a class="version" href="../../stable/getting_started/first_steps.html">0.7</a>
+          <a class="version" href="../../0.6/getting_started/first_steps.html">0.6</a>
           <a class="version" href="../../0.5/getting_started/first_steps.html">0.5</a>
           <a class="version is-missing" href="../../0.4/index.html">0.4</a>
           <a class="version is-missing" href="../../0.3/index.html">0.3</a>
@@ -156,7 +157,35 @@
     <a class="nav-link" href="../configuration.html">Configuration</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../usage.html">Usage</a>
+    <a class="nav-link" href="../concepts.html">Concepts</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../usage_guide/index.html">Usage guide</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../usage_guide/security.html">Security considerations</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../usage_guide/catalogs.html">Using Catalogs</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../usage_guide/cluster.html">Creating a Trino cluster</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../usage_guide/configuration.html">Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../usage_guide/monitoring.html">Monitoring</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../usage_guide/query.html">Testing Trino with Hive and S3</a>
+  </li>
+</ul>
   </li>
 </ul>
   </li>
@@ -373,7 +402,10 @@
           <a href="../index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../stable/index.html">0.6</a>
+          <a href="../../stable/index.html">0.7</a>
+        </li>
+        <li class="version">
+          <a href="../../0.6/index.html">0.6</a>
         </li>
         <li class="version">
           <a href="../../0.5/index.html">0.5</a>
@@ -440,7 +472,7 @@
 <h2 id="_setup_trino"><a class="anchor" href="#_setup_trino"></a>Setup Trino</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the simplest form, Trino does not require any other operators (except the commons and secret operator) to work and access the web interface. There are no data sources (e.g. PostgreSQL, Hive or S3) configured and for the tests only internal data is queried.</p>
+<p>A working Trino cluster and its web interface require only the commons and secret operators to work. Simple tests are possible without an external data source (e.g. PostgreSQL, Hive or S3), as internal data can be used.</p>
 </div>
 <div class="paragraph">
 <p>Create a file named <code>trino.yaml</code> with the following content:</p>
@@ -622,7 +654,7 @@ Your browser will probably show a security risk warning because it does not trus
 <h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Have a look at the <a href="../usage.html" class="xref page">Usage</a> page to find out more about the features of the Trino Operator.</p>
+<p>Have a look at the <a href="../usage_guide/cluster.html" class="xref page">Creating a Trino cluster</a> to find out more about how to configure a Trino cluster.</p>
 </div>
 </div>
 </div>

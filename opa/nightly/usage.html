@@ -479,13 +479,50 @@ It should generally be safe to simply use the latest image version that is avail
 </div>
 </div>
 <div class="sect1">
-<h2 id="_bundle_sources"><a class="anchor" href="#_bundle_sources"></a>Bundle Sources</h2>
+<h2 id="_policy_language"><a class="anchor" href="#_policy_language"></a>Policy Language</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>OPA bundles are generated from <code>ConfigMap</code> objects by a side car container running along side the OPA server.</p>
+<p>Users can define policies by using Rego, OPAs <a href="https://www.openpolicyagent.org/docs/latest/policy-language/">policy language</a>.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively, the OPA servers can load bundles from a remote server when a <code>regoRuleReference</code> is configured in the role group&#8217;s <code>config</code> section.</p>
+<p>Policy definitionas are deployed as <code>ConfigMap</code> resources as described in <a href="implementation-notes.html" class="xref page">implementation notes</a>.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test
+  labels:
+    opa.stackable.tech/bundle: "true" <i class="conum" data-value="1"></i><b>(1)</b>
+data:
+  test.rego: | <i class="conum" data-value="2"></i><b>(2)</b>
+    package test
+
+    hello {
+      true
+    }
+
+    world {
+      false
+    }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Mark this <code>ConfigMap</code> as a bundle source.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>test.rego</code> is the file name to use inside the bundle for these rules.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

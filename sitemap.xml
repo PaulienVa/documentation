@@ -25,6 +25,9 @@
 <loc>https://docs.stackable.tech/sitemap-kafka.xml</loc>
 </sitemap>
 <sitemap>
+<loc>https://docs.stackable.tech/sitemap-listener-operator.xml</loc>
+</sitemap>
+<sitemap>
 <loc>https://docs.stackable.tech/sitemap-nifi.xml</loc>
 </sitemap>
 <sitemap>

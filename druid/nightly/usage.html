@@ -997,60 +997,66 @@ Overriding certain properties which are set by operator (such as the HTTP port) 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_memory_requests"><a class="anchor" href="#_memory_requests"></a>Memory requests</h3>
+<h3 id="_resource_requests"><a class="anchor" href="#_resource_requests"></a>Resource Requests</h3>
 <div class="paragraph">
-<p>You can request a certain amount of memory for each individual role or role group, where the role group configuration overrides existing parts (otherwise they will be inherited) from the role configuration:</p>
+<p>Stackable operators handle resource requests in a sligtly different manner than Kubernetes. Resource requests are defined on role or group level. See <a href="#roles-and-role-groups.adoc" class="xref unresolved">roles-and-role-groups.adoc</a> for details on these concepts. On a role level this means that e.g. all workers will use the same resource requests and limits. This can be further specified on role group level (which takes priority to the role level) to apply different resources.</p>
+</div>
+<div class="paragraph">
+<p>This is an example on how to specify CPU and memory resources using the Stackable <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">Custom Resources</a>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">brokers:
-  config:
-    resources:
-      memory:
-        limit: '2Gi'
-  roleGroups:
-    default:
-      config:
-        resources:
-          memory:
-            limit: '3Gi'</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: example.stackable.tech/v1alpha1
+kind: ExampleCluster
+metadata:
+  name: example
+spec:
+  workers: # role-level
+    config:
+      resources:
+        cpu:
+          min: 300m
+          max: 600m
+        memory:
+          limit: 3Gi
+    roleGroups: # role-group-level
+      resources-from-role: # role-group 1
+        replicas: 1
+      resources-from-role-group: # role-group 2
+        replicas: 1
+        config:
+          resources:
+            cpu:
+              min: 400m
+              max: 800m
+            memory:
+              limit: 4Gi</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In this example, each Druid broker in the <code>default</code> group will have a maximum of <code>3Gi</code> (gigabytes) of memory. To be more precise, these memory limits apply to the container running Druid but not to any sidecar containers that are part of the pod.</p>
+<p>In this case, the role group <code>resources-from-role</code> will inherit the resources specified on the role level. Resulting in a maximum of <code>3Gi</code> memory and <code>600m</code> CPU resources.</p>
 </div>
 <div class="paragraph">
-<p>Not specifying any memory limits in the role group will use the provided <code>2Gi</code> from the role. If the role is not specified it will use defaults as demonstrated below.</p>
+<p>The role group <code>resources-from-role-group</code> has maximum of <code>4Gi</code> memory and <code>800m</code> CPU resources (which overrides the role CPU resources).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+For Java products the actual used Heap memory is lower than the specified memory limit due to other processes in the Container requiring memory to run as well. Currently, 80% of the specified memory limits is passed to the JVM.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>Setting this property will also automatically set the maximum Java heap size for the corresponding process to 80% of the available memory. Be aware that if the memory constraint is too low, the cluster might fail to start. If pods terminate with an 'OOMKilled' status and the cluster doesn&#8217;t start, try increasing the memory limit.</p>
+<p>For memory only a limit can be specified, which will be set as memory request and limit in the Container. This is to always guarantee a Container the full amount memory during Kubernetes scheduling.</p>
 </div>
 <div class="paragraph">
-<p>For more details regarding Kubernetes memory requests and limits see: <a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/">Assign Memory Resources to Containers and Pods</a>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_cpu_requests"><a class="anchor" href="#_cpu_requests"></a>CPU requests</h3>
-<div class="paragraph">
-<p>Similarly to memory resources, you can also configure CPU limits, as shown below:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">brokers:
-  roleGroups:
-    default:
-      config:
-        resources:
-          cpu:
-            max: '500m'
-            min: '250m'</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_defaults"><a class="anchor" href="#_defaults"></a>Defaults</h3>
-<div class="paragraph">
-<p>If nothing is specified, the operator will automatically set the following default values for resources:</p>
+<p>If no resources are configured explicitly, the Druid operator uses following defaults:</p>
 </div>
 <div class="listingblock">
 <div class="content">

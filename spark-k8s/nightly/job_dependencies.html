@@ -550,14 +550,8 @@ spec:
   mode: cluster
   mainClass: org.apache.spark.examples.SparkPi
   mainApplicationFile: /stackable/spark/examples/jars/spark-examples_2.12-3.3.0.jar <i class="conum" data-value="2"></i><b>(2)</b>
-  driver:
-    cores: 1
-    coreLimit: "1200m"
-    memory: "512m"
   executor:
-    cores: 1
-    instances: 3
-    memory: "512m"</code></pre>
+    instances: 3</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -603,16 +597,11 @@ spec:
       persistentVolumeClaim:
         claimName: pvc-ksv
   driver:
-    cores: 1
-    coreLimit: "1200m"
-    memory: "512m"
     volumeMounts:
       - name: job-deps
         mountPath: /dependencies <i class="conum" data-value="5"></i><b>(5)</b>
   executor:
-    cores: 1
     instances: 3
-    memory: "512m"
     volumeMounts:
       - name: job-deps
         mountPath: /dependencies <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
@@ -781,16 +770,11 @@ spec:
       persistentVolumeClaim:
         claimName: pvc-ksv
   driver:
-    cores: 1
-    coreLimit: "1200m"
-    memory: "512m"
     volumeMounts:
       - name: job-deps
         mountPath: /dependencies  <i class="conum" data-value="6"></i><b>(6)</b>
   executor:
-    cores: 1
     instances: 3
-    memory: "512m"
     volumeMounts:
       - name: job-deps
         mountPath: /dependencies  <i class="conum" data-value="6"></i><b>(6)</b></code></pre>

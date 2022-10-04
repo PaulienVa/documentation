@@ -617,7 +617,7 @@ Overriding certain properties which are set by operator can interfere with the o
 <div class="sect2">
 <h3 id="_resource_requests"><a class="anchor" href="#_resource_requests"></a>Resource Requests</h3>
 <div class="paragraph">
-<p>Stackable operators handle resource requests in a sligtly different manner than Kubernetes. Resource requests are defined on role or group level. See <a href="#roles-and-role-groups.adoc" class="xref unresolved">roles-and-role-groups.adoc</a> for details on these concepts. On a role level this means that e.g. all workers will use the same resource requests and limits. This can be further specified on role group level (which takes priority to the role level) to apply different resources.</p>
+<p>Stackable operators handle resource requests in a sligtly different manner than Kubernetes. Resource requests are defined on role or group level. See <a href="../../home/stable/concepts/roles-and-role-groups.html" class="xref page">Roles and role groups</a> for details on these concepts. On a role level this means that e.g. all workers will use the same resource requests and limits. This can be further specified on role group level (which takes priority to the role level) to apply different resources.</p>
 </div>
 <div class="paragraph">
 <p>This is an example on how to specify CPU and memory resources using the Stackable <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">Custom Resources</a>:</p>

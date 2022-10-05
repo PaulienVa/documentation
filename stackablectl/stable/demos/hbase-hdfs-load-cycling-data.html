@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>airflow-scheduled-job :: Stackable Documentation</title>
+    <title>hbase-hdfs-cycling-data :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>
@@ -157,10 +157,10 @@
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="index.html">Demos</a>
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="2">
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="airflow-scheduled-job.html">airflow-scheduled-job</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="hbase-hdfs-load-cycling-data.html">hbase-hdfs-cycling-data</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -451,17 +451,17 @@
   <ul>
     <li><a href="../index.html">stackablectl</a></li>
     <li><a href="index.html">Demos</a></li>
-    <li><a href="airflow-scheduled-job.html">airflow-scheduled-job</a></li>
+    <li><a href="hbase-hdfs-load-cycling-data.html">hbase-hdfs-cycling-data</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/demos/airflow-scheduled-job.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/demos/hbase-hdfs-load-cycling-data.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">airflow-scheduled-job</h1>
+<h1 class="page">hbase-hdfs-cycling-data</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="admonitionblock note">
@@ -472,9 +472,9 @@
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This guide assumes you already have the demo <code>airflow-scheduled-job</code> installed.
+<p>This guide assumes you already have the demo <code>hbase-hdfs-load-cycling-data</code> installed.
 If you don&#8217;t have it installed please follow the <a href="../commands/demo.html#_install_demo" class="xref page">documentation on how to install a demo</a>.
-To put it simply you have to run <code>stackablectl demo install airflow-scheduled-job</code>.</p>
+To put it simply you have to run <code>stackablectl demo install hbase-hdfs-load-cycling-data</code>.</p>
 </div>
 </td>
 </tr>
@@ -493,25 +493,25 @@ To put it simply you have to run <code>stackablectl demo install airflow-schedul
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Postgresql</strong>: An open-source database used for Airflow cluster- and job-metadata.</p>
+<p><strong>Hbase</strong>: A open source distributed scalable, big data store. This demos uses it to store the <a href="https://www.kaggle.com/datasets/timgid/cyclistic-dataset-google-certificate-capstone?select=Divvy_Trips_2020_Q1.csv">cyclistic dataset</a> and enable access to it</p>
 </li>
 <li>
-<p><strong>Redis</strong>: An in-memory data structure store used for queuing Airflow jobs</p>
-</li>
-<li>
-<p><strong>Airflow</strong>: An open-source workflow management platform for data engineering pipelines.</p>
+<p><strong>HDFS</strong>: A distributed file system used to intermediately store the dataset before importing it into Hbase</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Mount two Airflow jobs (referred to as Directed Acyclic Graphs, or DAGs) for the cluster to use</p>
+<p>Use <a href="https://hadoop.apache.org/docs/stable/hadoop-distcp/DistCp.html">distcp</a> to copy a <a href="https://www.kaggle.com/datasets/timgid/cyclistic-dataset-google-certificate-capstone?select=Divvy_Trips_2020_Q1.csv">cyclistic dataset</a> from an S3 bucket into HDFS</p>
 </li>
 <li>
-<p>Enable and schedule the jobs</p>
+<p>Create HFiles, which is a File format for hbase consisting of sorted key/value pairs. Both keys and values are byte arrays</p>
 </li>
 <li>
-<p>Verify the job status with the Airflow Webserver UI</p>
+<p>Load Hfiles into an existing table via the <code>Importtsv</code> utility, which will load data in <code>TSV</code> or <code>CSV</code> format into HBase</p>
+</li>
+<li>
+<p>Query data via hbase shell, which is an interactive shell to execute commands on the created table</p>
 </li>
 </ul>
 </div>
@@ -520,7 +520,7 @@ To put it simply you have to run <code>stackablectl demo install airflow-schedul
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../_images/demo-airflow-scheduled-job/overview.png" alt="overview">
+<img src="../_images/demo-hbase-hdfs-load-cycling-data/overview.png" alt="overview">
 </div>
 </div>
 </div>
@@ -529,14 +529,33 @@ To put it simply you have to run <code>stackablectl demo install airflow-schedul
 <h2 id="_list_deployed_stackable_services"><a class="anchor" href="#_list_deployed_stackable_services"></a>List deployed Stackable services</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To list the installed Stackable services run the following command:</p>
+<p>To list the installed Stackable services run the following command:
+<code>stackablectl services list --all-namespaces</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl services list
- PRODUCT  NAME     NAMESPACE  ENDPOINTS                                  EXTRA INFOS
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">PRODUCT    NAME       NAMESPACE  ENDPOINTS                                               EXTRA INFOS
 
- airflow  airflow  default    webserver-airflow http://172.18.0.2:31979  Admin user: airflow, password: airflow</code></pre>
+ hbase      hbase      default    regionserver                  172.18.0.5:32282
+                                  ui                            http://172.18.0.5:31527
+                                  metrics                       172.18.0.5:31081
+
+ hdfs       hdfs       default    datanode-default-0-metrics    172.18.0.2:31441
+                                  datanode-default-0-data       172.18.0.2:32432
+                                  datanode-default-0-http       http://172.18.0.2:30758
+                                  datanode-default-0-ipc        172.18.0.2:32323
+                                  journalnode-default-0-metrics 172.18.0.5:31123
+                                  journalnode-default-0-http    http://172.18.0.5:30038
+                                  journalnode-default-0-https   https://172.18.0.5:31996
+                                  journalnode-default-0-rpc     172.18.0.5:30080
+                                  namenode-default-0-metrics    172.18.0.2:32753
+                                  namenode-default-0-http       http://172.18.0.2:32475
+                                  namenode-default-0-rpc        172.18.0.2:31639
+                                  namenode-default-1-metrics    172.18.0.4:32202
+                                  namenode-default-1-http       http://172.18.0.4:31486
+                                  namenode-default-1-rpc        172.18.0.4:31874
+
+ zookeeper  zookeeper  default    zk                            172.18.0.4:32469</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -548,7 +567,7 @@ To put it simply you have to run <code>stackablectl demo install airflow-schedul
 <td class="content">
 <div class="paragraph">
 <p>When a product instance has not finished starting yet, the service will have no endpoint.
-Starting all the product instances might take a considerable amount of time depending on your internet connectivity.
+Starting all of the product instances might take a considerable amount of time depending on your internet connectivity.
 In case the product is not ready yet a warning might be shown.</p>
 </div>
 </td>
@@ -558,137 +577,182 @@ In case the product is not ready yet a warning might be shown.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_airflow_webserver_ui"><a class="anchor" href="#_airflow_webserver_ui"></a>Airflow Webserver UI</h2>
+<h2 id="_the_first_job"><a class="anchor" href="#_the_first_job"></a>The first Job</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Superset gives the ability to execute SQL queries and build dashboards.
-Open the <code>airflow</code> endpoint <code>webserver-airflow</code> in your browser (<code><a href="http://172.18.0.2:31979" class="bare">http://172.18.0.2:31979</a></code> in this case).</p>
+<p><a href="https://hadoop.apache.org/docs/stable/hadoop-distcp/DistCp.html">DistCp</a> (distributed copy) is a tool used for large inter/intra-cluster copying. It uses MapReduce to effect its distribution, error handling, recovery, and reporting. It expands a list of files and directories into input to map tasks, each of which will copy a partition of the files specified in the source list.
+Therefore, the first Job uses DistCp to copy data from a S3 bucket into HDFS. Below you&#8217;ll see parts from the logs.</p>
 </div>
-<div class="imageblock">
+<div class="listingblock">
 <div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_1.png" alt="airflow 1">
-</div>
-</div>
-<div class="paragraph">
-<p>Log in with the username <code>airflow</code> and password <code>airflow</code>. The overview screen shows the DAGs that have been mounted during the demo set-up (<code>date_demo</code>).</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_2.png" alt="airflow 2">
-</div>
-</div>
-<div class="paragraph">
-<p>There are two things to notice here. Both DAGs have been enabled, as shown by the slider to the left of the DAG name (DAGs are initially all <code>paused</code> and can be activated either manually in the UI or via a REST call, as done in the setup for this demo):</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_3.png" alt="airflow 3">
-</div>
-</div>
-<div class="paragraph">
-<p>Secondly, the <code>date_demo</code> job has been busy, with several runs already logged! The <code>sparkapp_dag</code> has only been run once. This is because they have been defined with different schedules.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_4.png" alt="airflow 4">
-</div>
-</div>
-<div class="paragraph">
-<p>Clicking on the number under <code>Runs</code> will display the individual job runs:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_5.png" alt="airflow 5">
-</div>
-</div>
-<div class="paragraph">
-<p>The <code>demo_date</code> job is running every minute. With Airflow, DAGs can be started manually or scheduled to run when certain conditions are fulfilled: in this case the DAG has been set up to run using a cron table, which is part of the DAG definition.</p>
-</div>
-<div class="sect2">
-<h3 id="_demo_date_dag"><a class="anchor" href="#_demo_date_dag"></a><code>demo_date</code> DAG</h3>
-<div class="paragraph">
-<p>Let&#8217;s drill down a bit deeper into this DAG. Click on one of the individual job runs shown in the previous step to display the job details. The DAG is displayed in the form of a graph (this job is so simple that it only has one step, called <code>run_every_minute</code>).</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_6.png" alt="airflow 6">
-</div>
-</div>
-<div class="paragraph">
-<p>In the top right-hand corner there is some scheduling information, which tells us that this job will run every minute continuously:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_7.png" alt="airflow 7">
-</div>
-</div>
-<div class="paragraph">
-<p>Click on the <code>run_every_minute</code> box in the centre of the page and then select <code>Log</code>:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_8.png" alt="airflow 8">
-</div>
-</div>
-<div class="paragraph">
-<p>This will navigate to the worker where this job was run (with multiple workers the jobs will be queued and distributed to the next free worker) and display the log. In this case the output is a simple printout of the timestamp:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_9.png" alt="airflow 9">
-</div>
-</div>
-<div class="paragraph">
-<p>To look at the actual DAG code click on <code>Code</code>. Here we can see the crontab information used to schedule the job as well the <code>bash</code> command that provides the output:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_10.png" alt="airflow 10">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_sparkapp_dag_dag"><a class="anchor" href="#_sparkapp_dag_dag"></a><code>sparkapp_dag</code> DAG</h3>
-<div class="paragraph">
-<p>Go back to DAG overview screen. The <code>sparkapp_dag</code> job has a scheduled entry of <code>None</code> and a last-execution time (<code>2022-09-19, 07:36:55</code>). This allows a DAG to be executed exactly once, with neither schedule-based runs nor any <a href="https://airflow.apache.org/docs/apache-airflow/stable/dag-run.html?highlight=backfill#backfill">backfill</a>. The DAG can always be triggered manually again via REST or from within the Webserver UI.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_11.png" alt="airflow 11">
-</div>
-</div>
-<div class="paragraph">
-<p>By navigating to the graphical overview of the job we can see that DAG has two steps, one to start the job - which runs asynchronously - and another to poll the running job to report on its status.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_12.png" alt="airflow 12">
-</div>
-</div>
-<div class="paragraph">
-<p>The logs for the first task - <code>spark-pi-submit</code> - indicate that it has been started, at which point the task exits without any further information:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_13.png" alt="airflow 13">
-</div>
-</div>
-<div class="paragraph">
-<p>The second task - <code>spark-pi-monitor</code> - polls this job and waits for a final result (in this case: <code>Success</code>). In this case, the actual result of the job (a value of <code>pi</code>) is logged by Spark in its driver pod, but more sophisticated jobs would persist this in a sink (e.g. a Kafka topic or HBase row) or use the result to trigger subsequent actions.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../_images/demo-airflow-scheduled-job/airflow_14.png" alt="airflow 14">
-</div>
+<pre class="highlightjs highlight"><code class="language-none hljs">Copying s3a://public-backup-nyc-tlc/cycling-tripdata/demo-cycling-tripdata.csv.gz to hdfs://hdfs/data/raw/demo-cycling-tripdata.csv.gz
+[LocalJobRunner Map Task Executor #0] mapred.RetriableFileCopyCommand (RetriableFileCopyCommand.java:getTempFile(235)) - Creating temp file: hdfs://hdfs/data/raw/.distcp.tmp.attempt_local60745921_0001_m_000000_0.1663687068145
+[LocalJobRunner Map Task Executor #0] mapred.RetriableFileCopyCommand (RetriableFileCopyCommand.java:doCopy(127)) - Writing to temporary target file path hdfs://hdfs/data/raw/.distcp.tmp.attempt_local60745921_0001_m_000000_0.1663687068145
+[LocalJobRunner Map Task Executor #0] mapred.RetriableFileCopyCommand (RetriableFileCopyCommand.java:doCopy(153)) - Renaming temporary target file path hdfs://hdfs/data/raw/.distcp.tmp.attempt_local60745921_0001_m_000000_0.1663687068145 to hdfs://hdfs/data/raw/demo-cycling-tripdata.csv.gz
+[LocalJobRunner Map Task Executor #0] mapred.RetriableFileCopyCommand (RetriableFileCopyCommand.java:doCopy(157)) - Completed writing hdfs://hdfs/data/raw/demo-cycling-tripdata.csv.gz (3342891 bytes)
+[LocalJobRunner Map Task Executor #0] mapred.LocalJobRunner (LocalJobRunner.java:statusUpdate(634)) -
+[LocalJobRunner Map Task Executor #0] mapred.Task (Task.java:done(1244)) - Task:attempt_local60745921_0001_m_000000_0 is done. And is in the process of committing
+[LocalJobRunner Map Task Executor #0] mapred.LocalJobRunner (LocalJobRunner.java:statusUpdate(634)) -
+[LocalJobRunner Map Task Executor #0] mapred.Task (Task.java:commit(1421)) - Task attempt_local60745921_0001_m_000000_0 is allowed to commit now
+[LocalJobRunner Map Task Executor #0] output.FileOutputCommitter (FileOutputCommitter.java:commitTask(609)) - Saved output of task 'attempt_local60745921_0001_m_000000_0' to file:/tmp/hadoop/mapred/staging/stackable339030898/.staging/_distcp-1760904616/_logs
+[LocalJobRunner Map Task Executor #0] mapred.LocalJobRunner (LocalJobRunner.java:statusUpdate(634)) - 100.0% Copying s3a://public-backup-nyc-tlc/cycling-tripdata/demo-cycling-tripdata.csv.gz to hdfs://hdfs/data/raw/demo-cycling-tripdata.csv.gz</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_summary"><a class="anchor" href="#_summary"></a>Summary</h2>
+<h2 id="_the_second_job"><a class="anchor" href="#_the_second_job"></a>The second Job</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This demo showed how DAGs can be made available for Airflow, scheduled, run and then inspected with the Webserver UI.</p>
+<p>The second Job consists of 2 steps.</p>
+</div>
+<div class="paragraph">
+<p>First, we use <code>org.apache.hadoop.hbase.mapreduce.ImportTsv</code> (see <a href="https://hbase.apache.org/book.html#importtsv">ImportTsv Docs</a>) to create a table and Hfiles.
+Hfile is an Hbase dedicated file format which is performance optimized for hbase. It stores meta information about the data and thus increases the performance of hbase
+When connecting to the hbase master and opening a <code>bin/hbase shell</code> and executing <code>list</code>, you will see the created table. However, it&#8217;ll contain 0 rows at this point.
+You can connect to the shell via</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl exec -it hbase-master-default-0 -- bin/hbase shell</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you use k9s you can go into the <code>hbase-master-default-0</code> and execute <code>bin/hbase shell list</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">TABLE
+cycling-tripdata</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Secondly, we&#8217;ll use <code>org.apache.hadoop.hbase.tool.LoadIncrementalHFiles</code> (see <a href="https://hbase.apache.org/book.html#arch.bulk.load">see bulk load docs</a>) to import the Hfiles into the table and ingest rows.
+You can now use the <code>bin/hbase shell</code> again and execute <code>count 'cycling-tripdata'</code> and see below for a partial result.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Current count: 1000, row: 02FD41C2518CCF81
+Current count: 2000, row: 06022E151BC79CE0
+Current count: 3000, row: 090E4E73A888604A
+...
+Current count: 82000, row: F7A8C86949FD9B1B
+Current count: 83000, row: FA9AA8F17E766FD5
+Current count: 84000, row: FDBD9EC46964C103
+84777 row(s)
+Took 13.4666 seconds
+=&gt; 84777</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_table"><a class="anchor" href="#_the_table"></a>The table</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can now use the table and the data. You are able to use all available hbase shell commands. Below, you&#8217;ll see the table description.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">describe 'cycling-tripdata'
+Table cycling-tripdata is ENABLED
+cycling-tripdata
+COLUMN FAMILIES DESCRIPTION
+{NAME =&gt; 'end_lat', BLOOMFILTER =&gt; 'ROW', IN_MEMORY =&gt; 'false', VERSIONS =&gt; '1', KEEP_DELETED_CELLS =&gt; 'FALSE', DATA_BLOCK_ENCODING =&gt; 'NONE', COMPRESSION =&gt; 'NONE', TTL =&gt; 'FOREVER', MIN_VERSIONS =&gt; '0', BLOCKCACHE =&gt; 'true', BLOCKSIZE =&gt; '65536', REPLICATION_SCOPE =&gt; '0'}
+{NAME =&gt; 'end_lng', BLOOMFILTER =&gt; 'ROW', IN_MEMORY =&gt; 'false', VERSIONS =&gt; '1', KEEP_DELETED_CELLS =&gt; 'FALSE', DATA_BLOCK_ENCODING =&gt; 'NONE', COMPRESSION =&gt; 'NONE', TTL =&gt; 'FOREVER', MIN_VERSIONS =&gt; '0', BLOCKCACHE =&gt; 'true', BLOCKSIZE =&gt; '65536', REPLICATION_SCOPE =&gt; '0'}
+{NAME =&gt; 'end_station_id', BLOOMFILTER =&gt; 'ROW', IN_MEMORY =&gt; 'false', VERSIONS =&gt; '1', KEEP_DELETED_CELLS =&gt; 'FALSE', DATA_BLOCK_ENCODING =&gt; 'NONE', COMPRESSION =&gt; 'NONE', TTL =&gt; 'FOREVER', MIN_VERSIONS =&gt; '0', BLOCKCACHE =&gt; 'true', BLOCKSIZE =&gt; '65536', REPLICATION_SCOPE =&gt; '0'}
+{NAME =&gt; 'end_station_name', BLOOMFILTER =&gt; 'ROW', IN_MEMORY =&gt; 'false', VERSIONS =&gt; '1', KEEP_DELETED_CELLS =&gt; 'FALSE', DATA_BLOCK_ENCODING =&gt; 'NONE', COMPRESSION =&gt; 'NONE', TTL =&gt; 'FOREVER', MIN_VERSIONS =&gt; '0', BLOCKCACHE =&gt; 'true', BLOCKSIZE =&gt; '65536', REPLICATION_SCOPE =&gt; '0'}
+{NAME =&gt; 'ended_at', BLOOMFILTER =&gt; 'ROW', IN_MEMORY =&gt; 'false', VERSIONS =&gt; '1', KEEP_DELETED_CELLS =&gt; 'FALSE', DATA_BLOCK_ENCODING =&gt; 'NONE', COMPRESSION =&gt; 'NONE', TTL =&gt; 'FOREVER', MIN_VERSIONS =&gt; '0', BLOCKCACHE =&gt; 'true', BLOCKSIZE =&gt; '65536', REPLICATION_SCOPE =&gt; '0'}
+{NAME =&gt; 'member_casual', BLOOMFILTER =&gt; 'ROW', IN_MEMORY =&gt; 'false', VERSIONS =&gt; '1', KEEP_DELETED_CELLS =&gt; 'FALSE', DATA_BLOCK_ENCODING =&gt; 'NONE', COMPRESSION =&gt; 'NONE', TTL =&gt; 'FOREVER', MIN_VERSIONS =&gt; '0', BLOCKCACHE =&gt; 'true', BLOCKSIZE =&gt; '65536', REPLICATION_SCOPE =&gt; '0'}
+{NAME =&gt; 'rideable_type', BLOOMFILTER =&gt; 'ROW', IN_MEMORY =&gt; 'false', VERSIONS =&gt; '1', KEEP_DELETED_CELLS =&gt; 'FALSE', DATA_BLOCK_ENCODING =&gt; 'NONE', COMPRESSION =&gt; 'NONE', TTL =&gt; 'FOREVER', MIN_VERSIONS =&gt; '0', BLOCKCACHE =&gt; 'true', BLOCKSIZE =&gt; '65536', REPLICATION_SCOPE =&gt; '0'}
+{NAME =&gt; 'start_lat', BLOOMFILTER =&gt; 'ROW', IN_MEMORY =&gt; 'false', VERSIONS =&gt; '1', KEEP_DELETED_CELLS =&gt; 'FALSE', DATA_BLOCK_ENCODING =&gt; 'NONE', COMPRESSION =&gt; 'NONE', TTL =&gt; 'FOREVER', MIN_VERSIONS =&gt; '0', BLOCKCACHE =&gt; 'true', BLOCKSIZE =&gt; '65536', REPLICATION_SCOPE =&gt; '0'}
+{NAME =&gt; 'start_lng', BLOOMFILTER =&gt; 'ROW', IN_MEMORY =&gt; 'false', VERSIONS =&gt; '1', KEEP_DELETED_CELLS =&gt; 'FALSE', DATA_BLOCK_ENCODING =&gt; 'NONE', COMPRESSION =&gt; 'NONE', TTL =&gt; 'FOREVER', MIN_VERSIONS =&gt; '0', BLOCKCACHE =&gt; 'true', BLOCKSIZE =&gt; '65536', REPLICATION_SCOPE =&gt; '0'}
+{NAME =&gt; 'start_station_id', BLOOMFILTER =&gt; 'ROW', IN_MEMORY =&gt; 'false', VERSIONS =&gt; '1', KEEP_DELETED_CELLS =&gt; 'FALSE', DATA_BLOCK_ENCODING =&gt; 'NONE', COMPRESSION =&gt; 'NONE', TTL =&gt; 'FOREVER', MIN_VERSIONS =&gt; '0', BLOCKCACHE =&gt; 'true', BLOCKSIZE =&gt; '65536', REPLICATION_SCOPE =&gt; '0'}
+{NAME =&gt; 'start_station_name', BLOOMFILTER =&gt; 'ROW', IN_MEMORY =&gt; 'false', VERSIONS =&gt; '1', KEEP_DELETED_CELLS =&gt; 'FALSE', DATA_BLOCK_ENCODING =&gt; 'NONE', COMPRESSION =&gt; 'NONE', TTL =&gt; 'FOREVER', MIN_VERSIONS =&gt; '0', BLOCKCACHE =&gt; 'true', BLOCKSIZE =&gt; '65536', REPLICATION_SCOPE =&gt; '0'}
+{NAME =&gt; 'started_at', BLOOMFILTER =&gt; 'ROW', IN_MEMORY =&gt; 'false', VERSIONS =&gt; '1', KEEP_DELETED_CELLS =&gt; 'FALSE', DATA_BLOCK_ENCODING =&gt; 'NONE', COMPRESSION =&gt; 'NONE', TTL =&gt; 'FOREVER', MIN_VERSIONS =&gt; '0', BLOCKCACHE =&gt; 'true', BLOCKSIZE =&gt; '65536', REPLICATION_SCOPE =&gt; '0'}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_hbase_ui"><a class="anchor" href="#_the_hbase_ui"></a>The Hbase UI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Hbase web UI will give you information on status and metrics of your Hbase cluster.
+If the UI is not available please do a port-forward <code>kubectl port-forward hbase-master-default-0 16010</code>
+See below for the startpage.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-hbase-hdfs-load-cycling-data/hbase-ui-start-page.png" alt="hbase ui start page">
+</div>
+</div>
+<div class="paragraph">
+<p>From the startpage you can check more details. For example details on the created table.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-hbase-hdfs-load-cycling-data/hbase-table-ui.png" alt="hbase table ui">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_hdfs_ui"><a class="anchor" href="#_the_hdfs_ui"></a>The HDFS UI</h2>
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The hdfs services will be available with the next release 22-11 via <code>stackablectl services list --all-namespaces</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can also see HDFS details via a UI. Below you will see the overview of your HDFS cluster</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-hbase-hdfs-load-cycling-data/hdfs-overview.png" alt="hdfs overview">
+</div>
+</div>
+<div class="paragraph">
+<p>The UI will give you information on the datanodes via the datanodes tab.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-hbase-hdfs-load-cycling-data/hdfs-datanode.png" alt="hdfs datanode">
+</div>
+</div>
+<div class="paragraph">
+<p>You can also browse the directory with the UI.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-hbase-hdfs-load-cycling-data/hdfs-data.png" alt="hdfs data">
+</div>
+</div>
+<div class="paragraph">
+<p>The raw data from the distcp job can be found here.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-hbase-hdfs-load-cycling-data/hdfs-data-raw.png" alt="hdfs data raw">
+</div>
+</div>
+<div class="paragraph">
+<p>The structure of the Hilfes can be seen here.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-hbase-hdfs-load-cycling-data/hdfs-data-hfile.png" alt="hdfs data hfile">
+</div>
 </div>
 </div>
 </div>

@@ -1023,6 +1023,21 @@ For more details regarding Kubernetes CPU limits see: <a href="https://kubernete
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>Spark allocates a default amount of non-heap memory based on the type of job (JVM or non-JVM). This is taken into account when defining memory settings based exclusively on the resource limits, so that the "declared" value is the actual total value (i.e. including memory overhead). This may result in minor deviations from the stated resource value due to rounding differences.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It is possible to define Spark resources either directly by setting configuration properties listed under <code>sparkConf</code>, or by using resource limits. If both are used, then <code>sparkConf</code> properties take precedence. It is recommended for the sake of clarity to use <strong><em>either</em></strong> one <strong><em>or</em></strong> the other.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">

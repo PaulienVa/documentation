@@ -463,7 +463,36 @@ Please open an <a href="https://github.com/stackabletech/hive-operator/issues">i
 <div class="sectionbody">
 <div class="paragraph">
 <p>Hive supports creating tables in S3 compatible object stores.
-To use this feature you need to provide connection details for the object store.</p>
+To use this feature you need to provide connection details for the object store using the <a href="../../home/stable/concepts/s3.html" class="xref page">S3Connection</a>.</p>
+</div>
+<div class="paragraph">
+<p>An example usage can look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  s3:
+    inline:
+      host: minio
+      port: 9000
+      accessStyle: Path
+      credentials:
+        secretClass: simple-hive-s3-secret-class</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_apache_hdfs_support"><a class="anchor" href="#_apache_hdfs_support"></a>Apache HDFS Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As well as S3, Hive also supports creating tables in HDFS.
+You can add the HDFS connection as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  hdfs:
+    configMap: my-hdfs-cluster # Name of the HdfsCluster</code></pre>
+</div>
 </div>
 </div>
 </div>

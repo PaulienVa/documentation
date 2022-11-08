@@ -116,7 +116,7 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="secret-operator" data-version="0.5">
+<div class="nav-container" data-component="secret-operator" data-version="0.6">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -124,10 +124,11 @@
     <div class="title-wrapper">
       <h3 class="title"><a href="index.html">Stackable Secret Operator</a></h3>
       <div class="page-versions">
-        <button class="version-menu-toggle" title="Show other versions of page">0.5</button>
+        <button class="version-menu-toggle" title="Show other versions of page">0.6</button>
         <div class="version-menu">
           <a class="version" href="../nightly/building.html">nightly</a>
-          <a class="version is-current" href="building.html">0.5</a>
+          <a class="version is-current" href="building.html">0.6</a>
+          <a class="version" href="../0.5/building.html">0.5</a>
         </div>
       </div>
     </div>
@@ -169,7 +170,7 @@
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
     <span class="title">Stackable Secret Operator</span>
-    <span class="version">0.5</span>
+    <span class="version">0.6</span>
   </div>
   <ul class="components">
     <li class="component">
@@ -446,7 +447,10 @@
           <a href="../nightly/index.html">nightly</a>
         </li>
         <li class="version is-current is-latest">
-          <a href="index.html">0.5</a>
+          <a href="index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../0.5/index.html">0.5</a>
         </li>
       </ul>
     </li>
@@ -473,7 +477,7 @@
     <li><a href="building.html">Building the Operator</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/secret-operator/blob/docs/0.5/docs/modules/ROOT/pages/building.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/secret-operator/blob/docs/0.6/docs/modules/ROOT/pages/building.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
@@ -508,8 +512,6 @@ using it. However, Nix has much faster incremental build and deploy times, makin
 <pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ echo Building with Docker
 # Ensure that all submodules are up-to-date
 $ git submodule update --recursive --init
-# Update the Chart metadata and CRD definitions
-$ make compile-chart
 # Create a unique image ID
 $ REPO=secret-operator
 $ TAG="$(uuidgen)"
@@ -517,6 +519,8 @@ $ TAG="$(uuidgen)"
 $ docker build . -f docker/Dockerfile -t "$REPO:$TAG"
 # Load the image onto the Kind nodes
 $ kind load docker-image "$REPO:$TAG"
+# Deploy latest CRD
+$ docker run --rm "$REPO:$TAG" crd | kubectl apply -f-
 # Deploy
 $ helm upgrade secret-operator deploy/helm/secret-operator \
        --install \
@@ -529,33 +533,37 @@ $ helm upgrade secret-operator deploy/helm/secret-operator \
 <h2 id="_nix"><a class="anchor" href="#_nix"></a>Nix</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To build and deploy to the active Kind cluster, run:</p>
+<p>To build and deploy to the active Kind cluster, run the following Bash commands:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ echo Building with Nix
 # Ensure that all submodules are up-to-date
 $ git submodule update --recursive --init
-# Ensure that the Cargo.lock is up-to-date
-# This is not required if you use a tool that invokes Cargo regularly anyway, such as Rust-Analyzer
-$ cargo generate-lockfile
 # Use crate2nix (https://github.com/kolloch/crate2nix) to convert Cargo.lock into a Nix derivation
 $ nix run -f . crate2nix generate
 # Build the Docker images
+# A custom Docker repository can be specified by appending `--argstr dockerName my-custom-registry/secret-operator`
 $ nix build -f . docker
 # Load the images onto the Kind nodes
-# Nix does not use the Docker daemon, instead it builds individual layers, as well as a script (`result/load-image`) that combines them into a Docker image archive
-$ kind load image-archive &lt;(./result/load-image)
+# Nix does not use the Docker daemon, instead it builds individual layers, as well as
+# a script (`result/load-image`) that combines them into a Docker image archive.
+# `load-image` can also be piped into `docker load` to prepare for pushing to a registry.
+$ ./result/load-image &gt; image.tar &amp;&amp; kind load image-archive image.tar
+# On single-node kind clusters it is slightly more efficient to run
+# `./result/load-image | kind load image-archive /dev/stdin` instead.
 # Deploy
-$ kubectl apply -f result/crds.yaml -f provisioner.yaml
-$ kubectl rollout restart ds/secret-provisioner</code></pre>
+$ kubectl apply -f result/crds.yaml
+$ helm upgrade secret-operator deploy/helm/secret-operator \
+  --install \
+  --set-string "image.repository=$(cat result/image-repo),image.tag=$(cat result/image-tag)"</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>You may need to add <code>extra-experimental-features = nix-command</code> to <code>/etc/nix/nix.conf</code>, or add <code>--experimental-features nix-command</code> to the Nix commands.</p>
 </div>
 <div class="paragraph">
-<p>You can also use <a href="https://tilt.dev/">Tilt</a> to automatically recompile and redeploy when files are changed:</p>
+<p>You can also use <a href="https://tilt.dev/">Tilt</a> to automatically rebuild and redeploy when files are changed:</p>
 </div>
 <div class="listingblock">
 <div class="content">

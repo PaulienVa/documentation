@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Operator :: Stackable Documentation</title>
+    <title>Customization :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>
@@ -137,19 +137,19 @@
     <span class="nav-text">Commands</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="demo.html">Demo</a>
-  </li>
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="operator.html">Operator</a>
+    <a class="nav-link" href="../commands/demo.html">Demo</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="release.html">Release</a>
+    <a class="nav-link" href="../commands/operator.html">Operator</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="services.html">Services</a>
+    <a class="nav-link" href="../commands/release.html">Release</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="stack.html">Stack</a>
+    <a class="nav-link" href="../commands/services.html">Services</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../commands/stack.html">Stack</a>
   </li>
 </ul>
   </li>
@@ -180,21 +180,21 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../customization/index.html">Customization</a>
+    <a class="nav-link" href="index.html">Customization</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../customization/add_demo.html">Add a demo</a>
+    <a class="nav-link" href="add_demo.html">Add a demo</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../customization/add_stack.html">Add a stack</a>
+    <a class="nav-link" href="add_stack.html">Add a stack</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../customization/add_release.html">Add a release</a>
+    <a class="nav-link" href="add_release.html">Add a release</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../customization/working_with_feature_branches.html">Working with feature branches</a>
+    <a class="nav-link" href="working_with_feature_branches.html">Working with feature branches</a>
   </li>
 </ul>
   </li>
@@ -516,176 +516,25 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">stackablectl</a></li>
-    <li>Commands</li>
-    <li><a href="operator.html">Operator</a></li>
+    <li><a href="index.html">Customization</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/commands/operator.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/customization/index.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Operator</h1>
-<div id="preamble">
-<div class="sectionbody">
+<h1 class="page">Customization</h1>
 <div class="paragraph">
-<p>The <code>stackable operator</code> command allows to list, install and uninstall Stackable operators.
-Operators manage the individual data products of the Stackable Data Platform.</p>
-</div>
-<div class="paragraph">
-<p>This command manages individual operators.
-It is mainly intended for people already having experience or working on the Stackable Data Platform.
-If you just want an easy way to get started or don&#8217;t know which products and/or which version to install it is recommended to use the <a href="release.html" class="xref page">Release</a> command.
-This command will install a bundle of operators from an official Stackable release.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_browse_available_operators"><a class="anchor" href="#_browse_available_operators"></a>Browse available operators</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>To list the operators that are part of the Stackable Data Platform as well as their stable versions run the following command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl operator list
-OPERATOR           STABLE VERSIONS
-airflow            0.4.0, 0.3.0, 0.2.0, 0.1.0
-commons            0.2.0, 0.1.0
-druid              0.6.0, 0.5.0, 0.4.0, 0.3.0, 0.2.0, 0.1.0
-hbase              0.3.0, 0.2.0
-hdfs               0.4.0, 0.3.0
-hive               0.6.0, 0.5.0, 0.3.0
-kafka              0.6.0, 0.5.0, 0.4.0
-nifi               0.6.0, 0.5.0, 0.4.0
-opa                0.9.0, 0.8.0, 0.7.0, 0.6.0
-secret             0.5.0, 0.4.0, 0.3.0, 0.2.0, 0.1.0
-spark              0.5.0, 0.4.0
-spark-k8s          0.3.0, 0.2.0, 0.1.0
-superset           0.5.0, 0.4.0, 0.3.0, 0.2.0, 0.1.0
-trino              0.4.0, 0.3.1, 0.3.0, 0.2.0
-zookeeper          0.9.0, 0.8.0, 0.7.0, 0.6.0, 0.10.0</code></pre>
-</div>
+<p>If you&#8217;re working for a large company, chances are that there are multiple teams using the Stackable Data Platform.
+A single team can also operate multiple Stackable Data Platforms.
+<code>stackablectl</code> is build in a way customers or developers can define their own releases, stacks and demos!
+This way it is possible to cover the following use-cases.</p>
 </div>
 <div class="paragraph">
-<p>This command only includes the stable versions of every operator for clarity.
-If you&#8217;re interested in a special version of an operator you can use the <code>describe</code> command to get more details for a specific operator as follows:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl operator describe airflow
-Operator:           airflow
-Stable versions:    0.4.0, 0.3.0, 0.2.0, 0.1.0
-Test versions:      0.5.0-pr135, 0.5.0-pr134, 0.5.0-pr133, 0.5.0-pr132, 0.5.0-pr131, 0.5.0-pr130, 0.5.0-pr129, 0.5.0-pr128, 0.5.0-pr127, 0.5.0-pr126, 0.5.0-pr125, 0.5.0-pr122, 0.4.0-pr123, 0.4.0-pr122, 0.4.0-pr121, 0.4.0-pr120, 0.4.0-pr119, 0.4.0-pr118, 0.4.0-pr117
-Dev versions:       0.5.0-nightly, 0.4.0-nightly, 0.3.0-nightly, 0.2.0-nightly, 0.1.0-nightly</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_install_operator"><a class="anchor" href="#_install_operator"></a>Install operator</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>If you want to access a Kubernetes cluster, make sure your <a href="https://kubernetes.io/docs/tasks/tools/#kubectl"><code>kubectl</code></a> Kubernetes client is configured to interact with the Kubernetes cluster.
-After that run the following command, which will install the operators in their latest nightly version - built from the main branch of the operators.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl operator install airflow commons secret
-[INFO ] Installing airflow operator
-[INFO ] Installing commons operator
-[INFO ] Installing secret operator</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you don&#8217;t have a Kubernetes cluster available, <code>stackablectl</code> can spin up a <a href="https://kind.sigs.k8s.io/">kind</a> Kubernetes cluster for you.
-Make sure you have <code>kind</code> installed and run the following command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl operator install airflow commons secret --kind-cluster
-[INFO ] Creating kind cluster stackable-data-platform
-Creating cluster "stackable-data-platform" ...
- ✓ Ensuring node image (kindest/node:v1.21.1) 🖼
- ✓ Preparing nodes 📦 📦 📦 📦
- ✓ Writing configuration 📜
- ✓ Starting control-plane 🕹️
- ✓ Installing CNI 🔌
- ✓ Installing StorageClass 💾
- ✓ Joining worker nodes 🚜
-Set kubectl context to "kind-stackable-data-platform"
-You can now use your cluster with:
-
-kubectl cluster-info --context kind-stackable-data-platform
-
-Not sure what to do next? 😅  Check out https://kind.sigs.k8s.io/docs/user/quick-start/
-[INFO ] Installing airflow operator
-[INFO ] Installing commons operator
-[INFO ] Installing secret operator</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>With this command we installed the operator for Apache Airflow as well as two operators needed internally by the Stackable Data Platform (commons and secret).</p>
-</div>
-<div class="paragraph">
-<p>As we didn&#8217;t specify a specific version to install, the operators were installed in the latest nightly version - built from the main branch of the operators.</p>
-</div>
-<div class="paragraph">
-<p>If you want to install a specific version, you can add the version to each operator to install as follows:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl operator install airflow=0.4.0 commons=0.2.0 secret=0.5.0
-[INFO ] Installing airflow operator in version 0.4.0
-[INFO ] Installing commons operator in version 0.2.0
-[INFO ] Installing secret operator in version 0.5.0</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>As you can see, the three operators where installed in the requested version.</p>
-</div>
-<div class="paragraph">
-<p>Remember: If you want to install a recommended and tested set of operator versions, have a look at the <a href="release.html" class="xref page">Release</a> command.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_list_installed_operators"><a class="anchor" href="#_list_installed_operators"></a>List installed operators</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>After installing some operators, you can list which operators are installed in your Kubernetes cluster.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl operator installed
-OPERATOR              VERSION         NAMESPACE                      STATUS           LAST UPDATED
-airflow               0.5.0-nightly   default                        deployed         2022-07-15 09:44:00.86514992 +0200 CEST
-commons               0.3.0-nightly   default                        deployed         2022-07-15 09:44:03.215214235 +0200 CEST
-secret                0.6.0-nightly   default                        deployed         2022-07-15 09:44:13.526843785 +0200 CEST</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In case you have installed the operators in a specific version, the specific versions will be shown instead of the <code>*-nightly</code> versions.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_uninstall_operator"><a class="anchor" href="#_uninstall_operator"></a>Uninstall operator</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>To uninstall the operators again you can use the <code>uninstall</code> command</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl operator uninstall airflow commons secret
-[INFO ] Uninstalling airflow operator
-[INFO ] Uninstalling commons operator
-[INFO ] Uninstalling secret operator</code></pre>
-</div>
-</div>
-</div>
+<p>Any additional demos/stacks/releases you specify, will be added to the already existing ones provided by Stackable.</p>
 </div>
 </article>
   </div>

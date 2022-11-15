@@ -161,7 +161,7 @@
     <a class="nav-link" href="../demos/airflow-scheduled-job.html">airflow-scheduled-job</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../demos/data-warehouse-iceberg-trino-spark.html">data-warehouse-iceberg-trino-spark</a>
+    <a class="nav-link" href="../demos/data-lakehouse-iceberg-trino-spark.html">data-lakehouse-iceberg-trino-spark</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../demos/hbase-hdfs-load-cycling-data.html">hbase-hdfs-cycling-data</a>
@@ -551,15 +551,15 @@ If you have the follow stack:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">stacks:
-   data-warehouse-iceberg-trino-spark:
-    description: Data warehouse using Iceberg warehouse on S3, Trino as query engine, Spark for streaming ingest and Superset for data visualization
+   data-lakehouse-iceberg-trino-spark:
+    description: Data lakehouse using Iceberg lakehouse on S3, Trino as query engine, Spark for streaming ingest and Superset for data visualization
     stackableRelease: 22.11
     labels:
       - foo
     manifests:
-      - plainYaml: https://raw.githubusercontent.com/stackabletech/stackablectl/main/stacks/data-warehouse-iceberg-trino-spark/hive-metastores.yaml
-      - plainYaml: https://raw.githubusercontent.com/stackabletech/stackablectl/main/stacks/data-warehouse-iceberg-trino-spark/trino.yaml
-      - plainYaml: https://raw.githubusercontent.com/stackabletech/stackablectl/main/stacks/data-warehouse-iceberg-trino-spark/zookeeper.yaml</code></pre>
+      - plainYaml: https://raw.githubusercontent.com/stackabletech/stackablectl/main/stacks/data-lakehouse-iceberg-trino-spark/hive-metastores.yaml
+      - plainYaml: https://raw.githubusercontent.com/stackabletech/stackablectl/main/stacks/data-lakehouse-iceberg-trino-spark/trino.yaml
+      - plainYaml: https://raw.githubusercontent.com/stackabletech/stackablectl/main/stacks/data-lakehouse-iceberg-trino-spark/zookeeper.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -568,15 +568,15 @@ If you have the follow stack:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">stacks:
-   data-warehouse-iceberg-trino-spark:
-    description: Data warehouse using Iceberg warehouse on S3, Trino as query engine, Spark for streaming ingest and Superset for data visualization
+   data-lakehouse-iceberg-trino-spark:
+    description: Data lakehouse using Iceberg lakehouse on S3, Trino as query engine, Spark for streaming ingest and Superset for data visualization
     stackableRelease: 22.11
     labels:
       - foo
     manifests:
-      - plainYaml: stacks/data-warehouse-iceberg-trino-spark/hive-metastores.yaml
-      - plainYaml: main/stacks/data-warehouse-iceberg-trino-spark/trino.yaml
-      - plainYaml: main/stacks/data-warehouse-iceberg-trino-spark/zookeeper.yaml</code></pre>
+      - plainYaml: stacks/data-lakehouse-iceberg-trino-spark/hive-metastores.yaml
+      - plainYaml: main/stacks/data-lakehouse-iceberg-trino-spark/trino.yaml
+      - plainYaml: main/stacks/data-lakehouse-iceberg-trino-spark/zookeeper.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">

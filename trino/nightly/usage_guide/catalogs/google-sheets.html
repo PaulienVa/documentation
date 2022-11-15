@@ -3,8 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Apache Iceberg :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/trino/stable/usage_guide/catalogs/iceberg.html">
+    <title>Google sheets :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../../_/css/site.css">
     <script>
@@ -126,8 +125,8 @@
       <div class="page-versions">
         <button class="version-menu-toggle" title="Show other versions of page">nightly</button>
         <div class="version-menu">
-          <a class="version is-current" href="iceberg.html">nightly</a>
-          <a class="version" href="../../../stable/usage_guide/catalogs/iceberg.html">0.8</a>
+          <a class="version is-current" href="google-sheets.html">nightly</a>
+          <a class="version is-missing" href="../../../stable/index.html">0.8</a>
           <a class="version is-missing" href="../../../0.7/index.html">0.7</a>
           <a class="version is-missing" href="../../../0.6/index.html">0.6</a>
           <a class="version is-missing" href="../../../0.5/index.html">0.5</a>
@@ -188,13 +187,13 @@
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="index.html">Catalogs</a>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="3">
+  <li class="nav-item is-current-page" data-depth="3">
     <a class="nav-link" href="google-sheets.html">Google sheets</a>
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="hive.html">Apache Hive</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="3">
+  <li class="nav-item" data-depth="3">
     <a class="nav-link" href="iceberg.html">Apache Iceberg</a>
   </li>
   <li class="nav-item" data-depth="3">
@@ -524,49 +523,64 @@
     <li><a href="../../index.html">Stackable Operator for Trino</a></li>
     <li><a href="../index.html">Usage guide</a></li>
     <li><a href="index.html">Catalogs</a></li>
-    <li><a href="iceberg.html">Apache Iceberg</a></li>
+    <li><a href="google-sheets.html">Google sheets</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/trino-operator/edit/main/docs/modules/usage_guide/pages/catalogs/iceberg.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/trino-operator/edit/main/docs/modules/usage_guide/pages/catalogs/google-sheets.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Apache Iceberg</h1>
+<h1 class="page">Google sheets</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Apache Iceberg is a format for huge analytic tables designed to address some of the scaling issues with traditional Hive tables. Iceberg depends on Hive metastore being present and makes use of the same metastore configMap used by the Hive connector.</p>
+<p>Whith this connector Trino can connect to Google Sheets.
+It needs a serviceuser to access the Google APIs.
+Please consult the <a href="https://trino.io/docs/current/connector/googlesheets.html">official documentation</a> on how to use the Google Sheets connector.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_example_iceberg_catalog_configuration"><a class="anchor" href="#_example_iceberg_catalog_configuration"></a>Example Iceberg catalog configuration</h2>
+<h2 id="_example_google_sheets_catalog_configuration"><a class="anchor" href="#_example_google_sheets_catalog_configuration"></a>Example Google sheets catalog configuration</h2>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: trino.stackable.tech/v1alpha1
 kind: TrinoCatalog
 metadata:
-  # The name of the catalog as it will appear in Trino
-  name: iceberg
+  name: gsheet
   labels:
-    trino: simple-trino
+    trino: trino
 spec:
   connector:
-    # Specify iceberg here when defining a iceberg catalog
-    iceberg:
-      metastore:
-        configMap: simple-hive-derby
-      s3:
-        inline:
-          host: test-minio
-          port: 9000
-          accessStyle: Path
-          credentials:
-            secretClass: minio-credentials</code></pre>
+    googleSheet:
+      credentialsSecret: gsheet-credentials
+      metadataSheetId: 1dT4dRWo9tAKBk5GdH-a54dcizuoxOTn98X8igZcnYr8
+      cache: # optional
+        sheetsDataMaxCacheSize: 1000 # optional, defaults to 1000
+        sheetsDataExpireAfterWrite: 5m # optional, defaults to 5m
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gsheet-credentials
+stringData:
+  credentials: |+
+    {
+      "type": "service_account",
+      "project_id": "neat-bricolage-231015",
+      "private_key_id": "XXX",
+      "private_key": "-----BEGIN PRIVATE KEY-----\nXXX=\n-----END PRIVATE KEY-----\n",
+      "client_email": "trino-550@neat-bricolage-231015.iam.gserviceaccount.com",
+      "client_id": "XXX",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/trino-550%40neat-bricolage-231015.iam.gserviceaccount.com"
+    }</code></pre>
 </div>
 </div>
 </div>

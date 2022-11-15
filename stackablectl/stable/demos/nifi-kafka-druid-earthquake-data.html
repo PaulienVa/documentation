@@ -621,12 +621,12 @@ To put it simply you have to run <code>stackablectl demo install nifi-kafka-drui
 
  nifi       nifi         default    https              https://172.18.0.3:32558  Admin user: admin, password: adminadmin
 
- superset   superset     default    external-superset  http://172.18.0.3:32108   Admin user: admin, password: admin
+ superset   superset     default    external-superset  http://172.18.0.3:32108   Admin user: admin, password: adminadmin
 
  zookeeper  zookeeper    default    zk                 172.18.0.2:32309
 
  minio      minio-druid  default    http               http://172.18.0.4:32306   Third party service
-                                    console-http       http://172.18.0.4:31664   Admin user: root, password: rootroot</code></pre>
+                                    console-http       http://172.18.0.4:31664   Admin user: admin, password: adminadmin</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -889,7 +889,7 @@ Open the <code>superset</code> endpoint <code>external-superset</code> in your b
 </div>
 </div>
 <div class="paragraph">
-<p>Log in with the username <code>admin</code> and password <code>admin</code>.</p>
+<p>Log in with the username <code>admin</code> and password <code>adminadmin</code>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1026,7 +1026,7 @@ Open the <code>minio</code> endpoint <code>console-http</code> in your browser (
 </div>
 </div>
 <div class="paragraph">
-<p>Log in with the username <code>root</code> and password <code>rootroot</code>.</p>
+<p>Log in with the username <code>admin</code> and password <code>adminadmin</code>.</p>
 </div>
 <div class="imageblock">
 <div class="content">

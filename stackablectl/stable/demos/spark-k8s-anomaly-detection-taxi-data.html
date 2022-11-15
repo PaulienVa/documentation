@@ -617,13 +617,13 @@ PRODUCT   NAME          NAMESPACE               ENDPOINTS                       
 
  opa       opa           spark-k8s-ad-taxi-data  http                http://172.18.0.3:31450
 
- superset  superset      spark-k8s-ad-taxi-data  external-superset   http://172.18.0.2:31339   Admin user: admin, password: admin
+ superset  superset      spark-k8s-ad-taxi-data  external-superset   http://172.18.0.2:31339   Admin user: admin, password: adminadmin
 
  trino     trino         spark-k8s-ad-taxi-data  coordinator-metrics 172.18.0.3:32168
                                                  coordinator-https   https://172.18.0.3:31408
 
  minio     minio-trino   spark-k8s-ad-taxi-data  http                http://172.18.0.3:30589   Third party service
-                                                 console-http        http://172.18.0.3:31452   Admin user: root, password: rootroot</code></pre>
+                                                 console-http        http://172.18.0.3:31452   Admin user: admin, password: adminadmin</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -659,7 +659,7 @@ Open the <code>minio-trino</code> endpoint <code>console-http</code> retrieved b
 </div>
 </div>
 <div class="paragraph">
-<p>Log in with the username <code>root</code> and password <code>rootroot</code>.</p>
+<p>Log in with the username <code>admin</code> and password <code>adminadmin</code>.</p>
 </div>
 <div class="imageblock">
 <div class="content">

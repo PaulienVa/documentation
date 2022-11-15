@@ -511,7 +511,7 @@ kind: NifiCluster
 metadata:
   name: simple-nifi <i class="conum" data-value="1"></i><b>(1)</b>
 spec:
-  version: 1.16.3-stackable0.1.0 <i class="conum" data-value="2"></i><b>(2)</b>
+  version: 1.18.0-stackable0.2.0 <i class="conum" data-value="2"></i><b>(2)</b>
   zookeeperConfigMapName: simple-nifi-znode <i class="conum" data-value="3"></i><b>(3)</b>
   config:
     authentication:
@@ -541,7 +541,7 @@ spec:
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Version of the Apache Nifi container image to use. This contains the Nifi version (<code>1.16.3</code>) as well as Stackable image version (<code>stackable0.1.0</code>). For a list of available versions please check our <a href="https://repo.stackable.tech/#browse/browse:docker:v2%2Fstackable%2Fnifi%2Ftags">image registry</a>.</td>
+<td>Version of the Apache Nifi container image to use. This contains the Nifi version (<code>1.18.0</code>) as well as Stackable image version (<code>stackable0.2.0</code>). For a list of available versions please check our <a href="https://repo.stackable.tech/#browse/browse:docker:v2%2Fstackable%2Fnifi%2Ftags">image registry</a>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
@@ -657,7 +657,7 @@ The available authorization methods depend on the chosen authentication method.<
 <div class="sectionbody">
 <div class="paragraph">
 <p>Updating (or downgrading for that matter) the deployed version of NiFi is as simple as changing the version stated in the CRD.
-Continuing the example above, to change the deployed version from <code>1.16.3</code> to <code>1.16.2</code> you&#8217;d simply deploy the following CRD.</p>
+Continuing the example above, to change the deployed version from <code>1.18.0</code> to <code>1.16.3</code> you&#8217;d simply deploy the following CRD.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -666,7 +666,7 @@ kind: NifiCluster
 metadata:
   name: simple-nifi
 spec:
-  version: 1.16.2-stackable0.1.0 <i class="conum" data-value="1"></i><b>(1)</b>
+  version: 1.16.3-stackable0.2.0 <i class="conum" data-value="1"></i><b>(1)</b>
   zookeeperConfigMapName: simple-nifi-znode
   config:
     authentication:

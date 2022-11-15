@@ -613,14 +613,14 @@ To put it simply you have to run <code>stackablectl demo install trino-taxi-data
 
  opa       opa          default    http                http://172.18.0.5:30316
 
- superset  superset     default    external-superset   http://172.18.0.4:32295   Admin user: admin, password: admin
+ superset  superset     default    external-superset   http://172.18.0.4:32295   Admin user: admin, password: adminadmin
 
  trino     trino        default    coordinator-http    http://172.18.0.3:30167
                                    coordinator-metrics 172.18.0.3:31818
                                    coordinator-https   https://172.18.0.3:30141
 
  minio     minio-trino  default    http                http://172.18.0.3:31062   Third party service
-                                   console-http        http://172.18.0.3:30503   Admin user: root, password: rootroot</code></pre>
+                                   console-http        http://172.18.0.3:30503   Admin user: admin, password: adminadmin</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -656,7 +656,7 @@ Open it with your favorite browser.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Log in with the username <code>root</code> and password <code>rootroot</code>.</p>
+<p>Log in with the username <code>admin</code> and password <code>adminadmin</code>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -693,7 +693,7 @@ If you get a warning regarding the self signed certificate (e.g. <code>Warning: 
 </div>
 </div>
 <div class="paragraph">
-<p>Log in with the username <code>admin</code> and password <code>admin</code>.</p>
+<p>Log in with the username <code>admin</code> and password <code>adminadmin</code>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -718,7 +718,7 @@ Open the <code>superset</code> endpoint <code>external-superset</code> in your b
 </div>
 </div>
 <div class="paragraph">
-<p>Log in with the username <code>admin</code> and password <code>admin</code>.</p>
+<p>Log in with the username <code>admin</code> and password <code>adminadmin</code>.</p>
 </div>
 <div class="imageblock">
 <div class="content">

@@ -498,7 +498,7 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Druid requires a Zookeeper to run, as well as a database. If HDFS is used as the backend-storage (so called "deep storage") then the HDFS operator is required as well.</p>
+<p>Druid requires a Zookeeper to run, as well as a database. If HDFS is used as the backend-storage (so-called "deep storage") then the HDFS operator is required as well.</p>
 </div>
 </div>
 </div>
@@ -566,43 +566,39 @@ kind: DruidCluster
 metadata:
   name: simple-druid
 spec:
-  version: 24.0.0-stackable0.1.0
-  zookeeperConfigMapName: simple-zk
-  metadataStorageDatabase:
-    dbType: postgresql
-    connString: jdbc:postgresql://druid-postgresql/druid
-    host: druid-postgresql    # this is the name of the Postgres service
-    port: 5432
-    user: druid
-    password: druid
-  deepStorage:
-    hdfs:
-      configMapName: simple-hdfs
-      directory: /druid
+  version: 24.0.0-stackable0.2.0
+  clusterConfig:
+    deepStorage:
+      hdfs:
+        configMapName: simple-hdfs
+        directory: /druid
+    metadataStorageDatabase:
+      dbType: postgresql
+      connString: jdbc:postgresql://druid-postgresql/druid
+      host: druid-postgresql    # this is the name of the Postgres service
+      port: 5432
+      user: druid
+      password: druid
+    zookeeperConfigMapName: simple-zk
   brokers:
     roleGroups:
       default:
-        config: {}
         replicas: 1
   coordinators:
     roleGroups:
       default:
-        config: {}
         replicas: 1
   historicals:
     roleGroups:
       default:
-        config: {}
         replicas: 1
   middleManagers:
     roleGroups:
       default:
-        config: {}
         replicas: 1
   routers:
     roleGroups:
       default:
-        config: {}
         replicas: 1</code></pre>
 </div>
 </div>
@@ -650,11 +646,12 @@ It should generally be safe to simply use the latest image version that is avail
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
-  ingestion:
-    s3connection:
-      host: yourhost.com  <i class="conum" data-value="1"></i><b>(1)</b>
-      port: 80 # optional <i class="conum" data-value="2"></i><b>(2)</b>
-      credentials: # optional <i class="conum" data-value="3"></i><b>(3)</b>
+  clusterConfig:
+    ingestion:
+      s3connection:
+        host: yourhost.com  <i class="conum" data-value="1"></i><b>(1)</b>
+        port: 80 # optional <i class="conum" data-value="2"></i><b>(2)</b>
+        credentials: # optional <i class="conum" data-value="3"></i><b>(3)</b>
         ...</code></pre>
 </div>
 </div>
@@ -683,16 +680,17 @@ It should generally be safe to simply use the latest image version that is avail
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
-  deepStorage:
-    s3:
-      bucket:
-        inline:
-          bucketName: my-bucket  <i class="conum" data-value="1"></i><b>(1)</b>
-          connection:
-            inline:
-              host: test-minio  <i class="conum" data-value="2"></i><b>(2)</b>
-              port: 9000  <i class="conum" data-value="3"></i><b>(3)</b>
-              credentials:  <i class="conum" data-value="4"></i><b>(4)</b>
+  clusterConfig:
+    deepStorage:
+      s3:
+        bucket:
+          inline:
+            bucketName: my-bucket  <i class="conum" data-value="1"></i><b>(1)</b>
+            connection:
+              inline:
+                host: test-minio  <i class="conum" data-value="2"></i><b>(2)</b>
+                port: 9000  <i class="conum" data-value="3"></i><b>(3)</b>
+                credentials:  <i class="conum" data-value="4"></i><b>(4)</b>
                 ...</code></pre>
 </div>
 </div>
@@ -722,10 +720,11 @@ It should generally be safe to simply use the latest image version that is avail
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
-  deepStorage:
-    s3:
-      bucket:
-        reference: my-bucket-resource <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+  clusterConfig:
+    deepStorage:
+      s3:
+        bucket:
+          reference: my-bucket-resource <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -825,10 +824,11 @@ credentials:
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
-  deepStorage:
-    hdfs:
-      configMapName: simple-hdfs <i class="conum" data-value="1"></i><b>(1)</b>
-      directory: /druid <i class="conum" data-value="2"></i><b>(2)</b>
+  clusterConfig:
+    deepStorage:
+      hdfs:
+        configMapName: simple-hdfs <i class="conum" data-value="1"></i><b>(1)</b>
+        directory: /druid <i class="conum" data-value="2"></i><b>(2)</b>
 ...</code></pre>
 </div>
 </div>
@@ -848,8 +848,122 @@ credentials:
 </div>
 </div>
 <div class="sect1">
-<h2 id="_using_open_policy_agent_opa_for_authorization"><a class="anchor" href="#_using_open_policy_agent_opa_for_authorization"></a>Using Open Policy Agent (OPA) for Authorization</h2>
+<h2 id="_security"><a class="anchor" href="#_security"></a>Security</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>The Druid cluster can be secured and protected in multiple ways.</p>
+</div>
+<div class="sect2">
+<h3 id="_encryption"><a class="anchor" href="#_encryption"></a>Encryption</h3>
+<div class="paragraph">
+<p>TLS encryption is supported for internal cluster communication (e.g. between Broker and Coordinator) as well as for external communication (e.g. between the Browser and the Router Web UI).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  clusterConfig:
+    tls:
+      secretClass: tls <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Name of the <code>SecretClass</code> that is used to encrypt internal and external communication.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+A Stackable Druid cluster is always encrypted per default. In order to disable this default behavior you can set <code>spec.clusterConfig.tls: null</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_authentication"><a class="anchor" href="#_authentication"></a>Authentication</h3>
+<div class="sect3">
+<h4 id="_tls"><a class="anchor" href="#_tls"></a>TLS</h4>
+<div class="paragraph">
+<p>The access to the Druid cluster can be limited by configuring client authentication (mutual TLS) for all participants. This means that processes acting as internal clients (e.g. a Broker) or external clients (e.g. a Browser) have to authenticate themselves with valid certificates in order to communicate with the Druid cluster.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  clusterConfig:
+    authentication:
+      tls:
+        authenticationClass: druid-tls-auth <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Name of the <code>AuthenticationClass</code> that is used to encrypt and authenticate communication.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The TLS <code>AuthenticationClass</code> and its respective <code>SecretClass</code> will always take precedence over the TLS encryption <code>SecretClass</code> (if provided).
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>AuthenticationClass</code> may or may not have a <code>SecretClass</code> configured:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: druid-mtls-authentication-class
+spec:
+  provider:
+    # Option 1
+    tls:
+      clientCertSecretClass: druid-mtls <i class="conum" data-value="1"></i><b>(1)</b>
+    # Option 2
+    tls: null <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>If a client <code>SecretClass</code> is provided in the <code>AuthenticationClass</code> (here <code>druid-mtls</code>), these certificates will be used for encryption and authentication.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>If no client <code>SecretClass</code> is provided in the <code>AuthenticationClass</code>, the <code>spec.clusterConfig.tls.secretClass</code> will be used for encryption and authentication. It cannot be explicitly set to null in this case.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ldap"><a class="anchor" href="#_ldap"></a>LDAP</h4>
+<div class="paragraph">
+<p>Currently not supported.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_authorization_with_open_policy_agent_opa"><a class="anchor" href="#_authorization_with_open_policy_agent_opa"></a>Authorization with Open Policy Agent (OPA)</h3>
 <div class="paragraph">
 <p>Druid can connect to an Open Policy Agent (OPA) instance for authorization policy decisions. You need to run an OPA instance to connect to, for which we refer to the <a href="https://docs.stackable.tech/opa/index.html">OPA Operator docs</a>. How you can write RegoRules for Druid is explained <a href="#_defining_regorules">below</a>.</p>
 </div>
@@ -858,9 +972,12 @@ credentials:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">opa:
-  configMapName: simple-opa <i class="conum" data-value="1"></i><b>(1)</b>
-  package: my-druid-rules <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  clusterConfig:
+    authorization:
+      opa:
+        configMapName: simple-opa <i class="conum" data-value="1"></i><b>(1)</b>
+        package: my-druid-rules <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -874,6 +991,7 @@ credentials:
 <td>The RegoRule package to use for policy decisions. The package should contain an <code>allow</code> rule. This is optional and will default to the name of the Druid cluster.</td>
 </tr>
 </table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_defining_regorules"><a class="anchor" href="#_defining_regorules"></a>Defining RegoRules</h3>

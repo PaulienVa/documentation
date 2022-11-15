@@ -189,6 +189,9 @@
     <a class="nav-link" href="catalogs/index.html">Catalogs</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="catalogs/google-sheets.html">Google sheets</a>
+  </li>
+  <li class="nav-item" data-depth="3">
     <a class="nav-link" href="catalogs/hive.html">Apache Hive</a>
   </li>
   <li class="nav-item" data-depth="3">
@@ -565,7 +568,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 396-stackable0.1.0
+  version: 396-stackable0.2.0
   catalogLabelSelector: {}
   authentication:
     method:
@@ -645,7 +648,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino-with-ldap
 spec:
-  version: 396-stackable0.1.0
+  version: 396-stackable0.2.0
   catalogLabelSelector: {}
   config:
   authentication:

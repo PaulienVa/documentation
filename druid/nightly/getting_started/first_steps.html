@@ -538,15 +538,11 @@ kind: ZookeeperCluster
 metadata:
   name: simple-zk
 spec:
-  version: 3.5.8-stackable0.7.0
+  version: 3.5.8-stackable0.8.0
   servers:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        replicas: 3
-        config: {}
+        replicas: 1
 ---
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperZnode
@@ -587,43 +583,20 @@ kind: HdfsCluster
 metadata:
   name: simple-hdfs
 spec:
-  version: 3.3.4-stackable0.1.0
+  version: 3.3.4-stackable0.2.0
   zookeeperConfigMapName: simple-hdfs-znode
   dfsReplication: 3
-  log4j: |-
-    # Define some default values that can be overridden by system properties
-    hadoop.root.logger=INFO,console
-    hadoop.log.dir=.
-    hadoop.log.file=hadoop.log
-    # Define the root logger to the system property "hadoop.root.logger".
-    log4j.rootLogger=${hadoop.root.logger}, EventCounter
-    # Logging Threshold
-    log4j.threshold=ALL
-    log4j.appender.console=org.apache.log4j.ConsoleAppender
-    log4j.appender.console.target=System.err
-    log4j.appender.console.layout=org.apache.log4j.PatternLayout
-    log4j.appender.console.layout.ConversionPattern=%d{ISO8601} %p %c{2}: %m%n
-    log4j.appender.EventCounter=org.apache.hadoop.log.metrics.EventCounter
   nameNodes:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
         replicas: 2
   dataNodes:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
         replicas: 1
   journalNodes:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
         replicas: 1</code></pre>
 </div>
 </div>
@@ -649,56 +622,38 @@ kind: DruidCluster
 metadata:
   name: simple-druid
 spec:
-  version: 24.0.0-stackable0.1.0
-  zookeeperConfigMapName: simple-druid-znode
-  metadataStorageDatabase:
-    dbType: derby
-    connString: jdbc:derby://localhost:1527/var/druid/metadata.db;create=true
-    host: localhost
-    port: 1527
-  deepStorage:
-    hdfs:
-      configMapName: simple-hdfs
-      directory: /data
+  version: 24.0.0-stackable0.2.0
+  clusterConfig:
+    deepStorage:
+      hdfs:
+        configMapName: simple-hdfs
+        directory: /data
+    metadataStorageDatabase:
+      dbType: derby
+      connString: jdbc:derby://localhost:1527/var/druid/metadata.db;create=true
+      host: localhost
+      port: 1527
+    tls: null
+    zookeeperConfigMapName: simple-druid-znode
   brokers:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        config: {}
         replicas: 1
   coordinators:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        config: {}
         replicas: 1
   historicals:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        config: {}
         replicas: 1
   middleManagers:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        config: {}
         replicas: 1
   routers:
     roleGroups:
       default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        config: {}
         replicas: 1</code></pre>
 </div>
 </div>

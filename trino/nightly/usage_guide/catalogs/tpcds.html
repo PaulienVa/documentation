@@ -189,6 +189,9 @@
     <a class="nav-link" href="index.html">Catalogs</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="google-sheets.html">Google sheets</a>
+  </li>
+  <li class="nav-item" data-depth="3">
     <a class="nav-link" href="hive.html">Apache Hive</a>
   </li>
   <li class="nav-item" data-depth="3">
@@ -539,8 +542,9 @@
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_example_tpc_ds_catalog_configuration"><a class="anchor" href="#_example_tpc_ds_catalog_configuration"></a>Example TPC-DS catalog configuration</h3>
+<div class="sect1">
+<h2 id="_example_tpc_ds_catalog_configuration"><a class="anchor" href="#_example_tpc_ds_catalog_configuration"></a>Example TPC-DS catalog configuration</h2>
+<div class="sectionbody">
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: trino.stackable.tech/v1alpha1
@@ -555,6 +559,7 @@ spec:
   connector:
     # Specify hive here when defining a hive catalog
     tpcds: {}</code></pre>
+</div>
 </div>
 </div>
 </div>

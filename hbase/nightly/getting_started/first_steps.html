@@ -511,7 +511,7 @@ kind: ZookeeperCluster
 metadata:
   name: simple-zk
 spec:
-  version: 3.8.0-stackable0.7.1
+  version: 3.8.0-stackable0.8.0
   servers:
     roleGroups:
       default:
@@ -564,7 +564,7 @@ kind: HdfsCluster
 metadata:
   name: simple-hdfs
 spec:
-  version: 3.3.3-stackable0.1.0
+  version: 3.3.4-stackable0.2.0
   zookeeperConfigMapName: simple-znode
   dfsReplication: 3
   nameNodes:
@@ -640,7 +640,7 @@ kind: HbaseCluster
 metadata:
   name: simple-hbase
 spec:
-  version: 2.4.12-stackable0.2.0
+  version: 2.4.12-stackable0.3.0
   hdfsConfigMapName: simple-hdfs
   zookeeperConfigMapName: simple-znode
   config:

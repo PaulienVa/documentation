@@ -189,6 +189,9 @@
     <a class="nav-link" href="catalogs/index.html">Catalogs</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="catalogs/google-sheets.html">Google sheets</a>
+  </li>
+  <li class="nav-item" data-depth="3">
     <a class="nav-link" href="catalogs/hive.html">Apache Hive</a>
   </li>
   <li class="nav-item" data-depth="3">
@@ -572,7 +575,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 396-stackable0.1.0
+  version: 396-stackable0.2.0
   catalogLabelSelector:
     matchLabels:
       trino: simple-trino
@@ -590,7 +593,7 @@ kind: HiveCluster
 metadata:
   name: simple-hive-derby
 spec:
-  version: 3.1.3-stackable0.1.0
+  version: 3.1.3-stackable0.2.0
   metastore:
     roleGroups:
       default:
@@ -690,7 +693,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 396-stackable0.1.0
+  version: 396-stackable0.2.0
   config:
     tls:
       secretClass: trino-tls <i class="conum" data-value="1"></i><b>(1)</b>
@@ -738,7 +741,7 @@ kind: HiveCluster
 metadata:
   name: simple-hive-derby
 spec:
-  version: 3.1.3-stackable0.1.0
+  version: 3.1.3-stackable0.2.0
   metastore:
     roleGroups:
       default:
@@ -806,7 +809,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 396-stackable0.1.0
+  version: 396-stackable0.2.0
   config:
     tls:
       secretClass: trino-tls <i class="conum" data-value="1"></i><b>(1)</b>
@@ -840,7 +843,7 @@ kind: HiveCluster
 metadata:
   name: simple-hive-derby
 spec:
-  version: 3.1.3-stackable0.1.0
+  version: 3.1.3-stackable0.2.0
   metastore:
     roleGroups:
       default:
@@ -903,7 +906,7 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 396-stackable0.1.0
+  version: 396-stackable0.2.0
   config:
     internalTls:
       secretClass: trino-internal-tls <i class="conum" data-value="1"></i><b>(1)</b>
@@ -951,7 +954,7 @@ kind: HiveCluster
 metadata:
   name: simple-hive-derby
 spec:
-  version: 3.1.3-stackable0.1.0
+  version: 3.1.3-stackable0.2.0
   metastore:
     roleGroups:
       default:

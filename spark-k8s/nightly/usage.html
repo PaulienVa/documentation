@@ -544,7 +544,7 @@ metadata:
   namespace: default
 spec:
   version: "1.0"
-  sparkImage: docker.stackable.tech/stackable/pyspark-k8s:3.3.0-stackable0.2.0
+  sparkImage: docker.stackable.tech/stackable/pyspark-k8s:3.3.0-stackable0.3.0
   mode: cluster
   mainApplicationFile: s3a://stackable-spark-k8s-jars/jobs/ny_tlc_report.py <i class="conum" data-value="1"></i><b>(1)</b>
   args:
@@ -613,7 +613,7 @@ metadata:
 spec:
   version: "1.0"
   image: docker.stackable.tech/stackable/ny-tlc-report:0.1.0 <i class="conum" data-value="1"></i><b>(1)</b>
-  sparkImage: docker.stackable.tech/stackable/pyspark-k8s:3.3.0-stackable0.2.0
+  sparkImage: docker.stackable.tech/stackable/pyspark-k8s:3.3.0-stackable0.3.0
   mode: cluster
   mainApplicationFile: local:///stackable/spark/jobs/ny_tlc_report.py <i class="conum" data-value="2"></i><b>(2)</b>
   args:
@@ -684,7 +684,7 @@ metadata:
   namespace: default
 spec:
   version: "1.0"
-  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.2.0
+  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.3.0
   mode: cluster
   mainApplicationFile: s3a://stackable-spark-k8s-jars/jobs/ny-tlc-report-1.0-SNAPSHOT.jar <i class="conum" data-value="1"></i><b>(1)</b>
   mainClass: org.example.App <i class="conum" data-value="2"></i><b>(2)</b>
@@ -745,7 +745,7 @@ metadata:
   name: example-sparkapp-s3-private
 spec:
   version: "1.0"
-  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.2.0
+  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.3.0
   mode: cluster
   mainApplicationFile: s3a://my-bucket/spark-examples_2.12-3.3.0.jar <i class="conum" data-value="1"></i><b>(1)</b>
   mainClass: org.apache.spark.examples.SparkPi <i class="conum" data-value="2"></i><b>(2)</b>
@@ -820,7 +820,7 @@ metadata:
   namespace: default
 spec:
   version: "1.0"
-  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.2.0
+  sparkImage: docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.3.0
   mode: cluster
   mainApplicationFile: s3a://stackable-spark-k8s-jars/jobs/ny-tlc-report-1.1.0.jar <i class="conum" data-value="3"></i><b>(3)</b>
   mainClass: tech.stackable.demo.spark.NYTLCReport
@@ -1130,7 +1130,7 @@ It is possible to define Spark resources either directly by setting configuratio
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spec.sparkImage</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Spark image which will be deployed to driver and executor pods, which must contain spark environment needed by the job e.g. <code>docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.2.0</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spark image which will be deployed to driver and executor pods, which must contain spark environment needed by the job e.g. <code>docker.stackable.tech/stackable/spark-k8s:3.3.0-stackable0.3.0</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spec.sparkImagePullPolicy</code></p></td>

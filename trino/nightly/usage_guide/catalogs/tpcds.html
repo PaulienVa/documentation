@@ -189,6 +189,9 @@
     <a class="nav-link" href="index.html">Catalogs</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="black-hole.html">Black Hole</a>
+  </li>
+  <li class="nav-item" data-depth="3">
     <a class="nav-link" href="google-sheets.html">Google sheets</a>
   </li>
   <li class="nav-item" data-depth="3">
@@ -538,7 +541,8 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Trino provides connectors that provide a data source for the TCP-DS benchmark data set. This is not a stored data set and is instead a virtual data sets generated at query time using a deterministic algorithm.</p>
+<p>The <a href="https://trino.io/docs/current/connector/tpcds.html">TPC-DS connector</a> provides a data source for the TCP-DS benchmark data set.
+This is not a stored data set and is instead a virtual data set generated at query time using a deterministic algorithm.</p>
 </div>
 </div>
 </div>
@@ -557,8 +561,7 @@ metadata:
     trino: simple-trino
 spec:
   connector:
-    # Specify hive here when defining a hive catalog
-    tpcds: {}</code></pre>
+    tpcds: {} # No options needed</code></pre>
 </div>
 </div>
 </div>

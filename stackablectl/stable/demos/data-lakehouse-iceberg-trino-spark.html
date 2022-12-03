@@ -986,8 +986,9 @@ This differs from job to job.</p>
 It reads from our Kafka at the address <code>kafka:9092`and the topic called `water_levels_measurements</code>.
 When starting up the job will ready all the already existing messages in Kafka (read from <code>earliest</code>) and will process <code>50000000</code> records as a maximum in a single batch.
 As the Kafka has a retention set up, Kafka records might alter out if the topic, before Spark has read the records.
-This can be the case when the Spark application was shut down or crashed for to long.
-In that case the streaming job should error out - so that missing data does not get unnoticed - and Kafka offsets need to be adjusted manually as well as maybe some post-loading of data.</p>
+This can be the case when the Spark application was shut down or crashed for too long.
+In that case of this demo the streaming job should not error out.
+For a production job <code>failOnDataLoss</code> should be set to <code>true</code>, so that missing data does not get unnoticed - and Kafka offsets need to be adjusted manually as well as maybe some post-loading of data.</p>
 </div>
 <div class="paragraph">
 <p>Note: All of the following Python snippets belong to a single Python statement but are spilled into separate blocks for better explanation purposes.</p>
@@ -1001,7 +1002,7 @@ In that case the streaming job should error out - so that missing data does not 
 .option("subscribe", "water_levels_measurements") \
 .option("startingOffsets", "earliest") \
 .option("maxOffsetsPerTrigger", 50000000) \
-.option("failOnDataLoss", "true") \
+.option("failOnDataLoss", "false") \
 .load() \</code></pre>
 </div>
 </div>

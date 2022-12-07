@@ -578,7 +578,9 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 396-stackable0.2.0
+  image:
+    productVersion: 396
+    stackableVersion: 0.2.0
   catalogLabelSelector:
     matchLabels:
       trino: simple-trino
@@ -596,7 +598,9 @@ kind: HiveCluster
 metadata:
   name: simple-hive-derby
 spec:
-  version: 3.1.3-stackable0.2.0
+  image:
+    productVersion: 3.1.3
+    stackableVersion: 0.2.0
   metastore:
     roleGroups:
       default:
@@ -696,7 +700,9 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 396-stackable0.2.0
+  image:
+    productVersion: 396
+    stackableVersion: 0.2.0
   config:
     tls:
       secretClass: trino-tls <i class="conum" data-value="1"></i><b>(1)</b>
@@ -744,7 +750,9 @@ kind: HiveCluster
 metadata:
   name: simple-hive-derby
 spec:
-  version: 3.1.3-stackable0.2.0
+  image:
+    productVersion: 3.1.3
+    stackableVersion: 0.2.0
   metastore:
     roleGroups:
       default:
@@ -812,7 +820,9 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 396-stackable0.2.0
+  image:
+    productVersion: 396
+    stackableVersion: 0.2.0
   config:
     tls:
       secretClass: trino-tls <i class="conum" data-value="1"></i><b>(1)</b>
@@ -846,7 +856,9 @@ kind: HiveCluster
 metadata:
   name: simple-hive-derby
 spec:
-  version: 3.1.3-stackable0.2.0
+  image:
+    productVersion: 3.1.3
+    stackableVersion: 0.2.0
   metastore:
     roleGroups:
       default:
@@ -909,7 +921,9 @@ kind: TrinoCluster
 metadata:
   name: simple-trino
 spec:
-  version: 396-stackable0.2.0
+  image:
+    productVersion: 396
+    stackableVersion: 0.2.0
   config:
     internalTls:
       secretClass: trino-internal-tls <i class="conum" data-value="1"></i><b>(1)</b>
@@ -957,7 +971,9 @@ kind: HiveCluster
 metadata:
   name: simple-hive-derby
 spec:
-  version: 3.1.3-stackable0.2.0
+  image:
+    productVersion: 3.1.3
+    stackableVersion: 0.2.0
   metastore:
     roleGroups:
       default:

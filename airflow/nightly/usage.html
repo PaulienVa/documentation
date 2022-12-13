@@ -712,7 +712,9 @@ kind: AirflowCluster
 metadata:
   name: airflow-with-ldap
 spec:
-  version: 2.4.1-stackable0.6.0
+  image:
+    productVersion: 2.4.1
+    stackableVersion: 0.7.0
   [...]
   authenticationConfig:
     authenticationClass: airflow-with-ldap-ldap
@@ -840,8 +842,9 @@ kind: AirflowCluster
 metadata:
   name: airflow
 spec:
-  version: 2.4.1-stackable0.6.0
-  statsdExporterVersion: v0.22.4
+  image:
+    productVersion: 2.4.1
+    stackableVersion: 0.7.0
   executor: CeleryExecutor
   loadExamples: false
   exposeConfig: false
@@ -991,8 +994,9 @@ kind: AirflowCluster
 metadata:
   name: airflow
 spec:
-  version: 2.4.1-stackable0.6.0
-  statsdExporterVersion: v0.22.4
+  image:
+    productVersion: 2.4.1
+    stackableVersion: 0.7.0
   executor: CeleryExecutor
   loadExamples: false
   exposeConfig: false
@@ -1135,8 +1139,9 @@ kind: AirflowCluster
 metadata:
   name: airflow
 spec:
-  version: 2.4.1-stackable0.6.0
-  statsdExporterVersion: v0.22.4
+  image:
+    productVersion: 2.4.1
+    stackableVersion: 0.7.0
   executor: CeleryExecutor
   loadExamples: false
   exposeConfig: false

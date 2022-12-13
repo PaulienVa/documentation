@@ -485,19 +485,21 @@
 <div class="paragraph">
 <p>The cluster can be configured via a YAML file. This custom resource specifies the amount of replicas for each role group, role group or role specific configuration like port definitions etc.</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>apiVersion: kafka.stackable.tech/v1alpha1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: kafka.stackable.tech/v1alpha1
 kind: KafkaCluster
 metadata:
   name: simple-kafka
 spec:
-  version: 3.2.0-stackable0.2.0
+  image:
+    productVersion: 3.3.1
+    stackableVersion: 0.2.0
   zookeeperConfigMapName: simple-kafka-znode
   brokers:
     roleGroups:
       default:
-        replicas: 1</pre>
+        replicas: 1</code></pre>
 </div>
 </div>
 <div class="sect2">

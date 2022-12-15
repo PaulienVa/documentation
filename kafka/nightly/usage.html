@@ -495,7 +495,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>To create an Apache Kafka (v3.2.0) cluster named <code>simple-kafka</code> assuming that you already have a Zookeeper cluster named <code>simple-zk</code>:</p>
+<p>To create an Apache Kafka cluster named <code>simple-kafka</code> assuming that you already have a Zookeeper cluster named <code>simple-zk</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -515,8 +515,8 @@ metadata:
   name: simple-kafka
 spec:
   image:
-    productVersion: 3.2.0
-    stackableVersion: 0.2.0
+    productVersion: 3.3.1
+    stackableVersion: 0.3.0
   zookeeperConfigMapName: simple-kafka-znode
   brokers:
     roleGroups:
@@ -536,8 +536,8 @@ metadata:
   name: simple-kafka
 spec:
   image:
-    productVersion: 3.2.0
-    stackableVersion: 0.2.0
+    productVersion: 3.3.1
+    stackableVersion: 0.3.0
   zookeeperConfigMapName: simple-kafka-znode
   opa:
     configMapName: simple-opa
@@ -560,8 +560,8 @@ metadata:
   name: simple-kafka
 spec:
   image:
-    productVersion: 3.2.0
-    stackableVersion: 0.2.0
+    productVersion: 3.3.1
+    stackableVersion: 0.3.0
   zookeeperConfigMapName: simple-kafka-znode
   opa:
     configMapName: simple-opa
@@ -606,8 +606,8 @@ metadata:
   name: simple-kafka
 spec:
   image:
-    productVersion: 3.2.0
-    stackableVersion: 0.2.0
+    productVersion: 3.3.1
+    stackableVersion: 0.3.0
   zookeeperConfigMapName: simple-kafka-znode
   log4j: |-
     log4j.rootLogger=INFO, stdout, kafkaAppender
@@ -644,8 +644,8 @@ metadata:
   name: simple-kafka
 spec:
   image:
-    productVersion: 3.2.0
-    stackableVersion: 0.2.0
+    productVersion: 3.3.1
+    stackableVersion: 0.3.0
   zookeeperConfigMapName: simple-kafka-znode
   config:
     tls:
@@ -732,8 +732,8 @@ metadata:
   name: simple-kafka
 spec:
   image:
-    productVersion: 3.2.0
-    stackableVersion: 0.2.0
+    productVersion: 3.3.1
+    stackableVersion: 0.3.0
   zookeeperConfigMapName: simple-kafka-znode
   config:
     tls:

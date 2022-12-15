@@ -3,8 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Getting started :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/zookeeper/stable/getting_started/index.html">
+    <title>Storage and resource configuration :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script type="text/javascript"> var tCPrivacyTagManager = "gtm"; </script>
@@ -114,9 +113,9 @@
       <div class="page-versions">
         <button class="version-menu-toggle" title="Show other versions of page">nightly</button>
         <div class="version-menu">
-          <a class="version is-current" href="index.html">nightly</a>
-          <a class="version" href="../../stable/getting_started/index.html">0.12</a>
-          <a class="version" href="../../0.11/getting_started/index.html">0.11</a>
+          <a class="version is-current" href="resource_configuration.html">nightly</a>
+          <a class="version is-missing" href="../../stable/index.html">0.12</a>
+          <a class="version is-missing" href="../../0.11/index.html">0.11</a>
           <a class="version is-missing" href="../../0.10/index.html">0.10</a>
         </div>
       </div>
@@ -124,15 +123,15 @@
     <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">Getting started</a>
+    <a class="nav-link" href="../getting_started/index.html">Getting started</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="installation.html">Installation</a>
+    <a class="nav-link" href="../getting_started/installation.html">Installation</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="first_steps.html">First steps</a>
+    <a class="nav-link" href="../getting_started/first_steps.html">First steps</a>
   </li>
 </ul>
   </li>
@@ -161,25 +160,25 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../usage_guide/index.html">Usage guide</a>
+    <a class="nav-link" href="index.html">Usage guide</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../usage_guide/encryption.html">Encryption</a>
+    <a class="nav-link" href="encryption.html">Encryption</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../usage_guide/authentication.html">Authentication</a>
+    <a class="nav-link" href="authentication.html">Authentication</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="resource_configuration.html">Storage and resource configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../usage_guide/resource_configuration.html">Storage and resource configuration</a>
+    <a class="nav-link" href="monitoring.html">Monitoring</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../usage_guide/monitoring.html">Monitoring</a>
+    <a class="nav-link" href="using_multiple_role_groups.html">Using multiple role groups</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../usage_guide/using_multiple_role_groups.html">Using multiple role groups</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../usage_guide/configuration_environment_overrides.html">Configuration and environment overrides</a>
+    <a class="nav-link" href="configuration_environment_overrides.html">Configuration and environment overrides</a>
   </li>
 </ul>
   </li>
@@ -498,73 +497,123 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Stackable Operator for Apache ZooKeeper</a></li>
-    <li><a href="index.html">Getting started</a></li>
+    <li><a href="index.html">Usage guide</a></li>
+    <li><a href="resource_configuration.html">Storage and resource configuration</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/zookeeper-operator/edit/main/docs/modules/getting_started/pages/index.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/zookeeper-operator/edit/main/docs/modules/usage_guide/pages/resource_configuration.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Getting started</h1>
-<div id="preamble">
+<h1 class="page">Storage and resource configuration</h1>
+<div class="sect1">
+<h2 id="_storage_for_data_volumes"><a class="anchor" href="#_storage_for_data_volumes"></a>Storage for data volumes</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This guide will get you started with Apache ZooKeeper using the Stackable Operator. It will guide you through the installation of the Operator and its dependencies, setting up your first ZooKeeper cluster and connecting to it as well as setting up your first <a href="../znodes.html" class="xref page">ZNode</a>.</p>
+<p>You can mount volumes where data is stored by specifying <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes">PersistentVolumeClaims</a> for each individual role group:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">servers:
+  roleGroups:
+    default:
+      config:
+        resources:
+          storage:
+            data:
+              capacity: 2Gi</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the above example, all ZooKeeper nodes in the default group will store data (the location of the property <code>dataDir</code>) on a <code>2Gi</code> volume.</p>
+</div>
+<div class="paragraph">
+<p>By default, in case nothing is configured in the custom resource for a certain role group, each Pod will have a <code>1Gi</code> large local volume mount for the data location.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h2>
+<h2 id="_resource_requests"><a class="anchor" href="#_resource_requests"></a>Resource requests</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You will need:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>a Kubernetes cluster</p>
-</li>
-<li>
-<p>kubectl</p>
-</li>
-<li>
-<p>optional: Helm</p>
-</li>
-</ul>
+<p>Stackable operators handle resource requests in a sligtly different manner than Kubernetes. Resource requests are defined on role or group level. See <a href="../../../home/stable/concepts/roles-and-role-groups.html" class="xref page">Roles and role groups</a> for details on these concepts. On a role level this means that e.g. all workers will use the same resource requests and limits. This can be further specified on role group level (which takes priority to the role level) to apply different resources.</p>
 </div>
 <div class="paragraph">
-<p>Resource sizing depends on cluster type(s), usage and scope, but as a starting point we recommend a minimum of the following resources for this operator:</p>
+<p>This is an example on how to specify CPU and memory resources using the Stackable <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">Custom Resources</a>:</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>0.2 cores (e.g. i5 or similar)</p>
-</li>
-<li>
-<p>256MB RAM</p>
-</li>
-</ul>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: example.stackable.tech/v1alpha1
+kind: ExampleCluster
+metadata:
+  name: example
+spec:
+  workers: # role-level
+    config:
+      resources:
+        cpu:
+          min: 300m
+          max: 600m
+        memory:
+          limit: 3Gi
+    roleGroups: # role-group-level
+      resources-from-role: # role-group 1
+        replicas: 1
+      resources-from-role-group: # role-group 2
+        replicas: 1
+        config:
+          resources:
+            cpu:
+              min: 400m
+              max: 800m
+            memory:
+              limit: 4Gi</code></pre>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>The Guide is divided into two steps:</p>
+<p>In this case, the role group <code>resources-from-role</code> will inherit the resources specified on the role level. Resulting in a maximum of <code>3Gi</code> memory and <code>600m</code> CPU resources.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="installation.html" class="xref page">Installing the Operators</a>.</p>
-</li>
-<li>
-<p><a href="first_steps.html" class="xref page">Setting up the ZooKeeper cluster</a>.</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>The role group <code>resources-from-role-group</code> has maximum of <code>4Gi</code> memory and <code>800m</code> CPU resources (which overrides the role CPU resources).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+For Java products the actual used Heap memory is lower than the specified memory limit due to other processes in the Container requiring memory to run as well. Currently, 80% of the specified memory limits is passed to the JVM.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For memory only a limit can be specified, which will be set as memory request and limit in the Container. This is to always guarantee a Container the full amount memory during Kubernetes scheduling.</p>
+</div>
+<div class="paragraph">
+<p>If no resource requests are configured explicitly, the ZooKeeper operator uses the following defaults:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">servers:
+  roleGroups:
+    default:
+      config:
+        resources:
+          memory:
+            limit: '512Mi'
+          cpu:
+            max: '4'
+            min: '500m'
+          storage:
+            data:
+              capacity: '1Gi'</code></pre>
+</div>
 </div>
 </div>
 </div>

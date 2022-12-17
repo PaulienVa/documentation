@@ -511,8 +511,8 @@ policy queries (which are often chained in serial, and block other tasks in the 
 <p>Users can manage policy rules by creating, updating and deleting <code>ConfigMap</code> resources.</p>
 </div>
 <div class="paragraph">
-<p>The role of the bundle builder is to convert these resources to bundles (<code>tar.gz</code> files) and make them available as an HTTP endpoint.
-The bundle builder runs in a side container of the OPA <code>Pod</code> as a simple HTTP server that OPA is querying regularly
+<p>The responsibility of the <a href="https://github.com/stackabletech/opa-bundle-builder">OPA Bundle Builder</a> is to convert these resources to bundles (<code>tar.gz</code> files) and make them available via an HTTP endpoint.
+The OPA Bundle Builder runs in a side container of the OPA <code>Pod</code> as a simple HTTP server that OPA is querying regularly
 (every 20 to 30 seconds) for updates.</p>
 </div>
 <div class="admonitionblock note">
@@ -538,7 +538,7 @@ the <code>data</code> entries in the <code>ConfigMap</code> are used as file nam
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Currently it is the user&#8217;s responsibility to make sure these names do not collide (as they will override each other).
+Currently, it is the user&#8217;s responsibility to make sure these names do not collide (as they will override each other).
 </td>
 </tr>
 </table>

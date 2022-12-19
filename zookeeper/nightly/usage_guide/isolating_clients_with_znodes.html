@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Storage and resource configuration :: Stackable Documentation</title>
+    <title>Isolating clients with ZNodes :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script type="text/javascript"> var tCPrivacyTagManager = "gtm"; </script>
@@ -113,7 +113,7 @@
       <div class="page-versions">
         <button class="version-menu-toggle" title="Show other versions of page">nightly</button>
         <div class="version-menu">
-          <a class="version is-current" href="resource_configuration.html">nightly</a>
+          <a class="version is-current" href="isolating_clients_with_znodes.html">nightly</a>
           <a class="version is-missing" href="../../stable/index.html">0.12</a>
           <a class="version is-missing" href="../../0.11/index.html">0.11</a>
           <a class="version is-missing" href="../../0.10/index.html">0.10</a>
@@ -168,7 +168,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="authentication.html">Authentication</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="resource_configuration.html">Storage and resource configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -177,7 +177,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="using_multiple_role_groups.html">Using multiple role groups</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="isolating_clients_with_znodes.html">Isolating clients with ZNodes</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -501,122 +501,222 @@
   <ul>
     <li><a href="../index.html">Stackable Operator for Apache ZooKeeper</a></li>
     <li><a href="index.html">Usage guide</a></li>
-    <li><a href="resource_configuration.html">Storage and resource configuration</a></li>
+    <li><a href="isolating_clients_with_znodes.html">Isolating clients with ZNodes</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/zookeeper-operator/edit/main/docs/modules/usage_guide/pages/resource_configuration.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/zookeeper-operator/edit/main/docs/modules/usage_guide/pages/isolating_clients_with_znodes.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Storage and resource configuration</h1>
-<div class="sect1">
-<h2 id="_storage_for_data_volumes"><a class="anchor" href="#_storage_for_data_volumes"></a>Storage for data volumes</h2>
+<h1 class="page">Isolating clients with ZNodes</h1>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can mount volumes where data is stored by specifying <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes">PersistentVolumeClaims</a> for each individual role group:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">servers:
-  roleGroups:
-    default:
-      config:
-        resources:
-          storage:
-            data:
-              capacity: 2Gi</code></pre>
-</div>
+<p>ZooKeeper is a dependency of many products supported by the Stackable Data Platform. To ensure that all products can use the same ZooKeeper cluster safely, it is important to isolate them which is done using <a href="../znodes.html" class="xref page">ZNodes</a>.</p>
 </div>
 <div class="paragraph">
-<p>In the above example, all ZooKeeper nodes in the default group will store data (the location of the property <code>dataDir</code>) on a <code>2Gi</code> volume.</p>
-</div>
-<div class="paragraph">
-<p>By default, in case nothing is configured in the custom resource for a certain role group, each Pod will have a <code>1Gi</code> large local volume mount for the data location.</p>
+<p>This guide shows you how to set up multiple ZNodes to use with different products from the Stackable Data Platform, using Kafka and Druid as an example. For an explanation of the ZNode concept, read the <a href="../znodes.html" class="xref page">ZNodes</a> concept page.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_resource_requests"><a class="anchor" href="#_resource_requests"></a>Resource requests</h2>
+<h2 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Stackable operators handle resource requests in a sligtly different manner than Kubernetes. Resource requests are defined on role or group level. See <a href="../../../home/stable/concepts/roles-and-role-groups.html" class="xref page">Roles and role groups</a> for details on these concepts. On a role level this means that e.g. all workers will use the same resource requests and limits. This can be further specified on role group level (which takes priority to the role level) to apply different resources.</p>
+<p>To follow this guide, you should have</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Access to a Kubernetes cluster</p>
+</li>
+<li>
+<p>The Stackable Operator for Apache ZooKeeper installed in said cluster</p>
+</li>
+<li>
+<p>A ZookeeperCluster already deployed on the cluster</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>This is an example on how to specify CPU and memory resources using the Stackable <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">Custom Resources</a>:</p>
+<p>If you have not yet set up the Operator and ZookeeperCluster, follow the <a href="../getting_started/index.html" class="xref page">getting started guide</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_steps"><a class="anchor" href="#_steps"></a>Steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide assumes the ZookeeperCluster is called <code>my-zookeeper</code> and is running in a <code>data</code> namespace.</p>
+</div>
+<div class="sect2">
+<h3 id="_setting_up_the_znodes"><a class="anchor" href="#_setting_up_the_znodes"></a>Setting up the ZNodes</h3>
+<div class="paragraph">
+<p>To set up a Kafka and Druid instance to use the ZookeeperCluster, two ZNodes are required, one for each product. This guide assumes the Kafka instance is running in the same namespace as the ZooKeeper, while the Druid instance is running in its own namespace called <code>druid-ns</code>.</p>
+</div>
+<div class="paragraph">
+<p>First, the Druid ZNode:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: example.stackable.tech/v1alpha1
-kind: ExampleCluster
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperZnode
 metadata:
-  name: example
+  name: druid-znode    <i class="conum" data-value="1"></i><b>(1)</b>
+  namespace: druid-ns  <i class="conum" data-value="2"></i><b>(2)</b>
 spec:
-  workers: # role-level
-    config:
-      resources:
-        cpu:
-          min: 300m
-          max: 600m
-        memory:
-          limit: 3Gi
-    roleGroups: # role-group-level
-      resources-from-role: # role-group 1
-        replicas: 1
-      resources-from-role-group: # role-group 2
-        replicas: 1
-        config:
-          resources:
-            cpu:
-              min: 400m
-              max: 800m
-            memory:
-              limit: 4Gi</code></pre>
+  clusterRef:          <i class="conum" data-value="1"></i><b>(1)</b>
+    name: my-zookeeper
+    namespace: data</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>In this case, the role group <code>resources-from-role</code> will inherit the resources specified on the role level. Resulting in a maximum of <code>3Gi</code> memory and <code>600m</code> CPU resources.</p>
-</div>
-<div class="paragraph">
-<p>The role group <code>resources-from-role-group</code> has maximum of <code>4Gi</code> memory and <code>800m</code> CPU resources (which overrides the role CPU resources).</p>
-</div>
-<div class="admonitionblock important">
+<div class="colist arabic">
 <table>
 <tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-For Java products the actual used Heap memory is lower than the specified memory limit due to other processes in the Container requiring memory to run as well. Currently, 80% of the specified memory limits is passed to the JVM.
-</td>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The name of the Druid ZNode.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The namespace where the ZNode should be created. This should be the same as the namespace of the product or client that wants to use the ZNode.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The ZooKeeper cluster reference. Since ZooKeeper is running in a different namespace, both the cluster name and namespace need to be given.</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>For memory only a limit can be specified, which will be set as memory request and limit in the Container. This is to always guarantee a Container the full amount memory during Kubernetes scheduling.</p>
-</div>
-<div class="paragraph">
-<p>If no resource requests are configured explicitly, the ZooKeeper operator uses the following defaults:</p>
+<p>And the Kafka ZNode:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">servers:
-  roleGroups:
-    default:
-      config:
-        resources:
-          memory:
-            limit: '512Mi'
-          cpu:
-            max: '4'
-            min: '500m'
-          storage:
-            data:
-              capacity: '1Gi'</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperZnode
+metadata:
+  name: kafka-znode  <i class="conum" data-value="1"></i><b>(1)</b>
+  namespace: data    <i class="conum" data-value="2"></i><b>(2)</b>
+spec:
+  clusterRef:        <i class="conum" data-value="3"></i><b>(3)</b>
+    name: my-zookeeper</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The name of the Kafka ZNode.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The namespace where the ZNode should be created. Since Kafka is running in the same namespace as ZooKeeper, this is the namespace of <code>my-zookeeper</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The ZooKeeper cluster reference. The namespace is omitted here because the ZooKeeper is in the same namespace as the ZNode object.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The Stackable Operator for ZooKeeper watches for ZookeeperZnode objects. If one is found it creates the ZNode <em>inside</em> of the ZooKeeper cluster and also creates a <a href="../../../home/stable/concepts/service_discovery.html" class="xref page">discovery ConfigMap</a> in the same namespace as the ZookeeperZnode with the same name as the ZookeeperZnode.</p>
+</div>
+<div class="paragraph">
+<p>In this example, two ConfigMaps are created:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The Druid ZNode discovery ConfigMap <code>druid-znode</code> in the <code>druid-ns</code> namespace</p>
+</li>
+<li>
+<p>The Kafka ZNode discovery ConfigMap <code>kafka-znode</code> in the <code>data</code> namespace</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_connecting_the_products_to_the_znodes"><a class="anchor" href="#_connecting_the_products_to_the_znodes"></a>Connecting the products to the ZNodes</h3>
+<div class="paragraph">
+<p>The ConfigMaps with the name and namespaces as given above will look similar to this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ...  <i class="conum" data-value="1"></i><b>(1)</b>
+  namespace: ...
+data:
+  ZOOKEEPER: pod-1:2181,pod-2:2181,pod-3:2181/{path} <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Name and namespaces as specified above</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>$PATH</code> will be a unique and unpredictable path that is generated by the operator</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This ConfigMap can then be mounted into other Pods and the <code>ZOOKEEPER</code> key can be used to connect to the ZooKeeper instance and the correct ZNode.</p>
+</div>
+<div class="paragraph">
+<p>All products that need a ZNode can be configured with a <code>zookeeperConfigMapName</code> property. As the name implies, this property  references the discovery ConfigMap for the requested ZNode.</p>
+</div>
+<div class="paragraph">
+<p>For Kafka:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: kafka.stackable.tech/v1alpha1
+kind: DruidCluster
+metadata:
+  name: my-druid
+  namespace: druid-ns
+spec:
+  zookeeperConfigMapName: kafka-znode
+  ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And for Druid:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: kafka.stackable.tech/v1alpha1
+kind: KafkaCluster
+metadata:
+  name: my-kafka
+  namespace: data
+spec:
+  zookeeperConfigMapName: kafka-znode
+  ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Stackable Operators for Kafka and Druid use the discovery ConfigMaps to connect Kafka and Druid Pods with different ZNodes in a shared ZooKeeper cluster.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can find out more about the discovery ConfigMap <a href="../discovery.html" class="xref page">Discovery Profiles</a> and the <a href="../znodes.html" class="xref page">ZNodes</a> in the concepts documentation.</p>
 </div>
 </div>
 </div>

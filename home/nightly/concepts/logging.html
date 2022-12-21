@@ -769,20 +769,21 @@
 <h2 id="configuration"><a class="anchor" href="#configuration"></a>Identical configuration in each product</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Logging configuration usually requires configuration what to log, where to log it and in which format. Usually you want to persist logs but also view them on the fly in a console, and possibly both of these in different formats. Stackable provides configuration for this out of the box. The only thing left to configure is the <em>what</em>. As part of the logging configuration, individual modules can be configured with different log levels:</p>
+<p>Logging configuration usually requires configuration what to log, where to log it and in which format. Usually you want to persist logs but also view them on the fly in a console, and possibly both of these in different formats. Stackable provides configuration for this out of the box. You only need to enable log aggregation and configure <em>what</em> you want to log. As part of the logging configuration, individual modules can be configured with different log levels:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">vectorAggregatorConfigMapName: vector-aggregator-discovery
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">vectorAggregatorConfigMapName: vector-aggregator-discovery  <i class="conum" data-value="1"></i><b>(1)</b>
 ...
-  logging:
-    containers:          <i class="conum" data-value="1"></i><b>(1)</b>
+  logging:                   <i class="conum" data-value="2"></i><b>(2)</b>
+    enableVectorAgent: true  <i class="conum" data-value="3"></i><b>(3)</b>
+    containers:              <i class="conum" data-value="4"></i><b>(4)</b>
       main-container:
-        console:         <i class="conum" data-value="2"></i><b>(2)</b>
+        console:             <i class="conum" data-value="5"></i><b>(5)</b>
           level: DEBUG
         file:
           level: INFO
-        loggers:         <i class="conum" data-value="3"></i><b>(3)</b>
+        loggers:             <i class="conum" data-value="6"></i><b>(6)</b>
           ROOT:
             level: INFO
           my.module:
@@ -797,20 +798,32 @@
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Logging is defined for each container</td>
+<td>The discovery ConfigMap of the Vector aggregator to publish the logs to. This is set at cluster level.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Console and file appenders can have different log level thresholds.</td>
+<td>The logging configuration fragment, can be set at role or role group level.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Setting log levels for individual modules is also possible</td>
+<td>Enable the Vector agent to aggregate logs.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Logging is defined for each container.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Console and file appenders can have different log level thresholds.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Setting log levels for individual modules is also possible.</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p><strong>Log levels per module</strong> - In the <code>loggers</code> section the log levels for each module are configured. Note the <code>ROOT</code> module. This is a special module and refers to the default log level for the container. The log levels are the commonly used ones (TRACE, DEBUG, INFO, WARN, ERROR, FATAL) as well as the NONE level to turn of logging.</p>
+<p><strong>Log levels per module</strong> - In the <code>loggers</code> section the log levels for each module are configured. Note the <code>ROOT</code> module. This is a special module and refers to the default log level for the container. The log levels are the commonly used ones (TRACE, DEBUG, INFO, WARN, ERROR, FATAL) as well as the NONE level to turn of logging. The default log level is <code>INFO</code>.</p>
 </div>
 <div class="paragraph">
 <p><strong>Log levels for console and file</strong> - The configuration supports setting another level threshold for the console and the file output from which the aggregation is done. A typical use case is that the log level for the console is set to a more detailed level to allow for detailed inspection of a container, but less information in the aggregated log store.</p>

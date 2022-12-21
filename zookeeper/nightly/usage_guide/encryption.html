@@ -526,10 +526,10 @@ spec:
   image:
     productVersion: 3.8.0
     stackableVersion: 0.8.0
-  config:
+  clusterConfig:
     tls:
-      secretClass: tls <i class="conum" data-value="1"></i><b>(1)</b>
-    quorumTlsSecretClass: tls <i class="conum" data-value="2"></i><b>(2)</b>
+      serverSecretClass: tls <i class="conum" data-value="1"></i><b>(1)</b>
+      quorumSecretClass: tls <i class="conum" data-value="2"></i><b>(2)</b>
   servers:
     roleGroups:
       default:
@@ -540,11 +540,11 @@ spec:
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The <code>tls.secretClass</code> refers to the client-to-server encryption. Defaults to the <code>tls</code> secret.</td>
+<td>The <code>tls.server.secretClass</code> refers to the client-to-server encryption. Defaults to the <code>tls</code> secret.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>The <code>quorumTlsSecretClass</code> refers to the server-to-server quorum encryption. Defaults to the <code>tls</code> secret.</td>
+<td>The <code>tls.quorum.secretClass</code> refers to the server-to-server quorum encryption. Defaults to the <code>tls</code> secret.</td>
 </tr>
 </table>
 </div>

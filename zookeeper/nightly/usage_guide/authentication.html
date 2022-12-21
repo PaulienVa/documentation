@@ -513,7 +513,10 @@
 <article class="doc">
 <h1 class="page">Authentication</h1>
 <div class="paragraph">
-<p>The quorum or server-to-server communication is authenticated via TLS per default. In order to enforce TLS authentication for client-to-server communication, you can set an <code>AuthenticationClass</code> reference in the custom resource provided by the <a href="../../../commons-operator/stable/index.html" class="xref page">Commons Operator</a>.</p>
+<p>The communication between nodes (server to server) is encrypted TLS by default. In order to enforce TLS authentication for client-to-server communication, you can set an <code>AuthenticationClass</code> reference in the custom resource provided by the <a href="../../../commons-operator/stable/index.html" class="xref page">Commons Operator</a>.</p>
+</div>
+<div class="paragraph">
+<p>Currently it is possible to configure a single form of authentication (of type TLS) by adding one (and only one) entry in the <code>authentication</code> sequence as shown in the example below. Additional authentication methods, such as Kerberos, are not yet supported.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -526,10 +529,9 @@ spec:
   image:
     productVersion: 3.8.0
     stackableVersion: 0.8.0
-  config:
-    clientAuthentication:
-      authenticationClass: zk-client-tls <i class="conum" data-value="1"></i><b>(1)</b>
-    quorumTlsSecretClass: tls
+  clusterConfig:
+    authentication:
+      - authenticationClass: zk-client-tls <i class="conum" data-value="1"></i><b>(1)</b>
   servers:
     roleGroups:
       default:
@@ -562,7 +564,7 @@ spec:
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The <code>config.clientAuthentication.authenticationClass</code> can be set to use TLS for authentication. This is optional.</td>
+<td>The <code>clusterConfig.authentication.authenticationClass</code> can be set to use TLS for authentication. This is optional.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -579,7 +581,7 @@ spec:
 </table>
 </div>
 <div class="paragraph">
-<p>If both <code>spec.config.tls.secretClass</code> and <code>spec.config.clientAuthentication.authenticationClass</code> are set, the authentication class will take precedence over the secret class. The cluster will be encrypted and authenticate only against the authentication class.</p>
+<p>If both <code>spec.clusterConfig.tls.server.secretClass</code> and <code>spec.clusterConfig.authentication.authenticationClass</code> are set, the authentication class will take precedence over the secret class. The cluster will be encrypted and authenticate only against the authentication class.</p>
 </div>
 <div class="admonitionblock warning">
 <table>

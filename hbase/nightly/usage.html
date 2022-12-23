@@ -500,7 +500,7 @@ metadata:
 spec:
   image:
     productVersion: 2.4.12
-    stackableVersion: 0.3.0
+    stackableVersion: 0.4.0
   hdfsConfigMapName: simple-hdfs-namenode-default
   zookeeperConfigMapName: simple-hbase-znode
   config:
@@ -558,6 +558,37 @@ It should generally be safe to simply use the latest image version that is avail
 <div class="paragraph">
 <p>The managed HBase instances are automatically configured to export Prometheus metrics. See
 <a href="../../home/stable/operators/monitoring.html" class="xref page">Monitoring</a> for more details.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_log_aggregation"><a class="anchor" href="#_log_aggregation"></a>Log aggregation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The logs can be forwarded to a Vector log aggregator by providing a discovery
+ConfigMap for the aggregator and by enabling the log agent:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  vectorAggregatorConfigMapName: vector-aggregator-discovery
+  masters:
+    config:
+      logging:
+        enableVectorAgent: true
+  regionServers:
+    config:
+      logging:
+        enableVectorAgent: true
+  restServers:
+    config:
+      logging:
+        enableVectorAgent: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Further information on how to configure logging, can be found in
+<a href="#home:concepts:logging.adoc" class="xref unresolved">home:concepts:logging.adoc</a>.</p>
 </div>
 </div>
 </div>

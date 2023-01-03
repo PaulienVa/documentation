@@ -517,7 +517,8 @@ spec:
   image:
     productVersion: 3.3.1
     stackableVersion: 0.3.0
-  zookeeperConfigMapName: simple-kafka-znode
+  clusterConfig:
+    zookeeperConfigMapName: simple-kafka-znode
   brokers:
     roleGroups:
       default:
@@ -538,10 +539,12 @@ spec:
   image:
     productVersion: 3.3.1
     stackableVersion: 0.3.0
-  zookeeperConfigMapName: simple-kafka-znode
-  opa:
-    configMapName: simple-opa
-    package: kafka
+  clusterConfig:
+    authorization:
+      opa:
+        configMapName: simple-opa
+        package: kafka
+    zookeeperConfigMapName: simple-kafka-znode
   brokers:
     roleGroups:
       default:
@@ -562,10 +565,12 @@ spec:
   image:
     productVersion: 3.3.1
     stackableVersion: 0.3.0
-  zookeeperConfigMapName: simple-kafka-znode
-  opa:
-    configMapName: simple-opa
-    package: kafka
+  clusterConfig:
+    authorization:
+      opa:
+        configMapName: simple-opa
+        package: kafka
+    zookeeperConfigMapName: simple-kafka-znode
   brokers:
     configOverrides:
       server.properties:
@@ -608,19 +613,20 @@ spec:
   image:
     productVersion: 3.3.1
     stackableVersion: 0.3.0
-  zookeeperConfigMapName: simple-kafka-znode
-  log4j: |-
-    log4j.rootLogger=INFO, stdout, kafkaAppender
+  clusterConfig:
+    zookeeperConfigMapName: simple-kafka-znode
+    log4j: |-
+      log4j.rootLogger=INFO, stdout, kafkaAppender
 
-    log4j.appender.stdout=org.apache.log4j.ConsoleAppender
-    log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
-    log4j.appender.stdout.layout.ConversionPattern=[%d] %p %m (%c)%n
+      log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+      log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+      log4j.appender.stdout.layout.ConversionPattern=[%d] %p %m (%c)%n
 
-    log4j.appender.kafkaAppender=org.apache.log4j.DailyRollingFileAppender
-    log4j.appender.kafkaAppender.DatePattern='.'yyyy-MM-dd-HH
-    log4j.appender.kafkaAppender.File=${kafka.logs.dir}/server.log
-    log4j.appender.kafkaAppender.layout=org.apache.log4j.PatternLayout
-    log4j.appender.kafkaAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
+      log4j.appender.kafkaAppender=org.apache.log4j.DailyRollingFileAppender
+      log4j.appender.kafkaAppender.DatePattern='.'yyyy-MM-dd-HH
+      log4j.appender.kafkaAppender.File=${kafka.logs.dir}/server.log
+      log4j.appender.kafkaAppender.layout=org.apache.log4j.PatternLayout
+      log4j.appender.kafkaAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
   brokers:
     roleGroups:
       default:
@@ -646,12 +652,11 @@ spec:
   image:
     productVersion: 3.3.1
     stackableVersion: 0.3.0
-  zookeeperConfigMapName: simple-kafka-znode
-  config:
+  clusterConfig:
+    zookeeperConfigMapName: simple-kafka-znode
     tls:
-      secretClass: tls <i class="conum" data-value="1"></i><b>(1)</b>
-    internalTls:
-      secretClass: kafka-internal-tls <i class="conum" data-value="2"></i><b>(2)</b>
+      serverSecretClass: tls <i class="conum" data-value="1"></i><b>(1)</b>
+      internalSecretClass: kafka-internal-tls <i class="conum" data-value="2"></i><b>(2)</b>
   brokers:
     roleGroups:
       default:
@@ -662,11 +667,11 @@ spec:
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The <code>tls.secretClass</code> refers to the client-to-server encryption. Defaults to the <code>tls</code> secret. It can be deactivated by setting <code>config.tls</code> to <code>null</code>.</td>
+<td>The <code>spec.clusterConfig.tls.serverSecretClass</code> refers to the client-to-server encryption. Defaults to the <code>tls</code> secret. Can be deactivated by setting <code>serverSecretClass</code> to <code>null</code>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>The <code>internalTls.secretClass</code> refers to the broker-to-broker internal encryption. This must be explicitly set or defaults to <code>tls</code>. Can be disabled by setting <code>config.internalTls</code> to <code>null</code>.</td>
+<td>The <code>spec.clusterConfig.tls.internalSecretClass</code> refers to the broker-to-broker internal encryption. This must be explicitly set or defaults to <code>tls</code>. May be disabled by setting <code>internalSecretClass</code> to <code>null</code>.</td>
 </tr>
 </table>
 </div>
@@ -691,7 +696,7 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>You can create your own secrets and reference them e.g. in the <code>tls.secretClass</code> or <code>internalTls.secretClass</code> to use different certificates.</p>
+<p>You can create your own secrets and reference them e.g. in the <code>spec.clusterConfig.tls.serverSecretClass</code> or <code>spec.clusterConfig.tls.internalSecretClass</code> to use different certificates.</p>
 </div>
 </div>
 </div>
@@ -734,12 +739,10 @@ spec:
   image:
     productVersion: 3.3.1
     stackableVersion: 0.3.0
-  zookeeperConfigMapName: simple-kafka-znode
-  config:
-    tls:
-      secretClass: tls
-    clientAuthentication:
-      authenticationClass: kafka-client-tls <i class="conum" data-value="1"></i><b>(1)</b>
+  clusterConfig:
+    authentication:
+      - authenticationClass: kafka-client-tls <i class="conum" data-value="1"></i><b>(1)</b>
+    zookeeperConfigMapName: simple-kafka-znode
   brokers:
     roleGroups:
       default:
@@ -750,7 +753,7 @@ spec:
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The <code>config.clientAuthentication.authenticationClass</code> can be set to use TLS for authentication. This is optional.</td>
+<td>The <code>clusterConfig.authentication.authenticationClass</code> can be set to use TLS for authentication. This is optional.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>

@@ -853,7 +853,7 @@ credentials:
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
   clusterConfig:
     tls:
-      secretClass: tls <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+      serverAndInternalSecretClass: tls <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -871,7 +871,7 @@ credentials:
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-A Stackable Druid cluster is always encrypted per default. In order to disable this default behavior you can set <code>spec.clusterConfig.tls: null</code>.
+A Stackable Druid cluster is always encrypted per default. In order to disable this default behavior you can set <code>spec.clusterConfig.tls.serverAndInternalSecretClass: null</code>.
 </td>
 </tr>
 </table>
@@ -889,8 +889,7 @@ A Stackable Druid cluster is always encrypted per default. In order to disable t
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
   clusterConfig:
     authentication:
-      tls:
-        authenticationClass: druid-tls-auth <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+      - authenticationClass: druid-tls-auth <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -898,18 +897,6 @@ A Stackable Druid cluster is always encrypted per default. In order to disable t
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td>Name of the <code>AuthenticationClass</code> that is used to encrypt and authenticate communication.</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-The TLS <code>AuthenticationClass</code> and its respective <code>SecretClass</code> will always take precedence over the TLS encryption <code>SecretClass</code> (if provided).
-</td>
 </tr>
 </table>
 </div>
@@ -929,7 +916,7 @@ spec:
     tls:
       clientCertSecretClass: druid-mtls <i class="conum" data-value="1"></i><b>(1)</b>
     # Option 2
-    tls: null <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+    tls: {} <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -940,7 +927,7 @@ spec:
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>If no client <code>SecretClass</code> is provided in the <code>AuthenticationClass</code>, the <code>spec.clusterConfig.tls.secretClass</code> will be used for encryption and authentication. It cannot be explicitly set to null in this case.</td>
+<td>If no client <code>SecretClass</code> is provided in the <code>AuthenticationClass</code>, the <code>spec.clusterConfig.tls.serverAndInternalSecretClass</code> will be used for encryption and authentication. It cannot be explicitly set to null in this case.</td>
 </tr>
 </table>
 </div>

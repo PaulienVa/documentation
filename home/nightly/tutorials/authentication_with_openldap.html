@@ -3,8 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Resource management :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/home/stable/concepts/resources.html">
+    <title>Authentication with OpenLDAP :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script type="text/javascript"> var tCPrivacyTagManager = "gtm"; </script>
@@ -114,8 +113,8 @@
       <div class="page-versions">
         <button class="version-menu-toggle" title="Show other versions of page">nightly</button>
         <div class="version-menu">
-          <a class="version is-current" href="resources.html">nightly</a>
-          <a class="version" href="../../stable/concepts/resources.html">22.11</a>
+          <a class="version is-current" href="authentication_with_openldap.html">nightly</a>
+          <a class="version is-missing" href="../../stable/index.html">22.11</a>
           <a class="version is-missing" href="../../22.09/index.html">22.09</a>
           <a class="version is-missing" href="../../22.06/index.html">22.06</a>
         </div>
@@ -136,37 +135,37 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">Concepts</a>
+    <a class="nav-link" href="../concepts/index.html">Concepts</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="roles-and-role-groups.html">Roles and role groups</a>
+    <a class="nav-link" href="../concepts/roles-and-role-groups.html">Roles and role groups</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="service_discovery.html">Service discovery ConfigMap</a>
+    <a class="nav-link" href="../concepts/service_discovery.html">Service discovery ConfigMap</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="logging.html">Logging</a>
+    <a class="nav-link" href="../concepts/logging.html">Logging</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="authenticationclass.html"><code>AuthenticationClass</code></a>
+    <a class="nav-link" href="../concepts/authenticationclass.html"><code>AuthenticationClass</code></a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="opa.html">OPA authorization</a>
+    <a class="nav-link" href="../concepts/opa.html">OPA authorization</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="product_image_selection.html">Product image selection</a>
+    <a class="nav-link" href="../concepts/product_image_selection.html">Product image selection</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="pvc.html">PersistentVolumeClaim usage</a>
-  </li>
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="resources.html">Resource management</a>
+    <a class="nav-link" href="../concepts/pvc.html">PersistentVolumeClaim usage</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="s3.html">S3 resources</a>
+    <a class="nav-link" href="../concepts/resources.html">Resource management</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="tls_server_verification.html">TLS server verification</a>
+    <a class="nav-link" href="../concepts/s3.html">S3 resources</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../concepts/tls_server_verification.html">TLS server verification</a>
   </li>
 </ul>
   </li>
@@ -176,13 +175,13 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../tutorials/index.html">Tutorials</a>
+    <a class="nav-link" href="index.html">Tutorials</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../tutorials/end-to-end_data_pipeline_example.html">Setting up an end-to-end data pipeline</a>
+    <a class="nav-link" href="end-to-end_data_pipeline_example.html">Setting up an end-to-end data pipeline</a>
   </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../tutorials/authentication_with_openldap.html">Authentication with OpenLDAP</a>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="authentication_with_openldap.html">Authentication with OpenLDAP</a>
   </li>
 </ul>
   </li>
@@ -712,213 +711,582 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Stackable Documentation</a></li>
-    <li><a href="index.html">Concepts</a></li>
-    <li><a href="resources.html">Resource management</a></li>
+    <li><a href="index.html">Tutorials</a></li>
+    <li><a href="authentication_with_openldap.html">Authentication with OpenLDAP</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/concepts/pages/resources.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/main/modules/tutorials/pages/authentication_with_openldap.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Resource management</h1>
+<h1 class="page">Authentication with OpenLDAP</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <a href="https://stackable.tech/en/">Stackable data platform</a> and its <a href="../operators/index.html" class="xref page">operators</a> deploy their products in <a href="https://kubernetes.io/docs/concepts/containers/">Containers</a> within <a href="https://kubernetes.io/docs/concepts/workloads/pods/">Pods</a> using <a href="https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/">StatefulSets</a> or <a href="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/">DaemonSets</a>. In order for the Kubernetes scheduler to select a proper <a href="https://kubernetes.io/docs/concepts/architecture/nodes/">Node</a> for a Pod, <a href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource</a> requests and limits for CPU and memory can be specified. The Kubernetes scheduler ensures that the sum of the CPU and memory requests does not exceed the capacity of a given Node.</p>
+<p>The Stackable platform supports user authentication with LDAP in multiple products. This page guides you through setting up the configuration necessary to use an exising LDAP installation with Stackable supported products.</p>
+</div>
+<div class="paragraph">
+<p>Prerequisites:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a k8s cluster available, or <a href="https://kind.sigs.k8s.io/">kind</a> installed</p>
+</li>
+<li>
+<p><a href="../../../stackablectl/stable/index.html" class="xref page">stackablectl</a> installed</p>
+</li>
+<li>
+<p>basic knowledge of how to create resources in Kubernetes (i.e. <code>kubectl apply -f &lt;filename&gt;.yaml</code>) and inspect them (<code>kubectl get</code> or a tool like <a href="https://k9scli.io/">k9s</a>)</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_terminology"><a class="anchor" href="#_terminology"></a>Terminology</h2>
+<h2 id="_setup"><a class="anchor" href="#_setup"></a>Setup</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The most commonly defined resources are CPU and memory (RAM). Keep in mind that there are other resources as well.
-For more information have a look at the Kubernetes <a href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits">documentation</a> on resources.</p>
+<p>Before configuring LDAP you need to set up some services to configure, as well as an LDAP server to use for authentication. This tutorial is about learning how to configure LDAP, so there won&#8217;t be detailed instructions on how to set up all of this, instead the tutorial uses <a href="../../../stackablectl/stable/commands/stack.html" class="xref page">stackablectl Stacks</a>.</p>
 </div>
 <div class="sect2">
-<h3 id="_cpu"><a class="anchor" href="#_cpu"></a>CPU</h3>
-<div class="sect3">
-<h4 id="_requests"><a class="anchor" href="#_requests"></a>Requests</h4>
+<h3 id="_superset_and_trino_stack"><a class="anchor" href="#_superset_and_trino_stack"></a>Superset and Trino Stack</h3>
 <div class="paragraph">
-<p>The CPU request defines which containers are allowed to have more CPU resources. Larger requests lead to more CPU resources than smaller requests if not enough resources are available.</p>
+<p>This command will install the latest Stackable release for you, and set up the <code>trino-superset-s3</code> Stack. It contains a Superset instance connected to a Trino instance, and all their dependencies (Minio S3, PostgreSQL). Later in this guide, a Superset and Trino instance will be configured to use LDAP.</p>
+</div>
+<div class="paragraph">
+<p>If you do not have a Kubernetes cluster already, add the <code>--kind-cluster</code> (or <code>-k</code>) flag to let stackablectl deploy one for you.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">stackablectl stack install trino-superset-s3</code></pre>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_limits"><a class="anchor" href="#_limits"></a>Limits</h4>
 <div class="paragraph">
-<p>The CPU limit is a hard bound on how much CPU resources the Container can use. The Linux Kernel checks to see if the limit is exceeded and waits if this is the case to resume the process.</p>
+<p>This command will take a few minutes to complete.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The stack installed here is used in the <a href="../../../stackablectl/stable/demos/trino-taxi-data.html" class="xref page"><code>trino-tax-data</code> demo</a>. Click the link to learn more.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="setup_login"><a class="anchor" href="#setup_login"></a>Inspect</h4>
+<div class="paragraph">
+<p>Before starting to add configuration to your Stackable cluster, inspect what the command above has set up in your Kubernetes cluster.</p>
+</div>
+<div class="paragraph">
+<p>Use <code>stackablectl svc list</code> to find the endpoints of Superset and Trino and open their web interfaces in the Browser.</p>
+</div>
+<div class="paragraph">
+<p>You can log into Superset with user <em>admin</em> and password <em>adminadmin</em>, and into Trino with user <em>admin</em> and password <em>adminadmin</em>.</p>
+</div>
+<div class="paragraph">
+<p>These are the current users defined in Superset&#8217;s and Trino&#8217;s internal user management. Later you will see that these users cannot be used for authentication anymore after LDAP authentication has been enabled.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_memory"><a class="anchor" href="#_memory"></a>Memory</h3>
+<h3 id="_openldap_stack"><a class="anchor" href="#_openldap_stack"></a>OpenLDAP Stack</h3>
+<div class="paragraph">
+<p>Install another Stack, the <code>tutorial-openldap</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">stackablectl stack install tutorial-openldap</code></pre>
+</div>
+</div>
 <div class="sect3">
-<h4 id="_requests_2"><a class="anchor" href="#_requests_2"></a>Requests</h4>
+<h4 id="_inspect"><a class="anchor" href="#_inspect"></a>Inspect</h4>
 <div class="paragraph">
-<p>The memory request is used during Kubernetes scheduling and checks which Nodes offer sufficient memory for a Pod to be scheduled.</p>
+<p>Look at the Pod definition of the <code>openldap-0</code> Pod, it contains the environment settings</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">LDAP_ADMIN_USERNAME:      ldapadmin
+LDAP_ADMIN_PASSWORD:      ldapadminpassword
+LDAP_USERS:               alice,bob
+LDAP_PASSWORDS:           alice,bob</code></pre>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_limits_2"><a class="anchor" href="#_limits_2"></a>Limits</h4>
 <div class="paragraph">
-<p>The memory limit is a hard bound. If a Container tries to use more memory than specified, the Container is usually marked for restart. To avoid the restart it is critical to specify sufficient resources.</p>
+<p><code>ldapadmin</code> is the admin or bind user, and <code>ldapadminpassword</code> is the password that belongs to that user. <code>alice</code> and <code>bob</code> (and their respective passwords) are the only two users defined in the LDAP instance. You will use this information later to configure LDAP.</p>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_storage"><a class="anchor" href="#_storage"></a>Storage</h3>
-<div class="paragraph">
-<p>Some Stackable products require data storage. This is done using <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims">Persistent Volume Claims</a> where the size of storage can be specified.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_kubernetes_resource_requests"><a class="anchor" href="#_kubernetes_resource_requests"></a>Kubernetes Resource Requests</h2>
+<h2 id="_steps"><a class="anchor" href="#_steps"></a>Steps</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In Kubernetes, you can specify resource requests and limits within Containers of Pods.</p>
+<p>Now that you have a couple of data products installed as well as an LDAP server, you can start configuring the products to use LDAP. The tutorial has 3 steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configure an AuthenticationClass with this LDAP installation</p>
+</li>
+<li>
+<p>Update the SupersetCluster to use the AuthenticationClass to authenticate users</p>
+</li>
+<li>
+<p>Update the TrinoCluster to use the AuthenticationClass to authenticate users</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_configure_ldap"><a class="anchor" href="#_configure_ldap"></a>Configure LDAP</h3>
+<div class="paragraph">
+<p>The AuthenticationClass is the main resource required to configure the products, but it depends on some other resources. Below you will create a Secret, SecretClass and the AuthenticationClass. Use <code>kubectl apply</code> to deploy the manifests shown below.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you&#8217;re having problems here, install the <code>openldap</code> stack instead of <code>tutorial-openldap</code> which comes with an already configured AuthenticationClass ready to use. You can then skip to <a href="#superset">configuring superset</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>First, create a secret that contains the LDAP bind credentials which products can use to authenticate with LDAP:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
 apiVersion: v1
-kind: Pod
+kind: Secret
 metadata:
-  name: stackable
+  name: openldap-bind-credentials
+  labels:
+    secrets.stackable.tech/class: openldap-bind-credentials  <i class="conum" data-value="1"></i><b>(1)</b>
+stringData:
+  user: cn=ldapadmin,dc=example,dc=org  <i class="conum" data-value="2"></i><b>(2)</b>
+  password: ldapadminpassword           <i class="conum" data-value="3"></i><b>(3)</b>
+  # TODO: Trino uses different keys, this needs to be fixed</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The annotation which SecretClass this secret belongs to</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The LDAP bind user that was provided by the <code>tutorial-ldap</code> Stack</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The corresponding password</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Notice the SecretClass annotation. Create the SecretClass next:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: openldap-bind-credentials
 spec:
-  containers:
-  - name: stackable
-    image: stackable:0.1.0
-    resources:
-      requests:
-        memory: "64Mi"
-        cpu: "250m"
-      limits:
-        memory: "128Mi"
-        cpu: "500m"</code></pre>
+  backend:
+    k8sSearch:
+      searchNamespace:
+        pod: {}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This Pod/Container will be scheduled on a Node that has at least <code>64Mi</code> of free memory. It is allowed to use a maximum amount of <code>128Mi</code> of memory or will be restarted if this value is exceeded. It can not use more CPU resources than <code>500m</code> (which is half of a physical or virtual core), but has a guaranteed CPU resources of <code>250m</code>.</p>
+<p>This level of indirection is necessary, because the AuthenticationClass is cluster-scoped but Secrets are not.</p>
+</div>
+<div class="paragraph">
+<p>Now you can create the AuthenticationClass <code>openldap</code> which references the SecretClass:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: openldap  <i class="conum" data-value="1"></i><b>(1)</b>
+spec:
+  provider:
+    ldap:
+      hostname: openldap.default.svc.cluster.local
+      searchBase: ou=users,dc=example,dc=org
+      bindCredentials:
+        secretClass: openldap-bind-credentials
+      port: 1636
+      tls:
+        verification:
+          server:
+            caCert:
+              secretClass: openldap-tls</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The name of the AuthenticationClass, which needs to be referenced later</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Remember the name of the AuthenticationClass (<code>openldap</code>), you will use it in the next steps when configuring the products.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="superset"><a class="anchor" href="#superset"></a>Add LDAP authentication to Superset</h3>
+<div class="paragraph">
+<p>To make Superset use your new LDAP AuthenticationClass, you have to update the SupersetCluster definition. A SupersetCluster named <code>superset</code> is already installed by the stack.</p>
+</div>
+<div class="paragraph">
+<p>Fetch the existing SupersetCluster defintion from the Kubernetes API server and save it into a <code>superset.yaml</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get superset superset -o yaml &gt; superset.yaml</code></pre>
+</div>
+</div>
+<details>
+<summary class="title">The <code>superset.yaml</code> file should look similar to this</summary>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: superset.stackable.tech/v1alpha1
+kind: SupersetCluster
+metadata:
+  name: superset
+  ...
+spec:
+  version: ...
+  statsdExporterVersion: ...
+  credentialsSecret: superset-credentials
+  nodes:
+    roleGroups:
+      default:
+        config:
+  ...</code></pre>
+</div>
+</div>
+</div>
+</details>
+<div class="paragraph">
+<p>You can now delete the SupersetCluster, you recreate it later with the new configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete superset superset</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Modify your <code>superset.yaml</code> to include this new <code>authenticationConfig</code> property under the <code>spec</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  authenticationConfig:            <i class="conum" data-value="1"></i><b>(1)</b>
+    authenticationClass: openldap  <i class="conum" data-value="2"></i><b>(2)</b>
+    userRegistrationRole: Admin    <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The new <code>authenticationConfig</code> section which configures how Superset is authenticating users</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>authenticationClass</code> property is referencing the AuthenticationClass <code>openldap</code> you created earlier</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The default Superset role that users should be assigned to when they log in. Any user will be an Admin</td>
+</tr>
+</table>
+</div>
+<details>
+<summary class="title">Your <code>superset.yaml</code> should now look similar to this</summary>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: superset.stackable.tech/v1alpha1
+kind: SupersetCluster
+metadata:
+  name: superset
+  ...
+spec:
+  version: ...
+  statsdExporterVersion: ...
+  credentialsSecret: superset-credentials
+  authenticationConfig:
+    authenticationClass: openldap
+    userRegistrationRole: Admin
+  nodes:
+    roleGroups:
+      default:
+        config:
+  ...</code></pre>
+</div>
+</div>
+</div>
+</details>
+<div class="paragraph">
+<p>Now deploy the updated superset cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f superset.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Connect to superset as before, and try logging in again with username <em>admin</em> and password <em>adminadmin</em>, Superset will not accept these credentials anymore. You now have to use LDAP credentials to log in. The OpenLDAP you installed earlier comes with two users, <em>alice</em> (password <em>alice</em>) and <em>bob</em> (password <em>bob</em>). Log in with any of these users and Superset will accept.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="trino"><a class="anchor" href="#trino"></a>Add LDAP configuration to Trino</h3>
+<div class="paragraph">
+<p>Trino is configured very similarly to Superset.</p>
+</div>
+<div class="paragraph">
+<p>Fetch the existing TrinoCluster defintion from the Kubernetes API server and save it into a <code>trino.yaml</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get trino trino -o yaml &gt; trino.yaml</code></pre>
+</div>
+</div>
+<details>
+<summary class="title">The <code>trino.yaml</code> file should look similar to this</summary>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: trino.stackable.tech/v1alpha1
+kind: TrinoCluster
+metadata:
+  name: trino
+  ...
+spec:
+  version: 396-stackable0.1.0
+  authentication:
+    method:
+      multiUser:
+        ...
+  opa:
+    configMapName: opa
+    package: trino
+  catalogLabelSelector:
+    ...
+  workers:
+    ...
+  coordinators:
+    ...
+  ...</code></pre>
+</div>
+</div>
+</div>
+</details>
+<div class="paragraph">
+<p>You can now delete the TrinoCluster. you recreate it later with the new configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete trino trino</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replace the <code>multiUser</code> authentication method in your <code>trino.yaml</code> with an <code>ldap</code> method that references the <code>openldap</code> AuthenticationClass:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  authentication:
+    method:
+      ldap:                            <i class="conum" data-value="1"></i><b>(1)</b>
+        authenticationClass: openldap  <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The new <code>ldap</code> authentication method replaces the previous <code>multiUser</code> authentication method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>authenticationClass</code> property is referencing the AuthenticationClass <code>openldap</code> you created earlier</td>
+</tr>
+</table>
+</div>
+<details>
+<summary class="title">Your <code>trino.yaml</code> should now look similar to this</summary>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: trino.stackable.tech/v1alpha1
+kind: TrinoCluster
+metadata:
+  name: trino
+  ...
+spec:
+  version: 396-stackable0.1.0
+  authentication:
+    method:
+      ldap:
+        authenticationClass: openldap
+  opa:
+    configMapName: opa
+    package: trino
+  catalogLabelSelector:
+    ...
+  workers:
+    ...
+  coordinators:
+    ...
+  ...</code></pre>
+</div>
+</div>
+</div>
+</details>
+<div class="paragraph">
+<p>Now deploy the updated Trino cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f trino.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Again, like with Superset, connect to Trino now (make sure that the StatefulSets are running). You will notice that the <em>admin</em> user cannot be used anymore, but the LDAP users <em>alice</em> and <em>bob</em> work!</p>
+</div>
+<div class="paragraph">
+<p>TODO verify that it works in the script using the Trino CLI <a href="https://trino.io/docs/current/client/cli.html#username-and-password-authentication" class="bare">https://trino.io/docs/current/client/cli.html#username-and-password-authentication</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_bonus_reconfigure_opa_to_use_the_new_ldap_users"><a class="anchor" href="#_bonus_reconfigure_opa_to_use_the_new_ldap_users"></a>Bonus: Reconfigure OPA to use the new LDAP users</h3>
+<div class="paragraph">
+<p>This is a bonus step, and if you want you can skip straight to the next section: <a href="#trino_try_it">Log in with the new LDAP credentials</a></p>
+</div>
+<div class="paragraph">
+<p>This step is not required for <em>authentication</em> by itself. But the demo stack you installed comes with an <em>authorization</em> configuration for Trino as well. Authorization on the platform is done using the <a href="../../../opa/stable/index.html" class="xref page">Stackable Operator for OPA (OpenPolicyAgent)</a>.</p>
+</div>
+<div class="paragraph">
+<p>Fetch the snippet as before:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get cm trino-opa-bundle -o yaml &gt; trino-opa-bundle.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Apply this patch:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">data:
+  trino.rego: |
+    package trino
+
+    default allow = false
+
+    allow {
+      input.context.identity.user == "alice"
+    }
+
+    allow {
+      input.context.identity.user == "bob"
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And apply the new bundle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f trino-opa-bundle.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The OPA Operator will automatically detect the change and update the Trino authorization bundle.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="trino_try_it"><a class="anchor" href="#trino_try_it"></a>Log in with the new LDAP credentials</h3>
+<div class="paragraph">
+<p>Congratulations! You have configured Superset and Trino to use LDAP for authentication.</p>
+</div>
+<div class="paragraph">
+<p>Log in with the LDAP user credentials <code>alice:alice</code> or <code>bob:bob</code> into Superset and Trino. Note also that the previously used <code>admin</code> credentials no longer work.</p>
+</div>
+<div class="paragraph">
+<p>If you skipped the OPA step, you will be able to log into Trino, but running queries will not work, as the LDAP users are not authorized to do so. If you <em>did</em> do this step, running queries with the LDAP users will also work.</p>
+</div>
+<div class="paragraph">
+<p>That concludes the tutorial!</p>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_stackable_resource_requests"><a class="anchor" href="#_stackable_resource_requests"></a>Stackable Resource Requests</h2>
+<h2 id="summary"><a class="anchor" href="#summary"></a>Summary</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_cpu_and_memory"><a class="anchor" href="#_cpu_and_memory"></a>CPU and Memory</h3>
 <div class="paragraph">
-<p>Stackable operators handle resource requests in a sligtly different manner than Kubernetes. Resource requests are defined on role or group level. See <a href="../../stable/concepts/roles-and-role-groups.html" class="xref page">Roles and role groups</a> for details on these concepts. On a role level this means that e.g. all workers will use the same resource requests and limits. This can be further specified on role group level (which takes priority to the role level) to apply different resources.</p>
+<p>To summarize, you have done the following:</p>
 </div>
-<div class="paragraph">
-<p>This is an example on how to specify CPU and memory resources using the Stackable <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">Custom Resources</a>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: example.stackable.tech/v1alpha1
-kind: ExampleCluster
-metadata:
-  name: example
-spec:
-  workers: # role-level
-    config:
-      resources:
-        cpu:
-          min: 300m
-          max: 600m
-        memory:
-          limit: 3Gi
-    roleGroups: # role-group-level
-      resources-from-role: # role-group 1
-        replicas: 1
-      resources-from-role-group: # role-group 2
-        replicas: 1
-        config:
-          resources:
-            cpu:
-              min: 400m
-              max: 800m
-            memory:
-              limit: 4Gi</code></pre>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Written an AuthenticationClass for an existing LDAP server. The credentials are stored in a Secret with a SecretClass that is referenced in the AuthenticationClass.</p>
+</li>
+<li>
+<p>Adapted the SupersetCluster spec to include the reference to the LDAP AuthenticationClass.</p>
+</li>
+<li>
+<p>Adapted the TrinoCluster spec to include the reference to the AuthenticationClass.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>In this case, the role group <code>resources-from-role</code> will inherit the resources specified on the role level. Resulting in a maximum of <code>3Gi</code> memory and <code>600m</code> CPU resources.</p>
-</div>
-<div class="paragraph">
-<p>The role group <code>resources-from-role-group</code> has maximum of <code>4Gi</code> memory and <code>800m</code> CPU resources (which overrides the role CPU resources).</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-For Java products the actual used Heap memory is lower than the specified memory limit due to other processes in the Container requiring memory to run as well. Currently, 80% of the specified memory limits is passed to the JVM.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>For memory only a limit can be specified, which will be set as memory request and limit in the Container. This is to always guarantee a Container the full amount memory during Kubernetes scheduling.</p>
+<p>The LDAP connection details only need to be written down once, in the AuthenticationClass. Making a product use this AuthenticationClass is then done by referencing the AuthenticationClass, so the configuration for LDAP is all in a single resource.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_storage_2"><a class="anchor" href="#_storage_2"></a>Storage</h3>
-<div class="paragraph">
-<p>This is an example on how to specify storage resources using the Stackable <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">Custom Resources</a>:</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: example.stackable.tech/v1alpha1
-kind: ExampleCluster
-metadata:
-  name: example
-spec:
-  workers: # role-level
-    config:
-      resources:
-        storage:
-          data: # name of the storage
-            capacity: 3Gi
-    roleGroups: # role-group-level
-      resources-from-role: # role-group 1
-        replicas: 1
-      resources-from-role-group: # role-group 2
-        replicas: 1
-        config:
-          resources:
-            storage:
-              data: # name of the storage
-                capacity: 4Gi</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this case, the role group <code>resources-from-role</code> will inherit the resources specified on the role level. Resulting in a <code>3Gi</code> storage space for <code>data</code>.</p>
-</div>
-<div class="paragraph">
-<p>The role group <code>resources-from-role-group</code> has maximum of <code>4Gi</code> storage space for <code>data</code> (which overrides the role resources).</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-Stackable operators use different names (<code>data</code> in this example) for their storage specification. This is documented in the operator specific documentation.
-</td>
-</tr>
-</table>
-</div>
+<div class="sect1">
+<h2 id="_further_reading"><a class="anchor" href="#_further_reading"></a>Further Reading</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="../../../superset/stable/getting_started/index.html" class="xref page">Getting started with the Stackable Operator for Apache Superset</a></p>
+</li>
+<li>
+<p><a href="../../../trino/stable/getting_started/index.html" class="xref page">Getting started with the Stackable Operator for Trino</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>

@@ -147,7 +147,7 @@
     <a class="nav-link" href="../concepts/logging.html">Logging</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../concepts/authenticationclass.html"><code>AuthenticationClass</code></a>
+    <a class="nav-link" href="../concepts/authentication.html">Authentication</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../concepts/opa.html">OPA authorization</a>
@@ -193,6 +193,9 @@
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="../reference/index.html">Reference</a>
 <ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../reference/authenticationclass.html">AuthenticationClass</a>
+  </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../reference/s3.html">S3 resources</a>
   </li>
@@ -726,7 +729,7 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Stackable platform supports user authentication with LDAP in multiple products. This page guides you through setting up the configuration necessary to use an exising LDAP installation with Stackable supported products.</p>
+<p>The Stackable platform supports user authentication with LDAP in multiple products. This page guides you through setting up the configuration necessary to use an exising LDAP installation with Stackable supported products. You can learn more about authentication in the Stackable Platform on the <a href="../concepts/authentication.html" class="xref page">concepts page</a>.</p>
 </div>
 <div class="paragraph">
 <p>Prerequisites:</p>
@@ -830,12 +833,20 @@ LDAP_PASSWORDS:           alice,bob</code></pre>
 <h2 id="_steps"><a class="anchor" href="#_steps"></a>Steps</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Now that you have a couple of data products installed as well as an LDAP server, you can start configuring the products to use LDAP. The tutorial has 3 steps:</p>
+<p>Now that you have a couple of data products installed as well as an LDAP server, you can start configuring the products to use LDAP. The following image shows the parts that are already there in blue and the parts you will add in green:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/openldap-tutorial.drawio.svg" alt="image$openldap tutorial.drawio">
+</div>
+</div>
+<div class="paragraph">
+<p>The tutorial has 3 steps:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Configure an AuthenticationClass with this LDAP installation</p>
+<p>Configure an AuthenticationClass (as well as SecretClass and Secret) with this LDAP installation</p>
 </li>
 <li>
 <p>Update the SupersetCluster to use the AuthenticationClass to authenticate users</p>
@@ -876,8 +887,7 @@ metadata:
     secrets.stackable.tech/class: openldap-bind-credentials  <i class="conum" data-value="1"></i><b>(1)</b>
 stringData:
   user: cn=ldapadmin,dc=example,dc=org  <i class="conum" data-value="2"></i><b>(2)</b>
-  password: ldapadminpassword           <i class="conum" data-value="3"></i><b>(3)</b>
-  # TODO: Trino uses different keys, this needs to be fixed</code></pre>
+  password: ldapadminpassword           <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -905,13 +915,25 @@ stringData:
 apiVersion: secrets.stackable.tech/v1alpha1
 kind: SecretClass
 metadata:
-  name: openldap-bind-credentials
+  name: openldap-bind-credentials  <i class="conum" data-value="1"></i><b>(1)</b>
 spec:
   backend:
     k8sSearch:
       searchNamespace:
-        pod: {}</code></pre>
+        pod: {}  <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The name of the <a href="../../../secret-operator/stable/secretclass.html" class="xref page"><code>SecretClass</code></a> we are creating that is referred to by the Secret</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This determines the namespace in which the referenced <code>Secret</code> will be looked for. In this case it searches for a <code>Secret</code> in the same namespace as the product runs in. See <a href="../../../secret-operator/stable/secretclass.html#backend-k8ssearch" class="xref page">the documentation of SecretClass</a></td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>This level of indirection is necessary, because the AuthenticationClass is cluster-scoped but Secrets are not.</p>
@@ -929,10 +951,10 @@ metadata:
 spec:
   provider:
     ldap:
-      hostname: openldap.default.svc.cluster.local
+      hostname: openldap.default.svc.cluster.local  <i class="conum" data-value="2"></i><b>(2)</b>
       searchBase: ou=users,dc=example,dc=org
       bindCredentials:
-        secretClass: openldap-bind-credentials
+        secretClass: openldap-bind-credentials  <i class="conum" data-value="3"></i><b>(3)</b>
       port: 1636
       tls:
         verification:
@@ -946,6 +968,14 @@ spec:
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td>The name of the AuthenticationClass, which needs to be referenced later</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The hostname in this case is the Service at which the OpenLDAP is running, inside of Kubernetes.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Here the SecretClass name is referenced</td>
 </tr>
 </table>
 </div>
@@ -1182,9 +1212,6 @@ spec:
 <div class="paragraph">
 <p>Again, like with Superset, connect to Trino now (make sure that the StatefulSets are running). You will notice that the <em>admin</em> user cannot be used anymore, but the LDAP users <em>alice</em> and <em>bob</em> work!</p>
 </div>
-<div class="paragraph">
-<p>TODO verify that it works in the script using the Trino CLI <a href="https://trino.io/docs/current/client/cli.html#username-and-password-authentication" class="bare">https://trino.io/docs/current/client/cli.html#username-and-password-authentication</a></p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_bonus_reconfigure_opa_to_use_the_new_ldap_users"><a class="anchor" href="#_bonus_reconfigure_opa_to_use_the_new_ldap_users"></a>Bonus: Reconfigure OPA to use the new LDAP users</h3>
@@ -1280,6 +1307,12 @@ spec:
 <div class="sectionbody">
 <div class="ulist">
 <ul>
+<li>
+<p><a href="../concepts/authentication.html" class="xref page">Authentication concepts page</a></p>
+</li>
+<li>
+<p><a href="../reference/authenticationclass.html" class="xref page">AuthenticationClass reference</a></p>
+</li>
 <li>
 <p><a href="../../../superset/stable/getting_started/index.html" class="xref page">Getting started with the Stackable Operator for Apache Superset</a></p>
 </li>

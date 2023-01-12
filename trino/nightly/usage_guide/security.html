@@ -525,6 +525,13 @@
 </aside>
 <article class="doc">
 <h1 class="page">Security</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This page covers <a href="#_authentication">Authentication</a> and <a href="#_authorization">Authorization</a>.</p>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_authentication"><a class="anchor" href="#_authentication"></a>Authentication</h2>
 <div class="sectionbody">
@@ -539,12 +546,11 @@
 <div class="sect3">
 <h4 id="_password_file"><a class="anchor" href="#_password_file"></a>Password file</h4>
 <div class="paragraph">
-<p>The <a href="https://trino.io/docs/current/security/password-file.html">file based authentication</a> can be defined as follows:</p>
+<p>The <a href="https://trino.io/docs/current/security/password-file.html">file based authentication</a> can be defined as follows. First create a secret with your users:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: v1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
 kind: Secret
 metadata:
   name: simple-trino-users-secret
@@ -552,120 +558,84 @@ type: kubernetes.io/opaque
 stringData:
   admin: $2y$10$89xReovvDLacVzRGpjOyAOONnayOgDAyIS2nW9bs5DJT98q17Dy5i
   alice: $2y$10$HcCa4k9v2DRrD/g7e5vEz.Bk.1xg00YTEHOZjPX7oK3KqMSt2xT8W
-  bob: $2y$10$xVRXtYZnYuQu66SmruijPO8WHFM/UK5QPHTr.Nzf4JMcZSqt3W.2.
----
-apiVersion: trino.stackable.tech/v1alpha1
-kind: TrinoCluster
-metadata:
-  name: simple-trino
-spec:
-  image:
-    productVersion: 396
-    stackableVersion: 0.3.0
-  catalogLabelSelector: {}
-  authentication:
-    method:
-      multiUser:
-        userCredentialsSecret:
-          name: simple-trino-users-secret
-  coordinators:
-    roleGroups:
-      default:
-        replicas: 1
-  workers:
-    roleGroups:
-      default:
-        replicas: 1</code></pre>
+  bob: $2y$10$xVRXtYZnYuQu66SmruijPO8WHFM/UK5QPHTr.Nzf4JMcZSqt3W.2.</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The <code>simple-trino-users-secret</code> points to a manually created secret. This contains username and password pairs as shown in the previous snippet.</p>
-</div>
-<div class="paragraph">
-<p>The username and password combinations are provided in the <code>stringData</code> field. The hashes are created using bcrypt with 10 rounds.</p>
+<p>This contains username and password pairs as shown in the previous snippet. The username and password combinations are provided in the <code>stringData</code> field. The hashes are created using bcrypt with 10 rounds:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">htpasswd -nbBC 10 admin admin</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_ldap"><a class="anchor" href="#_ldap"></a>LDAP</h4>
 <div class="paragraph">
-<p>The Trino operator supports <a href="https://trino.io/docs/current/security/ldap.html">LDAP authentication</a> as well. The following snippet shows how to configure <code>PASSWORD</code> authentication using LDAP:</p>
+<p>Then reference the secret in your TrinoCluster definition:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: authentication.stackable.tech/v1alpha1
-kind: AuthenticationClass
-metadata:
-  name: ldap-with-tls
-spec:
-  provider:
-    ldap:
-      hostname: openldap.default.svc.cluster.local
-      searchBase: ou=users,dc=example,dc=org
-      bindCredentials:
-        secretClass: trino-with-ldap-bind
-      port: 1636
-      tls:
-        verification:
-          server:
-            caCert:
-              secretClass: openldap-tls
----
-apiVersion: secrets.stackable.tech/v1alpha1
-kind: SecretClass
-metadata:
-  name: trino-with-ldap-bind
-spec:
-  backend:
-    k8sSearch:
-      searchNamespace:
-        pod: {}
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: trino-with-ldap-bind
-  labels:
-    secrets.stackable.tech/class: trino-with-ldap-bind
-stringData:
-  LDAP_USER: cn=integrationtest,ou=users,dc=example,dc=org
-  LDAP_PASSWORD: integrationtest
----
-apiVersion: trino.stackable.tech/v1alpha1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: trino.stackable.tech/v1alpha1
 kind: TrinoCluster
 metadata:
-  name: simple-trino-with-ldap
+  name: simple-trino
 spec:
-  image:
-    productVersion: 396
-    stackableVersion: 0.3.0
-  catalogLabelSelector: {}
+  ...
+  authentication:
+    method:
+      multiUser:
+        userCredentialsSecret:
+          name: simple-trino-users-secret
+  ...</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ldap"><a class="anchor" href="#_ldap"></a>LDAP</h3>
+<div class="paragraph">
+<p>The Trino operator supports <a href="https://trino.io/docs/current/security/ldap.html">LDAP authentication</a> as well and authentication in Stackable is done using <a href="#home:concepts:authentication.adoc#authenticationclass" class="xref unresolved">AuthenticationClasses</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: my-ldap
+...</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You can follow the <a href="#home:tutorials:authentication_with_openldap.adoc" class="xref unresolved">home:tutorials:authentication_with_openldap.adoc</a> tutorial to learn how to create an AuthenticationClass for an LDAP server.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>With an AuthenticationClass ready, <code>PASSWORD</code> authentication using LDAP is done by referincing the LDAP AuthenticationClass:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: trino.stackable.tech/v1alpha1
+kind: TrinoCluster
+metadata:
+  name: trino-with-ldap
+spec:
+  ...
   authentication:
     method:
       ldap:
-        authenticationClass: ldap-with-tls
-  coordinators:
-    roleGroups:
-      default:
-        replicas: 1
-  workers:
-    roleGroups:
-      default:
-        replicas: 1</code></pre>
+        authenticationClass: my-ldap
+  ...</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>With this configuration, Trino will authenticate via <code>ldaps://openldap.default.svc.cluster.local:1636</code>.
-The UI or Trino CLI need to authenticate with the user <code>integrationtest</code> and password <code>integrationtest</code>.</p>
-</div>
-<div class="paragraph">
-<p>Please have a look at the LDAP <a href="https://github.com/stackabletech/trino-operator/tree/main/tests/templates/kuttl/ldap">integration tests</a> for testing, setting up OpenLDAP and creating the integrationtest user.</p>
-</div>
+<p>In the Trino CLI and web interface, LDAP users can now be used to log in.</p>
 </div>
 </div>
 </div>

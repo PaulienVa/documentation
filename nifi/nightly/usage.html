@@ -557,63 +557,39 @@ There are multiple options to set up the authentication of users.</p>
 <div class="paragraph">
 <p>The default setting is to only provision a single user with administrative privileges.
 You need to specify the username and password of the user.
-Further users can not be added.</p>
+Additional users can not be added.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_ldap"><a class="anchor" href="#_ldap"></a>LDAP</h3>
+<h3 id="authentication-ldap"><a class="anchor" href="#authentication-ldap"></a>LDAP</h3>
 <div class="paragraph">
-<p>NiFI supports authentication of users against an LDAP server.
-Have a look at <a href="https://github.com/stackabletech/nifi-operator/tree/main/tests/templates/kuttl/ldap">the LDAP test</a> and the general <a href="../../commons-operator/stable/authenticationclass.html" class="xref page">Stackable Authentication</a> documentation on how to set it up.
-In general, it requires you to specify a <a href="../../commons-operator/stable/authenticationclass.html" class="xref page"><code>AuthenticationClass</code></a> which is used to authenticate the users.
-Here you have an example usage</p>
+<p>NiFi supports <a href="#home:concepts:authentication.adoc" class="xref unresolved">authentication</a> of users against an LDAP server. This requires setting up an <a href="#home:concepts:authentication.adoc#authenticationclass" class="xref unresolved">AuthenticationClass</a> for the LDAP server.
+The AuthenticationClass is then referenced in the NifiCluster resource as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: nifi.stackable.tech/v1alpha1
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: nifi.stackable.tech/v1alpha1
 kind: NifiCluster
 metadata:
   name: test-nifi
 spec:
+  [...]
   config:
     authentication:
       method:
-        authenticationClass: ldap-without-tls
----
-apiVersion: authentication.stackable.tech/v1alpha1
-kind: AuthenticationClass
-metadata:
-  name: ldap-without-tls
-spec:
-  provider:
-    ldap:
-      hostname: openldap.default.svc.cluster.local
-      searchBase: ou=users,dc=example,dc=org
-      bindCredentials:
-        secretClass: nifi-with-ldap-bind
-      port: 1389
----
-apiVersion: secrets.stackable.tech/v1alpha1
-kind: SecretClass
-metadata:
-  name: nifi-with-ldap-bind
-spec:
-  backend:
-    k8sSearch:
-      searchNamespace:
-        pod: {}
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: nifi-with-ldap-bind
-  labels:
-    secrets.stackable.tech/class: nifi-with-ldap-bind
-stringData:
-  user: cn=integrationtest,ou=users,dc=example,dc=org
-  password: integrationtest</code></pre>
+        authenticationClass: ldap <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The reference to an AuthenticationClass called <code>ldap</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can follow the <a href="#home:tutorials:authentication_with_openldap.adoc" class="xref unresolved">home:tutorials:authentication_with_openldap.adoc</a> tutorial to learn how to set up an AuthenticationClass for an LDAP server, as well as consulting the <a href="#home:reference:authenticationclass.adoc" class="xref unresolved">home:reference:authenticationclass.adoc</a> reference.</p>
 </div>
 </div>
 </div>
@@ -635,7 +611,7 @@ The available authorization methods depend on the chosen authentication method.<
 </div>
 </div>
 <div class="sect2">
-<h3 id="_ldap_2"><a class="anchor" href="#_ldap_2"></a>LDAP</h3>
+<h3 id="authorization-ldap"><a class="anchor" href="#authorization-ldap"></a>LDAP</h3>
 <div class="paragraph">
 <p>The operator uses the <a href="https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#fileusergroupprovider"><code>FileUserGroupProvider</code></a> and <a href="https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#fileaccesspolicyprovider">FileAccessPolicyProvider</a> to bind the LDAP user to the Nifi administrator group. This user is then able to create and modify groups and polices in the web interface. These changes local to the <code>Pod</code> running Nifi and are <strong>not</strong> persistent.</p>
 </div>

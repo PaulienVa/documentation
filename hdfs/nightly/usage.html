@@ -502,13 +502,12 @@ metadata:
   name: simple-zk
 spec:
   image:
-    productVersion: 3.5.8
-    stackableVersion: 0.8.0
+    productVersion: 3.8.0
+    stackableVersion: 0.9.0
   servers:
     roleGroups:
       default:
         replicas: 3
-        config: {}
 ---
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperZnode
@@ -538,7 +537,7 @@ metadata:
 spec:
   image:
     productVersion: 3.3.4
-    stackableVersion: 0.2.0
+    stackableVersion: 0.3.0
   zookeeperConfigMapName: simple-znode
   dfsReplication: 3
   nameNodes:
@@ -576,6 +575,37 @@ When scaling namenodes up, make sure to increase the replica count only by one a
 <div class="paragraph">
 <p>The managed HDFS instances are automatically configured to export Prometheus metrics. See
 <a href="../../home/stable/operators/monitoring.html" class="xref page">Monitoring</a> for more details.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_log_aggregation"><a class="anchor" href="#_log_aggregation"></a>Log aggregation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The logs can be forwarded to a Vector log aggregator by providing a discovery
+ConfigMap for the aggregator and by enabling the log agent:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  vectorAggregatorConfigMapName: vector-aggregator-discovery
+  nameNodes:
+    config:
+      logging:
+        enableVectorAgent: true
+  dataNodes:
+    config:
+      logging:
+        enableVectorAgent: true
+  journalNodes:
+    config:
+      logging:
+        enableVectorAgent: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Further information on how to configure logging, can be found in
+<a href="#home:concepts:logging.adoc" class="xref unresolved">home:concepts:logging.adoc</a>.</p>
 </div>
 </div>
 </div>
@@ -778,7 +808,7 @@ For Java products the actual used Heap memory is lower than the specified memory
         resources:
           cpu:
             max: '4'
-            min: '500m'
+            min: '100m'
           storage:
             data:
               capacity: 2Gi</code></pre>

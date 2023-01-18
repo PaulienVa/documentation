@@ -734,7 +734,79 @@ Some environment variables will be overriden by the operator and cannot be set m
 <p>In the above example, all data nodes in the default group will store data (the location of <code>dfs.datanode.name.dir</code>) on a <code>128Gi</code> volume.</p>
 </div>
 <div class="paragraph">
-<p>By default, in case nothing is configured in the custom resource for a certain role group, each Pod will have a <code>1Gi</code> large local volume mount for the data location.</p>
+<p>By default, in case nothing is configured in the custom resource for a certain role group, each Pod will have a <code>5Gi</code> large volume mount for the data location.</p>
+</div>
+<div class="sect3">
+<h4 id="_multiple_storage_volumes"><a class="anchor" href="#_multiple_storage_volumes"></a>Multiple storage volumes</h4>
+<div class="paragraph">
+<p>Datanodes can have multiple disks attached to increase the storage size as well as speed.
+They can be of different type, e.g. HDDs or SSDs.</p>
+</div>
+<div class="paragraph">
+<p>You can configure multiple [PersistentVolumeClaims](<a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims" class="bare">https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims</a>) (PVCs) for the datanodes as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">dataNodes:
+  roleGroups:
+    default:
+      config:
+        resources:
+          storage:
+            data: # We need to overwrite the data pvcs coming from the default value
+              count: 0
+            my-disks:
+              count: 3
+              capacity: 12Ti
+              hdfsStorageType: Disk
+            my-ssds:
+              count: 2
+              capacity: 5Ti
+              storageClass: premium-ssd
+              hdfsStorageType: SSD</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will create the following PVCs:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>my-disks-hdfs-datanode-default-0</code> (12Ti)</p>
+</li>
+<li>
+<p><code>my-disks-1-hdfs-datanode-default-0</code> (12Ti)</p>
+</li>
+<li>
+<p><code>my-disks-2-hdfs-datanode-default-0</code> (12Ti)</p>
+</li>
+<li>
+<p><code>my-ssds-hdfs-datanode-default-0</code> (5Ti)</p>
+</li>
+<li>
+<p><code>my-ssds-1-hdfs-datanode-default-0</code> (5Ti)</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>By configuring and using a dedicated <a href="https://kubernetes.io/docs/concepts/storage/storage-classes/">StorageClass</a> you can configure your HDFS to use local disks attached to Kubernetes nodes.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You might need to re-create the StatefulSet to apply the new PVC configuration because of <a href="https://github.com/kubernetes/kubernetes/issues/68737">this Kubernetes issue</a>.
+You can delete the StatefulSet using <code>kubectl delete sts --cascade=false &lt;statefulset&gt;</code>.
+The hdfs-operator will re-create the StatefulSet automatically.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect2">

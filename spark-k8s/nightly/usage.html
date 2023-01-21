@@ -154,6 +154,9 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="rbac.html">RBAC</a>
   </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="history_server.html">Spark History Server</a>
+  </li>
 </ul>
   </li>
 </ul>
@@ -737,16 +740,13 @@ spec:
   mode: cluster
   mainApplicationFile: s3a://my-bucket/spark-examples_2.12-3.3.0.jar <i class="conum" data-value="1"></i><b>(1)</b>
   mainClass: org.apache.spark.examples.SparkPi <i class="conum" data-value="2"></i><b>(2)</b>
-  s3bucket:  <i class="conum" data-value="3"></i><b>(3)</b>
+  s3connection: <i class="conum" data-value="3"></i><b>(3)</b>
     inline:
-      bucketName: my-bucket
-      connection:
-        inline:
-          host: test-minio
-          port: 9000
-          accessStyle: Path
-          credentials: <i class="conum" data-value="4"></i><b>(4)</b>
-            secretClass: s3-credentials-class
+      host: test-minio
+      port: 9000
+      accessStyle: Path
+      credentials: <i class="conum" data-value="4"></i><b>(4)</b>
+        secretClass: s3-credentials-class
   sparkConf: <i class="conum" data-value="5"></i><b>(5)</b>
     spark.hadoop.fs.s3a.aws.credentials.provider: "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider" <i class="conum" data-value="6"></i><b>(6)</b>
     spark.driver.extraClassPath: "/dependencies/jars/hadoop-aws-3.2.0.jar:/dependencies/jars/aws-java-sdk-bundle-1.11.375.jar"
@@ -873,86 +873,76 @@ spec:
 <p>You can specify S3 connection details directly inside the <code>SparkApplication</code> specification or by referring to an external <code>S3Bucket</code> custom resource.</p>
 </div>
 <div class="paragraph">
-<p>To specify S3 connection details directly as part of the <code>SparkApplication</code> resource you add an inline bucket configuration as shown below.</p>
+<p>To specify S3 connection details directly as part of the <code>SparkApplication</code> resource you add an inline connection configuration as shown below.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">s3bucket:  <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">s3connection: <i class="conum" data-value="1"></i><b>(1)</b>
   inline:
-    bucketName: my-bucket <i class="conum" data-value="2"></i><b>(2)</b>
-    connection:
-      inline:
-        host: test-minio <i class="conum" data-value="3"></i><b>(3)</b>
-        port: 9000 <i class="conum" data-value="4"></i><b>(4)</b>
-        accessStyle: Path
-        credentials:
-          secretClass: s3-credentials-class  <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+    host: test-minio <i class="conum" data-value="2"></i><b>(2)</b>
+    port: 9000 <i class="conum" data-value="3"></i><b>(3)</b>
+    accessStyle: Path
+    credentials:
+      secretClass: s3-credentials-class  <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Entry point for the bucket configuration.</td>
+<td>Entry point for the S3 connection configuration.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Bucket name.</td>
+<td>Connection host.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Bucket host.</td>
+<td>Optional connection port.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Optional bucket port.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
 <td>Name of the <code>Secret</code> object expected to contain the following keys: <code>ACCESS_KEY_ID</code> and <code>SECRET_ACCESS_KEY</code></td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>It is also possible to configure the bucket connection details as a separate Kubernetes resource and only refer to that object from the <code>SparkApplication</code> like this:</p>
+<p>It is also possible to configure the  connection details as a separate Kubernetes resource and only refer to that object from the <code>SparkApplication</code> like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">s3bucket:
-  reference: my-bucket-resource <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">s3connection:
+  reference: s3-connection-resource <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Name of the bucket resource with connection details.</td>
+<td>Name of the connection resource with connection details.</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>The resource named <code>my-bucket-resource</code> is then defined as shown below:</p>
+<p>The resource named <code>s3-connection-resource</code> is then defined as shown below:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
 apiVersion: s3.stackable.tech/v1alpha1
-kind: S3Bucket
+kind: S3Connection
 metadata:
-  name: my-bucket-resource
+  name: s3-connection-resource
 spec:
-  bucketName: my-bucket-name
-  connection:
-    inline:
-      host: test-minio
-      port: 9000
-      accessStyle: Path
-      credentials:
-        secretClass: minio-credentials-class</code></pre>
+  host: test-minio
+  port: 9000
+  accessStyle: Path
+  credentials:
+    secretClass: minio-credentials-class</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This has the advantage that bucket configuration can be shared across `SparkApplication`s and reduces the cost of updating these details.</p>
+<p>This has the advantage that one connection configuration can be shared across <code>SparkApplications</code> and reduces the cost of updating these details.</p>
 </div>
 </div>
 </div>
@@ -1141,8 +1131,8 @@ It is possible to define Spark resources either directly by setting configuratio
 <td class="tableblock halign-left valign-top"><p class="tableblock">Arguments passed directly to the job artifact</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spec.s3bucket</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket and connection specification. See the <a href="#_s3_bucket_specification">S3 bucket specification</a> for more details.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spec.s3connection</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3 connection specification. See the <a href="#_s3_bucket_specification">S3 bucket specification</a> for more details.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spec.sparkConf</code></p></td>

@@ -737,35 +737,117 @@
 <h2 id="_setup"><a class="anchor" href="#_setup"></a>Setup</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Download the cluster script and install the dependencies.</p>
+<p>Install <code>stackablectl</code>, the Stackable CLI utility.</p>
 </div>
 <div class="paragraph">
-<p>The script requires Python 3.7 or newer to run.</p>
+<p>On Linux (Windows and MacOS instructions below):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -L https://raw.githubusercontent.com/stackabletech/integration-tests/main/create_test_cluster.py &gt; create_test_cluster.py
-
-chmod +x create_test_cluster.py
-
-pip install requests</pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ curl -L -o stackablectl https://github.com/stackabletech/stackablectl/releases/latest/download/stackablectl-x86_64-unknown-linux-gnu</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>and mark it as executable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ chmod +x stackablectl</code></pre>
+</div>
+</div>
+<details>
+<summary class="title">Instruction for Windows and MacOS</summary>
+<div class="content">
+<div class="paragraph">
+<p>Download <code>stackablectl-x86_64-pc-windows-gnu.exe</code> (for Windows) or <code>stackablectl-x86_64-apple-darwin</code> (Mac OS Intel) or <code>stackablectl-aarch64-apple-darwin</code> (MacOS ARM) from the <a href="https://github.com/stackabletech/stackablectl/releases/latest">latest release</a> and save it as <code>stackablectl</code>.</p>
+</div>
+<div class="paragraph">
+<p>For windows, you can simply execute it. For MacOS mark it as executable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ chmod +x stackablectl</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to execute it from anywhere in your system, you need to add it to the system <code>PATH</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If macOS denies the execution of stackablectl go to <code>Settings</code> &#8594; <code>Security &amp; Privacy</code> &#8594; <code>General</code>. Here you will see a pop up asking if you want to allow access for <code>stackablectl</code>. You must allow access.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</details>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_install_the_taxi_data_demo"><a class="anchor" href="#_install_the_taxi_data_demo"></a>Install the Taxi data demo</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="#stackablectl:demos/trino-taxi-data.adoc" class="xref unresolved"><code>trino-taxi-data</code></a> Demo installs the latest Stackable platform release and a visualization of <a href="https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page">New York City Taxi Data</a> using Trino and Superset:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">./stackablectl demo install trino-taxi-data</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Learn more about this demo in the demo docs: <a href="../../stackablectl/stable/demos/trino-taxi-data.html" class="xref page">trino-taxi-data</a>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_install_example_architecture"><a class="anchor" href="#_install_example_architecture"></a>Install Example Architecture</h2>
+<h2 id="_connect"><a class="anchor" href="#_connect"></a>Connect</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Using the following command you will can install the Stackable Operators for Apache NiFi, Druid and Superset and deploy example definitions at the same time.</p>
+<p>To list the installed installed Stackable services run the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>./create-test-cluster.py -o nifi druid superset --example</pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">./stackablectl services list --all-namespaces</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>After this has finished you will have working installations of the three mentioned tools.</p>
+<p>It will output something like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"> PRODUCT   NAME         NAMESPACE  ENDPOINTS                                     EXTRA INFOS
+
+ hive      hive         default    hive                172.18.0.5:30298
+                                   metrics             172.18.0.5:31633
+
+ opa       opa          default    http                http://172.18.0.5:30316
+
+ superset  superset     default    external-superset   http://172.18.0.4:32295   Admin user: admin, password: adminadmin
+
+ trino     trino        default    coordinator-http    http://172.18.0.3:30167
+                                   coordinator-metrics 172.18.0.3:31818
+                                   coordinator-https   https://172.18.0.3:30141
+
+ minio     minio-trino  default    http                http://172.18.0.3:31062   Third party service
+                                   console-http        http://172.18.0.3:30503   Admin user: admin, password: adminadmin</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To connect to Superset, open the listed endpoint in your browser and log in with the username <code>admin</code> and the password <code>adminadmin</code>.</p>
 </div>
 </div>
 </div>

@@ -683,14 +683,18 @@ spec:
   image:
     productVersion: 1.18.0
     stackableVersion: 0.3.0
-  zookeeperConfigMapName: simple-nifi-znode
-  authenticationConfig:
-    method:
-      SingleUser:
-        adminCredentialsSecret:
-          name: nifi-admin-credentials-simple
-          namespace: default
-    allowAnonymousAccess: true
+  clusterConfig:
+    authentication:
+      method:
+        SingleUser:
+          adminCredentialsSecret:
+            name: nifi-admin-credentials-simple
+            namespace: default
+      allowAnonymousAccess: true
+    sensitiveProperties:
+      keySecret: nifi-sensitive-property-key
+      autoGenerate: true
+    zookeeperConfigMapName: simple-nifi-znode
   nodes:
     roleGroups:
       default:
@@ -698,7 +702,6 @@ spec:
           matchLabels:
             kubernetes.io/os: linux
         config:
-          sensitivePropertyKeySecret: nifi-sensitive-property-key
           log:
             rootLogLevel: INFO
         replicas: 3</code></pre>
@@ -708,14 +711,14 @@ spec:
 <h3 id="_node_configuration"><a class="anchor" href="#_node_configuration"></a>Node Configuration</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"> nodes:
-    roleGroups:
-      default:
-        selector:
-          matchLabels:
-            kubernetes.io/os: linux
-        config:
-        replicas: 3</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">nodes:
+  roleGroups:
+    default:
+      selector:
+        matchLabels:
+          kubernetes.io/os: linux
+      config: {}
+      replicas: 3</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -740,7 +743,8 @@ It is possible to define multiple groups of nodes, each with its own distinct co
 <h3 id="_authentication"><a class="anchor" href="#_authentication"></a>Authentication</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  authenticationConfig:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">clusterConfig:
+  authentication:
     method:
       SingleUser:
         adminCredentialsSecret:
@@ -750,7 +754,7 @@ It is possible to define multiple groups of nodes, each with its own distinct co
 </div>
 </div>
 <div class="paragraph">
-<p>All authentication related parameters are configured in the authenticationConfig element.</p>
+<p>All authentication related parameters are configured in the <code>authentication</code> element.</p>
 </div>
 <div class="sect3">
 <h4 id="_authentication_method"><a class="anchor" href="#_authentication_method"></a>Authentication Method</h4>
@@ -772,7 +776,8 @@ This setting is independent of the configured authentication method and will ove
 <h3 id="_zookeeper_connection"><a class="anchor" href="#_zookeeper_connection"></a>ZooKeeper Connection</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  zookeeperConfigMapName: simple-nifi-znode</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">clusterConfig:
+  zookeeperConfigMapName: simple-nifi-znode</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -785,7 +790,6 @@ Configuration happens via a ConfigMap, which needs to contain two keys called <c
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">config:
-  sensitivePropertyKeySecret: nifi-sensitive-property-key
   log:
     rootLogLevel: INFO</code></pre>
 </div>

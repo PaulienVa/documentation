@@ -561,14 +561,14 @@ spec:
   image:
     productVersion: 1.16.3 <i class="conum" data-value="1"></i><b>(1)</b>
     stackableVersion: 0.3.0 <i class="conum" data-value="2"></i><b>(2)</b>
-  zookeeperConfigMapName: simple-nifi-znode
-  config:
+  clusterConfig:
     authentication:
       method:
         singleUser:
           adminCredentialsSecret: nifi-admin-credentials-simple
     sensitiveProperties:
       keySecret: nifi-sensitive-property-key
+    zookeeperConfigMapName: simple-nifi-znode
   nodes:
     roleGroups:
       default:

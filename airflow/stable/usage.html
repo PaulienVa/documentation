@@ -186,10 +186,7 @@
           <a href="../../home/nightly/index.html">nightly</a>
         </li>
         <li class="version is-latest">
-          <a href="../../home/stable/index.html">23.1</a>
-        </li>
-        <li class="version">
-          <a href="../../home/22.11/index.html">22.11</a>
+          <a href="../../home/stable/index.html">22.11</a>
         </li>
         <li class="version">
           <a href="../../home/22.09/index.html">22.09</a>
@@ -750,7 +747,7 @@ will run and the job tree will update automatically:</p>
 <div class="sect2">
 <h3 id="_ldap"><a class="anchor" href="#_ldap"></a>LDAP</h3>
 <div class="paragraph">
-<p>Airflow supports <a href="../../home/stable/concepts/authentication.html" class="xref page">authentication</a> of users against an LDAP server. This requires setting up an <a href="../../home/stable/concepts/authentication.html#authenticationclass" class="xref page">AuthenticationClass</a> for the LDAP server.
+<p>Airflow supports <a href="#home:concepts:authentication.adoc" class="xref unresolved">authentication</a> of users against an LDAP server. This requires setting up an <a href="#home:concepts:authentication.adoc#authenticationclass" class="xref unresolved">AuthenticationClass</a> for the LDAP server.
 The AuthenticationClass is then referenced in the AirflowCluster resource as follows:</p>
 </div>
 <div class="listingblock">
@@ -785,7 +782,7 @@ spec:
 <p>Users that log in with LDAP are assigned to a default <a href="https://airflow.apache.org/docs/apache-airflow/stable/security/access-control.html#access-control">Role</a> which is specified with the <code>userRegistrationRole</code> property.</p>
 </div>
 <div class="paragraph">
-<p>You can follow the <a href="../../home/stable/tutorials/authentication_with_openldap.html" class="xref page">Authentication with OpenLDAP</a> tutorial to learn how to set up an AuthenticationClass for an LDAP server, as well as consulting the <a href="../../home/stable/reference/authenticationclass.html" class="xref page">AuthenticationClass</a> reference.</p>
+<p>You can follow the <a href="#home:tutorials:authentication_with_openldap.adoc" class="xref unresolved">home:tutorials:authentication_with_openldap.adoc</a> tutorial to learn how to set up an AuthenticationClass for an LDAP server, as well as consulting the <a href="#home:reference:authenticationclass.adoc" class="xref unresolved">home:reference:authenticationclass.adoc</a> reference.</p>
 </div>
 <div class="paragraph">
 <p>The users and roles can be viewed as before in the Webserver UI, but note that the blue "+" button is not available when authenticating against LDAP:</p>

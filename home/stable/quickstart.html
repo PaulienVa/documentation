@@ -104,7 +104,7 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="home" data-version="23.1">
+<div class="nav-container" data-component="home" data-version="22.11">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -112,11 +112,10 @@
     <div class="title-wrapper">
       <h3 class="title"><a href="index.html">Stackable Documentation</a></h3>
       <div class="page-versions">
-        <button class="version-menu-toggle" title="Show other versions of page">23.1</button>
+        <button class="version-menu-toggle" title="Show other versions of page">22.11</button>
         <div class="version-menu">
           <a class="version" href="../nightly/quickstart.html">nightly</a>
-          <a class="version is-current" href="quickstart.html">23.1</a>
-          <a class="version" href="../22.11/quickstart.html">22.11</a>
+          <a class="version is-current" href="quickstart.html">22.11</a>
           <a class="version" href="../22.09/quickstart.html">22.09</a>
           <a class="version" href="../22.06/quickstart.html">22.06</a>
         </div>
@@ -146,28 +145,16 @@
     <a class="nav-link" href="concepts/service_discovery.html">Service discovery ConfigMap</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="concepts/logging.html">Logging</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="concepts/authentication.html">Authentication</a>
-  </li>
-  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="concepts/opa.html">OPA authorization</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="concepts/product_image_selection.html">Product image selection</a>
+    <a class="nav-link" href="concepts/s3.html">S3 resources</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="concepts/pvc.html">PersistentVolumeClaim usage</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="concepts/resources.html">Resource management</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="concepts/s3.html">S3 resources</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="concepts/tls_server_verification.html">TLS server verification</a>
   </li>
 </ul>
   </li>
@@ -182,9 +169,6 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="tutorials/end-to-end_data_pipeline_example.html">Setting up an end-to-end data pipeline</a>
   </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="tutorials/authentication_with_openldap.html">Authentication with OpenLDAP</a>
-  </li>
 </ul>
   </li>
 </ul>
@@ -195,9 +179,6 @@
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="reference/index.html">Reference</a>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reference/authenticationclass.html">AuthenticationClass</a>
-  </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="reference/s3.html">S3 resources</a>
   </li>
@@ -367,9 +348,6 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="contributor/adr/ADR024-out-of-cluster_access.html">ADR024: How to provide stable out-of-cluster access to products</a>
   </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="contributor/adr/ADR025-logging_architecture.html">ADR025: Logging and Log Aggregation Architecture</a>
-  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="3">
@@ -409,7 +387,7 @@
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
     <span class="title">Stackable Documentation</span>
-    <span class="version">23.1</span>
+    <span class="version">22.11</span>
   </div>
   <ul class="components">
     <li class="component">
@@ -439,10 +417,7 @@
           <a href="../nightly/index.html">nightly</a>
         </li>
         <li class="version is-current is-latest">
-          <a href="index.html">23.1</a>
-        </li>
-        <li class="version">
-          <a href="../22.11/index.html">22.11</a>
+          <a href="index.html">22.11</a>
         </li>
         <li class="version">
           <a href="../22.09/index.html">22.09</a>
@@ -767,7 +742,7 @@
     <li><a href="quickstart.html">Quickstart</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/release/23.1/modules/ROOT/pages/quickstart.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/release/22.11/modules/ROOT/pages/quickstart.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
@@ -786,117 +761,35 @@
 <h2 id="_setup"><a class="anchor" href="#_setup"></a>Setup</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Install <code>stackablectl</code>, the Stackable CLI utility.</p>
+<p>Download the cluster script and install the dependencies.</p>
 </div>
 <div class="paragraph">
-<p>On Linux (Windows and MacOS instructions below):</p>
+<p>The script requires Python 3.7 or newer to run.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ curl -L -o stackablectl https://github.com/stackabletech/stackablectl/releases/latest/download/stackablectl-x86_64-unknown-linux-gnu</code></pre>
+<pre>curl -L https://raw.githubusercontent.com/stackabletech/integration-tests/main/create_test_cluster.py &gt; create_test_cluster.py
+
+chmod +x create_test_cluster.py
+
+pip install requests</pre>
 </div>
-</div>
-<div class="paragraph">
-<p>and mark it as executable:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ chmod +x stackablectl</code></pre>
-</div>
-</div>
-<details>
-<summary class="title">Instruction for Windows and MacOS</summary>
-<div class="content">
-<div class="paragraph">
-<p>Download <code>stackablectl-x86_64-pc-windows-gnu.exe</code> (for Windows) or <code>stackablectl-x86_64-apple-darwin</code> (Mac OS Intel) or <code>stackablectl-aarch64-apple-darwin</code> (MacOS ARM) from the <a href="https://github.com/stackabletech/stackablectl/releases/latest">latest release</a> and save it as <code>stackablectl</code>.</p>
-</div>
-<div class="paragraph">
-<p>For windows, you can simply execute it. For MacOS mark it as executable:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ chmod +x stackablectl</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you want to execute it from anywhere in your system, you need to add it to the system <code>PATH</code>.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-If macOS denies the execution of stackablectl go to <code>Settings</code> &#8594; <code>Security &amp; Privacy</code> &#8594; <code>General</code>. Here you will see a pop up asking if you want to allow access for <code>stackablectl</code>. You must allow access.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</details>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_install_the_taxi_data_demo"><a class="anchor" href="#_install_the_taxi_data_demo"></a>Install the Taxi data demo</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The <a href="#stackablectl:demos/trino-taxi-data.adoc" class="xref unresolved"><code>trino-taxi-data</code></a> Demo installs the latest Stackable platform release and a visualization of <a href="https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page">New York City Taxi Data</a> using Trino and Superset:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">./stackablectl demo install trino-taxi-data</code></pre>
-</div>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-Learn more about this demo in the demo docs: <a href="../../stackablectl/stable/demos/trino-taxi-data.html" class="xref page">trino-taxi-data</a>
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_connect"><a class="anchor" href="#_connect"></a>Connect</h2>
+<h2 id="_install_example_architecture"><a class="anchor" href="#_install_example_architecture"></a>Install Example Architecture</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To list the installed installed Stackable services run the following command:</p>
+<p>Using the following command you will can install the Stackable Operators for Apache NiFi, Druid and Superset and deploy example definitions at the same time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">./stackablectl services list --all-namespaces</code></pre>
+<pre>./create-test-cluster.py -o nifi druid superset --example</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>It will output something like:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs"> PRODUCT   NAME         NAMESPACE  ENDPOINTS                                     EXTRA INFOS
-
- hive      hive         default    hive                172.18.0.5:30298
-                                   metrics             172.18.0.5:31633
-
- opa       opa          default    http                http://172.18.0.5:30316
-
- superset  superset     default    external-superset   http://172.18.0.4:32295   Admin user: admin, password: adminadmin
-
- trino     trino        default    coordinator-http    http://172.18.0.3:30167
-                                   coordinator-metrics 172.18.0.3:31818
-                                   coordinator-https   https://172.18.0.3:30141
-
- minio     minio-trino  default    http                http://172.18.0.3:31062   Third party service
-                                   console-http        http://172.18.0.3:30503   Admin user: admin, password: adminadmin</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To connect to Superset, open the listed endpoint in your browser and log in with the username <code>admin</code> and the password <code>adminadmin</code>.</p>
+<p>After this has finished you will have working installations of the three mentioned tools.</p>
 </div>
 </div>
 </div>

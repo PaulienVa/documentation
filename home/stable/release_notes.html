@@ -104,7 +104,7 @@
   </header>
 <div class="body">
     <div class="container">
-<div class="nav-container" data-component="home" data-version="23.1">
+<div class="nav-container" data-component="home" data-version="22.11">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -112,11 +112,10 @@
     <div class="title-wrapper">
       <h3 class="title"><a href="index.html">Stackable Documentation</a></h3>
       <div class="page-versions">
-        <button class="version-menu-toggle" title="Show other versions of page">23.1</button>
+        <button class="version-menu-toggle" title="Show other versions of page">22.11</button>
         <div class="version-menu">
           <a class="version" href="../nightly/release_notes.html">nightly</a>
-          <a class="version is-current" href="release_notes.html">23.1</a>
-          <a class="version" href="../22.11/release_notes.html">22.11</a>
+          <a class="version is-current" href="release_notes.html">22.11</a>
           <a class="version" href="../22.09/release_notes.html">22.09</a>
           <a class="version" href="../22.06/release_notes.html">22.06</a>
         </div>
@@ -146,28 +145,16 @@
     <a class="nav-link" href="concepts/service_discovery.html">Service discovery ConfigMap</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="concepts/logging.html">Logging</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="concepts/authentication.html">Authentication</a>
-  </li>
-  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="concepts/opa.html">OPA authorization</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="concepts/product_image_selection.html">Product image selection</a>
+    <a class="nav-link" href="concepts/s3.html">S3 resources</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="concepts/pvc.html">PersistentVolumeClaim usage</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="concepts/resources.html">Resource management</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="concepts/s3.html">S3 resources</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="concepts/tls_server_verification.html">TLS server verification</a>
   </li>
 </ul>
   </li>
@@ -182,9 +169,6 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="tutorials/end-to-end_data_pipeline_example.html">Setting up an end-to-end data pipeline</a>
   </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="tutorials/authentication_with_openldap.html">Authentication with OpenLDAP</a>
-  </li>
 </ul>
   </li>
 </ul>
@@ -195,9 +179,6 @@
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="reference/index.html">Reference</a>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reference/authenticationclass.html">AuthenticationClass</a>
-  </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="reference/s3.html">S3 resources</a>
   </li>
@@ -367,9 +348,6 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="contributor/adr/ADR024-out-of-cluster_access.html">ADR024: How to provide stable out-of-cluster access to products</a>
   </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="contributor/adr/ADR025-logging_architecture.html">ADR025: Logging and Log Aggregation Architecture</a>
-  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="3">
@@ -409,7 +387,7 @@
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
     <span class="title">Stackable Documentation</span>
-    <span class="version">23.1</span>
+    <span class="version">22.11</span>
   </div>
   <ul class="components">
     <li class="component">
@@ -439,10 +417,7 @@
           <a href="../nightly/index.html">nightly</a>
         </li>
         <li class="version is-current is-latest">
-          <a href="index.html">23.1</a>
-        </li>
-        <li class="version">
-          <a href="../22.11/index.html">22.11</a>
+          <a href="index.html">22.11</a>
         </li>
         <li class="version">
           <a href="../22.09/index.html">22.09</a>
@@ -767,7 +742,7 @@
     <li><a href="release_notes.html">Release Notes</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/release/23.1/modules/ROOT/pages/release_notes.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/documentation/edit/release/22.11/modules/ROOT/pages/release_notes.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
@@ -784,627 +759,13 @@ Periodically a platform release is made, including all components of the platfor
 </div>
 </div>
 <div class="sect1">
-<h2 id="_release_23_1"><a class="anchor" href="#_release_23_1"></a>Release 23.1</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>This release marks a major change in the way operator and product images are versioned. Up until now, operators were versioned independently of each other and a platform release was a loosely coupled set of operator versions. This had major disadvantages both technical and organisational.</p>
-</div>
-<div class="paragraph">
-<p>On the technical side, a multi-dimensional matrix of versions had to be tested, documentation cross-references had to be maintained and coordinating a platform release was extremely difficult.</p>
-</div>
-<div class="paragraph">
-<p>Organizationally the biggest challenge was communication and coordination within the teams as well as to and with users.
-As a result, starting with this release, all operator and product images are versioned in lock-step. This platform release is marked <code>23.1</code> and all included components are tagged with <code>23.1.0</code>. Eventual patch versions of the components that might follow and will be tagged with <code>23.1.1</code>, <code>23.1.2</code> and so on.</p>
-</div>
-<div class="paragraph">
-<p>The focus in this platform release is on the support of offline (or on-premise) product images and the partial rollout of logging support.</p>
-</div>
-<div class="sect2">
-<h3 id="_new_platform_features"><a class="anchor" href="#_new_platform_features"></a>New platform features</h3>
-<div class="paragraph">
-<p>The following new major platform features were added:</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Product image selection</dt>
-<dd>
-<p>Product image selection has been expanded to cover different scenarios:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Stackable-provided product images, defined with the repository, the product version and the stackable tag</p>
-</li>
-<li>
-<p>As above, but without the stackable tag (whereby the most recent tagged image will be taken)</p>
-</li>
-<li>
-<p>The product version and a full repository path (this allows fully-customized product images)</p>
-</li>
-</ul>
-</div>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>These options are described in more detail <a href="contributor/adr/ADR023-product-image-selection.html" class="xref page">in this ADR</a> and on <a href="concepts/product_image_selection.html" class="xref page">this concepts page</a>.</p>
-</div>
-<div class="paragraph">
-<p><strong>N.B.</strong> this is a breaking change across all operators as <code>spec.version</code> has been replaced by <code>spec.image</code>.</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Logging Aggregation</dt>
-<dd>
-<p>Component activity within the platform is logged in a way that makes it difficult to find, persist and consolidate this information. Log configuration is also a challenge. To address these two issues a logging framework has been added to the platform, offering a consistent custom resource configuration and a separate, persisted sink (the current implementation support OpenSearch). This is discussed in more detail <a href="contributor/adr/ADR025-logging_architecture.html" class="xref page">in this ADR</a> and <a href="concepts/logging.html" class="xref page">on this concepts page</a>.</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>In this release this has been added to the following components:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/stackabletech/hbase-operator/pull/294">Apache HBase</a></p>
-</li>
-<li>
-<p><a href="https://github.com/stackabletech/hdfs-operator/pull/290">Apache Hadoop</a></p>
-</li>
-<li>
-<p><a href="https://github.com/stackabletech/zookeeper-operator/pull/588">Apache Zookeeper</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Support for other products will be added in future releases.</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">New Versions</dt>
-<dd>
-<p>The following new product version is now supported:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/stackabletech/trino-operator/pull/358">Trino 403</a></p>
-</li>
-</ul>
-</div>
-</dd>
-<dt class="hdlist1">Deprecated Versions</dt>
-<dd>
-<p>The following product version is no longer supported:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/stackabletech/druid-operator/pull/339">Druid 0.22.1</a></p>
-</li>
-</ul>
-</div>
-</dd>
-<dt class="hdlist1">Product features</dt>
-<dd>
-<p>Additionally, there are some individual product features that are noteworthy</p>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/stackabletech/druid-operator/pull/342">The Druid segment cache size is configurable</a></p>
-</li>
-<li>
-<p><a href="https://github.com/stackabletech/druid-operator/pull/333">Druid support for TLS encryption and authentication</a></p>
-</li>
-<li>
-<p><a href="https://github.com/stackabletech/hdfs-operator/pull/296">HDFS support for multiple storage directories</a></p>
-</li>
-<li>
-<p><a href="https://github.com/stackabletech/spark-k8s-operator/pull/187">Support for Spark History Server</a></p>
-</li>
-<li>
-<p><a href="https://github.com/stackabletech/trino-operator/pull/337">Trino support for Google Sheets connector</a></p>
-</li>
-<li>
-<p><a href="https://github.com/stackabletech/trino-operator/pull/347">Trino support for Black Hole connector</a></p>
-</li>
-</ul>
-</div>
-</dd>
-</dl>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_stackablectl"><a class="anchor" href="#_stackablectl"></a>stackablectl</h3>
-<div class="paragraph">
-<p>The following have been added to <code>stackablectl</code>:</p>
-</div>
-<div class="sect3">
-<h4 id="_logging_demo"><a class="anchor" href="#_logging_demo"></a>Logging demo</h4>
-<div class="paragraph">
-<p>This illustrates how to set up logging for Zookeeper and browse the results in an Open Search dashboard. This has been implemented for HBase, Hadoop and Zookeeper and will eventually be available for all Stackable operators.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_ldap_stack_and_tutorial"><a class="anchor" href="#_ldap_stack_and_tutorial"></a>LDAP stack and tutorial</h4>
-<div class="paragraph">
-<p>LDAP support has now been added to multiple products. An explanation of the overall approach is given <a href="concepts/authentication.html" class="xref page">here</a> but in order to make the configuration steps a little clearer a <a href="tutorials/authentication_with_openldap.html" class="xref page">tutorial</a> has been added that uses a dedicated Stackable <a href="https://docs.stackable.tech/stackablectl/stable/commands/stack.html">stack</a> for OpenLDAP and shows its usage.</p>
-</div>
-<div class="paragraph">
-<p>The <a href="../../stackablectl/stable/quickstart.html" class="xref page">quickstart guide</a> shows how to get started with <code>stackablectl</code>. This link lists the <a href="../../stackablectl/stable/demos/index.html" class="xref page">available demos</a>.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_supported_kubernetes_versions"><a class="anchor" href="#_supported_kubernetes_versions"></a>Supported Kubernetes versions</h3>
-<div class="paragraph">
-<p>This release supports the following Kubernetes versions:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>1.25</code></p>
-</li>
-<li>
-<p><code>1.24</code></p>
-</li>
-<li>
-<p><code>1.23</code></p>
-</li>
-<li>
-<p><code>1.22</code></p>
-</li>
-</ul>
-</div>
-<div class="sect3">
-<h4 id="_breaking_changes"><a class="anchor" href="#_breaking_changes"></a>Breaking changes</h4>
-<div class="paragraph">
-<p>This release brings with it several breaking changes needed to future-proof the platform. You will need to adapt your existing CRDs due to the following breaking changes:</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_all_stackable_operators"><a class="anchor" href="#_all_stackable_operators"></a>All Stackable Operators</h4>
-<div class="paragraph">
-<p>As mentioned above, product image selection is a breaking for all operators. Previously the product image was declared using <code>spec.version</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">spec:
-  version: 396-stackable23.1</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>(example for Trino)</p>
-</div>
-<div class="paragraph">
-<p>This must now be replaced with <code>spec.image</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">spec:
-  image:
-    productVersion: 396
-    stackableVersion: 23.1</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This is the same pattern across operators. so for Hive the change would look like this. From:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">spec:
-  version: 3.1.3-stackable23.1</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>to</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">spec:
-  image:
-    productVersion: 3.1.3
-    stackableVersion: 23.1</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_stackable_operator_for_apache_druid"><a class="anchor" href="#_stackable_operator_for_apache_druid"></a>Stackable Operator for Apache Druid</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/stackabletech/druid-operator/pull/358">Tools image replaced with Druid image</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>This means a stackable version &gt;= 23.1 has to be used for the product image.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/stackabletech/druid-operator/pull/333">Reworked top level configuration to support TLS changes</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Deep storage, Ingestion spec, discovery config maps, authentication etc. are now subfields of spec.clusterConfig instead of being top level under spec. Change the resource from e.g.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">  zookeeperConfigMapName: simple-druid-znode
-  metadataStorageDatabase:
-    dbType: derby
-    connString: jdbc:derby://localhost:1527/var/druid/metadata.db;create=true
-    host: localhost
-    port: 1527
-  deepStorage:
-    hdfs:
-      configMapName: simple-hdfs
-      directory: /data</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>to</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">  clusterConfig:
-    deepStorage:
-      hdfs:
-        configMapName: simple-hdfs
-        directory: /data
-    metadataStorageDatabase:
-      dbType: derby
-      connString: jdbc:derby://localhost:1527/var/druid/metadata.db;create=true
-      host: localhost
-      port: 1527
-    tls: null
-    zookeeperConfigMapName: simple-druid-znode</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_stackable_operator_for_apache_hive"><a class="anchor" href="#_stackable_operator_for_apache_hive"></a>Stackable Operator for Apache Hive</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/stackabletech/hive-operator/pull/292">Moved database specification from role/role-group level to top-level clusterConfig</a></p>
-</li>
-<li>
-<p><a href="https://github.com/stackabletech/hive-operator/pull/292">Moved s3, serviceType and hdfs discovery to top-level clusterConfig</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>These two changes mean that resources previously defined like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">  s3:
-    reference: minio
-  metastore:
-    roleGroups:
-      default:
-        replicas: 1
-        config:
-          database:
-            connString: jdbc:postgresql://hive-postgresql:5432/hive
-            user: hive
-            password: hive
-            dbType: postgres</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>will now be defined like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">  clusterConfig:
-    database:
-      connString: jdbc:postgresql://hive-postgresql:5432/hive
-      user: hive
-      password: hive
-      dbType: postgres
-    s3:
-      reference: minio
-  metastore:
-    roleGroups:
-      default:
-        replicas: 1</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_stackable_operator_for_apache_kafka"><a class="anchor" href="#_stackable_operator_for_apache_kafka"></a>Stackable Operator for Apache Kafka</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/stackabletech/kafka-operator/pull/527">Remove the tools image and add kcat to the product image</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>This means a stackable version &gt;= 23.1 has to be used for the product image.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/stackabletech/kafka-operator/pull/532">Consolidate TLS encryption and authentication</a></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">spec:
-  ...
-  zookeeperConfigMapName: simple-kafka-znode
-  config:
-    authentication:
-      - authenticationClass: kafka-client-auth-tls
-    tls:
-      secretClass: tls
-    clientAuthentication:
-      authenticationClass: kafka-client-auth-tls
-    internalTls:
-      secretClass: kafka-internal-tls</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Changes to:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">spec:
-  ...
-  clusterConfig:
-    authentication:
-      - authenticationClass: kafka-client-auth-tls
-    tls:
-      internalSecretClass: kafka-internal-tls
-      serverSecretClass: tls
-    zookeeperConfigMapName: simple-kafka-znode</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_stackable_operator_for_apache_nifi"><a class="anchor" href="#_stackable_operator_for_apache_nifi"></a>Stackable Operator for Apache Nifi</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/stackabletech/nifi-operator/pull/397">Removed tools image</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>This means a stackable version &gt;= 23.1 has to be used for the product image.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_stackable_operator_for_trino"><a class="anchor" href="#_stackable_operator_for_trino"></a>Stackable Operator for Trino</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/stackabletech/trino-operator/pull/357">Removed tools image</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>This means a stackable version &gt;= 23.1 has to be used for the product image.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/stackabletech/trino-operator/pull/362">Use user and password Secret keys for LDAP bind credentials Secrets, instead of env var names</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>This changes the secret definition from:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">stringData:
-  LDAP_USER: cn=admin,dc=example,dc=org
-  LDAP_PASSWORD: admin</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>to:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">stringData:
-  user: cn=admin,dc=example,dc=org
-  password: admin</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_stackable_operator_for_apache_zookeeper"><a class="anchor" href="#_stackable_operator_for_apache_zookeeper"></a>Stackable Operator for Apache Zookeeper</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/stackabletech/zookeeper-operator/pull/612">Consolidate config</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Similar to the Kafka example above, the configuration settings are consolidated under <code>.spec</code> i.e. from:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">  config:
-    tls:
-      secretClass: tls
-    clientAuthentication:
-      authenticationClass: zk-client-tls
-    quorumTlsSecretClass: tls</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>to:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">  clusterConfig:
-    authentication:
-      - authenticationClass: zk-client-tls
-    tls:
-      serverSecretClass: tls
-      quorumSecretClass: tls</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_upgrade_from_22_11"><a class="anchor" href="#_upgrade_from_22_11"></a>Upgrade from 22.11</h3>
-<div class="sect3">
-<h4 id="_using_stackablectl"><a class="anchor" href="#_using_stackablectl"></a>Using stackablectl</h4>
-<div class="paragraph">
-<p>You can list the available releases as follows</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl release list
-RELEASE            RELEASE DATE   DESCRIPTION
-23.1               2023-01-27     Fourth release focusing on image selection and logging
-22.11              2022-11-08     Third release focusing on resource management
-22.09              2022-09-09     Second release focusing on security and OpenShift support
-22.06              2022-06-30     First official release of the Stackable Data Platform</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To uninstall the <code>22.11</code> release run</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl release uninstall 22.11
-[INFO ] Uninstalling release 22.11
-[INFO ] Uninstalling airflow operator
-[INFO ] Uninstalling commons operator
-# ...</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Afterwards you will need to update the CustomResourceDefinitions (CRDs) installed by the Stackable Platform.
-The reason for this is that helm will uninstall the operators but not the CRDs.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/airflow-operator/23.1.0/deploy/helm/airflow-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/commons-operator/23.1.0/deploy/helm/commons-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/druid-operator/23.1.0/deploy/helm/druid-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/hbase-operator/23.1.0/deploy/helm/hbase-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/hdfs-operator/23.1.0/deploy/helm/hdfs-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/hive-operator/23.1.0/deploy/helm/hive-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/kafka-operator/23.1.0/deploy/helm/kafka-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/nifi-operator/23.1.0/deploy/helm/nifi-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/opa-operator/23.1.0/deploy/helm/opa-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/secret-operator/23.1.0/deploy/helm/secret-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/spark-k8s-operator/23.1.0/deploy/helm/spark-k8s-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/superset-operator/23.1.0/deploy/helm/superset-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/trino-operator/23.1.0/deploy/helm/trino-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-operator/23.1.0/deploy/helm/zookeeper-operator/crds/crds.yaml</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To install the <code>23.1</code> release run</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl release install 23.1
-[INFO ] Installing release 23.1
-[INFO ] Installing airflow operator in version 23.1.0
-[INFO ] Installing commons operator in version 23.1.0
-[INFO ] Installing druid operator in version 23.1.0
-[INFO ] Installing hbase operator in version 23.1.0
-[INFO ] Installing hdfs operator in version 23.1.0
-[INFO ] Installing hive operator in version 23.1.0
-[INFO ] Installing kafka operator in version 23.1.0
-[INFO ] Installing listener operator in version 23.1.0
-[INFO ] Installing nifi operator in version 23.1.0
-[INFO ] Installing opa operator in version 23.1.0
-[INFO ] Installing secret operator in version 23.1.0
-[INFO ] Installing spark-k8s operator in version 23.1.0
-[INFO ] Installing superset operator in version 23.1.0
-[INFO ] Installing trino operator in version 23.1.0
-[INFO ] Installing zookeeper operator in version 23.1.0
-# ...</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_using_helm"><a class="anchor" href="#_using_helm"></a>Using helm</h4>
-<div class="paragraph">
-<p>Use <code>helm list</code> to list the currently installed operators.</p>
-</div>
-<div class="paragraph">
-<p>You can use the following command to uninstall all operators that are part of the release 22.11:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ helm uninstall airflow-operator commons-operator druid-operator hbase-operator hdfs-operator hive-operator kafka-operator nifi-operator opa-operator secret-operator spark-k8s-operator superset-operator trino-operator zookeeper-operator
-release "airflow-operator" uninstalled
-release "commons-operator" uninstalled
-# ...</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Afterwards you will need to update the CustomResourceDefinitions (CRDs) installed by the Stackable Platform.
-This is because helm will uninstall the operators but not the CRDs.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/airflow-operator/23.1.0/deploy/helm/airflow-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/commons-operator/23.1.0/deploy/helm/commons-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/druid-operator/23.1.0/deploy/helm/druid-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/hbase-operator/23.1.0/deploy/helm/hbase-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/hdfs-operator/23.1.0/deploy/helm/hdfs-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/hive-operator/23.1.0/deploy/helm/hive-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/kafka-operator/23.1.0/deploy/helm/kafka-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/nifi-operator/23.1.0/deploy/helm/nifi-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/opa-operator/23.1.0/deploy/helm/opa-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/secret-operator/23.1.0/deploy/helm/secret-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/spark-k8s-operator/23.1.0/deploy/helm/spark-k8s-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/superset-operator/23.1.0/deploy/helm/superset-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/trino-operator/23.1.0/deploy/helm/trino-operator/crds/crds.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-operator/23.1.0/deploy/helm/zookeeper-operator/crds/crds.yaml</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To install the release 23.1 run</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ helm repo add stackable-stable https://repo.stackable.tech/repository/helm-stable/
-$ helm repo update stackable-stable
-$ helm install --wait airflow-operator stackable-stable/airflow-operator --version 23.1.0
-$ helm install --wait commons-operator stackable-stable/commons-operator --version 23.1.0
-$ helm install --wait druid-operator stackable-stable/druid-operator --version 23.1.0
-$ helm install --wait hbase-operator stackable-stable/hbase-operator --version 23.1.0
-$ helm install --wait hdfs-operator stackable-stable/hdfs-operator --version 23.1.0
-$ helm install --wait hive-operator stackable-stable/hive-operator --version 23.1.0
-$ helm install --wait kafka-operator stackable-stable/kafka-operator --version 23.1.0
-$ helm install --wait listener-operator stackable-stable/listener-operator --version 23.1.0
-$ helm install --wait nifi-operator stackable-stable/nifi-operator --version 23.1.0
-$ helm install --wait opa-operator stackable-stable/opa-operator --version 23.1.0
-$ helm install --wait secret-operator stackable-stable/secret-operator --version 23.1.0
-$ helm install --wait spark-k8s-operator stackable-stable/spark-k8s-operator --version 23.1.0
-$ helm install --wait superset-operator stackable-stable/superset-operator --version 23.1.0
-$ helm install --wait trino-operator stackable-stable/trino-operator --version 23.1.0
-$ helm install --wait zookeeper-operator stackable-stable/zookeeper-operator --version 23.1.0</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
 <h2 id="_release_22_11"><a class="anchor" href="#_release_22_11"></a>Release 22.11</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This is the third release of the Stackable Data Platform, which this time focuses on resource management.</p>
 </div>
 <div class="sect2">
-<h3 id="_new_platform_features_2"><a class="anchor" href="#_new_platform_features_2"></a>New platform features</h3>
+<h3 id="_new_platform_features"><a class="anchor" href="#_new_platform_features"></a>New platform features</h3>
 <div class="paragraph">
 <p>The following new major platform features were added:</p>
 </div>
@@ -1527,7 +888,7 @@ $ helm install --wait zookeeper-operator stackable-stable/zookeeper-operator --v
 </div>
 </div>
 <div class="sect2">
-<h3 id="_supported_kubernetes_versions_2"><a class="anchor" href="#_supported_kubernetes_versions_2"></a>Supported Kubernetes versions</h3>
+<h3 id="_supported_kubernetes_versions"><a class="anchor" href="#_supported_kubernetes_versions"></a>Supported Kubernetes versions</h3>
 <div class="paragraph">
 <p>This release supports the following Kubernetes versions:</p>
 </div>
@@ -1551,7 +912,7 @@ $ helm install --wait zookeeper-operator stackable-stable/zookeeper-operator --v
 <div class="sect2">
 <h3 id="_upgrade_from_22_09"><a class="anchor" href="#_upgrade_from_22_09"></a>Upgrade from 22.09</h3>
 <div class="sect3">
-<h4 id="_using_stackablectl_2"><a class="anchor" href="#_using_stackablectl_2"></a>Using stackablectl</h4>
+<h4 id="_using_stackablectl"><a class="anchor" href="#_using_stackablectl"></a>Using stackablectl</h4>
 <div class="paragraph">
 <p>You can list the available releases as follows</p>
 </div>
@@ -1624,7 +985,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-ope
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_helm_2"><a class="anchor" href="#_using_helm_2"></a>Using helm</h4>
+<h4 id="_using_helm"><a class="anchor" href="#_using_helm"></a>Using helm</h4>
 <div class="paragraph">
 <p>Use <code>helm list</code> to list the currently installed operators.</p>
 </div>
@@ -1666,27 +1027,27 @@ $ kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-ope
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ helm repo add stackable-stable https://repo.stackable.tech/repository/helm-stable/
-$ helm repo update stackable-stable
-$ helm install --wait airflow-operator stackable-stable/airflow-operator --version 0.6.0
-$ helm install --wait commons-operator stackable-stable/commons-operator --version 0.4.0
-$ helm install --wait druid-operator stackable-stable/druid-operator --version 0.8.0
-$ helm install --wait hbase-operator stackable-stable/hbase-operator --version 0.5.0
-$ helm install --wait hdfs-operator stackable-stable/hdfs-operator --version 0.6.0
-$ helm install --wait hive-operator stackable-stable/hive-operator --version 0.8.0
-$ helm install --wait kafka-operator stackable-stable/kafka-operator --version 0.8.0
-$ helm install --wait nifi-operator stackable-stable/nifi-operator --version 0.8.0
-$ helm install --wait opa-operator stackable-stable/opa-operator --version 0.11.0
-$ helm install --wait secret-operator stackable-stable/secret-operator --version 0.6.0
-$ helm install --wait spark-k8s-operator stackable-stable/spark-k8s-operator --version 0.6.0
-$ helm install --wait superset-operator stackable-stable/superset-operator --version 0.7.0
-$ helm install --wait trino-operator stackable-stable/trino-operator --version 0.7.0
-$ helm install --wait zookeeper-operator stackable-stable/zookeeper-operator --version 0.12.0</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ helm repo add stackable https://repo.stackable.tech/repository/helm-stable/
+$ helm repo update stackable
+$ helm install --wait airflow-operator stackable/airflow-operator --version 0.6.0
+$ helm install --wait commons-operator stackable/commons-operator --version 0.4.0
+$ helm install --wait druid-operator stackable/druid-operator --version 0.8.0
+$ helm install --wait hbase-operator stackable/hbase-operator --version 0.5.0
+$ helm install --wait hdfs-operator stackable/hdfs-operator --version 0.6.0
+$ helm install --wait hive-operator stackable/hive-operator --version 0.8.0
+$ helm install --wait kafka-operator stackable/kafka-operator --version 0.8.0
+$ helm install --wait nifi-operator stackable/nifi-operator --version 0.8.0
+$ helm install --wait opa-operator stackable/opa-operator --version 0.11.0
+$ helm install --wait secret-operator stackable/secret-operator --version 0.6.0
+$ helm install --wait spark-k8s-operator stackable/spark-k8s-operator --version 0.6.0
+$ helm install --wait superset-operator stackable/superset-operator --version 0.7.0
+$ helm install --wait trino-operator stackable/trino-operator --version 0.7.0
+$ helm install --wait zookeeper-operator stackable/zookeeper-operator --version 0.12.0</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_breaking_changes_2"><a class="anchor" href="#_breaking_changes_2"></a>Breaking changes</h4>
+<h4 id="_breaking_changes"><a class="anchor" href="#_breaking_changes"></a>Breaking changes</h4>
 <div class="paragraph">
 <p>You will need to adapt your existing CRDs due to the following breaking changes:</p>
 </div>
@@ -1760,7 +1121,7 @@ It contains lots of new features and bugfixes.
 The main features focus on OpenShift support and security.</p>
 </div>
 <div class="sect2">
-<h3 id="_new_platform_features_3"><a class="anchor" href="#_new_platform_features_3"></a>New platform features</h3>
+<h3 id="_new_platform_features_2"><a class="anchor" href="#_new_platform_features_2"></a>New platform features</h3>
 <div class="paragraph">
 <p>The following new major platform features were added:</p>
 </div>
@@ -1826,14 +1187,14 @@ The following operators added support for LDAP authentication:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_stackablectl_2"><a class="anchor" href="#_stackablectl_2"></a>stackablectl</h3>
+<h3 id="_stackablectl"><a class="anchor" href="#_stackablectl"></a>stackablectl</h3>
 <div class="paragraph">
 <p><code>stackablectl</code> now supports deploying ready-to-use demos, which give an end-to-end demonstration of the usage of the Stackable Data Platform.
 The <a href="../../stackablectl/stable/quickstart.html" class="xref page">quickstart guide</a> shows how to get started with <code>stackablectl</code>. Here you can see the <a href="../../stackablectl/stable/demos/index.html" class="xref page">available demos</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_supported_kubernetes_versions_3"><a class="anchor" href="#_supported_kubernetes_versions_3"></a>Supported Kubernetes versions</h3>
+<h3 id="_supported_kubernetes_versions_2"><a class="anchor" href="#_supported_kubernetes_versions_2"></a>Supported Kubernetes versions</h3>
 <div class="paragraph">
 <p>This release supports the following Kubernetes versions:</p>
 </div>
@@ -1857,7 +1218,7 @@ The <a href="../../stackablectl/stable/quickstart.html" class="xref page">quicks
 <div class="sect2">
 <h3 id="_upgrade_from_22_06"><a class="anchor" href="#_upgrade_from_22_06"></a>Upgrade from 22.06</h3>
 <div class="sect3">
-<h4 id="_using_stackablectl_3"><a class="anchor" href="#_using_stackablectl_3"></a>Using stackablectl</h4>
+<h4 id="_using_stackablectl_2"><a class="anchor" href="#_using_stackablectl_2"></a>Using stackablectl</h4>
 <div class="paragraph">
 <p>You can list the available releases as follows</p>
 </div>
@@ -1930,7 +1291,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/stackabletech/zookeeper-ope
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_helm_3"><a class="anchor" href="#_using_helm_3"></a>Using helm</h4>
+<h4 id="_using_helm_2"><a class="anchor" href="#_using_helm_2"></a>Using helm</h4>
 <div class="paragraph">
 <p>Use <code>helm list</code> to list the currently installed operators.</p>
 </div>
@@ -1973,27 +1334,27 @@ The reason is, that helm will uninstall the operators but not the CRDs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ helm repo add stackable-stable https://repo.stackable.tech/repository/helm-stable/
-$ helm repo update stackable-stable
-$ helm install --wait airflow-operator stackable-stable/airflow-operator --version 0.5.0
-$ helm install --wait commons-operator stackable-stable/commons-operator --version 0.3.0
-$ helm install --wait druid-operator stackable-stable/druid-operator --version 0.7.0
-$ helm install --wait hbase-operator stackable-stable/hbase-operator --version 0.4.0
-$ helm install --wait hdfs-operator stackable-stable/hdfs-operator --version 0.5.0
-$ helm install --wait hive-operator stackable-stable/hive-operator --version 0.7.0
-$ helm install --wait kafka-operator stackable-stable/kafka-operator --version 0.7.0
-$ helm install --wait nifi-operator stackable-stable/nifi-operator --version 0.7.0
-$ helm install --wait opa-operator stackable-stable/opa-operator --version 0.10.0
-$ helm install --wait secret-operator stackable-stable/secret-operator --version 0.5.0
-$ helm install --wait spark-k8s-operator stackable-stable/spark-k8s-operator --version 0.5.0
-$ helm install --wait superset-operator stackable-stable/superset-operator --version 0.6.0
-$ helm install --wait trino-operator stackable-stable/trino-operator --version 0.6.0
-$ helm install --wait zookeeper-operator stackable-stable/zookeeper-operator --version 0.11.0</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ helm repo add stackable https://repo.stackable.tech/repository/helm-stable/
+$ helm repo update stackable
+$ helm install --wait airflow-operator stackable/airflow-operator --version 0.5.0
+$ helm install --wait commons-operator stackable/commons-operator --version 0.3.0
+$ helm install --wait druid-operator stackable/druid-operator --version 0.7.0
+$ helm install --wait hbase-operator stackable/hbase-operator --version 0.4.0
+$ helm install --wait hdfs-operator stackable/hdfs-operator --version 0.5.0
+$ helm install --wait hive-operator stackable/hive-operator --version 0.7.0
+$ helm install --wait kafka-operator stackable/kafka-operator --version 0.7.0
+$ helm install --wait nifi-operator stackable/nifi-operator --version 0.7.0
+$ helm install --wait opa-operator stackable/opa-operator --version 0.10.0
+$ helm install --wait secret-operator stackable/secret-operator --version 0.5.0
+$ helm install --wait spark-k8s-operator stackable/spark-k8s-operator --version 0.5.0
+$ helm install --wait superset-operator stackable/superset-operator --version 0.6.0
+$ helm install --wait trino-operator stackable/trino-operator --version 0.6.0
+$ helm install --wait zookeeper-operator stackable/zookeeper-operator --version 0.11.0</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_breaking_changes_3"><a class="anchor" href="#_breaking_changes_3"></a>Breaking changes</h4>
+<h4 id="_breaking_changes_2"><a class="anchor" href="#_breaking_changes_2"></a>Breaking changes</h4>
 <div class="paragraph">
 <p>You will need to adapt your existing CRDs to the following breaking changes:</p>
 </div>
@@ -2319,7 +1680,7 @@ All our operators reuse the same CRD structure as well.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_supported_kubernetes_versions_4"><a class="anchor" href="#_supported_kubernetes_versions_4"></a>Supported Kubernetes versions</h3>
+<h3 id="_supported_kubernetes_versions_3"><a class="anchor" href="#_supported_kubernetes_versions_3"></a>Supported Kubernetes versions</h3>
 <div class="paragraph">
 <p>This release supports the following Kubernetes versions:</p>
 </div>

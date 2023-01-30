@@ -984,7 +984,65 @@ spec:
 <div class="sect3">
 <h4 id="_ldap"><a class="anchor" href="#_ldap"></a>LDAP</h4>
 <div class="paragraph">
-<p>Currently not supported.</p>
+<p>Druid supports <a href="../../home/stable/concepts/authentication.html" class="xref page">authentication</a> of users against an LDAP server.
+This requires setting up an <a href="../../home/stable/concepts/authentication.html#authenticationclass" class="xref page">AuthenticationClass</a> for the LDAP server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: ldap-auth
+spec:
+  [...]</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You can follow the <a href="../../home/stable/tutorials/authentication_with_openldap.html" class="xref page">Authentication with OpenLDAP</a> tutorial to learn how to create an AuthenticationClass for an LDAP server.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Reference the AuthenticationClass in your DruidCluster resource:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: druid.stackable.tech/v1alpha1
+kind: DruidCluster
+metadata:
+  name: druid
+spec:
+  clusterConfig:
+    authentication:
+      - authenticationClass: ldap-auth
+  [...]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Check out the <a href="../../home/stable/tutorials/authentication_with_openldap.html" class="xref page">Authentication with OpenLDAP</a> tutorial to see a complete example of how to set LDAP authentication for another Stackable operator. You can also consult the <a href="../../home/stable/reference/authenticationclass.html" class="xref page">AuthenticationClass</a> reference, or
+<a href="https://github.com/stackabletech/druid-operator/tree/main/tests/templates/kuttl/ldap-authentication">the LDAP test</a> suite.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_current_limitations_and_upcoming_work"><a class="anchor" href="#_current_limitations_and_upcoming_work"></a>Current Limitations and Upcoming Work</h4>
+<div class="paragraph">
+<p>At the moment you can either use TLS authentication or LDAP authentication. Both methods together are not supported.</p>
+</div>
+<div class="paragraph">
+<p>Communication with a TLS-secured LDAP server is currently not implemented, but will be tackled in the future.</p>
+</div>
+<div class="paragraph">
+<p>Using an LDAP server <strong>without</strong> bind credentials is not supported. This limitation is due to Druid not supporting this scenario.</p>
+</div>
+<div class="paragraph">
+<p>Authorization is done using the <code>allowAll</code> authorizer. Supporting for <code>memberOf</code> and OPA authorization are planned.</p>
 </div>
 </div>
 </div>

@@ -1066,60 +1066,170 @@ As a result, starting with this release, all operator and product images are ver
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://github.com/stackabletech/hdfs-operator/issues/274">Support for multiple storage directories</a></p>
+<p><a href="https://github.com/stackabletech/hdfs-operator/issues/290">Enable Log Aggregation for HDFS</a></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>As part of the change mentioned above the naming scheme for the PersistentVolumeClaims written for DataNodes has been changed, so that PVCs written by earlier operator versions are not recognized any more.
-Previous PVCs were called <code>hdfs-datanode-default-0</code> but now need to have the prefix <code>data-</code> added, because otherwise there may be naming collisions due to the ability to specify multiple storage classes.</p>
+<p>As part of the change mentioned above we also did some code cleanup that allowed us to remove arbitrary hard-coded values from the operator.</p>
 </div>
 <div class="paragraph">
-<p>In order to move over existing PVCs a few migration steps are required.
-Since it is not possible to rename PVCs you&#8217;ll need to delete the existing PVCs and recreate them with the correct name and bound to the correct backing PV.</p>
+<p>This change affects the directory structure the operator creates inside of the PersistentVolumes used for permanent storage.</p>
 </div>
 <div class="paragraph">
-<p>Please find an example workflow of how this can be achieved below, this also sets the reclaim policy for the backing PV to <code>Retain</code> to avoid the PV being deleted when it becomes unbound, depending on your Kubernetes config this step may not be necessary.</p>
+<p>The old folder naming was:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>DataNode &#8594; <code>data</code></p>
+</li>
+<li>
+<p>JournalNode &#8594; <code>journal</code></p>
+</li>
+<li>
+<p>NameNode &#8594; <code>name</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>which has now been adopted to match the actual rolename:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>DataNode &#8594; <code>datanode</code></p>
+</li>
+<li>
+<p>JournalNode &#8594; <code>journalnode</code></p>
+</li>
+<li>
+<p>NameNode &#8594; <code>namenode</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Unfortunately, this means that for cluster that where initially rolled out with an older operator version, a one-time migration step becomes necessary to rename these directories.</p>
+</div>
+<div class="paragraph">
+<p>You can either do this manually by attaching the PVs to a pod and performing the rename (cluster needs to be stopped for this) or use the script provided below.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Please be aware that if this script runs after the cluster was already restarted with the newer operator version it will delete any data that was written to the empty post-upgrade HDFS that was stood up by the new operator.
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">export PVNAME=$(kubectl get pvc hdfs-datanode-default-0 -o yaml | yq '.spec.volumeName')
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/usr/bin/env bash
 
-kubectl patch pv ${PVNAME} -p '{"spec":{"persistentVolumeReclaimPolicy": "Retain"}}'
+if [ $# -ne 1 ] ; then
+     echo "Usage: $0 CLUSTER_NAME"
+     exit 1
+else
+    HDFS_CLUSTER_NAME=$1
+fi
 
-kubectl delete pvc hdfs-datanode-default-0
-
-kubectl patch pv ${PVNAME} -p '{"spec":{"claimRef": null}}'</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Afterwards you can recreate the PVC with the new name and bind it to the PV.</p>
-</div>
-<div class="paragraph">
-<p>Please note that you will need to adapt labels, storageClassName and resources to your specific configuration.
-Ideally export the pre-existing PVC with kubectl and change the name.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
-kind: PersistentVolumeClaim
+kubectl get pvc -l app.kubernetes.io/name=hdfs -l app.kubernetes.io/instance="$HDFS_CLUSTER_NAME"
+for pvc in $(kubectl get pvc -l app.kubernetes.io/name=hdfs -l app.kubernetes.io/instance="$HDFS_CLUSTER_NAME" -l app.kubernetes.io/component=journalnode -o name | sed -e 's#persistentvolumeclaim/##'); do
+kubectl apply -f - &lt;&lt; EOF
+apiVersion: batch/v1
+kind: Job
 metadata:
-  labels:
-    app.kubernetes.io/component: datanode
-    app.kubernetes.io/instance: hdfs
-    app.kubernetes.io/name: hdfs
-    app.kubernetes.io/role-group: default
-  name: data-hdfs-datanode-default-0
+  name: migrate-journalnode-${pvc}
 spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: standard
-  volumeMode: Filesystem
-  volumeName: &lt;insert PV Name here&gt;</code></pre>
+  template:
+    spec:
+      containers:
+        - name: migrate
+          image: docker.stackable.tech/stackable/hadoop:3.3.4-stackable23.1.0
+          command: ["bash", "-c", "ls -la /stackable/data &amp;&amp; if [ -d /stackable/data/journal ]; then echo Removing might existing target dir &amp;&amp; rm -rf /stackable/data/journalnode &amp;&amp; echo Renaming folder &amp;&amp; mv /stackable/data/journal /stackable/data/journalnode; else echo Nothing to do; fi"]
+          volumeMounts:
+            - name: data
+              mountPath: /stackable/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: ${pvc}
+      restartPolicy: Never
+  backoffLimit: 1
+EOF
+done
+for pvc in $(kubectl get pvc -l app.kubernetes.io/name=hdfs -l app.kubernetes.io/instance="$HDFS_CLUSTER_NAME" -l app.kubernetes.io/component=namenode -o name | sed -e 's#persistentvolumeclaim/##'); do
+kubectl apply -f - &lt;&lt; EOF
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-namenode-${pvc}
+spec:
+  template:
+    spec:
+      containers:
+        - name: migrate
+          image: docker.stackable.tech/stackable/hadoop:3.3.4-stackable23.1.0
+          command: ["bash", "-c", "ls -la /stackable/data &amp;&amp; if [ -d /stackable/data/name ]; then echo Removing might existing target dir &amp;&amp; rm -rf /stackable/data/namenode &amp;&amp; echo Renaming folder &amp;&amp; mv /stackable/data/name /stackable/data/namenode; else echo Nothing to do; fi"]
+          volumeMounts:
+            - name: data
+              mountPath: /stackable/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: ${pvc}
+      restartPolicy: Never
+  backoffLimit: 1
+EOF
+done
+for pvc in $(kubectl get pvc -l app.kubernetes.io/name=hdfs -l app.kubernetes.io/instance="$HDFS_CLUSTER_NAME" -l app.kubernetes.io/component=datanode -o name | sed -e 's#persistentvolumeclaim/##'); do
+kubectl apply -f - &lt;&lt; EOF
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-datanode-${pvc}
+spec:
+  template:
+    spec:
+      containers:
+        - name: migrate
+          image: docker.stackable.tech/stackable/hadoop:3.3.4-stackable23.1.0
+          command: ["bash", "-c", "ls -la /stackable/data/data &amp;&amp; if [ -d /stackable/data/data/data ]; then echo Removing might existing target dir &amp;&amp; rm -rf /stackable/data/data/datanode &amp;&amp; echo Renaming folder &amp;&amp; mv /stackable/data/data/data /stackable/data/data/datanode; else echo Nothing to do; fi"]
+          volumeMounts:
+            - name: data
+              mountPath: /stackable/data/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: ${pvc}
+      restartPolicy: Never
+  backoffLimit: 1
+EOF
+done</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The migration process for this now becomes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Stop HDFS cluster by either removing the HdfsCluster definition object or scaling all roles to 0 replicas</p>
+</li>
+<li>
+<p>Uninstall Stackable Operator for Apache Hadoop</p>
+</li>
+<li>
+<p>Run migration script</p>
+</li>
+<li>
+<p>Install newer version of Stackable Operator for Apache Hadoop</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">

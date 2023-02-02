@@ -165,6 +165,9 @@
     <a class="nav-link" href="monitoring.html">Monitoring</a>
   </li>
   <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="log-aggregation.html">Log aggregation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="configuration-environment-overrides.html">Configuration &amp; Environment Overrides</a>
   </li>
   <li class="nav-item is-current-page" data-depth="2">
@@ -560,7 +563,7 @@ metadata:
 spec:
   image:
     productVersion: 1.16.3 <i class="conum" data-value="1"></i><b>(1)</b>
-    stackableVersion: 0.3.0 <i class="conum" data-value="2"></i><b>(2)</b>
+    stackableVersion: "23.4.0-rc1" <i class="conum" data-value="2"></i><b>(2)</b>
   clusterConfig:
     authentication:
       method:
@@ -575,9 +578,7 @@ spec:
         selector:
           matchLabels:
             kubernetes.io/os: linux
-        config:
-          log:
-            rootLogLevel: INFO
+        config: {}
         replicas: 3</code></pre>
 </div>
 </div>

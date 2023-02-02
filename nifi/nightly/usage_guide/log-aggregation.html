@@ -3,8 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Getting started :: Stackable Documentation</title>
-    <link rel="canonical" href="https://docs.stackable.tech/nifi/stable/getting_started/index.html">
+    <title>Log aggregation :: Stackable Documentation</title>
     <meta name="generator" content="Antora 3.1.0">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script type="text/javascript"> var tCPrivacyTagManager = "gtm"; </script>
@@ -114,10 +113,10 @@
       <div class="page-versions">
         <button class="version-menu-toggle" title="Show other versions of page">nightly</button>
         <div class="version-menu">
-          <a class="version is-current" href="index.html">nightly</a>
-          <a class="version" href="../../stable/getting_started/index.html">23.1</a>
-          <a class="version" href="../../0.8/getting_started/index.html">0.8</a>
-          <a class="version" href="../../0.7/getting_started/index.html">0.7</a>
+          <a class="version is-current" href="log-aggregation.html">nightly</a>
+          <a class="version is-missing" href="../../stable/index.html">23.1</a>
+          <a class="version is-missing" href="../../0.8/index.html">0.8</a>
+          <a class="version is-missing" href="../../0.7/index.html">0.7</a>
           <a class="version is-missing" href="../../0.6/index.html">0.6</a>
         </div>
       </div>
@@ -125,15 +124,15 @@
     <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">Getting started</a>
+    <a class="nav-link" href="../getting_started/index.html">Getting started</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="installation.html">Installation</a>
+    <a class="nav-link" href="../getting_started/installation.html">Installation</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="first_steps.html">First steps</a>
+    <a class="nav-link" href="../getting_started/first_steps.html">First steps</a>
   </li>
 </ul>
   </li>
@@ -153,25 +152,25 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../usage_guide/index.html">Usage guide</a>
+    <a class="nav-link" href="index.html">Usage guide</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../usage_guide/security.html">Security</a>
+    <a class="nav-link" href="security.html">Security</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../usage_guide/resource-configuration.html">Resource configuration</a>
+    <a class="nav-link" href="resource-configuration.html">Resource configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../usage_guide/monitoring.html">Monitoring</a>
+    <a class="nav-link" href="monitoring.html">Monitoring</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="log-aggregation.html">Log aggregation</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../usage_guide/log-aggregation.html">Log aggregation</a>
+    <a class="nav-link" href="configuration-environment-overrides.html">Configuration &amp; Environment Overrides</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../usage_guide/configuration-environment-overrides.html">Configuration &amp; Environment Overrides</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../usage_guide/updating.html">Updating NiFi</a>
+    <a class="nav-link" href="updating.html">Updating NiFi</a>
   </li>
 </ul>
   </li>
@@ -538,75 +537,36 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Stackable Operator for Apache NiFi</a></li>
-    <li><a href="index.html">Getting started</a></li>
+    <li><a href="index.html">Usage guide</a></li>
+    <li><a href="log-aggregation.html">Log aggregation</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/stackabletech/nifi-operator/edit/main/docs/modules/getting_started/pages/index.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/nifi-operator/edit/main/docs/modules/usage_guide/pages/log-aggregation.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Getting started</h1>
-<div id="preamble">
-<div class="sectionbody">
+<h1 class="page">Log aggregation</h1>
 <div class="paragraph">
-<p>This guide will get you started with Apache NiFi using the Stackable operator. It will guide you through the installation of the operator and its dependencies, setting up your first NiFi cluster.</p>
+<p>The logs can be forwarded to a Vector log aggregator by providing a discovery
+ConfigMap for the aggregator and by enabling the log agent:</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  clusterConfig:
+    vectorAggregatorConfigMapName: vector-aggregator-discovery
+  nodes:
+    config:
+      logging:
+        enableVectorAgent: true</code></pre>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You will need:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>a Kubernetes cluster</p>
-</li>
-<li>
-<p>kubectl</p>
-</li>
-<li>
-<p>optional: Helm</p>
-</li>
-</ul>
 </div>
 <div class="paragraph">
-<p>Resource sizing depends on cluster type(s), usage and scope, but as a starting point we recommend a minimum of the following resources for this operator:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>0.2 cores (e.g. i5 or similar)</p>
-</li>
-<li>
-<p>256MB RAM</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The guide is divided into the following steps:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="installation.html" class="xref page">Installing the Operators</a></p>
-</li>
-<li>
-<p><a href="first_steps.html" class="xref page">Setting up the NiFi cluster</a></p>
-</li>
-</ul>
-</div>
-</div>
+<p>Further information on how to configure logging, can be found in
+<a href="../../../home/stable/concepts/logging.html" class="xref page">Logging</a>.</p>
 </div>
 </article>
   </div>

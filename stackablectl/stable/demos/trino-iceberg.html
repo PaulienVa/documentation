@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>trino-iceberg :: Stackable Documentation</title>
+    <meta name="generator" content="Antora 3.1.0">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <script type="text/javascript"> var tCPrivacyTagManager = "gtm"; </script>
+    <script>
+        var consent = document.createElement("script");
+        if(window.location.pathname.indexOf("/en/") > -1){
+            // Default is EN Cookie Banner if /en/ in path
+            consent.src = "https://cdn.trustcommander.net/privacy/4616/privacy_v2_27.js";
+        } else {
+            // Default is DE Cookie Banner
+            consent.src = "https://cdn.trustcommander.net/privacy/4616/privacy_v2_9.js";
+        }
+        consent.type = "text/javascript";
+        document.head.appendChild(consent);
+    </script>
+    <!-- Matomo consent with trustcommander -->
+    <script type="text/tc_privacy" data-category="2">
+    console.log('consent provided for Matomo')
+    <!-- Matomo -->
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+    _paq.push(["setCookieDomain", "*.stackable.tech"]);
+    _paq.push(["setDomains", ["*.stackable.tech"]]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+        var u="https://stackable.matomo.cloud/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '2']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.async=true; g.src='//cdn.matomo.cloud/stackable.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+    </script>
+    <!-- End Matomo Code -->
+    <script>var uiRootPath = '../../../_'</script>
+    <link rel="icon" href="../../../_/img/favicon.png" type="image/png">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://stackable.tech/en/"><img src="../../../_/img/stackable-logo.png"></a>
+      <a class="navbar-item documentation-link" href="/home/stable/index.html">Documentation</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search...">
+        </div>
+      </div>
+      <button class="navbar-burger" data-target="navbar-sub">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <a href="https://www.stackable.tech/en/contact/" class="button pull-right">Contact Us</a>
+    </div>
+      <div id="topbar-nav" class="navbar-menu">
+      </div>
+      </div>
+    </nav>
+    <nav id="navbar-sub" class="navbar-sub">
+      <div class="container">
+<a class="navbar-sub-item" href="../../../home/stable/index.html">Home</a>
+<a class="navbar-sub-item" href="../../../home/stable/getting_started.html">Getting Started</a>
+<a class="navbar-sub-item" href="../../../home/stable/concepts/index.html">Concepts</a>
+<a class="navbar-sub-item" href="../../../home/stable/tutorials/end-to-end_data_pipeline_example.html">Tutorials</a>
+<a class="navbar-sub-item" href="../index.html">stackablectl</a>
+<div class="navbar-sub-item drop-down">
+    Operators
+    <div class="drop-down-content">
+        <a class="drop-down-item" href="../../../home/stable/operators/index.html">Overview</a>
+        <a class="drop-down-item" href="../../../airflow/stable/index.html">Apache Airflow</a>
+        <a class="drop-down-item" href="../../../druid/stable/index.html">Apache Druid</a>
+        <a class="drop-down-item" href="../../../hbase/stable/index.html">Apache HBase</a>
+        <a class="drop-down-item" href="../../../hdfs/stable/index.html">Apache Hadoop HDFS</a>
+        <a class="drop-down-item" href="../../../hive/stable/index.html">Apache Hive</a>
+        <a class="drop-down-item" href="../../../kafka/stable/index.html">Apache Kafka</a>
+        <a class="drop-down-item" href="../../../nifi/stable/index.html">Apache NiFi</a>
+        <a class="drop-down-item" href="../../../spark-k8s/stable/index.html">Apache Spark on K8S</a>
+        <a class="drop-down-item" href="../../../superset/stable/index.html">Apache Superset</a>
+        <a class="drop-down-item" href="../../../trino/stable/index.html">Trino</a>
+        <a class="drop-down-item" href="../../../zookeeper/stable/index.html">Apache ZooKeeper</a>
+        <a class="drop-down-item" href="../../../opa/stable/index.html">OpenPolicyAgent</a>
+        <a class="drop-down-item" href="../../../commons-operator/stable/index.html">Commons</a>
+        <a class="drop-down-item" href="../../../secret-operator/stable/index.html">Secret</a>
+        <a class="drop-down-item" href="../../../listener-operator/stable/index.html">Listener</a>
+    </div>
+</div>
+<a class="navbar-sub-item" href="../../../home/stable/contributor/index.html">Contribute</a>
+
+        <a class="arrow" href="javascript:document.querySelector('.navbar-sub').classList.toggle('open')">
+          <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>
+        </a>
+      </div>
+    </nav>
+  </header>
+<div class="body">
+    <div class="container">
+<div class="nav-container" data-component="stackablectl" data-version="nightly">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <div class="title-wrapper">
+      <h3 class="title"><a href="../index.html">stackablectl</a></h3>
+    </div>
+    <ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../quickstart.html">Quickstart</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Commands</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../commands/demo.html">Demo</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../commands/operator.html">Operator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../commands/release.html">Release</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../commands/services.html">Services</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../commands/stack.html">Stack</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">Demos</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="airflow-scheduled-job.html">airflow-scheduled-job</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="data-lakehouse-iceberg-trino-spark.html">data-lakehouse-iceberg-trino-spark</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="hbase-hdfs-load-cycling-data.html">hbase-hdfs-cycling-data</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="logging.html">logging</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="nifi-kafka-druid-earthquake-data.html">nifi-kafka-druid-earthquake-data</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="nifi-kafka-druid-water-level-data.html">nifi-kafka-druid-water-level-data</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="spark-k8s-anomaly-detection-taxi-data.html">spark-k8s-anomaly-detection-taxi-data</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="trino-iceberg.html">trino-iceberg</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="trino-taxi-data.html">trino-taxi-data</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../customization/index.html">Customization</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../customization/add_demo.html">Add a demo</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../customization/add_stack.html">Add a stack</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../customization/add_release.html">Add a release</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../customization/working_with_feature_branches.html">Working with feature branches</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../troubleshooting.html">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">stackablectl</span>
+    <span class="version">nightly</span>
+  </div>
+  <ul class="components">
+    <li class="component">
+      <a class="title" href="../../../commons-operator/stable/index.html">Stackable Commons Operator</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../commons-operator/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../commons-operator/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../commons-operator/0.4/index.html">0.4</a>
+        </li>
+        <li class="version">
+          <a href="../../../commons-operator/0.3/index.html">0.3</a>
+        </li>
+        <li class="version">
+          <a href="../../../commons-operator/0.2/index.html">0.2</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../home/stable/index.html">Stackable Documentation</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../home/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../home/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../home/22.11/index.html">22.11</a>
+        </li>
+        <li class="version">
+          <a href="../../../home/22.09/index.html">22.09</a>
+        </li>
+        <li class="version">
+          <a href="../../../home/22.06/index.html">22.06</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../listener-operator/stable/index.html">Stackable Listener Operator</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../listener-operator/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../listener-operator/stable/index.html">23.1</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../airflow/stable/index.html">Stackable Operator for Apache Airflow</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../airflow/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../airflow/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../airflow/0.6/index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../../../airflow/0.5/index.html">0.5</a>
+        </li>
+        <li class="version">
+          <a href="../../../airflow/0.4/index.html">0.4</a>
+        </li>
+        <li class="version">
+          <a href="../../../airflow/0.3/index.html">0.3</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../druid/stable/index.html">Stackable Operator for Apache Druid</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../druid/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../druid/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../druid/0.8/index.html">0.8</a>
+        </li>
+        <li class="version">
+          <a href="../../../druid/0.7/index.html">0.7</a>
+        </li>
+        <li class="version">
+          <a href="../../../druid/0.6/index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../../../druid/0.2/index.html">0.2</a>
+        </li>
+        <li class="version">
+          <a href="../../../druid/0.1/index.html">0.1</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../hbase/stable/index.html">Stackable Operator for Apache HBase</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../hbase/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../hbase/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../hbase/0.5/index.html">0.5</a>
+        </li>
+        <li class="version">
+          <a href="../../../hbase/0.4/index.html">0.4</a>
+        </li>
+        <li class="version">
+          <a href="../../../hbase/0.3/index.html">0.3</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../hdfs/stable/index.html">Stackable Operator for Apache HDFS</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../hdfs/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../hdfs/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../hdfs/0.6/index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../../../hdfs/0.5/index.html">0.5</a>
+        </li>
+        <li class="version">
+          <a href="../../../hdfs/0.4/index.html">0.4</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../hive/stable/index.html">Stackable Operator for Apache Hive</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../hive/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../hive/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../hive/0.8/index.html">0.8</a>
+        </li>
+        <li class="version">
+          <a href="../../../hive/0.7/index.html">0.7</a>
+        </li>
+        <li class="version">
+          <a href="../../../hive/0.6/index.html">0.6</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../kafka/stable/index.html">Stackable Operator for Apache Kafka</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../kafka/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../kafka/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../kafka/0.8/index.html">0.8</a>
+        </li>
+        <li class="version">
+          <a href="../../../kafka/0.7/index.html">0.7</a>
+        </li>
+        <li class="version">
+          <a href="../../../kafka/0.6/index.html">0.6</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../nifi/stable/index.html">Stackable Operator for Apache NiFi</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../nifi/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../nifi/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../nifi/0.8/index.html">0.8</a>
+        </li>
+        <li class="version">
+          <a href="../../../nifi/0.7/index.html">0.7</a>
+        </li>
+        <li class="version">
+          <a href="../../../nifi/0.6/index.html">0.6</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../spark-k8s/stable/index.html">Stackable Operator for Apache Spark on Kubernetes</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../spark-k8s/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../spark-k8s/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../spark-k8s/0.6/index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../../../spark-k8s/0.5/index.html">0.5</a>
+        </li>
+        <li class="version">
+          <a href="../../../spark-k8s/0.4/index.html">0.4</a>
+        </li>
+        <li class="version">
+          <a href="../../../spark-k8s/0.3/index.html">0.3</a>
+        </li>
+        <li class="version">
+          <a href="../../../spark-k8s/0.2/index.html">0.2</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../superset/stable/index.html">Stackable Operator for Apache Superset</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../superset/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../superset/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../superset/0.7/index.html">0.7</a>
+        </li>
+        <li class="version">
+          <a href="../../../superset/0.6/index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../../../superset/0.5/index.html">0.5</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../zookeeper/stable/index.html">Stackable Operator for Apache ZooKeeper</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../zookeeper/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../zookeeper/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../zookeeper/0.12/index.html">0.12</a>
+        </li>
+        <li class="version">
+          <a href="../../../zookeeper/0.11/index.html">0.11</a>
+        </li>
+        <li class="version">
+          <a href="../../../zookeeper/0.10/index.html">0.10</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../opa/stable/index.html">Stackable Operator for OPA</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../opa/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../opa/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../opa/0.11/index.html">0.11</a>
+        </li>
+        <li class="version">
+          <a href="../../../opa/0.10/index.html">0.10</a>
+        </li>
+        <li class="version">
+          <a href="../../../opa/0.9/index.html">0.9</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../trino/stable/index.html">Stackable Operator for Trino</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../trino/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../trino/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../trino/0.8/index.html">0.8</a>
+        </li>
+        <li class="version">
+          <a href="../../../trino/0.7/index.html">0.7</a>
+        </li>
+        <li class="version">
+          <a href="../../../trino/0.6/index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../../../trino/0.5/index.html">0.5</a>
+        </li>
+        <li class="version">
+          <a href="../../../trino/0.4/index.html">0.4</a>
+        </li>
+        <li class="version">
+          <a href="../../../trino/0.3/index.html">0.3</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../secret-operator/stable/index.html">Stackable Secret Operator</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="../../../secret-operator/nightly/index.html">nightly</a>
+        </li>
+        <li class="version is-latest">
+          <a href="../../../secret-operator/stable/index.html">23.1</a>
+        </li>
+        <li class="version">
+          <a href="../../../secret-operator/0.6/index.html">0.6</a>
+        </li>
+        <li class="version">
+          <a href="../../../secret-operator/0.5/index.html">0.5</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component is-current">
+      <a class="title" href="../index.html">stackablectl</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">nightly</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../../home/stable/index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">stackablectl</a></li>
+    <li><a href="index.html">Demos</a></li>
+    <li><a href="trino-iceberg.html">trino-iceberg</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/stackabletech/stackablectl/edit/main/docs/modules/ROOT/pages/demos/trino-iceberg.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">trino-iceberg</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This is a condensed form of the <a href="data-lakehouse-iceberg-trino-spark.html" class="xref page">data-lakehouse-iceberg-trino-spark</a> demo focusing on using the lakehouse to store and modify data.
+It focuses on the Trino and Iceberg integration and should run on you local workstation.
+If you are interested in a more complex lakehouse setup, please have a look at the <a href="data-lakehouse-iceberg-trino-spark.html" class="xref page">data-lakehouse-iceberg-trino-spark</a> demo.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This guide assumes that you already have the demo <code>trino-iceberg</code> installed.
+If you don&#8217;t have it installed please follow the <a href="../commands/demo.html#_install_demo" class="xref page">documentation on how to install a demo</a>.
+To put it simply you have to run <code>stackablectl demo install trino-iceberg</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This demo will</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Install the required Stackable operators</p>
+</li>
+<li>
+<p>Spin up the following data products</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Trino</strong>: A fast distributed SQL query engine for big data analytics that helps you explore your data universe. This demo uses it to enable SQL access to the data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Create multiple data lakehouse tables using Apache Iceberg and data from the <a href="https://www.tpc.org/tpch/">TPC-H dataset</a>.</p>
+</li>
+<li>
+<p>Run some queries to show the benefits of Iceberg</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_list_deployed_stackable_services"><a class="anchor" href="#_list_deployed_stackable_services"></a>List deployed Stackable services</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To list the installed installed Stackable services run the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ stackablectl services list --all-namespaces
+┌─────────┬──────────────┬───────────┬──────────────────────────────────────────────┬─────────────────────────────────────────┐
+│ Product ┆ Name         ┆ Namespace ┆ Endpoints                                    ┆ Extra infos                             │
+╞═════════╪══════════════╪═══════════╪══════════════════════════════════════════════╪═════════════════════════════════════════╡
+│ hive    ┆ hive-iceberg ┆ default   ┆ hive                172.18.0.4:30637         ┆                                         │
+│         ┆              ┆           ┆ metrics             172.18.0.4:30176         ┆                                         │
+├╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ opa     ┆ opa          ┆ default   ┆ http                http://172.18.0.2:32470  ┆                                         │
+├╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ trino   ┆ trino        ┆ default   ┆ coordinator-metrics 172.18.0.2:32402         ┆                                         │
+│         ┆              ┆           ┆ coordinator-https   https://172.18.0.2:31605 ┆                                         │
+├╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ minio   ┆ minio        ┆ default   ┆ http                http://172.18.0.2:30357  ┆ Third party service                     │
+│         ┆              ┆           ┆ console-http        http://172.18.0.2:30310  ┆ Admin user: admin, password: adminadmin │
+└─────────┴──────────────┴───────────┴──────────────────────────────────────────────┴─────────────────────────────────────────┘</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When a product instance has not finished starting yet, the service will have no endpoint.
+Starting all the product instances might take a considerable amount of time depending on your internet connectivity.
+In case the product is not ready yet a warning might be shown.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_minio"><a class="anchor" href="#_minio"></a>MinIO</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can view the available buckets as well as objects (think of files) as described in <a href="data-lakehouse-iceberg-trino-spark.html#_minio" class="xref page">the data-lakehouse-iceberg-trino-spark demo</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_connect_to_trino"><a class="anchor" href="#_connect_to_trino"></a>Connect to Trino</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Have a look at <a href="data-lakehouse-iceberg-trino-spark.html#_connect_with_dbeaver" class="xref page">documentation on how to connect with DBeaver</a>.</p>
+</div>
+<div class="paragraph">
+<p>As a alternative you can use <a href="https://trino.io/download.html">trino-cli</a> by running</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">java -jar ~/Downloads/trino-cli-396-executable.jar --user admin --insecure --password --server https://172.18.0.3:31250</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Make sure to replace the server endpoint with the endpoint listed in the <code>stackablectl services list</code> output.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_testdata"><a class="anchor" href="#_create_testdata"></a>Create testdata</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_create_schema"><a class="anchor" href="#_create_schema"></a>Create Schema</h3>
+<div class="paragraph">
+<p>First of you need to create a schema in the lakehouse to store the testdata</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE SCHEMA lakehouse.tpch WITH (location = 's3a://lakehouse/tpch');</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Afterwards you can set the context to the freshly created schema, so that you don&#8217;t need to write out every table as <code>lakehouse.tpch.&lt;table-name&gt;</code> but instead can use <code>&lt;table-name&gt; directly</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">use lakehouse.tpch;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_create_tables"><a class="anchor" href="#_create_tables"></a>Create tables</h3>
+<div class="paragraph">
+<p>In order to have some testdata to work with you can use the <a href="https://www.tpc.org/tpch/">TPC-H dataset</a>.
+Trino offers a special <a href="https://trino.io/docs/current/connector/tpch.html">TPCH connector</a> which generates the testdata deterministically on the fly.</p>
+</div>
+<div class="paragraph">
+<p>You can list the tables that are part of the dataset using</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">show tables in tpch.sf5;
+
+  Table
+----------
+ customer
+ lineitem
+ nation
+ orders
+ part
+ partsupp
+ region
+ supplier
+(8 rows)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The dataset comes with different scale factors.
+This demo is intended to run on a Laptop, so it starts with a scale factor of 5 (hence the <code>sf5</code> in the above query).
+If you have a sufficiently large S3 and Trino deployed, you can easily re-run the statements below with a different scale factor.
+This demo has been tested up to a scale factor of 10000, but you can choose any scale in between or even more if desired.</p>
+</div>
+<div class="paragraph">
+<p>If you have decided on your scale factor run the queries below to create tables in the lakehouse and propagate them with testdata.
+Depending on the scale factor this can take a considerable amount of time (the queries are ordered by size ascending).
+The progress of the query can be tracked in the WebUI.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">create table nation as select * from tpch.sf5.nation;
+create table region as select * from tpch.sf5.region;
+create table part as select * from tpch.sf5.part;
+create table partsupp as select * from tpch.sf5.partsupp;
+create table supplier as select * from tpch.sf5.supplier;
+create table customer as select * from tpch.sf5.customer;
+create table orders as select * from tpch.sf5.orders;
+create table lineitem as select * from tpch.sf5.lineitem;</code></pre>
+</div>
+</div>
+<details>
+<summary class="title">If you want to re-create the tables for any reason, you can drop them with the statements below</summary>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">drop table if exists nation;
+drop table if exists region;
+drop table if exists part;
+drop table if exists partsupp;
+drop table if exists supplier;
+drop table if exists customer;
+drop table if exists orders;
+drop table if exists lineitem;
+drop table if exists customers_to_delete;
+drop table if exists customers_to_prioritize;</code></pre>
+</div>
+</div>
+</div>
+</details>
+<div class="paragraph">
+<p>Afterwards your database overview in DBeaver should look like the following (you might need to refresh the contents with <code>F5</code>).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-trino-iceberg/dbeaver_1.png" alt="dbeaver 1">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_explore_data"><a class="anchor" href="#_explore_data"></a>Explore data</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_basic_table_information"><a class="anchor" href="#_basic_table_information"></a>Basic table information</h3>
+<div class="paragraph">
+<p>To create a view giving some basic information about the tables please execute the statement below:</p>
+</div>
+<details>
+<summary class="title">Statement to create table_information view</summary>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">create or replace view table_information as
+with
+	table_infos as (
+		select 'nation' as "table", (select count(*) from nation) as records, (select count(*) from "nation$snapshots") as snapshots
+		union all select 'region' as "table", (select count(*) from region) as records, (select count(*) from "region$snapshots") as snapshots
+		union all select 'part' as "table", (select count(*) from part) as records, (select count(*) from "part$snapshots") as snapshots
+		union all select 'partsupp' as "table", (select count(*) from partsupp) as records, (select count(*) from "partsupp$snapshots") as snapshots
+		union all select 'supplier' as "table", (select count(*) from supplier) as records, (select count(*) from "supplier$snapshots") as snapshots
+		union all select 'customer' as "table", (select count(*) from customer) as records, (select count(*) from "customer$snapshots") as snapshots
+		union all select 'orders' as "table", (select count(*) from orders) as records, (select count(*) from "orders$snapshots") as snapshots
+		union all select 'lineitem' as "table", (select count(*) from lineitem) as records, (select count(*) from "lineitem$snapshots") as snapshots
+	),
+	table_file_infos as (
+		select
+			"table",
+			sum(file_size_in_bytes) as size_in_bytes,
+			count(*) as num_files,
+			sum(file_size_in_bytes) / count(*) as avg_file_size,
+			min(file_size_in_bytes) as min_file_size,
+			max(file_size_in_bytes) as max_file_size
+		from (
+			select 'nation' as "table", * from "nation$files"
+			union all select 'region' as "table", * from "region$files"
+			union all select 'part' as "table", * from "part$files"
+			union all select 'partsupp' as "table", * from "partsupp$files"
+			union all select 'supplier' as "table", * from "supplier$files"
+			union all select 'customer' as "table", * from "customer$files"
+			union all select 'orders' as "table", * from "orders$files"
+			union all select 'lineitem' as "table", * from "lineitem$files"
+		)
+		group by 1
+	)
+select
+	i."table",
+	i.records,
+	format_number(f.size_in_bytes) as size_in_bytes,
+	f.num_files,
+	format_number(f.avg_file_size) as avg_file_size,
+	format_number(f.min_file_size) as min_file_size,
+	format_number(f.max_file_size) as max_file_size,
+	i.snapshots,
+	f.size_in_bytes / i.records as avg_record_size
+from table_infos as i
+left join table_file_infos as f
+on i."table" = f."table";</code></pre>
+</div>
+</div>
+</div>
+</details>
+<div class="paragraph">
+<p>Afterwards you can query the view using</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">select * from table_information order by records desc;
+
+  table   | records  | size_in_bytes | num_files | avg_file_size | min_file_size | max_file_size | snapshots | avg_record_size
+----------+----------+---------------+-----------+---------------+---------------+---------------+-----------+-----------------
+ lineitem | 29999795 | 832M          |         7 | 119M          | 20.7M         | 220M          |         1 |              27
+ orders   |  7500000 | 177M          |         3 | 59M           | 24.6M         | 95.3M         |         1 |              23
+ partsupp |  4000000 | 144M          |         3 | 48.1M         | 11.8M         | 86.5M         |         1 |              36
+ part     |  1000000 | 18.3M         |         1 | 18.3M         | 18.3M         | 18.3M         |         1 |              18
+ customer |   750000 | 37.8M         |         1 | 37.8M         | 37.8M         | 37.8M         |         1 |              50
+ supplier |    50000 | 2.39M         |         1 | 2.39M         | 2.39M         | 2.39M         |         1 |              47
+ nation   |       25 | 1.84K         |         1 | 1.84K         | 1.84K         | 1.84K         |         1 |              73
+ region   |        5 | 1.08K         |         1 | 1.08K         | 1.08K         | 1.08K         |         1 |             215
+(8 rows)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_query_the_data"><a class="anchor" href="#_query_the_data"></a>Query the data</h3>
+<div class="paragraph">
+<p>You can now use normal SQL to analyze the data.
+The relation of the tables to each other is explained in the <a href="https://www.tpc.org/tpc_documents_current_versions/pdf/tpc-h_v3.0.1.pdf">TPC-H specification</a> and looks as follows:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-trino-iceberg/tpch_schema.png" alt="tpch schema">
+</div>
+</div>
+<div class="paragraph">
+<p>A sample query could look like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">select
+	returnflag,
+	linestatus,
+	sum(quantity) as sum_qty,
+	sum(extendedprice) as sum_base_price,
+	sum(extendedprice*(1-discount)) as sum_disc_price,
+	sum(extendedprice*(1-discount)*(1+tax)) as sum_charge,
+	avg(quantity) as avg_qty,
+	avg(extendedprice) as avg_price,
+	avg(discount) as avg_disc,
+	count(*) as count_order
+from lineitem
+group by returnflag, linestatus
+order by returnflag, linestatus;
+
+ returnflag | linestatus |     sum_qty      |    sum_base_price     |    sum_disc_price     |      sum_charge       |      avg_qty       |     avg_price     |      avg_disc       | count_order
+------------+------------+------------------+-----------------------+-----------------------+-----------------------+--------------------+-------------------+---------------------+-------------
+ A          | F          | 3.77571137746E11 |  5.661718069977699E14 | 5.3786257473244656E14 | 5.5937697399894625E14 | 25.499847411525963 |   38237.283637033 | 0.05000115102912903 | 14806799886
+ N          | F          |    9.856650789E9 | 1.4780258531756047E13 |  1.404124283043353E13 | 1.4602969210709287E13 |  25.50036232002822 | 38238.33833740861 | 0.05000485996120825 |   386529833
+ N          | O          | 7.64999496883E11 | 1.1471184784585715E15 | 1.0897628058085238E15 | 1.1333538244374085E15 |  25.49998026123563 | 38237.27816446654 |  0.0499992984087016 | 30000003492
+ R          | F          | 3.77567805489E11 |   5.66161080454589E14 |  5.378529622951691E14 | 5.5936684090849675E14 | 25.499861451613416 | 38236.91771651432 | 0.04999987724835343 | 14806661056
+(4 rows)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is inspired by the first query <code>Q1</code> of the <a href="https://www.tpc.org/tpc_documents_current_versions/pdf/tpc-h_v3.0.1.pdf">TPC-H benchmark</a>.
+The only difference is that the <code>where shipdate &#8656; date '1998-12-01' - interval '[DELTA]' day</code> clause was omitted to produce a full-table scan.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_row_level_deletes"><a class="anchor" href="#_row_level_deletes"></a>Row level deletes</h3>
+<div class="paragraph">
+<p>So far the tables have been written once and only been read afterwards.
+Trino - in combination with Iceberg - can not only read data but also can do row-level deletes (deleting single rows out of a table).
+They achieve this by writing so-called "delete files", which mark rows for deletion.</p>
+</div>
+<div class="paragraph">
+<p>First of imagine a situation where some customers want all of their data to be deleted.
+You track all of the deletion requests in a dedicated table and have a nightly job that deletes all the data you have about the user.
+Let&#8217;s create a table <code>customers_to_delete</code> containing a random sample of 1% of our user-base.
+If you run with a larger scale factor you can leave the command unchanged.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">create table customers_to_delete as select custkey from customer tablesample bernoulli (1);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to add new users to delete you can of course also insert new users to delete with the following query:</p>
+</div>
+<details>
+<summary class="title">Statement to add new users to customers_to_delete</summary>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">insert into customers_to_delete select custkey from customer tablesample bernoulli (1);</code></pre>
+</div>
+</div>
+</div>
+</details>
+<div class="paragraph">
+<p>Next step is the actual deletion process.
+It starts with the <code>lineitem</code> table and deletes all items that are part of a orders from the customers to delete:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">delete from lineitem where orderkey in (
+	select orderkey from orders where custkey in (select custkey from customers_to_delete)
+);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Afterwards all the orders can be safely deleted</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">delete from orders where custkey in (select custkey from customers_to_delete);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As a last step the actual users get deleted.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">delete from customer where custkey in (select custkey from customers_to_delete);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s check that we actually deleted the data.
+Both of the queries below should return <code>0</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">select count(*) from customer where custkey in (select custkey from customers_to_delete);
+select count(*) from orders where custkey in (select custkey from customers_to_delete);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_row_level_updates"><a class="anchor" href="#_row_level_updates"></a>Row level updates</h3>
+<div class="paragraph">
+<p>Iceberg does not only offer row level deletes but also updates.</p>
+</div>
+<div class="paragraph">
+<p>Imagine a customer relocating that wants to update his address information.
+He has the customer key <code>112501</code> and his name is <code>Customer#000112501</code>.</p>
+</div>
+<div class="paragraph">
+<p>First of let&#8217;s see his current status.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">select * from customer where custkey = 112501;
+
+ custkey |        name        |    address    | nationkey |      phone      | acctbal | mktsegment |                                                  comment
+---------+--------------------+---------------+-----------+-----------------+---------+------------+-----------------------------------------------------------------------------------------------------------
+  112501 | Customer#000112501 | DWA,dNub2S5a0 |         3 | 13-503-907-7391 | 2490.91 | AUTOMOBILE | onic dependencies. slyly regular waters was among the final packages. asymptotes nod fluffily blithely un</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now let&#8217;s update the address</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">update customer set address='Karlsruhe' where custkey=112501;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Afterwards the records should look the same as before, with the difference that <code>address</code> is set to <code>Karlsruhe</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_merge_into_statement"><a class="anchor" href="#_merge_into_statement"></a>MERGE INTO statement</h3>
+<div class="paragraph">
+<p>Trino also offers a <a href="https://trino.io/docs/current/sql/merge.html">MERGE INTO</a> statement, which gives you great flexibility.</p>
+</div>
+<div class="paragraph">
+<p>To show the usage, we want to pick some customers and give them VIP status.
+We do this by giving all of their orders maximum priority.
+We could easily do this with an <code>UPDATE`</code> statement, but here we want to add some additional requirements and use the <code>MERGE INTO</code> statement.
+So we have the requirement to track the previous priority.</p>
+</div>
+<div class="paragraph">
+<p>Inspect <code>orders</code> table first:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">describe orders;
+    Column     |  Type   | Extra | Comment
+---------------+---------+-------+---------
+ orderkey      | bigint  |       |
+ custkey       | bigint  |       |
+ orderstatus   | varchar |       |
+ totalprice    | double  |       |
+ orderdate     | date    |       |
+ orderpriority | varchar |       |
+ clerk         | varchar |       |
+ shippriority  | integer |       |
+ comment       | varchar |       |
+(9 rows)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now add a column <code>orderpriority_prev</code> that tracks the priority of the order before the VIP status.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">alter table orders add column orderpriority_prev varchar;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now a sample record has the new column <code>orderpriority_prev</code> set to <code>NULL</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">select * from orders limit 1;
+ orderkey | custkey | orderstatus | totalprice | orderdate  | orderpriority |      clerk      | shippriority |                               comment                               | orderpriority_prev
+----------+---------+-------------+------------+------------+---------------+-----------------+--------------+---------------------------------------------------------------------+--------------------
+ 11827265 |  367454 | O           |   103958.7 | 1997-02-22 | 1-URGENT      | Clerk#000000162 |            0 | atelets cajole bold packages. carefully silent dolphins cajole fina | NULL</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The next step is to create a list of users that should get the VIP status:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">create table customers_to_prioritize as select custkey from customer tablesample bernoulli (0.5);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s check the current priority of the orders of the VIP customers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">select orderpriority, count(*) from orders where custkey in (select custkey from customers_to_prioritize) group by 1 order by 1;
+
+  orderpriority  | _col1
+-----------------+-------
+ 1-URGENT        |  7482
+ 2-HIGH          |  7499
+ 3-MEDIUM        |  7444
+ 4-NOT SPECIFIED |  7436
+ 5-LOW           |  7470
+(5 rows)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The next step is the most interesting, the order priorities will be changed and the previous priority will be saved.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">merge into orders as o
+using customers_to_prioritize as c
+on o.custkey = c.custkey
+when matched
+  then update set orderpriority_prev = orderpriority, orderpriority = '1-URGENT';</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All the orders should have top priority now:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">select orderpriority, count(*) from orders where custkey in (select custkey from customers_to_prioritize) group by 1 order by 1;
+
+ orderpriority | _col1
+---------------+-------
+ 1-URGENT      | 37331
+(1 row)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But you can still access the previous priority. It should return the same counts as before.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">select orderpriority_prev, count(*) from orders where custkey in (select custkey from customers_to_prioritize) group by 1 order by 1;
+
+ orderpriority_prev | _col1
+--------------------+-------
+ 1-URGENT           |  7482
+ 2-HIGH             |  7499
+ 3-MEDIUM           |  7444
+ 4-NOT SPECIFIED    |  7436
+ 5-LOW              |  7470
+(5 rows)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_scaling_up_to_larger_amount_of_data"><a class="anchor" href="#_scaling_up_to_larger_amount_of_data"></a>Scaling up to larger amount of data</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>So far we have executed all the queries against a dataset created from TPC-H with a scale factor of 5.
+The demo is able to handle much larger data volumes.</p>
+</div>
+<div class="paragraph">
+<p>This section describes how to scale up your environment to be able to drop and re-create the tables with a larger scale factor.
+After creating the tables you should be able to execute the above queries again without changing anything.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>It is important that your Kubernetes cluster is large enough to handle the scale up.
+If you are running e.g. on your local machine and try to spin up 8 Trino workers with 16GB RAM each chances are pretty high that Pods will be stuck in <code>Pending</code> as the resources needs can&#8217;t be fulfilled.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_scale_s3"><a class="anchor" href="#_scale_s3"></a>Scale S3</h3>
+<div class="paragraph">
+<p>If you have access to a managed S3, e.g. from a Cloud provider where you have a good network interconnection to, that should be the preferred option.</p>
+</div>
+<div class="paragraph">
+<p>You can change the endpoint of the S3 by running <code>kubectl edit s3connection minio -o yaml</code> and <code>kubectl edit secret minio-s3-credentials</code>. Please note that the credentials need to be base64 encoded.</p>
+</div>
+<details>
+<summary class="title">Example IONOS configuration</summary>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">apiVersion: s3.stackable.tech/v1alpha1
+kind: S3Connection
+metadata:
+  name: ionos-sbernauer
+spec:
+  host: s3-eu-central-1.ionoscloud.com
+  port: 443
+  tls:
+    verification:
+      server:
+        caCert:
+          webPki: {}
+  credentials:
+    secretClass: ionos-sbernauer-s3-credentials
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: ionos-sbernauer-s3-credentials
+spec:
+  backend:
+    k8sSearch:
+      searchNamespace:
+        pod: {}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ionos-sbernauer-s3-credentials
+  labels:
+    secrets.stackable.tech/class: ionos-sbernauer-s3-credentials
+stringData:
+  accessKey: "&lt;username&gt;"
+  secretKey: "&lt;password&gt;"</code></pre>
+</div>
+</div>
+</div>
+</details>
+<div class="paragraph">
+<p>If you don&#8217;t have access to a managed S3 or don&#8217;t want to use it you can also scale up the MinIO cluster.
+You can see the available replicas using</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ kubectl get statefulsets.apps minio
+
+NAME    READY   AGE
+minio   2/2     4m16s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can edit the MinIO cluster using <code>kubectl edit statefulsets.apps minio</code>.
+Especially out of interest are the following options:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: minio
+spec:
+  replicas: 5 # Number of MinIO nodes
+  template:
+    spec:
+      containers:
+      - name: minio
+        resources:
+          requests:
+            cpu: 1000m # Guaranteed CPU available (one core in this case)
+            memory: 4Gi # RAM available</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>E.g. set <code>spec.replicas</code> to <code>5</code> and save the changes.
+You can re-run <code>kubectl get statefulsets.apps minio</code> to see the effect.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_scale_trino"><a class="anchor" href="#_scale_trino"></a>Scale Trino</h3>
+<div class="paragraph">
+<p>Run <code>kubectl edit trinocluster trino</code>.
+Modify the following settings to your needs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: trino.stackable.tech/v1alpha1
+kind: TrinoCluster
+spec:
+  coordinators:
+    config:
+      queryMaxMemory: 10TB
+      resources:
+        cpu:
+          max: "4" # CPU resources that can be used at a maximum
+          min: "4" # Guaranteed CPU resources
+        memory:
+          limit: 6Gi # Available RAM
+  opa:
+    configMapName: opa
+    package: trino
+  version: 403-stackable0.1.0
+  workers:
+    config:
+	  # This limit can't be to big as otherwise the workers won't start.
+	  # I suggest setting it to half of spec.coordinators.config.resources.memory.limit
+      queryMaxMemoryPerNode: 6GB
+      resources:
+        cpu:
+          max: "12" # CPU resources that can be used at a maximum
+          min: "12" # Guaranteed CPU resources
+        memory:
+          limit: 16Gi # Available RAM
+    roleGroups:
+      default:
+        replicas: 8</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Afterwards save your changes.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+    </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-container">
+      <!-- link columns -->
+      <div class="footer-info">
+        <div class="footer-info-item-large">
+          <img src="../../../_/img/logo-2-1.png">
+          <p>
+            your data, your platform
+          </p>
+        </div>
+        <div class="footer-info-item">
+          <h2>Company</h2>
+          <ul class="footer-link-list">
+            <li>
+              <a href="https://stackable.tech/en/about-us">About Us</a>
+            </li>
+            <li>
+              <a href="https://stackable.tech/en/blog">Blog</a>
+            </li>
+            <li>
+              <a href="https://jobs.stackable.de/" target="_blank">Jobs</a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer-info-item">
+          <h2>Support</h2>
+          <ul class="footer-link-list">
+            <li>
+              <a href="https://stackable.tech/en/contact">Contact Us</a>
+            </li>
+            <li>
+              <a href="https://stackable.tech/en/imprint">Imprint</a>
+            </li>
+            <li>
+              <a href="https://stackable.tech/en/data-protection">Data Protection</a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer-info-item">
+          <h2>Get in touch</h2>
+          <ul class="footer-link-list">
+            <li>
+              <a href="mailto:info@stackable.de">info@stackable.de</a>
+            </li>
+            <li>
+              <a href="tel:+4941039263100">+49 4103 926 3100</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-seperator"></div>
+      <!-- social links -->
+      <div class="c-and-socials">
+        <div>© 2022 Stackable.</div>
+        <div class="social-icons-container">
+          <a class="social-icon" href="https://www.xing.com/pages/stackable" target="_blank">
+            <i class="fab fa-xing"></i>
+          </a>
+          <a class="social-icon" href="https://www.linkedin.com/company/stackabletech/" target="_blank">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a class="social-icon" href="https://github.com/stackabletech" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+          <a class="social-icon" href="https://twitter.com/stackabletech" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+      <!-- copyright notice -->
+      <p>
+        Apache, Apache Kafka®, Kafka, and the Kafka logo, Apache Druid, Druid, and the Druid logo,
+        Apache ZooKeeper™, ZooKeeper, and the Druid logo, Apache Hive™, Hive, and the Hive logo,
+        Apache Spark™, Spark, and the Spark logo, Apache Airflow, Airflow, and the Airflow logo,
+        Apache HBase®, HBase, and the HBase logo, Apache NiFi, NiFi, and the NiFi logo, Apache
+        Superset, Superset, the Superset logo, Apache Hadoop® HDFS, Apache Hadoop, Hadoop and the
+        Hadoop logo, Apache Phoenix™, Phoenix and the Phoenix-Logo, Apache Iceberg, Iceberg and the
+        Iceberg-Logo are either registered trademarks or trademarks of the Apache Software Foundation
+        in the United States and/or other countries. Open Policy Agent (OPA) is a Cloud Native
+        Computing Foundation graduated project. Licensed under the Apache License, Version 2.0. Trino
+        is open source software licensed under the Apache License 2.0 and supported by the Trino
+        Software Foundation. MinIO is a [“registered”, if applicable] trademark of the MinIO
+        Corporation. All other products or name brands are trademarks of their respective holders.
+        All product and service names used in this website are for identification purposes only and
+        do not imply endorsement.
+      </p>
+    </div>
+  </div>
+</footer>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+<script src="../../../_/js/vendor/lunr.js"></script>
+<script src="../../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../../.." data-snippet-length="100" data-stylesheet="../../../_/css/search.css"></script>
+<script async src="../../../search-index.js"></script>
+  </body>
+</html>

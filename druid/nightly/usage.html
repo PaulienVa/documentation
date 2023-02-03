@@ -1359,11 +1359,11 @@ The default values are <em>most likely</em> not sufficient to run a proper clust
         resources:
           storage:
             segmentCache:
-              # The amount of free space to subtract from the capacity setting below.
+              # The amount of free space to subtract from the capacity setting below. Defaults to 5%
               freePercentage: 7
               emptyDir:
                 # The maximum size of the volume used to store the segment cache
-                capacity: 2g</code></pre>
+                capacity: 2Gi</code></pre>
 </div>
 </div>
 </div>

@@ -598,6 +598,13 @@
 <div class="paragraph">
 <p>Helm will deploy the operator in Kubernetes containers and apply the CRDs. You&#8217;re now ready to deploy secrets!</p>
 </div>
+<div class="sect2">
+<h3 id="_microk8s"><a class="anchor" href="#_microk8s"></a>Microk8s</h3>
+<div class="paragraph">
+<p>Microk8s uses a non-standard Kubelet state directory. Installing secret-operator on Microk8s requires the argument
+<code>--set kubeletDir=/var/snap/microk8s/common/var/lib/kubelet</code> to be added to the <code>helm install</code> command.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">

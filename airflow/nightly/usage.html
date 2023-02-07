@@ -532,6 +532,55 @@
 </div>
 </div>
 <div class="sect1">
+<h2 id="_log_aggregation"><a class="anchor" href="#_log_aggregation"></a>Log aggregation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The logs can be forwarded to a Vector log aggregator by providing a discovery
+ConfigMap for the aggregator and by enabling the log agent:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  vectorAggregatorConfigMapName: vector-aggregator-discovery
+  webservers:
+    config:
+      logging:
+        enableVectorAgent: true
+        containers:
+          airflow:
+            loggers:
+              "flask_appbuilder":
+                level: WARN
+  workers:
+    config:
+      logging:
+        enableVectorAgent: true
+        containers:
+          airflow:
+            loggers:
+              "airflow.processor":
+                level: INFO
+  schedulers:
+    config:
+      logging:
+        enableVectorAgent: true
+        containers:
+          airflow:
+            loggers:
+              "airflow.processor_manager":
+                level: INFO
+  databaseInitialization:
+    logging:
+      enableVectorAgent: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Further information on how to configure logging, can be found in
+<a href="../../home/stable/concepts/logging.html" class="xref page">Logging</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_configuration_environment_overrides"><a class="anchor" href="#_configuration_environment_overrides"></a>Configuration &amp; Environment Overrides</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -762,7 +811,7 @@ metadata:
 spec:
   image:
     productVersion: 2.4.1
-    stackableVersion: 0.7.0
+    stackableVersion: 23.4.0-rc2
   [...]
   authenticationConfig:
     authenticationClass: ldap    <i class="conum" data-value="1"></i><b>(1)</b>
@@ -931,7 +980,7 @@ metadata:
 spec:
   image:
     productVersion: 2.4.1
-    stackableVersion: 0.7.0
+    stackableVersion: 23.4.0-rc2
   executor: CeleryExecutor
   loadExamples: false
   exposeConfig: false
@@ -1083,7 +1132,7 @@ metadata:
 spec:
   image:
     productVersion: 2.4.1
-    stackableVersion: 0.7.0
+    stackableVersion: 23.4.0-rc2
   executor: CeleryExecutor
   loadExamples: false
   exposeConfig: false
@@ -1228,7 +1277,7 @@ metadata:
 spec:
   image:
     productVersion: 2.4.1
-    stackableVersion: 0.7.0
+    stackableVersion: 23.4.0-rc2
   executor: CeleryExecutor
   loadExamples: false
   exposeConfig: false

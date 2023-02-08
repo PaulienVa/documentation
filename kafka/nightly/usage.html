@@ -565,7 +565,7 @@ metadata:
 spec:
   image:
     productVersion: 3.3.1
-    stackableVersion: "23.4.0-rc1"
+    stackableVersion: "23.4.0-rc2"
   clusterConfig:
     zookeeperConfigMapName: simple-kafka-znode
   brokers:
@@ -587,7 +587,7 @@ metadata:
 spec:
   image:
     productVersion: 3.3.1
-    stackableVersion: "23.4.0-rc1"
+    stackableVersion: "23.4.0-rc2"
   clusterConfig:
     authorization:
       opa:
@@ -613,7 +613,7 @@ metadata:
 spec:
   image:
     productVersion: 3.3.1
-    stackableVersion: "23.4.0-rc1"
+    stackableVersion: "23.4.0-rc2"
   clusterConfig:
     authorization:
       opa:
@@ -646,41 +646,26 @@ spec:
 </div>
 </div>
 <div class="sect1">
-<h2 id="_provide_log4j_properties"><a class="anchor" href="#_provide_log4j_properties"></a>Provide log4j.properties</h2>
+<h2 id="_log_aggregation"><a class="anchor" href="#_log_aggregation"></a>Log aggregation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Per default, the <code>log4j.properties</code> from the kafka package is used. However, you can provide your own <code>log4j.properties</code> via the custom resource:</p>
+<p>The logs can be forwarded to a Vector log aggregator by providing a discovery
+ConfigMap for the aggregator and by enabling the log agent:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: kafka.stackable.tech/v1alpha1
-kind: KafkaCluster
-metadata:
-  name: simple-kafka
-spec:
-  image:
-    productVersion: 3.3.1
-    stackableVersion: "23.4.0-rc1"
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
   clusterConfig:
-    zookeeperConfigMapName: simple-kafka-znode
-    log4j: |-
-      log4j.rootLogger=INFO, stdout, kafkaAppender
-
-      log4j.appender.stdout=org.apache.log4j.ConsoleAppender
-      log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
-      log4j.appender.stdout.layout.ConversionPattern=[%d] %p %m (%c)%n
-
-      log4j.appender.kafkaAppender=org.apache.log4j.DailyRollingFileAppender
-      log4j.appender.kafkaAppender.DatePattern='.'yyyy-MM-dd-HH
-      log4j.appender.kafkaAppender.File=${kafka.logs.dir}/server.log
-      log4j.appender.kafkaAppender.layout=org.apache.log4j.PatternLayout
-      log4j.appender.kafkaAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
+    vectorAggregatorConfigMapName: vector-aggregator-discovery
   brokers:
-    roleGroups:
-      default:
-        replicas: 3</code></pre>
+    config:
+      logging:
+        enableVectorAgent: true</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Further information on how to configure logging, can be found in
+<a href="../../home/stable/concepts/logging.html" class="xref page">Logging</a>.</p>
 </div>
 </div>
 </div>
@@ -700,7 +685,7 @@ metadata:
 spec:
   image:
     productVersion: 3.3.1
-    stackableVersion: "23.4.0-rc1"
+    stackableVersion: "23.4.0-rc2"
   clusterConfig:
     zookeeperConfigMapName: simple-kafka-znode
     tls:
@@ -787,7 +772,7 @@ metadata:
 spec:
   image:
     productVersion: 3.3.1
-    stackableVersion: "23.4.0-rc1"
+    stackableVersion: "23.4.0-rc2"
   clusterConfig:
     authentication:
       - authenticationClass: kafka-client-tls <i class="conum" data-value="1"></i><b>(1)</b>

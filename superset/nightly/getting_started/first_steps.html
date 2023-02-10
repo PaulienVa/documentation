@@ -678,9 +678,9 @@ If you get timeout errors before your query returns the result you may need to i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl wait supersetdb/simple-superset \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">time kubectl wait supersetdb/simple-superset \
   --for jsonpath='{.status.condition}'=Ready \
-  --timeout 300s</code></pre>
+  --timeout 600s</code></pre>
 </div>
 </div>
 </div>
@@ -698,7 +698,7 @@ browser.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl port-forward service/simple-superset-external 8088 2&gt;&amp;1 &gt;/dev/null &amp;</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl port-forward service/simple-superset-external 8088 &gt; /dev/null 2&gt;&amp;1 &amp;</code></pre>
 </div>
 </div>
 <div class="paragraph">

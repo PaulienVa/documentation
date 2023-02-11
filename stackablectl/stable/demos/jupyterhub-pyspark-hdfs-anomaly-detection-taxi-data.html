@@ -606,6 +606,14 @@
 </div>
 </div>
 <div class="sect1">
+<h2 id="_aim_context"><a class="anchor" href="#_aim_context"></a>Aim / Context</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This demo does not use the Stackable spark-k8s-operator but rather delegates the creation of executor pods to JupyterHub. The intention is to demonstrate how to interact with SDP components when designing and testing Spark jobs: the resulting script and Spark job definition can then be transferred for use with a Stackable <code>SparkApplication</code> resource. When logging in to JupyterHub (described below), a pod will be created with the username as a suffix e.g. <code>jupyter-admin</code>. This runs a container that hosts a Jupyter notebook with Spark, Java and Python pre-installed. When the user creates a <code>SparkSession</code>, temporary spark executors are created that are persisted until the notebook kernel is shut down or re-started. The notebook can thus be used as a sandbox for writing, testing and benchmarking Spark jobs before they are moved into production.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_overview"><a class="anchor" href="#_overview"></a>Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -755,13 +763,27 @@ user-scheduler-8d888c6d4-qbqkq                   1/1     Running     0          
 <img src="../_images/demo-jupyterhub-pyspark-hdfs-anomaly-detection-taxi-data/jupyter_hub_run_notebook.png" alt="jupyter hub run notebook">
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The image defined for the spark job must contain all dependencies needed for that job to run. For pyspark jobs, this will mean that python libraries either need to be baked into the image itself (this demo contains a Dockerfile that was used to generate a image containing scikit-learn, pandas and their dependencies), or <a href="https://spark.apache.org/docs/latest/api/python/user_guide/python_packaging.html">packaged some other way</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_model_details"><a class="anchor" href="#_model_details"></a>Model details</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The job uses an implementation of the Isolation Forest <a href="https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/icdm08b.pdf">algorithm</a> provided by the scikit-learn <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html">library</a>: the model is trained and then invoked by a user-defined function (see <a href="https://towardsdatascience.com/isolation-forest-and-spark-b88ade6c63ff">this article</a> for how to call the sklearn library with a pyspark UDF), all of which is run using Spark in non-distributed/local mode. This type of model attempts to isolate each data point by continually partitioning the data. Data closely packed together will require more partitions to separate data points, whereas any outliers will require less: the number of required partitions for a particular data point is thus inversely proportional to the anomaly "score".</p>
+<p>The job uses an implementation of the Isolation Forest <a href="https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/icdm08b.pdf">algorithm</a> provided by the scikit-learn <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html">library</a>: the model is trained and then invoked by a user-defined function (see <a href="https://towardsdatascience.com/isolation-forest-and-spark-b88ade6c63ff">this article</a> for how to call the sklearn library with a pyspark UDF), all of which is run using the Spark executors spun up in the current <code>SparkSession</code>. This type of model attempts to isolate each data point by continually partitioning the data. Data closely packed together will require more partitions to separate data points, whereas any outliers will require less: the number of required partitions for a particular data point is thus inversely proportional to the anomaly "score".</p>
 </div>
 </div>
 </div>
@@ -769,7 +791,15 @@ user-scheduler-8d888c6d4-qbqkq                   1/1     Running     0          
 <h2 id="_visualization"><a class="anchor" href="#_visualization"></a>Visualization</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The notebook shows how to plot the outliers against a particular metric (e.g. "number of rides"). However, this is mainly for convenience - the anomaly score is derived from the <strong><em>entire</em></strong> feature space i.e. it takes all dimensions (or features/columns) into account when scoring data. This means that not only are the results difficult to visualize (how can multidimensional data be represented in only 3-D dimensional space?), but that a root cause analysis has to be a separate process. It would be tempting to look at just one metric and assume causal affects, but the model "sees" all features as a set of numerical values and derives patterns accordingly.</p>
+<p>The notebook shows how to plot the outliers against a particular metric (e.g. "number of rides"):</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/demo-jupyterhub-pyspark-hdfs-anomaly-detection-taxi-data/jupyter_hub_graph.png" alt="jupyter hub graph">
+</div>
+</div>
+<div class="paragraph">
+<p>However, this is mainly for convenience - the anomaly score is derived from the <strong><em>entire</em></strong> feature space i.e. it takes all dimensions (or features/columns) into account when scoring data. This means that not only are the results difficult to visualize (how can multidimensional data be represented in only 3-D dimensional space?), but that a root cause analysis has to be a separate process. It would be tempting to look at just one metric and assume causal affects, but the model "sees" all features as a set of numerical values and derives patterns accordingly.</p>
 </div>
 <div class="paragraph">
 <p>We can tackle the first of these issues by collapsing - or projecting - our data down into a manageable number of dimensions that can be plotted: once the script has finished successfully, plots should be displayed on the bottom that show the same data in 2D and 3D representation. The 3D plot should look like this:</p>
